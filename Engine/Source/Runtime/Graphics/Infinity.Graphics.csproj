@@ -56,8 +56,8 @@
 		<PackageReference Include="Vortice.DirectX" Version="2.1.1-beta9" />
 		<PackageReference Include="Vortice.Dxc" Version="2.1.1-beta9" />
 		<PackageReference Include="Vortice.DXGI" Version="2.1.1-beta9" />
-		<PackageReference Include="Vortice.Mathematics" Version="1.4.4" />
-		<PackageReference Include="Vortice.Vulkan" Version="1.5.1" />
+		<PackageReference Include="Vortice.Mathematics" Version="1.4.7" />
+		<PackageReference Include="Vortice.Vulkan" Version="1.5.2" />
 		<PackageReference Include="WaveEngine.HLSLEverywhere" Version="3.3.0.8617-preview" />
 	</ItemGroup>
 

@@ -209,7 +209,7 @@ namespace InfinityEngine.Graphics.RHI.Metal
 
         }
 
-        public override void SetRenderResourceBind(in uint slot, FRHIResourceSet resourceSet)
+        public override void SetGraphicsResourceBind(in uint slot, FRHIResourceSet resourceSet)
         {
 
         }

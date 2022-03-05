@@ -270,7 +270,7 @@ namespace InfinityEngine.Graphics.RHI.D3D
             nativeCmdList->IASetVertexBuffers(slot, 1, &vertexBufferView);*/
         }
 
-        public override void SetRenderResourceBind(in uint slot, FRHIResourceSet resourceSet)
+        public override void SetGraphicsResourceBind(in uint slot, FRHIResourceSet resourceSet)
         {
             nativeCmdList->SetGraphicsRootDescriptorTable(slot, default);
         }

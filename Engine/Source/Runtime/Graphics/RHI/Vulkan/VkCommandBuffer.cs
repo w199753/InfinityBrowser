@@ -206,7 +206,7 @@ namespace InfinityEngine.Graphics.RHI.Vulkan
             throw new System.NotImplementedException();
         }
 
-        public override void SetRenderResourceBind(in uint slot, FRHIResourceSet resourceSet)
+        public override void SetGraphicsResourceBind(in uint slot, FRHIResourceSet resourceSet)
         {
             throw new System.NotImplementedException();
         }

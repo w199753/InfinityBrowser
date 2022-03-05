@@ -94,7 +94,7 @@ namespace InfinityEngine.Graphics.RHI
         public abstract void SetGraphicsPipelineState(FRHIGraphicsPipelineState graphicsPipelineState);
         public abstract void SetIndexBuffer(FRHIIndexBufferView indexBufferView);
         public abstract void SetVertexBuffer(in uint slot, FRHIVertexBufferView vertexBufferView);
-        public abstract void SetRenderResourceBind(in uint slot, FRHIResourceSet resourceSet);
+        public abstract void SetGraphicsResourceBind(in uint slot, FRHIResourceSet resourceSet);
         public abstract void DrawIndexInstanced(in uint indexCount, in uint startIndex, in int startVertex, in uint instanceCount, in uint startInstance);
         public abstract void DrawMultiIndexInstanced(FRHIBuffer argsBuffer, in uint argsOffset, FRHIBuffer countBuffer, in uint countOffset);
         public abstract void DrawIndexInstancedIndirect(FRHIBuffer argsBuffer, in uint argsOffset);
