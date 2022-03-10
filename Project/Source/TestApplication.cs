@@ -46,7 +46,7 @@ namespace ExampleProject
                 fence = renderContext.GetFence("Readback");
                 query = renderContext.GetQuery(EQueryType.CopyTimestamp, "Readback");
                 bufferRef = renderContext.GetBuffer(descriptor);
-                FRHICommandBuffer cmdBuffer = renderContext.GetCommandBuffer(EContextType.Copy, "Upload");
+                FRHICommandBuffer cmdBuffer = renderContext.GetCommandBuffer("Upload", EContextType.Copy);
 
                 int[] data = new int[numData];
                 for (int i = 0; i < numData; ++i) { 
@@ -68,7 +68,7 @@ namespace ExampleProject
             {
                 if (dataReady && renderContext.copyQueueState) 
                 {
-                    FRHICommandBuffer cmdBuffer = renderContext.GetCommandBuffer(EContextType.Copy, "Readback");
+                    FRHICommandBuffer cmdBuffer = renderContext.GetCommandBuffer("Readback", EContextType.Copy);
                     cmdBuffer.Clear();
                     cmdBuffer.BeginEvent("Readback");
                     cmdBuffer.BeginQuery(query);

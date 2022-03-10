@@ -58,13 +58,13 @@ namespace InfinityEngine.Rendering.RenderLoop
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public FRHICommandBuffer CreateCommandBuffer(in EContextType contextType, string name)
+        public FRHICommandBuffer CreateCommandBuffer(string name = null, in EContextType contextType = EContextType.Graphics)
         {
             return m_Context.CreateCommandBuffer(contextType, name);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public FRHICommandBuffer GetCommandBuffer(in EContextType contextType, string name)
+        public FRHICommandBuffer GetCommandBuffer(string name = null, in EContextType contextType = EContextType.Graphics)
         {
             return m_Context.GetCommandBuffer(contextType, name);
         }

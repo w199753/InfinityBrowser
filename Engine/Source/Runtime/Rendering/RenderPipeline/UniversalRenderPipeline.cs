@@ -19,7 +19,7 @@ namespace InfinityEngine.Rendering.RenderPipeline
 
         public override void Render(FRenderContext renderContext)
         {
-            FRHICommandBuffer cmdBuffer = renderContext.GetCommandBuffer(EContextType.Graphics, "ClearRenderTarget");
+            FRHICommandBuffer cmdBuffer = renderContext.GetCommandBuffer("ClearRenderTarget");
             cmdBuffer.Clear();
 
             cmdBuffer.BeginEvent("ClearBackBuffer");
