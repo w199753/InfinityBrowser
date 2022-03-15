@@ -55,7 +55,12 @@ namespace InfinityEngine.Graphics.RHI
         internal EContextType contextType;
         protected EPrimitiveTopology m_TopologyType;
 
-        internal FRHICommandBuffer(string name, FRHIDevice device, EContextType contextType) { }
+        internal FRHICommandBuffer(string name, FRHIDevice device, in EContextType contextType)
+        {
+            this.name = name;
+            this.contextType = contextType;
+        }
+
         public abstract void Clear();
         internal abstract void Close();
         public abstract void BeginEvent(string name);

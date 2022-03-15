@@ -12,13 +12,10 @@ namespace InfinityEngine.Graphics.RHI.D3D
         internal ID3D12CommandAllocator* nativeCmdPool;
         internal ID3D12GraphicsCommandList5* nativeCmdList;
 
-        internal FD3DCommandBuffer(string name, FRHIDevice device, FRHICommandContext cmdContext, EContextType contextType) : base(name, device, contextType)
+        internal FD3DCommandBuffer(string name, FRHIDevice device, FRHICommandContext cmdContext, in EContextType contextType) : base(name, device, contextType)
         {
             FD3DDevice d3dDevice = (FD3DDevice)device;
             FD3DCommandContext d3dCmdContext = (FD3DCommandContext)cmdContext;
-
-            this.name = name;
-            this.contextType = contextType;
             this.nativeCmdPool = d3dCmdContext.nativeCmdAllocator;
 
             ID3D12GraphicsCommandList5* commandListPtr;

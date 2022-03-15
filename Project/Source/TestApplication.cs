@@ -47,13 +47,13 @@ namespace ExampleProject
                 query = renderContext.GetQuery(EQueryType.CopyTimestamp, "Readback");
                 bufferRef = renderContext.GetBuffer(descriptor);
                 FRHICommandBuffer cmdBuffer = renderContext.GetCommandBuffer("Upload", EContextType.Copy);
+                cmdBuffer.Clear();
 
                 int[] data = new int[numData];
                 for (int i = 0; i < numData; ++i) { 
                     data[i] = numData - i; 
                 }
 
-                cmdBuffer.Clear();
                 cmdBuffer.BeginEvent("Upload");
                 buffer.SetData(cmdBuffer, data);
                 cmdBuffer.EndEvent();
@@ -78,7 +78,7 @@ namespace ExampleProject
                     renderContext.ExecuteCommandBuffer(cmdBuffer);
                     renderContext.ReleaseCommandBuffer(cmdBuffer);
                     renderContext.WriteToFence(EContextType.Copy, fence);
-                    //renderContext.WaitForFence(EContextType.Graphics, fence);
+                    renderContext.WaitForFence(EContextType.Graphics, fence);
                 }
 
                 timeProfiler.Start();

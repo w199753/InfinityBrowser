@@ -183,6 +183,7 @@ namespace InfinityEngine.Graphics.RHI.D3D
         public override void ExecuteCommandBuffer(FRHICommandBuffer cmdBuffer)
         {
             #if DeferredExecute
+                cmdBuffer.Close();
                 FExecuteInfo executeInfo;
                 executeInfo.fence = null;
                 executeInfo.cmdBuffer = cmdBuffer;
