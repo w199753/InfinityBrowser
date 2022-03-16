@@ -3,7 +3,7 @@
 	Properties
 	{
         [Header (Microface)]
-        [NoScaleOffset]_MainTex ("BaseColor Map", 2D) = "white" {}
+        _MainTex ("BaseColor Map", 2D) = "white" {}
 	}
 
 	Category

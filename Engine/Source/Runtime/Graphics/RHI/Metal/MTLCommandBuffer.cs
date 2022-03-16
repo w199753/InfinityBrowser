@@ -159,7 +159,7 @@ namespace InfinityEngine.Graphics.RHI.Metal
 
         }
 
-        public override void ClearRenderTarget(FRHIRenderTargetView renderTargetView, float4 color)
+        public override void ClearRenderTarget(FRHIRenderTargetView renderTargetView, in float4 color)
         {
 
         }

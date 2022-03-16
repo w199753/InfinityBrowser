@@ -89,7 +89,7 @@ namespace InfinityEngine.Graphics.RHI
         public abstract void SetViewport(in FViewport viewport);
         public abstract void BeginRenderPass(FRHITexture depthBuffer, params FRHITexture[] colorBuffer);
         public abstract void EndRenderPass();
-        public abstract void ClearRenderTarget(FRHIRenderTargetView renderTargetView, float4 color);
+        public abstract void ClearRenderTarget(FRHIRenderTargetView renderTargetView, in float4 color);
         public abstract void SetStencilRef(in uint refValue);
         public abstract void SetBlendFactor(in float blendFactor);
         public abstract void SetDepthBound(in float min, in float max);

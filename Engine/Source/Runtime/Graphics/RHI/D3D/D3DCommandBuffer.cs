@@ -204,10 +204,11 @@ namespace InfinityEngine.Graphics.RHI.D3D
             nativeCmdList->EndRenderPass();
         }
 
-        public override void ClearRenderTarget(FRHIRenderTargetView renderTargetView, float4 color)
+        public override void ClearRenderTarget(FRHIRenderTargetView renderTargetView, in float4 color)
         {
+            float4 copyColor = color;
             FD3DRenderTargetView d3dRTV = (FD3DRenderTargetView)renderTargetView;
-            nativeCmdList->ClearRenderTargetView(d3dRTV.descriptorHandle, (float*)&color, 0, null);
+            nativeCmdList->ClearRenderTargetView(d3dRTV.descriptorHandle, (float*)&copyColor, 0, null);
             //Vortice.Direct3D12.ID3D12GraphicsCommandList
         }
 
