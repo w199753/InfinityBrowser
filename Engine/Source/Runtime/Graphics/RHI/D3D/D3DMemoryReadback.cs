@@ -1,50 +1,55 @@
-﻿using System;
-
-namespace InfinityEngine.Graphics.RHI.D3D
+﻿namespace InfinityEngine.Graphics.RHI.D3D
 {
-    internal class FD3DMemoryReadbackFactory : FRHIMemoryReadbackFactory
+    public class FD3DGPUMemoryReadback : FRHIGPUMemoryReadback
     {
-        public override bool IsReady => m_Fence.IsCompleted;
-
-        private FRHIFence m_Fence;
-
-        internal FD3DMemoryReadbackFactory(FRHIDevice device) : base(device)
+        internal FD3DGPUMemoryReadback(FRHIContext context, string requestName, bool bProfiler) : base(context, requestName, bProfiler)
         {
-            m_Fence = new FD3DFence(device, "ReadbackFactory");
+            name = requestName;
+            gpuTime = -1;
+            m_IsReady = true;
+            m_IsProfile = bProfiler;
+            m_Fence = context.GetFence(requestName);
+            m_Query = bProfiler == true ? context.CreateQuery(EQueryType.CopyTimestamp, requestName) : null;
         }
 
-        protected override void RequestAsyncReadback(FRHIBuffer buffer, Action<FRHIAsyncReadbackRequest> callback) 
+        public override void EnqueueCopy(FRHIContext context, FRHIBuffer buffer)
         {
-            FAsyncReadbackRequestInfo requestInfo;
-            requestInfo.target = buffer;
-            requestInfo.callbackFunc = callback;
-            requestInfo.resourceType = EResourceType.Buffer;
-            requestInfos.Add(requestInfo);
+            if (m_IsReady && context.copyQueueState)
+            {
+                FRHICommandBuffer cmdBuffer = context.GetCommandBuffer(EContextType.Copy, name);
+                cmdBuffer.Clear();
+
+                if (m_IsProfile) 
+                {
+                    cmdBuffer.BeginEvent("Readback");
+                    cmdBuffer.BeginQuery(m_Query);
+                    buffer.Readback(cmdBuffer);
+                    cmdBuffer.EndQuery(m_Query);
+                    cmdBuffer.EndEvent();
+                } else {
+                    buffer.Readback(cmdBuffer);
+                }
+
+                context.ExecuteCommandBuffer(cmdBuffer);
+                context.ReleaseCommandBuffer(cmdBuffer);
+                context.WriteToFence(EContextType.Copy, m_Fence);
+                context.WaitForFence(EContextType.Graphics, m_Fence);
+            }
         }
 
-        protected override void RequestAsyncReadback(FRHIBuffer buffer, in int size, in int offset, Action<FRHIAsyncReadbackRequest> callback)
+        public override void GetData<T>(FRHIContext context, FRHIBuffer buffer, T[] data) where T : struct
         {
-
-        }
-
-        protected override void RequestAsyncReadback(FRHITexture texture, Action<FRHIAsyncReadbackRequest> callback)
-        {
-
-        }
-
-        protected override void RequestAsyncReadback(FRHITexture texture, in int mipIndex, Action<FRHIAsyncReadbackRequest> callback)
-        {
-
-        }
-
-        protected override void RequestAsyncReadback(FRHITexture texture, in int mipIndex, in int x, in int width, in int y, in int height, in int z, in int depth, Action<FRHIAsyncReadbackRequest> callback)
-        {
-
+            if (m_IsReady = m_Fence.IsCompleted)
+            {
+                buffer.GetData(data);
+                gpuTime = m_IsProfile ? m_Query.GetResult(context.copyFrequency) : -1;
+            }
         }
 
         protected override void Release()
         {
             m_Fence?.Dispose();
+            m_Query?.Dispose();
         }
     }
 }

@@ -7,8 +7,6 @@ namespace InfinityEngine.Rendering.RenderLoop
 {
     public sealed class FRenderContext : FDisposal
     {
-        public bool copyQueueState => m_Context.copyQueueState;
-        public ulong copyFrequency => m_Context.copyFrequency;
         public ulong computeFrequency => m_Context.computeFrequency;
         public ulong graphicsFrequency => m_Context.graphicsFrequency;
         internal FRHITexture backBuffer => m_SwapChain.backBuffer;
@@ -208,6 +206,12 @@ namespace InfinityEngine.Rendering.RenderLoop
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public FRHIGPUMemoryReadback CreateGPUMemoryReadback(string requestName, bool bProfiler = false)
+        {
+            return m_Context.CreateGPUMemoryReadback(requestName, bProfiler);
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public FRHIIndexBufferView CreateIndexBufferView(FRHIBuffer buffer)
         {
             return m_Context.CreateIndexBufferView(buffer);
@@ -271,5 +275,7 @@ namespace InfinityEngine.Rendering.RenderLoop
         {
 
         }
+
+        public static implicit operator FRHIContext(FRenderContext renderContext) { return renderContext.m_Context; }
     }
 }

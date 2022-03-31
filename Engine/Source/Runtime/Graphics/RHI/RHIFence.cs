@@ -19,8 +19,8 @@ namespace InfinityEngine.Graphics.RHI
 
     internal class FRHIFencePool : FDisposal
     {
-        Stack<FRHIFence> m_Pooled;
         FRHIContext m_Context;
+        Stack<FRHIFence> m_Pooled;
 
         public int countAll { get; private set; }
         public int countActive { get { return countAll - countInactive; } }

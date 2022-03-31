@@ -19,16 +19,15 @@ namespace ExampleProject
         {
             get { return (float)timeProfiler.microseconds / 1000.0f; }
         }
-        float gpuTime;
+        float gpuTime => memoryReadback.gpuTime;
 
-        FRHIFence fence;
-        FRHIQuery query;
         FRHIBuffer buffer
         {
             get { return bufferRef.buffer; }
         }
         FRHIBufferRef bufferRef;
         FTimeProfiler timeProfiler;
+        FRHIGPUMemoryReadback memoryReadback;
 
         public override void OnEnable()
         {
@@ -43,9 +42,9 @@ namespace ExampleProject
                 FBufferDescriptor descriptor = new FBufferDescriptor(numData, 4, EUsageType.Default, EStorageType.Default | EStorageType.Dynamic | EStorageType.Staging);
                 descriptor.name = "TestBuffer";
 
-                fence = renderContext.GetFence("Readback");
-                query = renderContext.GetQuery(EQueryType.CopyTimestamp, "Readback");
                 bufferRef = renderContext.GetBuffer(descriptor);
+                memoryReadback = renderContext.CreateGPUMemoryReadback("TestReadback", true);
+
                 FRHICommandBuffer cmdBuffer = renderContext.GetCommandBuffer("Upload", EContextType.Copy);
                 cmdBuffer.Clear();
 
@@ -66,27 +65,10 @@ namespace ExampleProject
         {
             FGraphics.AddTask((FRenderContext renderContext) =>
             {
-                if (dataReady && renderContext.copyQueueState) 
-                {
-                    FRHICommandBuffer cmdBuffer = renderContext.GetCommandBuffer("Readback", EContextType.Copy);
-                    cmdBuffer.Clear();
-                    cmdBuffer.BeginEvent("Readback");
-                    cmdBuffer.BeginQuery(query);
-                    buffer.Readback(cmdBuffer);
-                    cmdBuffer.EndQuery(query);
-                    cmdBuffer.EndEvent();
-                    renderContext.ExecuteCommandBuffer(cmdBuffer);
-                    renderContext.ReleaseCommandBuffer(cmdBuffer);
-                    renderContext.WriteToFence(EContextType.Copy, fence);
-                    renderContext.WaitForFence(EContextType.Graphics, fence);
-                }
+                memoryReadback.EnqueueCopy(renderContext, buffer);
 
                 timeProfiler.Start();
-                if (dataReady = fence.IsCompleted) 
-                {
-                    buffer.GetData(readData);
-                    gpuTime = query.GetResult(renderContext.copyFrequency);
-                }
+                memoryReadback.GetData(renderContext, buffer, readData);
                 timeProfiler.Stop();
 
                 Console.WriteLine("||");
@@ -99,9 +81,10 @@ namespace ExampleProject
         {
             FGraphics.AddTask((FRenderContext renderContext) =>
             {
-                renderContext.ReleaseFence(fence);
-                renderContext.ReleaseQuery(query);
+                //renderContext.ReleaseFence(fence);
+                //renderContext.ReleaseQuery(query);
                 renderContext.ReleaseBuffer(bufferRef);
+                memoryReadback.Dispose();
                 Console.WriteLine("Release RenderProxy");
             });
 

@@ -1,60 +1,67 @@
-﻿using System;
-using InfinityEngine.Core.Object;
-using InfinityEngine.Core.Container;
+﻿using InfinityEngine.Core.Object;
+using System.Collections.Generic;
 
 namespace InfinityEngine.Graphics.RHI
 {
-    public struct FRHIAsyncReadbackRequest
+    public abstract class FRHIGPUMemoryReadback : FDisposal
     {
-        public bool IsReady => m_Fence.IsCompleted;
+        protected bool m_IsReady;
+        protected bool m_IsProfile;
+        protected FRHIFence m_Fence;
+        protected FRHIQuery m_Query;
 
-        private FRHIFence m_Fence;
+        public string name;
+        public float gpuTime;
+        public bool IsReady => m_IsReady;
 
-        internal FRHIAsyncReadbackRequest(FRHIFence fence)
-        {
-            m_Fence = fence;
-        }
-
-        public void GetData(ref IntPtr data)
-        {
-            
-        }
-
-        public void GetData<T>(T[] data) where T : struct
-        {
-
-        }
-
-        public void GetData<T>(ref Span<T> data) where T : struct
-        {
-
-        }
+        internal FRHIGPUMemoryReadback(FRHIContext context, string requestName, bool bProfiler) { }
+        public abstract void EnqueueCopy(FRHIContext context, FRHIBuffer buffer);
+        public abstract void GetData<T>(FRHIContext context, FRHIBuffer buffer, T[] data) where T : struct;
     }
 
-    public struct FAsyncReadbackRequestInfo
+    internal class FRHIGPUMemoryReadbackPool : FDisposal
     {
-        public FRHIResource target;
-        public EResourceType resourceType;
-        public Action<FRHIAsyncReadbackRequest> callbackFunc;
-    }
+        bool m_IsProfile;
+        FRHIContext m_Context;
+        Stack<FRHIGPUMemoryReadback> m_Pooled;
 
-    internal abstract class FRHIMemoryReadbackFactory : FDisposal
-    {
-        public virtual bool IsReady => false;
-        public TArray<FAsyncReadbackRequestInfo> requestInfos;
+        public int countAll { get; private set; }
+        public int countActive { get { return countAll - countInactive; } }
+        public int countInactive { get { return m_Pooled.Count; } }
 
-        public FRHIMemoryReadbackFactory(FRHIDevice device) 
+        public FRHIGPUMemoryReadbackPool(FRHIContext context, bool bProfile)
         {
-            requestInfos = new TArray<FAsyncReadbackRequestInfo>(16);
+            m_Context = context;
+            m_IsProfile = bProfile;
+            m_Pooled = new Stack<FRHIGPUMemoryReadback>();
         }
-        public void Clear()
+
+        public FRHIGPUMemoryReadback GetTemporary(string name)
         {
-            requestInfos.Clear();
+            FRHIGPUMemoryReadback gpuReadback;
+            if (m_Pooled.Count == 0)
+            {
+                gpuReadback = m_Context.CreateGPUMemoryReadback(name, m_IsProfile);
+                countAll++;
+            } else {
+                gpuReadback = m_Pooled.Pop();
+            }
+            gpuReadback.name = name;
+            return gpuReadback;
         }
-        protected abstract void RequestAsyncReadback(FRHIBuffer buffer, Action<FRHIAsyncReadbackRequest> callback);
-        protected abstract void RequestAsyncReadback(FRHIBuffer buffer, in int size, in int offset, Action<FRHIAsyncReadbackRequest> callback);
-        protected abstract void RequestAsyncReadback(FRHITexture texture, Action<FRHIAsyncReadbackRequest> callback);
-        protected abstract void RequestAsyncReadback(FRHITexture texture, in int mipIndex, Action<FRHIAsyncReadbackRequest> callback);
-        protected abstract void RequestAsyncReadback(FRHITexture texture, in int mipIndex, in int x, in int width, in int y, in int height, in int z, in int depth, Action<FRHIAsyncReadbackRequest> callback);
+
+        public void ReleaseTemporary(FRHIGPUMemoryReadback gpuReadback)
+        {
+            m_Pooled.Push(gpuReadback);
+        }
+
+        protected override void Release()
+        {
+            m_Context = null;
+            foreach (FRHIGPUMemoryReadback gpuReadback in m_Pooled)
+            {
+                gpuReadback.Dispose();
+            }
+        }
     }
 }

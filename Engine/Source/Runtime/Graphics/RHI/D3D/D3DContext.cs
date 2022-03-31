@@ -394,6 +394,11 @@ namespace InfinityEngine.Graphics.RHI.D3D
             m_ResourcePool.ReleaseTexture(textureRef);
         }
 
+        public override FRHIGPUMemoryReadback CreateGPUMemoryReadback(string requestName, bool bProfiler)
+        {
+            return new FD3DGPUMemoryReadback(this, requestName, bProfiler);
+        }
+
         public override FRHIIndexBufferView CreateIndexBufferView(FRHIBuffer buffer)
         {
             throw new NotImplementedException();
