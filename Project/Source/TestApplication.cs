@@ -2,7 +2,6 @@
 using InfinityEngine.Game.System;
 using InfinityEngine.Graphics.RHI;
 using InfinityEngine.Core.Profiler;
-using System.Runtime.CompilerServices;
 using InfinityEngine.Game.Application;
 using InfinityEngine.Game.ActorFramework;
 using InfinityEngine.Rendering.RenderLoop;
@@ -13,7 +12,6 @@ namespace ExampleProject
     public class TestComponent : UComponent
     {
         int numData = 100000;
-        bool dataReady;
         int[] readData;
         float cpuTime
         {
@@ -27,13 +25,12 @@ namespace ExampleProject
         }
         FRHIBufferRef bufferRef;
         FTimeProfiler timeProfiler;
-        FRHIGPUMemoryReadback memoryReadback;
+        FRHIMemoryReadback memoryReadback;
 
         public override void OnEnable()
         {
             Console.WriteLine("Enable Component");
 
-            dataReady = true;
             readData = new int[numData];
             timeProfiler = new FTimeProfiler();
 
@@ -43,7 +40,7 @@ namespace ExampleProject
                 descriptor.name = "TestBuffer";
 
                 bufferRef = renderContext.GetBuffer(descriptor);
-                memoryReadback = renderContext.CreateGPUMemoryReadback("TestReadback", true);
+                memoryReadback = renderContext.CreateMemoryReadback("TestReadback", true);
 
                 FRHICommandBuffer cmdBuffer = renderContext.GetCommandBuffer("Upload", EContextType.Copy);
                 cmdBuffer.Clear();

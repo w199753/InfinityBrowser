@@ -394,9 +394,9 @@ namespace InfinityEngine.Graphics.RHI.D3D
             m_ResourcePool.ReleaseTexture(textureRef);
         }
 
-        public override FRHIGPUMemoryReadback CreateGPUMemoryReadback(string requestName, bool bProfiler)
+        public override FRHIMemoryReadback CreateMemoryReadback(string requestName, bool bProfiler)
         {
-            return new FD3DGPUMemoryReadback(this, requestName, bProfiler);
+            return new FD3DMemoryReadback(this, requestName, bProfiler);
         }
 
         public override FRHIIndexBufferView CreateIndexBufferView(FRHIBuffer buffer)

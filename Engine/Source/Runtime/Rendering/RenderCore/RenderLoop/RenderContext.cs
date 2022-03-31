@@ -206,9 +206,9 @@ namespace InfinityEngine.Rendering.RenderLoop
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public FRHIGPUMemoryReadback CreateGPUMemoryReadback(string requestName, bool bProfiler = false)
+        public FRHIMemoryReadback CreateMemoryReadback(string requestName, bool bProfiler = false)
         {
-            return m_Context.CreateGPUMemoryReadback(requestName, bProfiler);
+            return m_Context.CreateMemoryReadback(requestName, bProfiler);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]

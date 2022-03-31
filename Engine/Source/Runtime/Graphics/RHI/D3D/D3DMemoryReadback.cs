@@ -2,9 +2,9 @@
 
 namespace InfinityEngine.Graphics.RHI.D3D
 {
-    public class FD3DGPUMemoryReadback : FRHIGPUMemoryReadback
+    public class FD3DMemoryReadback : FRHIMemoryReadback
     {
-        internal FD3DGPUMemoryReadback(FRHIContext context, string requestName, bool bProfiler) : base(context, requestName, bProfiler)
+        internal FD3DMemoryReadback(FRHIContext context, string requestName, bool bProfiler) : base(context, requestName, bProfiler)
         {
             name = requestName;
             gpuTime = -1;

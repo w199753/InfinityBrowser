@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace InfinityEngine.Graphics.RHI
 {
-    public abstract class FRHIGPUMemoryReadback : FDisposal
+    public abstract class FRHIMemoryReadback : FDisposal
     {
         protected bool m_IsReady;
         protected bool m_IsProfile;
@@ -14,34 +14,34 @@ namespace InfinityEngine.Graphics.RHI
         public float gpuTime;
         public bool IsReady => m_IsReady;
 
-        internal FRHIGPUMemoryReadback(FRHIContext context, string requestName, bool bProfiler) { }
+        internal FRHIMemoryReadback(FRHIContext context, string requestName, bool bProfiler) { }
         public abstract void EnqueueCopy(FRHIContext context, FRHIBuffer buffer);
         public abstract void GetData<T>(FRHIContext context, FRHIBuffer buffer, T[] data) where T : struct;
     }
 
-    internal class FRHIGPUMemoryReadbackPool : FDisposal
+    internal class FRHIMemoryReadbackPool : FDisposal
     {
         bool m_IsProfile;
         FRHIContext m_Context;
-        Stack<FRHIGPUMemoryReadback> m_Pooled;
+        Stack<FRHIMemoryReadback> m_Pooled;
 
         public int countAll { get; private set; }
         public int countActive { get { return countAll - countInactive; } }
         public int countInactive { get { return m_Pooled.Count; } }
 
-        public FRHIGPUMemoryReadbackPool(FRHIContext context, bool bProfile)
+        public FRHIMemoryReadbackPool(FRHIContext context, bool bProfile)
         {
             m_Context = context;
             m_IsProfile = bProfile;
-            m_Pooled = new Stack<FRHIGPUMemoryReadback>();
+            m_Pooled = new Stack<FRHIMemoryReadback>();
         }
 
-        public FRHIGPUMemoryReadback GetTemporary(string name)
+        public FRHIMemoryReadback GetTemporary(string name)
         {
-            FRHIGPUMemoryReadback gpuReadback;
+            FRHIMemoryReadback gpuReadback;
             if (m_Pooled.Count == 0)
             {
-                gpuReadback = m_Context.CreateGPUMemoryReadback(name, m_IsProfile);
+                gpuReadback = m_Context.CreateMemoryReadback(name, m_IsProfile);
                 countAll++;
             } else {
                 gpuReadback = m_Pooled.Pop();
@@ -50,7 +50,7 @@ namespace InfinityEngine.Graphics.RHI
             return gpuReadback;
         }
 
-        public void ReleaseTemporary(FRHIGPUMemoryReadback gpuReadback)
+        public void ReleaseTemporary(FRHIMemoryReadback gpuReadback)
         {
             m_Pooled.Push(gpuReadback);
         }
@@ -58,7 +58,7 @@ namespace InfinityEngine.Graphics.RHI
         protected override void Release()
         {
             m_Context = null;
-            foreach (FRHIGPUMemoryReadback gpuReadback in m_Pooled)
+            foreach (FRHIMemoryReadback gpuReadback in m_Pooled)
             {
                 gpuReadback.Dispose();
             }
