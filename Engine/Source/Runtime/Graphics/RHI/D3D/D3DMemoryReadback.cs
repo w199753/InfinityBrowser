@@ -1,4 +1,6 @@
-﻿namespace InfinityEngine.Graphics.RHI.D3D
+﻿using System.Runtime.CompilerServices;
+
+namespace InfinityEngine.Graphics.RHI.D3D
 {
     public class FD3DGPUMemoryReadback : FRHIGPUMemoryReadback
     {
@@ -12,6 +14,7 @@
             m_Query = bProfiler == true ? context.CreateQuery(EQueryType.CopyTimestamp, requestName) : null;
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public override void EnqueueCopy(FRHIContext context, FRHIBuffer buffer)
         {
             if (m_IsReady && context.copyQueueState)
@@ -37,6 +40,7 @@
             }
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public override void GetData<T>(FRHIContext context, FRHIBuffer buffer, T[] data) where T : struct
         {
             if (m_IsReady = m_Fence.IsCompleted)
