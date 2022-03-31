@@ -24,7 +24,7 @@ namespace InfinityEngine.Graphics.RHI.D3D
 
                 if (m_IsProfile) 
                 {
-                    cmdBuffer.BeginEvent("Readback");
+                    cmdBuffer.BeginEvent(name);
                     cmdBuffer.BeginQuery(m_Query);
                     buffer.Readback(cmdBuffer);
                     cmdBuffer.EndQuery(m_Query);
@@ -36,7 +36,7 @@ namespace InfinityEngine.Graphics.RHI.D3D
                 context.ExecuteCommandBuffer(cmdBuffer);
                 context.ReleaseCommandBuffer(cmdBuffer);
                 context.WriteToFence(EContextType.Copy, m_Fence);
-                context.WaitForFence(EContextType.Graphics, m_Fence);
+                //context.WaitForFence(EContextType.Graphics, m_Fence);
             }
         }
 
