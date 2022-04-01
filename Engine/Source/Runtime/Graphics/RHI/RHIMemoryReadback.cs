@@ -1,5 +1,6 @@
 ﻿using InfinityEngine.Core.Object;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 
 namespace InfinityEngine.Graphics.RHI
 {
@@ -15,7 +16,9 @@ namespace InfinityEngine.Graphics.RHI
         public bool IsReady => m_IsReady;
 
         internal FRHIMemoryReadback(FRHIContext context, string requestName, bool bProfiler) { }
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public abstract void EnqueueCopy(FRHIContext context, FRHIBuffer buffer);
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public abstract void GetData<T>(FRHIContext context, FRHIBuffer buffer, T[] data) where T : struct;
     }
 

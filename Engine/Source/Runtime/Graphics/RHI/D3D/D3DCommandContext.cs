@@ -1,6 +1,7 @@
 ﻿using System.Threading;
 using TerraFX.Interop.Windows;
 using TerraFX.Interop.DirectX;
+using System.Runtime.CompilerServices;
 
 namespace InfinityEngine.Graphics.RHI.D3D
 {
@@ -58,16 +59,19 @@ namespace InfinityEngine.Graphics.RHI.D3D
 
         public static implicit operator ID3D12CommandQueue*(FD3DCommandContext cmdContext) { return cmdContext.m_NativeCmdQueue; }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public override void SignalQueue(FRHIFence fence)
         {
             fence.Signal(this);
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public override void WaitQueue(FRHIFence fence)
         {
             fence.WaitOnGPU(this);
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public override void ExecuteQueue(FRHICommandBuffer cmdBuffer)
         {
             cmdBuffer.Close();
@@ -76,6 +80,7 @@ namespace InfinityEngine.Graphics.RHI.D3D
             m_NativeCmdQueue->ExecuteCommandLists(1, ppCommandLists);
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public override void Flush()
         {
             m_Fence.Signal(this);
@@ -83,6 +88,7 @@ namespace InfinityEngine.Graphics.RHI.D3D
             m_NativeCmdAllocator->Reset();
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public override void AsyncFlush()
         {
             if (IsReady)

@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using InfinityEngine.Core.Object;
 using InfinityEngine.Core.Mathmatics;
+using System.Runtime.CompilerServices;
 
 namespace InfinityEngine.Graphics.RHI
 {
@@ -9,7 +10,8 @@ namespace InfinityEngine.Graphics.RHI
         Default = 0x1,
         DeptnStencil = 0x2,
         RenderTarget = 0x4,
-        UnorderedAccess = 0x8
+        UnorderAccess = 0x8,
+        ConstantBuffer = 0x16
     };
 
     public enum EStorageType
@@ -247,11 +249,17 @@ namespace InfinityEngine.Graphics.RHI
 
         internal FRHIBuffer() { }
         internal FRHIBuffer(FRHIDevice device, in FBufferDescriptor descriptor) { }
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public abstract void SetData<T>(params T[] data) where T : struct;
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public abstract void Upload(FRHICommandBuffer cmdBuffer);
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public abstract void SetData<T>(FRHICommandBuffer cmdBuffer, params T[] data) where T : struct;
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public abstract void GetData<T>(T[] data) where T : struct;
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public abstract void Readback(FRHICommandBuffer cmdBuffer);
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public abstract void GetData<T>(FRHICommandBuffer cmdBuffer, T[] data) where T : struct;
     }
 
@@ -339,6 +347,7 @@ namespace InfinityEngine.Graphics.RHI
         abstract protected string GetResourceName(Type res);
         abstract protected string GetResourceTypeName();
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public bool Pull(in int hashCode, out Type resource)
         {
             if (m_ResourcePool.TryGetValue(hashCode, out var list) && list.Count > 0)
@@ -354,6 +363,7 @@ namespace InfinityEngine.Graphics.RHI
             return false;
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void Push(in int hash, Type resource)
         {
             if (!m_ResourcePool.TryGetValue(hash, out var list))
@@ -426,6 +436,7 @@ namespace InfinityEngine.Graphics.RHI
             m_TexturePool = new FRHITextureCache();
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public FRHIBufferRef GetBuffer(in FBufferDescriptor descriptor)
         {
             FRHIBuffer buffer;
@@ -439,11 +450,13 @@ namespace InfinityEngine.Graphics.RHI
             return new FRHIBufferRef(handle, buffer);
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void ReleaseBuffer(in FRHIBufferRef bufferRef)
         {
             m_BufferPool.Push(bufferRef.handle, bufferRef.buffer);
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public FRHITextureRef GetTexture(in FTextureDescriptor descriptor)
         {
             FRHITexture texture;
@@ -457,6 +470,7 @@ namespace InfinityEngine.Graphics.RHI
             return new FRHITextureRef(handle, texture);
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void ReleaseTexture(in FRHITextureRef textureRef)
         {
             m_TexturePool.Push(textureRef.handle, textureRef.texture);

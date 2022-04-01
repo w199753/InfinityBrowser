@@ -54,8 +54,8 @@ namespace InfinityEngine.Graphics.RHI.D3D
             FD3DDevice d3dDevice = (FD3DDevice)device;
             FD3DTexture d3DTexture = (FD3DTexture)texture;
             D3D12_RENDER_TARGET_VIEW_DESC rtvDescriptor;
-            rtvDescriptor.Format = FD3DTextureUtility.GetNativeViewFormat(d3DTexture.descriptor.format);
-            rtvDescriptor.ViewDimension = FD3DTextureUtility.GetRTVDimension(d3DTexture.descriptor.textureType);
+            rtvDescriptor.Format = FD3DResourceUtility.GetNativeViewFormat(d3DTexture.descriptor.format);
+            rtvDescriptor.ViewDimension = FD3DResourceUtility.GetRTVDimension(d3DTexture.descriptor.textureType);
             d3dDevice.nativeDevice->CreateRenderTargetView(d3DTexture.defaultResource, &rtvDescriptor, m_DescriptorHandle);
         }
 

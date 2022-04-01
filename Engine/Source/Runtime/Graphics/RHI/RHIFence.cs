@@ -1,6 +1,7 @@
 ﻿using System.Threading;
 using System.Collections.Generic;
 using InfinityEngine.Core.Object;
+using System.Runtime.CompilerServices;
 
 namespace InfinityEngine.Graphics.RHI
 {
@@ -12,8 +13,11 @@ namespace InfinityEngine.Graphics.RHI
 
         internal FRHIFence(FRHIDevice device, string name) { }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal abstract void Signal(FRHICommandContext cmdContext);
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal abstract void WaitOnCPU(AutoResetEvent fenceEvent);
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal abstract void WaitOnGPU(FRHICommandContext cmdContext);
     }
 
@@ -32,6 +36,7 @@ namespace InfinityEngine.Graphics.RHI
             m_Context = context;
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public FRHIFence GetTemporary(string name)
         {
             FRHIFence gpuFence;
@@ -48,6 +53,7 @@ namespace InfinityEngine.Graphics.RHI
             return gpuFence;
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void ReleaseTemporary(FRHIFence gpuFence)
         {
             m_Pooled.Push(gpuFence);

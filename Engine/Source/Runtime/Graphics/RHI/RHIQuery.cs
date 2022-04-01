@@ -1,4 +1,5 @@
 ﻿using InfinityEngine.Core.Object;
+using System.Runtime.CompilerServices;
 
 namespace InfinityEngine.Graphics.RHI
 {
@@ -16,7 +17,9 @@ namespace InfinityEngine.Graphics.RHI
 		internal int indexLast;
 
 		internal FRHIQuery(FRHIQueryContext queryContext) { }
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public abstract int GetResult();
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public abstract float GetResult(in ulong frequency);
 	}
 
@@ -33,11 +36,17 @@ namespace InfinityEngine.Graphics.RHI
 		public virtual bool IsTimeQuery => false;
 
 		public FRHIQueryContext(FRHIDevice device, in EQueryType queryType, in int queryCount, string name) { }
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public abstract void Submit(FRHICommandContext commandContext);
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public abstract void ResolveData();
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		internal abstract int Allocate();
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		internal abstract void Free(in int index);
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public abstract FRHIQuery GetTemporary(string name = null);
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public abstract void ReleaseTemporary(FRHIQuery query);
 	}
 }

@@ -17,7 +17,7 @@ namespace ExampleProject
         {
             get { return (float)timeProfiler.microseconds / 1000.0f; }
         }
-        float gpuTime => memoryReadback.gpuTime;
+        float gpuTime => gpuReadback.gpuTime;
 
         FRHIBuffer buffer
         {
@@ -25,7 +25,7 @@ namespace ExampleProject
         }
         FRHIBufferRef bufferRef;
         FTimeProfiler timeProfiler;
-        FRHIMemoryReadback memoryReadback;
+        FRHIMemoryReadback gpuReadback;
 
         public override void OnEnable()
         {
@@ -36,11 +36,11 @@ namespace ExampleProject
 
             FGraphics.AddTask((FRenderContext renderContext) =>
             {
-                FBufferDescriptor descriptor = new FBufferDescriptor(numData, 4, EUsageType.Default, EStorageType.Default | EStorageType.Dynamic | EStorageType.Staging);
+                FBufferDescriptor descriptor = new FBufferDescriptor(numData, 4, EUsageType.UnorderAccess, EStorageType.Default | EStorageType.Dynamic | EStorageType.Staging);
                 descriptor.name = "TestBuffer";
 
                 bufferRef = renderContext.GetBuffer(descriptor);
-                memoryReadback = renderContext.CreateMemoryReadback("TestReadback", true);
+                gpuReadback = renderContext.CreateMemoryReadback("TestReadback", true);
 
                 FRHICommandBuffer cmdBuffer = renderContext.GetCommandBuffer("Upload", EContextType.Copy);
                 cmdBuffer.Clear();
@@ -62,10 +62,10 @@ namespace ExampleProject
         {
             FGraphics.AddTask((FRenderContext renderContext) =>
             {
-                memoryReadback.EnqueueCopy(renderContext, buffer);
+                gpuReadback.EnqueueCopy(renderContext, buffer);
 
                 timeProfiler.Start();
-                memoryReadback.GetData(renderContext, buffer, readData);
+                gpuReadback.GetData(renderContext, buffer, readData);
                 timeProfiler.Stop();
 
                 Console.WriteLine("||");
@@ -78,10 +78,8 @@ namespace ExampleProject
         {
             FGraphics.AddTask((FRenderContext renderContext) =>
             {
-                //renderContext.ReleaseFence(fence);
-                //renderContext.ReleaseQuery(query);
+                gpuReadback.Dispose();
                 renderContext.ReleaseBuffer(bufferRef);
-                memoryReadback.Dispose();
                 Console.WriteLine("Release RenderProxy");
             });
 

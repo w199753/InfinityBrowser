@@ -6,7 +6,7 @@ using System.Runtime.CompilerServices;
 
 namespace InfinityEngine.Graphics.RHI.D3D
 {
-    internal static class FD3DTextureUtility
+    internal static class FD3DResourceUtility
     {
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static DXGI_FORMAT GetNativeFormat(this EGraphicsFormat format)
@@ -123,6 +123,29 @@ namespace InfinityEngine.Graphics.RHI.D3D
 
             return D3D12_RESOURCE_DIMENSION.D3D12_RESOURCE_DIMENSION_UNKNOWN;
         }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        internal static D3D12_RESOURCE_FLAGS GetNativeUsageType(this EUsageType type)
+        {
+            D3D12_RESOURCE_FLAGS usageType = D3D12_RESOURCE_FLAGS.D3D12_RESOURCE_FLAG_NONE;
+
+            if ((type & EUsageType.DeptnStencil) == EUsageType.DeptnStencil)
+            {
+                usageType |= D3D12_RESOURCE_FLAGS.D3D12_RESOURCE_FLAG_ALLOW_DEPTH_STENCIL;
+            }
+
+            if ((type & EUsageType.RenderTarget) == EUsageType.RenderTarget) 
+            {
+                usageType |= D3D12_RESOURCE_FLAGS.D3D12_RESOURCE_FLAG_ALLOW_RENDER_TARGET;
+            }
+
+            if ((type & EUsageType.UnorderAccess) == EUsageType.UnorderAccess) 
+            {
+                usageType |= D3D12_RESOURCE_FLAGS.D3D12_RESOURCE_FLAG_ALLOW_UNORDERED_ACCESS;
+            }
+
+            return usageType;
+        }
     }
 
     public unsafe class FD3DBuffer : FRHIBuffer
@@ -163,7 +186,7 @@ namespace InfinityEngine.Graphics.RHI.D3D
                     defaultResourceDesc.Format = DXGI_FORMAT.DXGI_FORMAT_UNKNOWN;
                     defaultResourceDesc.SampleDesc.Count = 1;
                     defaultResourceDesc.SampleDesc.Quality = 0;
-                    defaultResourceDesc.Flags = D3D12_RESOURCE_FLAGS.D3D12_RESOURCE_FLAG_NONE;
+                    defaultResourceDesc.Flags = FD3DResourceUtility.GetNativeUsageType(descriptor.usageType);
                     defaultResourceDesc.Layout = D3D12_TEXTURE_LAYOUT.D3D12_TEXTURE_LAYOUT_ROW_MAJOR;
                 }
 
@@ -247,6 +270,7 @@ namespace InfinityEngine.Graphics.RHI.D3D
             }
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public override void SetData<T>(params T[] data) where T : struct
         {
             if ((descriptor.storageType & EStorageType.Static) == EStorageType.Static || (descriptor.storageType & EStorageType.Dynamic) == EStorageType.Dynamic)
@@ -259,6 +283,7 @@ namespace InfinityEngine.Graphics.RHI.D3D
             }
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public override void Upload(FRHICommandBuffer cmdBuffer)
         {
             if ((descriptor.storageType & EStorageType.Static) == EStorageType.Static || (descriptor.storageType & EStorageType.Dynamic) == EStorageType.Dynamic)
@@ -273,6 +298,7 @@ namespace InfinityEngine.Graphics.RHI.D3D
             }
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public override void SetData<T>(FRHICommandBuffer cmdBuffer, params T[] data) where T : struct
         {
             if ((descriptor.storageType & EStorageType.Static) == EStorageType.Static || (descriptor.storageType & EStorageType.Dynamic) == EStorageType.Dynamic)
@@ -293,6 +319,7 @@ namespace InfinityEngine.Graphics.RHI.D3D
             }
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public override void GetData<T>(T[] data) where T : struct
         {
             if ((descriptor.storageType & EStorageType.Staging) == EStorageType.Staging)
@@ -305,6 +332,7 @@ namespace InfinityEngine.Graphics.RHI.D3D
             }
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public override void Readback(FRHICommandBuffer cmdBuffer)
         {
             if ((descriptor.storageType & EStorageType.Staging) == EStorageType.Staging)
@@ -318,7 +346,8 @@ namespace InfinityEngine.Graphics.RHI.D3D
                 d3dCmdBuffer.nativeCmdList->ResourceBarrier(0, &afterBarrier);
             }
         }
-        
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public override void GetData<T>(FRHICommandBuffer cmdBuffer, T[] data) where T : struct
         {
             if ((descriptor.storageType & EStorageType.Staging) == EStorageType.Staging)

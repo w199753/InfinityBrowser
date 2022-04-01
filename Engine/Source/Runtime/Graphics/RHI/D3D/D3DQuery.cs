@@ -48,11 +48,13 @@ namespace InfinityEngine.Graphics.RHI.D3D
 			this.indexLast = queryContext.IsTimeQuery ? queryContext.Allocate() : -1;
 		}
 
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public override int GetResult()
 		{
 			return (int)queryContext.queryData[indexHead];
 		}
 
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public override float GetResult(in ulong frequency)
 		{
 			if (!queryContext.IsTimeQuery) { return -1; }
@@ -141,6 +143,7 @@ namespace InfinityEngine.Graphics.RHI.D3D
 			m_QueryResult = resultPtr;
 		}
 
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public override void Submit(FRHICommandContext commandContext)
         {
 			if (IsReady) 
@@ -154,6 +157,7 @@ namespace InfinityEngine.Graphics.RHI.D3D
 			}
 		}
 
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public override void ResolveData()
 		{
 			if (IsReady) 
@@ -166,6 +170,7 @@ namespace InfinityEngine.Graphics.RHI.D3D
 			}
 		}
 
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		internal override int Allocate()
         {
 			if (m_QueryMap.length != 0)
@@ -177,11 +182,13 @@ namespace InfinityEngine.Graphics.RHI.D3D
 			return -1;
 		}
 
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		internal override void Free(in int index)
 		{
 			m_QueryMap.Add(index);
 		}
 
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public override FRHIQuery GetTemporary(string name)
 		{
 			FD3DQuery query;
@@ -195,6 +202,7 @@ namespace InfinityEngine.Graphics.RHI.D3D
 			return query;
 		}
 
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public override void ReleaseTemporary(FRHIQuery query)
 		{
 			m_StackPool.Push((FD3DQuery)query);
