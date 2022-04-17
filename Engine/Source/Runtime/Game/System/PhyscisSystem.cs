@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading;
 using InfinityEngine.Core.Object;
+using System.Runtime.CompilerServices;
 
 namespace InfinityEngine.Game.System
 {
@@ -27,6 +28,7 @@ namespace InfinityEngine.Game.System
             physicsThread.Join();
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void PhysicsFunc()
         {
             while (!IsLoopExit)

@@ -6,6 +6,7 @@ using InfinityEngine.Game.Window;
 using InfinityEngine.Core.Profiler;
 using InfinityEngine.Core.Thread.Sync;
 using InfinityEngine.Game.Application;
+using System.Runtime.CompilerServices;
 
 namespace InfinityEngine.Game.System
 {
@@ -50,6 +51,7 @@ namespace InfinityEngine.Game.System
             m_GameEndFunc();
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void GameLoop()
         {
             while (!IsLoopExit)
@@ -72,7 +74,8 @@ namespace InfinityEngine.Game.System
                 WaitForTargetFPS();
             }
         }
-        
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         void WaitForTargetFPS()
         {
             long elapsed = 0;

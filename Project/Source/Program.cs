@@ -3,6 +3,9 @@ using System.Threading;
 using InfinityEngine.Core.Container;
 using System.Runtime.InteropServices;
 using InfinityEngine.Core.Thread.TaskSystem;
+using Veldrid.StartupUtilities;
+using Veldrid.Sdl2;
+using Veldrid;
 
 namespace ExampleProject
 {
@@ -67,6 +70,22 @@ namespace ExampleProject
         {
             TestApplication App = new TestApplication("InfinityExample", 1280, 720);
             App.Run();
+
+            /*WindowCreateInfo wci = new WindowCreateInfo
+            {
+                X = 100,
+                Y = 100,
+                WindowWidth = 1280,
+                WindowHeight = 720,
+                WindowTitle = "TestWindow",
+            };
+            Sdl2Window window = VeldridStartup.CreateWindow(ref wci);
+            while (window.Exists)
+            {
+                Console.WriteLine("GameLoop");
+                InputSnapshot inputSnapshot = window.PumpEvents();
+            }
+            window.Close();*/
 
             //packing data test
             /*float testFloatBA = 0.25f;

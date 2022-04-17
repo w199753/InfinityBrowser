@@ -35,6 +35,15 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+	  <PackageReference Include="Silk.NET.Input" Version="2.14.0" />
+	  <PackageReference Include="Silk.NET.Input.Common" Version="2.14.0" />
+	  <PackageReference Include="Silk.NET.Input.Sdl" Version="2.14.0" />
+	  <PackageReference Include="Silk.NET.Windowing" Version="2.14.0" />
+	  <PackageReference Include="Veldrid.SDL2" Version="4.8.0" />
+	  <PackageReference Include="Veldrid.StartupUtilities" Version="4.8.0" />
+	</ItemGroup>
+
+	<ItemGroup>
 		<ProjectReference Include="..\..\Engine\Source\Runtime\Core\Infinity.Core.csproj" />
 		<ProjectReference Include="..\..\Engine\Source\Runtime\Game\Infinity.Game.csproj" />
 		<ProjectReference Include="..\..\Engine\Source\Runtime\Graphics\Infinity.Graphics.csproj" />

@@ -3,6 +3,7 @@ using InfinityEngine.Game.Window;
 using InfinityEngine.Core.Object;
 using InfinityEngine.Graphics.RHI;
 using InfinityEngine.Core.Container;
+using System.Runtime.CompilerServices;
 using InfinityEngine.Core.Thread.Sync;
 using InfinityEngine.Graphics.RHI.D3D;
 using InfinityEngine.Rendering.RenderLoop;
@@ -16,6 +17,7 @@ namespace InfinityEngine.Game.System
     {
         internal static TArray<FGraphicsTask> GraphicsTasks = new TArray<FGraphicsTask>(64);
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void AddTask(FGraphicsTask graphicsTask, in bool bParallel = false)
         {
             GraphicsTasks.Add(graphicsTask);
@@ -59,6 +61,7 @@ namespace InfinityEngine.Game.System
             m_RenderThread.Join();
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void GraphicsFunc()
         {
             bool isInit = true;
@@ -78,6 +81,7 @@ namespace InfinityEngine.Game.System
             }
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void ProcessGraphicsTasks()
         {
             if (FGraphics.GraphicsTasks.length == 0) { return; }
