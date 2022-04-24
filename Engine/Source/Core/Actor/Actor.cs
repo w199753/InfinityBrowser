@@ -1,13 +1,12 @@
 ﻿using System;
 using System.Collections;
-using System.Collections.Generic;
 using InfinityEngine.Core.Object;
 using InfinityEngine.Core.Container;
 using InfinityEngine.Core.Mathmatics;
 using System.Runtime.CompilerServices;
 using InfinityEngine.Core.Thread.Coroutine;
 
-namespace InfinityEngine.Game.ActorFramework
+namespace InfinityEngine.Core.ActorComponent
 {
     [Serializable]
     public class AActor : UObject, IComparable<AActor>, IEquatable<AActor>

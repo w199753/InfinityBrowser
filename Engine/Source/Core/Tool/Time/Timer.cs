@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics;
 
-namespace InfinityEngine.Core.Profiler
+namespace InfinityEngine.Core.Time
 {
     public class FTimer
     {
@@ -8,39 +8,20 @@ namespace InfinityEngine.Core.Profiler
         public static double MilliSecsPerTick { get { return 1000.0f / Stopwatch.Frequency; } }
         public static double MicroSecsPerTick { get { return 1000000.0f / Stopwatch.Frequency; } }
 
-        static float deltaTime;
-        public static float DeltaTime { get { return deltaTime; } }
+        static float m_DeltaTime;
+        public static float DeltaTime { get { return m_DeltaTime; } }
 
-        static float elapsedTime = 0;
-        public static float ElapsedTime { get { return elapsedTime; } }
+        static float m_ElapsedTime = 0;
+        public static float ElapsedTime { get { return m_ElapsedTime; } }
 
-        static int frameIndex = 0;
-        public static int FrameIndex { get { return frameIndex; } }
+        static int m_FrameIndex = 0;
+        public static int FrameIndex { get { return m_FrameIndex; } }
 
         public static void Tick(in float deltaTime)
         {
-            FTimer.frameIndex += 1;
-            FTimer.deltaTime = deltaTime;
-            FTimer.elapsedTime += elapsedTime;
+            ++m_FrameIndex;
+            m_DeltaTime = deltaTime;
+            m_ElapsedTime += m_ElapsedTime;
         }
-    }
-
-    public class FTimeProfiler
-    {
-        private Stopwatch m_Stopwatch;
-
-        public FTimeProfiler()
-        {
-            m_Stopwatch = new Stopwatch();
-        }
-
-        public long microseconds { get { return (long)(m_Stopwatch.ElapsedTicks * FTimer.MicroSecsPerTick); } }
-        public long milliseconds {get { return m_Stopwatch.ElapsedMilliseconds; } }
-        public float seconds {get { return m_Stopwatch.ElapsedMilliseconds / 1000.0f; } }
-        public void Reset() => m_Stopwatch.Reset();
-        public void Begin() => m_Stopwatch.Start();
-        public void Start() => m_Stopwatch.Restart();
-        public void Stop() => m_Stopwatch.Stop();
-
     }
 }

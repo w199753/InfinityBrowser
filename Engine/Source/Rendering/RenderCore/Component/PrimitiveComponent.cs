@@ -1,6 +1,7 @@
 ﻿using InfinityEngine.Core.Object;
+using InfinityEngine.Core.ActorComponent;
 
-namespace InfinityEngine.Game.ActorFramework
+namespace InfinityEngine.Rendering.Object
 {
     public class FPrimitiveRenderProxy : FDisposal
     {

@@ -1,7 +1,7 @@
 ﻿using System;
 using InfinityEngine.Core.Object;
 
-namespace InfinityEngine.Game.ActorFramework
+namespace InfinityEngine.Core.ActorComponent
 {
     [Serializable]
     public class UComponent : UObject

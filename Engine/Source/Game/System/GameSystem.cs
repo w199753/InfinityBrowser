@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading;
+using InfinityEngine.Core.Time;
 using System.Collections.Generic;
 using InfinityEngine.Core.Object;
 using InfinityEngine.Game.Window;

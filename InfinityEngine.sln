@@ -13,9 +13,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ThirdParty", "ThirdParty", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Antlr4", "Engine\Source\ThirdParty\Antlr4\Antlr4.csproj", "{06994188-1C74-434D-B7E2-5FCBDEA9574B}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Shaders", "Shaders", "{8AFD4933-9D61-4994-8BAD-A7C7484D5ED8}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Shader", "Shader", "{8AFD4933-9D61-4994-8BAD-A7C7484D5ED8}"
 	ProjectSection(SolutionItems) = preProject
-		Engine\Shaders\InfinityLit.shader = Engine\Shaders\InfinityLit.shader
+		Engine\Shader\InfinityLit.shader = Engine\Shader\InfinityLit.shader
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Source", "Source", "{6C469758-77F5-4360-A3A4-58D11F9C9F21}"
