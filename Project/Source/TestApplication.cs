@@ -159,7 +159,7 @@ namespace ExampleProject
 
         protected override void Tick()
         {
-            m_Actor.OnUpdate(FGameTime.DeltaTime);
+            m_Actor.OnUpdate(FTimer.DeltaTime);
         }
 
         protected override void End()

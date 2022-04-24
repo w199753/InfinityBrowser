@@ -1,0 +1,7 @@
+<Project>
+  <PropertyGroup>
+    <MSBuildProjectExtensionsPath>$(ProjectDir)../../Intermediate/Audio/</MSBuildProjectExtensionsPath>
+    <BaseIntermediateOutputPath>$(ProjectDir)../../Intermediate/Audio/</BaseIntermediateOutputPath>
+    <UseHostCompilerIfAvailable>false</UseHostCompilerIfAvailable>
+  </PropertyGroup>
+</Project>
