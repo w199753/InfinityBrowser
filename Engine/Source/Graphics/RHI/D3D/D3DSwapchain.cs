@@ -2,7 +2,7 @@
 using TerraFX.Interop.DirectX;
 using System.Runtime.CompilerServices;
 
-namespace InfinityEngine.Graphics.RHI.D3D
+namespace InfinityEngine.Graphics
 {
     public unsafe class D3DSwapChain : RHISwapChain
     {

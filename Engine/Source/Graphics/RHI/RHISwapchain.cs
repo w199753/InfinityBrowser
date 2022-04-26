@@ -1,6 +1,6 @@
 ﻿using System.Runtime.CompilerServices;
 
-namespace InfinityEngine.Graphics.RHI
+namespace InfinityEngine.Graphics
 {
     public unsafe abstract class RHISwapChain : Disposal
     {

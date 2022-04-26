@@ -1,10 +1,8 @@
 ﻿using System.Threading;
+using InfinityEngine.Graphics;
+using InfinityEngine.Rendering;
 using InfinityEngine.Container;
-using InfinityEngine.Graphics.RHI;
 using System.Runtime.CompilerServices;
-using InfinityEngine.Graphics.RHI.D3D;
-using InfinityEngine.Rendering.RenderLoop;
-using InfinityEngine.Rendering.RenderPipeline;
 using Semaphore = InfinityEngine.Threading.Semaphore;
 
 namespace InfinityEngine.Game.System

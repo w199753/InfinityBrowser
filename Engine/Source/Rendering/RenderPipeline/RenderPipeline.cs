@@ -1,7 +1,6 @@
-﻿using InfinityEngine.Graphics.RDG;
-using InfinityEngine.Rendering.RenderLoop;
+﻿using InfinityEngine.Graphics;
 
-namespace InfinityEngine.Rendering.RenderPipeline
+namespace InfinityEngine.Rendering
 {
     public abstract class RenderPipeline : Disposal
     {

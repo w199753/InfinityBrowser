@@ -1,6 +1,6 @@
 ﻿using System.Runtime.CompilerServices;
 
-namespace InfinityEngine.Graphics.RHI.D3D
+namespace InfinityEngine.Graphics
 {
     public class D3DMemoryReadback : RHIMemoryReadback
     {

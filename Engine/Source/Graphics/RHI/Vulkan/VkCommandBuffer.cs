@@ -4,7 +4,7 @@ using static Vortice.Vulkan.Vulkan;
 using InfinityEngine.Core.Mathmatics;
 using InfinityEngine.Core.Mathmatics.Geometry;
 
-namespace InfinityEngine.Graphics.RHI.Vulkan
+namespace InfinityEngine.Graphics
 {
     public unsafe class VKCommandBuffer : RHICommandBuffer
     {

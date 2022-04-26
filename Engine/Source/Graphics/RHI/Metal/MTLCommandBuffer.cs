@@ -3,7 +3,7 @@ using Veldrid.MetalBindings;
 using InfinityEngine.Core.Mathmatics;
 using InfinityEngine.Core.Mathmatics.Geometry;
 
-namespace InfinityEngine.Graphics.RHI.Metal
+namespace InfinityEngine.Graphics
 {
     public unsafe class MtlCommandBuffer : RHICommandBuffer
     {

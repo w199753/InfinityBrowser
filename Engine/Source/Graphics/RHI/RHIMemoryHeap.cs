@@ -1,4 +1,4 @@
-﻿namespace InfinityEngine.Graphics.RHI
+﻿namespace InfinityEngine.Graphics
 {
     internal sealed class RHIMemoryHeapFactory : Disposal
     {

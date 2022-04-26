@@ -3,7 +3,7 @@ using TerraFX.Interop.DirectX;
 using InfinityEngine.Container;
 using System.Runtime.CompilerServices;
 
-namespace InfinityEngine.Graphics.RHI.D3D
+namespace InfinityEngine.Graphics
 {
     internal static class D3DDescriptorUtil
     {

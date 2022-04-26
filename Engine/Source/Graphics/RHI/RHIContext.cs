@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.CompilerServices;
 
-namespace InfinityEngine.Graphics.RHI
+namespace InfinityEngine.Graphics
 {
     public enum EContextType
     {

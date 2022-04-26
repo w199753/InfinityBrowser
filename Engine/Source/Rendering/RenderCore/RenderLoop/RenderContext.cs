@@ -1,8 +1,8 @@
 ﻿using System;
-using InfinityEngine.Graphics.RHI;
+using InfinityEngine.Graphics;
 using System.Runtime.CompilerServices;
 
-namespace InfinityEngine.Rendering.RenderLoop
+namespace InfinityEngine.Rendering
 {
     public sealed class RenderContext : Disposal
     {

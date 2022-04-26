@@ -1,8 +1,8 @@
 ﻿using System;
+using InfinityEngine.Graphics;
 using InfinityEngine.Container;
-using InfinityEngine.Graphics.RHI;
 
-namespace InfinityEngine.Graphics.RDG
+namespace InfinityEngine.Graphics
 {
     public enum EDepthAccess
     {

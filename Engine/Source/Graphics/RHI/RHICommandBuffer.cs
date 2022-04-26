@@ -4,7 +4,7 @@ using InfinityEngine.Core.Mathmatics;
 using System.Runtime.CompilerServices;
 using InfinityEngine.Core.Mathmatics.Geometry;
 
-namespace InfinityEngine.Graphics.RHI
+namespace InfinityEngine.Graphics
 {
     public enum EExecuteType
     {

@@ -1,4 +1,4 @@
-﻿namespace InfinityEngine.Graphics.RHI.D3D
+﻿namespace InfinityEngine.Graphics
 {
 
 }

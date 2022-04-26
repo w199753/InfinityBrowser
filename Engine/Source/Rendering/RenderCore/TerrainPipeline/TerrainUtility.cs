@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using InfinityEngine.Core.Mathmatics;
 using InfinityEngine.Core.Mathmatics.Geometry;
 
-namespace InfinityEngine.Rendering.TerrainPipeline
+namespace InfinityEngine.Rendering
 {
     /*public static class HeightmapLoader
     {

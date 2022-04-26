@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using InfinityEngine.Core.Mathmatics;
 using System.Runtime.CompilerServices;
 
-namespace InfinityEngine.Graphics.RHI.D3D
+namespace InfinityEngine.Graphics
 {
 	internal static class D3DQueryUtility
 	{

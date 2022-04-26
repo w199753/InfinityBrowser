@@ -1,4 +1,4 @@
-﻿namespace InfinityEngine.Graphics.RHI
+﻿namespace InfinityEngine.Graphics
 {
     public class RHIShader : Disposal
     {

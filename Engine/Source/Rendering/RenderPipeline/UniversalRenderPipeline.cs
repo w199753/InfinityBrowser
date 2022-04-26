@@ -1,9 +1,8 @@
 ﻿using System;
-using InfinityEngine.Graphics.RHI;
+using InfinityEngine.Graphics;
 using InfinityEngine.Core.Mathmatics;
-using InfinityEngine.Rendering.RenderLoop;
 
-namespace InfinityEngine.Rendering.RenderPipeline
+namespace InfinityEngine.Rendering
 {
     public class UniversalRenderPipeline : RenderPipeline
     {

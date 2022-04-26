@@ -4,7 +4,7 @@ using TerraFX.Interop.Windows;
 using TerraFX.Interop.DirectX;
 using System.Runtime.CompilerServices;
 
-namespace InfinityEngine.Graphics.RHI.D3D
+namespace InfinityEngine.Graphics
 {
     internal static class D3DResourceUtility
     {

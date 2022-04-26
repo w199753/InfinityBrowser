@@ -3,7 +3,7 @@ using System.Threading;
 using TerraFX.Interop.Windows;
 using TerraFX.Interop.DirectX;
 
-namespace InfinityEngine.Graphics.RHI.D3D
+namespace InfinityEngine.Graphics
 {
     public unsafe class D3DFence : RHIFence
     {

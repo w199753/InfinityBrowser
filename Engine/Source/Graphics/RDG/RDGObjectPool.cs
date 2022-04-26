@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace InfinityEngine.Graphics.RDG
+namespace InfinityEngine.Graphics
 {
     internal class SharedObjectPool<T> where T : new()
     {

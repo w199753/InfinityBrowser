@@ -1,9 +1,9 @@
 ﻿using System;
 using InfinityEngine;
+using InfinityEngine.Graphics;
+using InfinityEngine.Rendering;
 using InfinityEngine.Analytics;
 using InfinityEngine.Game.System;
-using InfinityEngine.Graphics.RHI;
-using InfinityEngine.Rendering.RenderLoop;
 
 namespace ExampleProject
 {

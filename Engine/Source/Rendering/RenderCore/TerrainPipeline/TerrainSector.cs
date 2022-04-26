@@ -1,11 +1,11 @@
-﻿using InfinityEngine.Core.Mathmatics;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Collections.Generic;
+using InfinityEngine.Core.Mathmatics;
 
-namespace InfinityEngine.Rendering.TerrainPipeline
+namespace InfinityEngine.Rendering
 {
     /*[Serializable]
     public class FTerrainSector

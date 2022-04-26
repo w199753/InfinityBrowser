@@ -2,7 +2,7 @@
 using Vortice.Dxc;
 using Vortice.Direct3D12.Shader;
 
-namespace InfinityEngine.Graphics.RHI.D3D
+namespace InfinityEngine.Graphics
 {
     internal class D3DShaderCompiler
     {
