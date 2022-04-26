@@ -3,7 +3,6 @@ using InfinityEngine;
 using InfinityEngine.Graphics;
 using InfinityEngine.Rendering;
 using InfinityEngine.Analytics;
-using InfinityEngine.Game.System;
 
 namespace ExampleProject
 {
@@ -33,7 +32,7 @@ namespace ExampleProject
             readData = new int[numData];
             timeProfiler = new TimeProfiler();
 
-            Graphics.AddTask((RenderContext renderContext) =>
+            GraphicsUtility.AddTask((RenderContext renderContext) =>
             {
                 BufferDescriptor descriptor = new BufferDescriptor(numData, 4, EUsageType.UnorderAccess, EStorageType.Default | EStorageType.Dynamic | EStorageType.Staging);
                 descriptor.name = "TestBuffer";
@@ -59,7 +58,7 @@ namespace ExampleProject
 
         public override void OnUpdate(in float deltaTime)
         {
-            Graphics.AddTask((RenderContext renderContext) =>
+            GraphicsUtility.AddTask((RenderContext renderContext) =>
             {
                 gpuReadback.EnqueueCopy(renderContext, buffer);
 
@@ -75,7 +74,7 @@ namespace ExampleProject
 
         public override void OnDisable()
         {
-            Graphics.AddTask((RenderContext renderContext) =>
+            GraphicsUtility.AddTask((RenderContext renderContext) =>
             {
                 gpuReadback.Dispose();
                 renderContext.ReleaseBuffer(bufferRef);

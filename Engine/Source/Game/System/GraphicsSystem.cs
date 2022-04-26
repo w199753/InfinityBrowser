@@ -1,25 +1,11 @@
 ﻿using System.Threading;
 using InfinityEngine.Graphics;
 using InfinityEngine.Rendering;
-using InfinityEngine.Container;
 using System.Runtime.CompilerServices;
 using Semaphore = InfinityEngine.Threading.Semaphore;
 
-namespace InfinityEngine.Game.System
+namespace InfinityEngine.System
 {
-    public delegate void FGraphicsTask(RenderContext renderContext);
-
-    public static class Graphics
-    {
-        internal static TArray<FGraphicsTask> GraphicsTasks = new TArray<FGraphicsTask>(64);
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static void AddTask(FGraphicsTask graphicsTask, in bool bParallel = false)
-        {
-            GraphicsTasks.Add(graphicsTask);
-        }
-    }
-
     internal class GraphicsSystem : Disposal
     {
         private bool IsLoopExit;
@@ -80,13 +66,13 @@ namespace InfinityEngine.Game.System
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void ProcessGraphicsTasks()
         {
-            if (Graphics.GraphicsTasks.length == 0) { return; }
+            if (GraphicsUtility.GraphicsTasks.length == 0) { return; }
 
-            for (int i = 0; i < Graphics.GraphicsTasks.length; ++i) {
-                Graphics.GraphicsTasks[i](m_RenderContext);
-                Graphics.GraphicsTasks[i] = null;
+            for (int i = 0; i < GraphicsUtility.GraphicsTasks.length; ++i) {
+                GraphicsUtility.GraphicsTasks[i](m_RenderContext);
+                GraphicsUtility.GraphicsTasks[i] = null;
             }
-            Graphics.GraphicsTasks.Clear();
+            GraphicsUtility.GraphicsTasks.Clear();
         }
 
         protected override void Release()

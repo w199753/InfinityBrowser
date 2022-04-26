@@ -1,6 +1,6 @@
 ﻿using System;
+using InfinityEngine.System;
 using InfinityEngine.Threading;
-using InfinityEngine.Game.System;
 using System.Runtime.InteropServices;
 using System.Runtime.CompilerServices;
 
