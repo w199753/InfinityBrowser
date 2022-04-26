@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Threading;
-using InfinityEngine.Core.Thread.TaskSystem;
+using InfinityEngine.Threading;
 
 namespace ExampleProject
 {

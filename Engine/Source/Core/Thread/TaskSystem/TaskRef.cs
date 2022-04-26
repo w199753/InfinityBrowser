@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
 using System.Runtime.CompilerServices;
 
-namespace InfinityEngine.Core.Thread.TaskSystem
+namespace InfinityEngine.Threading
 {
     public struct TaskRef
     {

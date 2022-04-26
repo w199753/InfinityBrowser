@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Diagnostics;
-using InfinityEngine.Core.Time;
 using System.Runtime.InteropServices;
 
-namespace InfinityEngine.Core.Profiler
+namespace InfinityEngine.Analytics
 {
     public class TimeProfiler
     {

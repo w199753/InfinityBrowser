@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 
-namespace InfinityEngine.Core.Thread.Coroutine
+namespace InfinityEngine.Threading
 {
     // A container for running multiple routines in parallel. Coroutines can be nested.
     public class CoroutineDispatcher

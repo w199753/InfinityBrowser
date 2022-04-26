@@ -1,9 +1,9 @@
-﻿using InfinityEngine.Core.Memory;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.Diagnostics;
+using InfinityEngine.Memory;
+using System.Collections.Generic;
 
-namespace InfinityEngine.Core.Container
+namespace InfinityEngine.Container
 {
     public class TSparseArray<T>
     {

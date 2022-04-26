@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace InfinityEngine.Core.Analytics.Debug
+namespace InfinityEngine.Analytics
 {
     internal class Logger
     {

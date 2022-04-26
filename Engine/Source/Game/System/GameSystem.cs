@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Threading;
+using InfinityEngine.Analytics;
 using System.Collections.Generic;
-using InfinityEngine.Core.Profiler;
 using System.Runtime.CompilerServices;
-using Timer = InfinityEngine.Core.Time.Timer;
-using Semaphore = InfinityEngine.Core.Thread.Sync.Semaphore;
+using Semaphore = InfinityEngine.Threading.Semaphore;
 
 namespace InfinityEngine.Game.System
 {

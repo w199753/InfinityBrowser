@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections;
-using InfinityEngine.Core.Container;
+using InfinityEngine.Container;
+using InfinityEngine.Threading;
 using InfinityEngine.Core.Mathmatics;
 using System.Runtime.CompilerServices;
-using InfinityEngine.Core.Thread.Coroutine;
 
 namespace InfinityEngine
 {

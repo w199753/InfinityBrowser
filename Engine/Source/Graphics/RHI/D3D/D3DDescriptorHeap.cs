@@ -1,6 +1,6 @@
 ﻿using TerraFX.Interop.Windows;
 using TerraFX.Interop.DirectX;
-using InfinityEngine.Core.Container;
+using InfinityEngine.Container;
 using System.Runtime.CompilerServices;
 
 namespace InfinityEngine.Graphics.RHI.D3D

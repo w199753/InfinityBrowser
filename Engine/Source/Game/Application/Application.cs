@@ -1,8 +1,8 @@
 ﻿using System;
+using InfinityEngine.Threading;
 using InfinityEngine.Game.System;
 using System.Runtime.InteropServices;
 using System.Runtime.CompilerServices;
-using InfinityEngine.Core.Thread.Sync;
 
 namespace InfinityEngine
 {
