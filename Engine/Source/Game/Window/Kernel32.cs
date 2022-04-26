@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 
-namespace InfinityEngine.Game.Window
+namespace InfinityEngine
 {
     internal static class Kernel32
     {        

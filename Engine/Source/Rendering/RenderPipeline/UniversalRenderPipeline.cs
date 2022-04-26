@@ -5,21 +5,21 @@ using InfinityEngine.Rendering.RenderLoop;
 
 namespace InfinityEngine.Rendering.RenderPipeline
 {
-    public class FUniversalRenderPipeline : FRenderPipeline
+    public class UniversalRenderPipeline : RenderPipeline
     {
-        public FUniversalRenderPipeline(string pipelineName) : base(pipelineName) 
+        public UniversalRenderPipeline(string pipelineName) : base(pipelineName) 
         {
 
         }
 
-        public override void Init(FRenderContext renderContext)
+        public override void Init(RenderContext renderContext)
         {
             Console.WriteLine("Init RenderPipeline");
         }
 
-        public override void Render(FRenderContext renderContext)
+        public override void Render(RenderContext renderContext)
         {
-            FRHICommandBuffer cmdBuffer = renderContext.GetCommandBuffer("ClearRenderTarget");
+            RHICommandBuffer cmdBuffer = renderContext.GetCommandBuffer("ClearRenderTarget");
             cmdBuffer.Clear();
 
             cmdBuffer.BeginEvent("ClearBackBuffer");
@@ -30,7 +30,7 @@ namespace InfinityEngine.Rendering.RenderPipeline
             renderContext.ReleaseCommandBuffer(cmdBuffer);
         }
 
-        public override void Release(FRenderContext renderContext)
+        public override void Release(RenderContext renderContext)
         {
             Console.WriteLine("Release RenderPipeline");
         }
@@ -57,18 +57,18 @@ namespace InfinityEngine.Rendering.RenderPipeline
 
 
 //ResourceBind Example
-/*FRHIBuffer Buffer = context.CreateBuffer(16, 4, EUseFlag.CPUWrite, EBufferType.Structured);
+/*RHIBuffer Buffer = context.CreateBuffer(16, 4, EUseFlag.CPUWrite, EBufferType.Structured);
 
-FRHIShaderResourceView SRV = context.CreateShaderResourceView(Buffer);
-FRHIUnorderedAccessView UAV = context.CreateUnorderedAccessView(Buffer);
+RHIShaderResourceView SRV = context.CreateShaderResourceView(Buffer);
+RHIUnorderedAccessView UAV = context.CreateUnorderedAccessView(Buffer);
 
-FRHIResourceViewRange ResourceViewRange = context.CreateResourceViewRange(2);
+RHIResourceViewRange ResourceViewRange = context.CreateResourceViewRange(2);
 ResourceViewRange.SetShaderResourceView(0, SRV);
 ResourceViewRange.SetUnorderedAccessView(1, UAV);*/
 
 //ASyncCompute Example
-/*FRHIFence computeFence = context.CreateFence();
-FRHIFence graphicsFence = context.CreateFence();
+/*RHIFence computeFence = context.CreateFence();
+RHIFence graphicsFence = context.CreateFence();
 
 //Pass-A in GraphicsQueue
 cmdList.DrawPrimitiveInstance(null, null, PrimitiveTopology.TriangleList, 0, 0);

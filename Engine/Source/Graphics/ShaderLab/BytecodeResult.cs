@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Text;
 
 namespace InfinityEngine.Graphics.ShaderCompiler
 {
@@ -49,7 +45,7 @@ namespace InfinityEngine.Graphics.ShaderCompiler
         }
     }
 
-    internal class FBytecodeResult
+    internal class BytecodeResult
     {
         public ShaderBytecode Bytecode { get; set; }
 
@@ -58,6 +54,6 @@ namespace InfinityEngine.Graphics.ShaderCompiler
 
     internal interface IShaderCompiler
     {
-        FBytecodeResult Compile(string shaderSource, string entryPoint, EShaderStage stage, string sourceFilename = null);
+        BytecodeResult Compile(string shaderSource, string entryPoint, EShaderStage stage, string sourceFilename = null);
     }
 }

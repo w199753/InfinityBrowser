@@ -1,13 +1,10 @@
 ﻿using System;
 using System.Threading;
-using InfinityEngine.Core.Time;
 using System.Collections.Generic;
-using InfinityEngine.Core.Object;
-using InfinityEngine.Game.Window;
 using InfinityEngine.Core.Profiler;
-using InfinityEngine.Core.Thread.Sync;
-using InfinityEngine.Game.Application;
 using System.Runtime.CompilerServices;
+using Timer = InfinityEngine.Core.Time.Timer;
+using Semaphore = InfinityEngine.Core.Thread.Sync.Semaphore;
 
 namespace InfinityEngine.Game.System
 {
@@ -15,26 +12,26 @@ namespace InfinityEngine.Game.System
     internal delegate void FGameTickFunc();
     internal delegate void FGameEndFunc();
 
-    internal class FGameSystem : FDisposal
+    internal class GameSystem : Disposal
     {
         private bool IsLoopExit;
         private float m_DeltaTime;
-        private FSemaphore m_SemaphoreG2R;
-        private FSemaphore m_SemaphoreR2G;
+        private Semaphore m_SemaphoreG2R;
+        private Semaphore m_SemaphoreR2G;
         private FGameEndFunc m_GameEndFunc;
         private FGamePlayFunc m_GamePlayFunc;
         private FGameTickFunc m_GameTickFunc;
-        private FTimeProfiler m_TimeCounter;
+        private TimeProfiler m_TimeCounter;
         private List<float> m_LastDeltaTimes;
 
-        public FGameSystem(FGameEndFunc gameEndFunc, FGamePlayFunc gamePlayFunc, FGameTickFunc gameTickFunc, FSemaphore semaphoreG2R, FSemaphore semaphoreR2G)
+        public GameSystem(FGameEndFunc gameEndFunc, FGamePlayFunc gamePlayFunc, FGameTickFunc gameTickFunc, Semaphore semaphoreG2R, Semaphore semaphoreR2G)
         {
             this.m_GameEndFunc = gameEndFunc;
             this.m_GamePlayFunc = gamePlayFunc;
             this.m_GameTickFunc = gameTickFunc;
             this.m_SemaphoreG2R = semaphoreG2R;
             this.m_SemaphoreR2G = semaphoreR2G;
-            this.m_TimeCounter = new FTimeProfiler();
+            this.m_TimeCounter = new TimeProfiler();
             this.m_LastDeltaTimes = new List<float>(64);
 
             Thread.CurrentThread.Name = "GameThread";
@@ -69,7 +66,7 @@ namespace InfinityEngine.Game.System
 
                 m_TimeCounter.Start();
                 m_SemaphoreR2G.Wait();
-                FTimer.Tick(m_DeltaTime);
+                Timer.Tick(m_DeltaTime);
                 m_GameTickFunc();
                 m_SemaphoreG2R.Signal();
                 WaitForTargetFPS();
@@ -82,9 +79,9 @@ namespace InfinityEngine.Game.System
             long elapsed = 0;
             int deltaTimeSmoothing = 2;
 
-            if (FApplication.GTargetFrameRate > 0)
+            if (GameApplication.GTargetFrameRate > 0)
             {
-                long targetMax = 1000000L / FApplication.GTargetFrameRate;
+                long targetMax = 1000000L / GameApplication.GTargetFrameRate;
 
                 while(true)
                 {

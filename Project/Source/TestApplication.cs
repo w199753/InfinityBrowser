@@ -1,16 +1,15 @@
 ﻿using System;
+using InfinityEngine;
 using InfinityEngine.Core.Time;
 using InfinityEngine.Game.System;
 using InfinityEngine.Graphics.RHI;
 using InfinityEngine.Core.Profiler;
-using InfinityEngine.Game.Application;
-using InfinityEngine.Core.ActorComponent;
 using InfinityEngine.Rendering.RenderLoop;
 
 namespace ExampleProject
 {
     [Serializable]
-    public class TestComponent : UComponent
+    public class TestComponent : Component
     {
         int numData = 100000;
         int[] readData;
@@ -20,30 +19,30 @@ namespace ExampleProject
         }
         float gpuTime => gpuReadback.gpuTime;
 
-        FRHIBuffer buffer
+        RHIBuffer buffer
         {
             get { return bufferRef.buffer; }
         }
-        FRHIBufferRef bufferRef;
-        FTimeProfiler timeProfiler;
-        FRHIMemoryReadback gpuReadback;
+        RHIBufferRef bufferRef;
+        TimeProfiler timeProfiler;
+        RHIMemoryReadback gpuReadback;
 
         public override void OnEnable()
         {
             Console.WriteLine("Enable Component");
 
             readData = new int[numData];
-            timeProfiler = new FTimeProfiler();
+            timeProfiler = new TimeProfiler();
 
-            FGraphics.AddTask((FRenderContext renderContext) =>
+            Graphics.AddTask((RenderContext renderContext) =>
             {
-                FBufferDescriptor descriptor = new FBufferDescriptor(numData, 4, EUsageType.UnorderAccess, EStorageType.Default | EStorageType.Dynamic | EStorageType.Staging);
+                BufferDescriptor descriptor = new BufferDescriptor(numData, 4, EUsageType.UnorderAccess, EStorageType.Default | EStorageType.Dynamic | EStorageType.Staging);
                 descriptor.name = "TestBuffer";
 
                 bufferRef = renderContext.GetBuffer(descriptor);
                 gpuReadback = renderContext.CreateMemoryReadback("TestReadback", true);
 
-                FRHICommandBuffer cmdBuffer = renderContext.GetCommandBuffer("Upload", EContextType.Copy);
+                RHICommandBuffer cmdBuffer = renderContext.GetCommandBuffer("Upload", EContextType.Copy);
                 cmdBuffer.Clear();
 
                 int[] data = new int[numData];
@@ -61,7 +60,7 @@ namespace ExampleProject
 
         public override void OnUpdate(in float deltaTime)
         {
-            FGraphics.AddTask((FRenderContext renderContext) =>
+            Graphics.AddTask((RenderContext renderContext) =>
             {
                 gpuReadback.EnqueueCopy(renderContext, buffer);
 
@@ -77,7 +76,7 @@ namespace ExampleProject
 
         public override void OnDisable()
         {
-            FGraphics.AddTask((FRenderContext renderContext) =>
+            Graphics.AddTask((RenderContext renderContext) =>
             {
                 gpuReadback.Dispose();
                 renderContext.ReleaseBuffer(bufferRef);
@@ -89,7 +88,7 @@ namespace ExampleProject
     }
 
     [Serializable]
-    public class TestActor : AActor
+    public class TestActor : Actor
     {
         //FTaskHandle m_AsynTaskRef;
         private TestComponent m_Component;
@@ -106,7 +105,7 @@ namespace ExampleProject
             //AddComponent(m_Component);
         }
 
-        public TestActor(string name, AActor parent) : base(name, parent)
+        public TestActor(string name, Actor parent) : base(name, parent)
         {
             m_Component = new TestComponent();
             //AddComponent(m_Component);
@@ -144,7 +143,7 @@ namespace ExampleProject
         }
     }
 
-    public class TestApplication : FApplication
+    public class TestApplication : GameApplication
     {
         private TestActor m_Actor;
 
@@ -160,7 +159,7 @@ namespace ExampleProject
 
         protected override void Tick()
         {
-            m_Actor.OnUpdate(FTimer.DeltaTime);
+            m_Actor.OnUpdate(Timer.DeltaTime);
         }
 
         protected override void End()

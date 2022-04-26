@@ -1,18 +1,17 @@
 ﻿using System;
-using System.Runtime.Serialization;
 
-namespace InfinityEngine.Core.Object
+namespace InfinityEngine
 {
-    public class FDisposal : IDisposable
+    public class Disposal : IDisposable
     {
         private bool IsDisposed = false;
 
-        public FDisposal()
+        public Disposal()
         {
             
         }
 
-        ~FDisposal()
+        ~Disposal()
         {
             Finalizer();
         }

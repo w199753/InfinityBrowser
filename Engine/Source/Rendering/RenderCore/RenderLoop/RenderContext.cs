@@ -1,21 +1,20 @@
 ﻿using System;
-using InfinityEngine.Core.Object;
 using InfinityEngine.Graphics.RHI;
 using System.Runtime.CompilerServices;
 
 namespace InfinityEngine.Rendering.RenderLoop
 {
-    public sealed class FRenderContext : FDisposal
+    public sealed class RenderContext : Disposal
     {
         public ulong computeFrequency => m_Context.computeFrequency;
         public ulong graphicsFrequency => m_Context.graphicsFrequency;
-        internal FRHITexture backBuffer => m_SwapChain.backBuffer;
-        internal FRHIRenderTargetView backBufferView => m_SwapChain.backBufferView;
+        internal RHITexture backBuffer => m_SwapChain.backBuffer;
+        internal RHIRenderTargetView backBufferView => m_SwapChain.backBufferView;
 
-        private FRHIContext m_Context;
-        private FRHISwapChain m_SwapChain;
+        private RHIContext m_Context;
+        private RHISwapChain m_SwapChain;
 
-        public FRenderContext(FRHIContext context, FRHISwapChain swapChain)
+        public RenderContext(RHIContext context, RHISwapChain swapChain)
         {
             m_Context = context;
             m_SwapChain = swapChain;
@@ -56,97 +55,97 @@ namespace InfinityEngine.Rendering.RenderLoop
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public FRHICommandBuffer CreateCommandBuffer(string name = null, in EContextType contextType = EContextType.Graphics)
+        public RHICommandBuffer CreateCommandBuffer(string name = null, in EContextType contextType = EContextType.Graphics)
         {
             return m_Context.CreateCommandBuffer(contextType, name);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public FRHICommandBuffer GetCommandBuffer(string name = null, in EContextType contextType = EContextType.Graphics)
+        public RHICommandBuffer GetCommandBuffer(string name = null, in EContextType contextType = EContextType.Graphics)
         {
             return m_Context.GetCommandBuffer(contextType, name);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public void ReleaseCommandBuffer(FRHICommandBuffer cmdBuffer)
+        public void ReleaseCommandBuffer(RHICommandBuffer cmdBuffer)
         {
             m_Context.ReleaseCommandBuffer(cmdBuffer);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public void WriteToFence(in EContextType contextType, FRHIFence fence)
+        public void WriteToFence(in EContextType contextType, RHIFence fence)
         {
             m_Context.WriteToFence(contextType, fence);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public void WaitForFence(in EContextType contextType, FRHIFence fence)
+        public void WaitForFence(in EContextType contextType, RHIFence fence)
         {
             m_Context.WaitForFence(contextType, fence);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public void ExecuteCommandBuffer(FRHICommandBuffer cmdBuffer)
+        public void ExecuteCommandBuffer(RHICommandBuffer cmdBuffer)
         {
             m_Context.ExecuteCommandBuffer(cmdBuffer);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public FRHISwapChain CreateSwapChain(in uint width, in uint height, in IntPtr windowPtr, string name)
+        public RHISwapChain CreateSwapChain(in uint width, in uint height, in IntPtr windowPtr, string name)
         {
             return m_Context.CreateSwapChain(name, width, height, windowPtr);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public FRHIFence CreateFence(string name)
+        public RHIFence CreateFence(string name)
         {
             return m_Context.CreateFence(name);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public FRHIFence GetFence(string name)
+        public RHIFence GetFence(string name)
         {
             return m_Context.GetFence(name);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public void ReleaseFence(FRHIFence fence)
+        public void ReleaseFence(RHIFence fence)
         {
             m_Context.ReleaseFence(fence);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public FRHIQuery CreateQuery(in EQueryType queryType, string name)
+        public RHIQuery CreateQuery(in EQueryType queryType, string name)
         {
             return m_Context.CreateQuery(queryType, name);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public FRHIQuery GetQuery(in EQueryType queryType, string name)
+        public RHIQuery GetQuery(in EQueryType queryType, string name)
         {
             return m_Context.GetQuery(queryType, name);;
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public void ReleaseQuery(FRHIQuery query)
+        public void ReleaseQuery(RHIQuery query)
         {
             m_Context.ReleaseQuery(query);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public FRHIComputePipelineState CreateComputePipelineState(in FRHIComputePipelineDescriptor descriptor)
+        public RHIComputePipelineState CreateComputePipelineState(in RHIComputePipelineDescriptor descriptor)
         {
             return m_Context.CreateComputePipelineState(descriptor);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public FRHIRayTracePipelineState CreateRayTracePipelineState(in FRHIRayTracePipelineDescriptor descriptor)
+        public RHIRayTracePipelineState CreateRayTracePipelineState(in RHIRayTracePipelineDescriptor descriptor)
         {
             return m_Context.CreateRayTracePipelineState(descriptor);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public FRHIGraphicsPipelineState CreateGraphicsPipelineState(in FRHIGraphicsPipelineDescriptor descriptor)
+        public RHIGraphicsPipelineState CreateGraphicsPipelineState(in RHIGraphicsPipelineDescriptor descriptor)
         {
             return m_Context.CreateGraphicsPipelineState(descriptor);
         }
@@ -170,103 +169,103 @@ namespace InfinityEngine.Rendering.RenderLoop
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public FRHIBuffer CreateBuffer(in FBufferDescriptor descriptor)
+        public RHIBuffer CreateBuffer(in BufferDescriptor descriptor)
         {
             return m_Context.CreateBuffer(descriptor);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public FRHIBufferRef GetBuffer(in FBufferDescriptor descriptor)
+        public RHIBufferRef GetBuffer(in BufferDescriptor descriptor)
         {
             return m_Context.GetBuffer(descriptor);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public void ReleaseBuffer(in FRHIBufferRef bufferRef)
+        public void ReleaseBuffer(in RHIBufferRef bufferRef)
         {
             m_Context.ReleaseBuffer(bufferRef);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public FRHITexture CreateTexture(in FTextureDescriptor descriptor)
+        public RHITexture CreateTexture(in TextureDescriptor descriptor)
         {
             return m_Context.CreateTexture(descriptor);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public FRHITextureRef GetTexture(in FTextureDescriptor descriptor)
+        public RHITextureRef GetTexture(in TextureDescriptor descriptor)
         {
             return m_Context.GetTexture(descriptor);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public void ReleaseTexture(FRHITextureRef textureRef)
+        public void ReleaseTexture(RHITextureRef textureRef)
         {
             m_Context.ReleaseTexture(textureRef);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public FRHIMemoryReadback CreateMemoryReadback(string requestName, bool bProfiler = false)
+        public RHIMemoryReadback CreateMemoryReadback(string requestName, bool bProfiler = false)
         {
             return m_Context.CreateMemoryReadback(requestName, bProfiler);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public FRHIIndexBufferView CreateIndexBufferView(FRHIBuffer buffer)
+        public RHIIndexBufferView CreateIndexBufferView(RHIBuffer buffer)
         {
             return m_Context.CreateIndexBufferView(buffer);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public FRHIVertexBufferView CreateVertexBufferView(FRHIBuffer buffer)
+        public RHIVertexBufferView CreateVertexBufferView(RHIBuffer buffer)
         {
             return m_Context.CreateVertexBufferView(buffer);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public FRHIDeptnStencilView CreateDepthStencilView(FRHITexture texture)
+        public RHIDeptnStencilView CreateDepthStencilView(RHITexture texture)
         {
             return m_Context.CreateDepthStencilView(texture);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public FRHIRenderTargetView CreateRenderTargetView(FRHITexture texture)
+        public RHIRenderTargetView CreateRenderTargetView(RHITexture texture)
         {
             return m_Context.CreateRenderTargetView(texture);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public FRHIConstantBufferView CreateConstantBufferView(FRHIBuffer buffer)
+        public RHIConstantBufferView CreateConstantBufferView(RHIBuffer buffer)
         {
             return m_Context.CreateConstantBufferView(buffer);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public FRHIShaderResourceView CreateShaderResourceView(FRHIBuffer buffer)
+        public RHIShaderResourceView CreateShaderResourceView(RHIBuffer buffer)
         {
             return m_Context.CreateShaderResourceView(buffer);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public FRHIShaderResourceView CreateShaderResourceView(FRHITexture texture)
+        public RHIShaderResourceView CreateShaderResourceView(RHITexture texture)
         {
             return m_Context.CreateShaderResourceView(texture);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public FRHIUnorderedAccessView CreateUnorderedAccessView(FRHIBuffer buffer)
+        public RHIUnorderedAccessView CreateUnorderedAccessView(RHIBuffer buffer)
         {
             return m_Context.CreateUnorderedAccessView(buffer);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public FRHIUnorderedAccessView CreateUnorderedAccessView(FRHITexture texture)
+        public RHIUnorderedAccessView CreateUnorderedAccessView(RHITexture texture)
         {
             return m_Context.CreateUnorderedAccessView(texture);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public FRHIResourceSet CreateResourceSet(in uint count)
+        public RHIResourceSet CreateResourceSet(in uint count)
         {
             return m_Context.CreateResourceSet(count);
         }
@@ -276,6 +275,6 @@ namespace InfinityEngine.Rendering.RenderLoop
 
         }
 
-        public static implicit operator FRHIContext(FRenderContext renderContext) { return renderContext.m_Context; }
+        public static implicit operator RHIContext(RenderContext renderContext) { return renderContext.m_Context; }
     }
 }

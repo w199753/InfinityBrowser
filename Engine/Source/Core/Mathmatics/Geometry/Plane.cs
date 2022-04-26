@@ -13,7 +13,7 @@ namespace InfinityEngine.Core.Mathmatics.Geometry
     /// </remarks>
     [DebuggerDisplay("{Normal}, {Distance}")]
     [Serializable]
-    internal struct Plane
+    public struct Plane
     {
         /// <summary>
         /// A plane in the form Ax + By + Cz + Dw = 0.

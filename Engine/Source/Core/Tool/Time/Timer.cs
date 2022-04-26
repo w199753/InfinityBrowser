@@ -2,7 +2,7 @@
 
 namespace InfinityEngine.Core.Time
 {
-    public class FTimer
+    public class Timer
     {
         public static double SecondsPerTick { get { return 1.0 / Stopwatch.Frequency; } }
         public static double MilliSecsPerTick { get { return 1000.0f / Stopwatch.Frequency; } }

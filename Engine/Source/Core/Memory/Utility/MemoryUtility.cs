@@ -4,7 +4,7 @@ using System.Runtime.CompilerServices;
 
 namespace InfinityEngine.Core.Memory
 {
-    public unsafe static class FMemoryUtil
+    public unsafe static class MemoryUtility
     {
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int SizeOf<T>()

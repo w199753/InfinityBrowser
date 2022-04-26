@@ -1,5 +1,4 @@
 ﻿using System;
-using InfinityEngine.Core.Object;
 using InfinityEngine.Graphics.RHI;
 using InfinityEngine.Core.Container;
 
@@ -12,7 +11,7 @@ namespace InfinityEngine.Graphics.RDG
         ReadWrite = Read | Write,
     }
 
-    internal struct FRDGResourceRef
+    internal struct RDGResourceRef
     {
         internal bool IsValid;
         public int index { get; private set; }
@@ -20,38 +19,38 @@ namespace InfinityEngine.Graphics.RDG
         public int iType { get { return (int)type; } }
 
 
-        internal FRDGResourceRef(int value, EResourceType type)
+        internal RDGResourceRef(int value, EResourceType type)
         {
             this.type = type;
             this.index = value;
             this.IsValid = true;
         }
 
-        public static implicit operator int(FRDGResourceRef handle) => handle.index;
+        public static implicit operator int(RDGResourceRef handle) => handle.index;
     }
 
-    public struct FRDGBufferRef
+    public struct RDGBufferRef
     {
-        internal FRDGResourceRef handle;
+        internal RDGResourceRef handle;
 
-        internal FRDGBufferRef(int handle) 
+        internal RDGBufferRef(int handle) 
         { 
-            this.handle = new FRDGResourceRef(handle, EResourceType.Buffer); 
+            this.handle = new RDGResourceRef(handle, EResourceType.Buffer); 
         }
 
-        public static implicit operator FRHIBuffer(FRDGBufferRef bufferRef) => bufferRef.handle.IsValid ? FRDGResourceFactory.current.GetBuffer(bufferRef) : null;
+        public static implicit operator RHIBuffer(RDGBufferRef bufferRef) => bufferRef.handle.IsValid ? RDGResourceFactory.current.GetBuffer(bufferRef) : null;
     }
 
-    public struct FRDGTextureRef
+    public struct RDGTextureRef
     {
-        internal FRDGResourceRef handle;
+        internal RDGResourceRef handle;
 
-        internal FRDGTextureRef(int handle) 
+        internal RDGTextureRef(int handle) 
         { 
-            this.handle = new FRDGResourceRef(handle, EResourceType.Texture); 
+            this.handle = new RDGResourceRef(handle, EResourceType.Texture); 
         }
 
-        public static implicit operator FRHITexture(FRDGTextureRef textureRef) => textureRef.handle.IsValid ? FRDGResourceFactory.current.GetTexture(textureRef) : null;
+        public static implicit operator RHITexture(RDGTextureRef textureRef) => textureRef.handle.IsValid ? RDGResourceFactory.current.GetTexture(textureRef) : null;
     }
 
     internal class IRDGResource
@@ -77,12 +76,12 @@ namespace InfinityEngine.Graphics.RDG
         }
     }
 
-    internal class FRDGResource<DescType, ResType> : IRDGResource where DescType : struct where ResType : class
+    internal class RDGResource<DescType, ResType> : IRDGResource where DescType : struct where ResType : class
     {
         public DescType desc;
         public ResType resource;
 
-        protected FRDGResource()
+        protected RDGResource()
         {
 
         }
@@ -94,7 +93,7 @@ namespace InfinityEngine.Graphics.RDG
         }
     }
 
-    internal class FRDGBuffer : FRDGResource<FBufferDescriptor, FRHIBuffer>
+    internal class RDGBuffer : RDGResource<BufferDescriptor, RHIBuffer>
     {
         public override string GetName()
         {
@@ -102,7 +101,7 @@ namespace InfinityEngine.Graphics.RDG
         }
     }
 
-    internal class FRDGTexture : FRDGResource<FTextureDescriptor, FRHITexture>
+    internal class RDGTexture : RDGResource<TextureDescriptor, RHITexture>
     {
         public override string GetName()
         {
@@ -110,10 +109,10 @@ namespace InfinityEngine.Graphics.RDG
         }
     }
 
-    internal class FRDGResourceFactory : FDisposal
+    internal class RDGResourceFactory : Disposal
     {
-        static FRDGResourceFactory m_CurrentRegistry;
-        internal static FRDGResourceFactory current
+        static RDGResourceFactory m_CurrentRegistry;
+        internal static RDGResourceFactory current
         {
             get
             {
@@ -123,22 +122,22 @@ namespace InfinityEngine.Graphics.RDG
             }
         }
 
-        FRHIBufferCache m_BufferPool = new FRHIBufferCache();
-        FRHITextureCache m_TexturePool = new FRHITextureCache();
+        RHIBufferCache m_BufferPool = new RHIBufferCache();
+        RHITextureCache m_TexturePool = new RHITextureCache();
         TArray<IRDGResource>[] m_Resources = new TArray<IRDGResource>[2];
 
-        internal FRDGResourceFactory()
+        internal RDGResourceFactory()
         {
             for (int i = 0; i < 2; ++i)
                 m_Resources[i] = new TArray<IRDGResource>();
         }
 
-        internal FRHIBuffer GetBuffer(in FRDGBufferRef bufferRef)
+        internal RHIBuffer GetBuffer(in RDGBufferRef bufferRef)
         {
             return GetBufferResource(bufferRef.handle).resource;
         }
 
-        internal FRHITexture GetTexture(in FRDGTextureRef textureRef)
+        internal RHITexture GetTexture(in RDGTextureRef textureRef)
         {
             return GetTextureResource(textureRef.handle).resource;
         }
@@ -146,7 +145,7 @@ namespace InfinityEngine.Graphics.RDG
         #region Internal Interface
         ResType GetResource<DescType, ResType>(TArray<IRDGResource> resourceArray, int index) where DescType : struct where ResType : class
         {
-            var rdgResource = resourceArray[index] as FRDGResource<DescType, ResType>;
+            var rdgResource = resourceArray[index] as RDGResource<DescType, ResType>;
             return rdgResource.resource;
         }
 
@@ -160,17 +159,17 @@ namespace InfinityEngine.Graphics.RDG
             current = null;
         }
 
-        internal string GetResourceName(in FRDGResourceRef resourceRef)
+        internal string GetResourceName(in RDGResourceRef resourceRef)
         {
             return m_Resources[resourceRef.iType][resourceRef.index].GetName();
         }
 
-        internal bool IsResourceImported(in FRDGResourceRef resourceRef)
+        internal bool IsResourceImported(in RDGResourceRef resourceRef)
         {
             return m_Resources[resourceRef.iType][resourceRef.index].imported;
         }
 
-        internal int GetResourceTemporalIndex(in FRDGResourceRef resourceRef)
+        internal int GetResourceTemporalIndex(in RDGResourceRef resourceRef)
         {
             return m_Resources[resourceRef.iType][resourceRef.index].temporalPassIndex;
         }
@@ -187,23 +186,23 @@ namespace InfinityEngine.Graphics.RDG
             return result;
         }
 
-        internal FRDGTextureRef ImportTexture(FRHITexture rhiTexture, in int shaderProperty = 0)
+        internal RDGTextureRef ImportTexture(RHITexture rhiTexture, in int shaderProperty = 0)
         {
-            int newHandle = AddNewResource(m_Resources[(int)EResourceType.Texture], out FRDGTexture rdgTexture);
+            int newHandle = AddNewResource(m_Resources[(int)EResourceType.Texture], out RDGTexture rdgTexture);
             rdgTexture.resource = rhiTexture;
             rdgTexture.imported = true;
             rdgTexture.shaderProperty = shaderProperty;
 
-            return new FRDGTextureRef(newHandle);
+            return new RDGTextureRef(newHandle);
         }
 
-        internal FRDGTextureRef CreateTexture(in FTextureDescriptor textureDescriptor, in int shaderProperty = 0, in int temporalPassIndex = -1)
+        internal RDGTextureRef CreateTexture(in TextureDescriptor textureDescriptor, in int shaderProperty = 0, in int temporalPassIndex = -1)
         {
-            int newHandle = AddNewResource(m_Resources[(int)EResourceType.Texture], out FRDGTexture rdgTexture);
+            int newHandle = AddNewResource(m_Resources[(int)EResourceType.Texture], out RDGTexture rdgTexture);
             rdgTexture.desc = textureDescriptor;
             rdgTexture.shaderProperty = shaderProperty;
             rdgTexture.temporalPassIndex = temporalPassIndex;
-            return new FRDGTextureRef(newHandle);
+            return new RDGTextureRef(newHandle);
         }
 
         internal int GetTextureResourceCount()
@@ -211,32 +210,32 @@ namespace InfinityEngine.Graphics.RDG
             return m_Resources[(int)EResourceType.Texture].length;
         }
 
-        FRDGTexture GetTextureResource(in FRDGResourceRef resourceRef)
+        RDGTexture GetTextureResource(in RDGResourceRef resourceRef)
         {
-            return m_Resources[(int)EResourceType.Texture][resourceRef] as FRDGTexture;
+            return m_Resources[(int)EResourceType.Texture][resourceRef] as RDGTexture;
         }
 
-        internal FTextureDescriptor GetTextureDescriptor(in FRDGResourceRef resourceRef)
+        internal TextureDescriptor GetTextureDescriptor(in RDGResourceRef resourceRef)
         {
-            return (m_Resources[(int)EResourceType.Texture][resourceRef] as FRDGTexture).desc;
+            return (m_Resources[(int)EResourceType.Texture][resourceRef] as RDGTexture).desc;
         }
 
-        internal FRDGBufferRef ImportBuffer(FRHIBuffer rhiBuffer)
+        internal RDGBufferRef ImportBuffer(RHIBuffer rhiBuffer)
         {
-            int newHandle = AddNewResource(m_Resources[(int)EResourceType.Buffer], out FRDGBuffer rdgBuffer);
+            int newHandle = AddNewResource(m_Resources[(int)EResourceType.Buffer], out RDGBuffer rdgBuffer);
             rdgBuffer.resource = rhiBuffer;
             rdgBuffer.imported = true;
 
-            return new FRDGBufferRef(newHandle);
+            return new RDGBufferRef(newHandle);
         }
 
-        internal FRDGBufferRef CreateBuffer(in FBufferDescriptor bufferDescriptor, in int temporalPassIndex = -1)
+        internal RDGBufferRef CreateBuffer(in BufferDescriptor bufferDescriptor, in int temporalPassIndex = -1)
         {
-            int newHandle = AddNewResource(m_Resources[(int)EResourceType.Buffer], out FRDGBuffer bufferResource);
+            int newHandle = AddNewResource(m_Resources[(int)EResourceType.Buffer], out RDGBuffer bufferResource);
             bufferResource.desc = bufferDescriptor;
             bufferResource.temporalPassIndex = temporalPassIndex;
 
-            return new FRDGBufferRef(newHandle);
+            return new RDGBufferRef(newHandle);
         }
 
         internal int GetBufferResourceCount()
@@ -244,19 +243,19 @@ namespace InfinityEngine.Graphics.RDG
             return m_Resources[(int)EResourceType.Buffer].length;
         }
 
-        FRDGBuffer GetBufferResource(in FRDGResourceRef resourceRef)
+        RDGBuffer GetBufferResource(in RDGResourceRef resourceRef)
         {
-            return m_Resources[(int)EResourceType.Buffer][resourceRef] as FRDGBuffer;
+            return m_Resources[(int)EResourceType.Buffer][resourceRef] as RDGBuffer;
         }
 
-        internal FBufferDescriptor GetBufferDescriptor(in FRDGResourceRef handle)
+        internal BufferDescriptor GetBufferDescriptor(in RDGResourceRef handle)
         {
-            return (m_Resources[(int)EResourceType.Buffer][handle] as FRDGBuffer).desc;
+            return (m_Resources[(int)EResourceType.Buffer][handle] as RDGBuffer).desc;
         }
 
         internal void CreateRealBuffer(in int index)
         {
-            var resource = m_Resources[(int)EResourceType.Buffer][index] as FRDGBuffer;
+            var resource = m_Resources[(int)EResourceType.Buffer][index] as RDGBuffer;
             if (!resource.imported)
             {
                 var desc = resource.desc;
@@ -276,7 +275,7 @@ namespace InfinityEngine.Graphics.RDG
 
         internal void ReleaseRealBuffer(in int index)
         {
-            var resource = m_Resources[(int)EResourceType.Buffer][index] as FRDGBuffer;
+            var resource = m_Resources[(int)EResourceType.Buffer][index] as RDGBuffer;
 
             if (!resource.imported)
             {
@@ -292,7 +291,7 @@ namespace InfinityEngine.Graphics.RDG
 
         internal void CreateRealTexture(in int index)
         {
-            var resource = m_Resources[(int)EResourceType.Texture][index] as FRDGTexture;
+            var resource = m_Resources[(int)EResourceType.Texture][index] as RDGTexture;
 
             if (!resource.imported)
             {
@@ -315,7 +314,7 @@ namespace InfinityEngine.Graphics.RDG
 
         internal void ReleaseRealTexture(in int index)
         {
-            var resource = m_Resources[(int)EResourceType.Texture][index] as FRDGTexture;
+            var resource = m_Resources[(int)EResourceType.Texture][index] as RDGTexture;
 
             if (!resource.imported)
             {

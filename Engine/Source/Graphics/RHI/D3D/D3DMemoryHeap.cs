@@ -1,10 +1,8 @@
-﻿using InfinityEngine.Core.Object;
-
-namespace InfinityEngine.Graphics.RHI.D3D
+﻿namespace InfinityEngine.Graphics.RHI.D3D
 {
-    internal sealed class FD3DMemoryHeapFactory : FDisposal
+    internal sealed class D3DMemoryHeapFactory : Disposal
     {
-        internal FD3DMemoryHeapFactory(FRHIDevice device, in int heapCount) : base()
+        internal D3DMemoryHeapFactory(RHIDevice device, in int heapCount) : base()
         {
 
         }

@@ -9,7 +9,7 @@ using System.Runtime.CompilerServices;
 
 namespace InfinityEngine.Graphics.RHI.D3D
 {
-	internal static class FD3DQueryUtility
+	internal static class D3DQueryUtility
 	{
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		internal static D3D12_QUERY_TYPE GetNativeQueryType(this EQueryType queryType)
@@ -37,13 +37,13 @@ namespace InfinityEngine.Graphics.RHI.D3D
 		}
 	}
 
-	public class FD3DQuery : FRHIQuery
+	public class D3DQuery : RHIQuery
 	{
-		internal FD3DQueryContext queryContext;
+		internal D3DQueryContext queryContext;
 
-		internal FD3DQuery(FRHIQueryContext queryContext) : base(queryContext)
+		internal D3DQuery(RHIQueryContext queryContext) : base(queryContext)
 		{
-			this.queryContext = (FD3DQueryContext)queryContext;
+			this.queryContext = (D3DQueryContext)queryContext;
 			this.indexHead = queryContext.Allocate();
 			this.indexLast = queryContext.IsTimeQuery ? queryContext.Allocate() : -1;
 		}
@@ -73,30 +73,30 @@ namespace InfinityEngine.Graphics.RHI.D3D
 		}
     }
 
-	internal unsafe class FD3DQueryContext : FRHIQueryContext
+	internal unsafe class D3DQueryContext : RHIQueryContext
 	{
 		internal ID3D12QueryHeap* queryHeap;
 		private TArray<int> m_QueryMap;
-		private Stack<FD3DQuery> m_StackPool;
-		private FD3DFence m_QueryFence;
+		private Stack<D3DQuery> m_StackPool;
+		private D3DFence m_QueryFence;
 		private ID3D12Resource* m_QueryResult;
-		private FD3DCommandBuffer m_CmdBuffer;
+		private D3DCommandBuffer m_CmdBuffer;
 		public int countAll { get; private set; }
 		public override int countActive => (countAll - countInactive);
 		public override int countInactive => m_StackPool.Count;
 		public override bool IsReady => m_QueryFence.IsCompleted;
 		public override bool IsTimeQuery => (queryType == EQueryType.CopyTimestamp || queryType == EQueryType.GenericTimestamp);
 
-		public FD3DQueryContext(FRHIDevice device, FRHICommandContext cmdContext, in EQueryType queryType, in int queryCount, string name) : base(device, queryType, queryCount, name)
+		public D3DQueryContext(RHIDevice device, RHICommandContext cmdContext, in EQueryType queryType, in int queryCount, string name) : base(device, queryType, queryCount, name)
 		{
-			FD3DDevice d3dDevice = (FD3DDevice)device;
+			D3DDevice d3dDevice = (D3DDevice)device;
 
 			this.queryType = queryType;
 			this.m_QueryCount = queryCount;
 			this.m_QueryData = new ulong[queryCount];
-			this.m_QueryFence = new FD3DFence(device, name);
+			this.m_QueryFence = new D3DFence(device, name);
 			this.m_QueryMap = new TArray<int>(queryCount);
-			this.m_StackPool = new Stack<FD3DQuery>(64);
+			this.m_StackPool = new Stack<D3DQuery>(64);
 			for (int i = 0; i < queryCount; ++i) { this.m_QueryMap.Add(i); }
 
 			ID3D12QueryHeap* heapPtr;
@@ -134,7 +134,7 @@ namespace InfinityEngine.Graphics.RHI.D3D
 				resourceDesc.Layout = D3D12_TEXTURE_LAYOUT.D3D12_TEXTURE_LAYOUT_ROW_MAJOR;
             }
 			ID3D12Resource* resultPtr;
-			m_CmdBuffer = new FD3DCommandBuffer(name, device, cmdContext, queryType == EQueryType.CopyTimestamp ? EContextType.Copy : EContextType.Graphics);
+			m_CmdBuffer = new D3DCommandBuffer(name, device, cmdContext, queryType == EQueryType.CopyTimestamp ? EContextType.Copy : EContextType.Graphics);
 			d3dDevice.nativeDevice->CreateCommittedResource(&heapProperties, D3D12_HEAP_FLAGS.D3D12_HEAP_FLAG_NONE, &resourceDesc, D3D12_RESOURCE_STATES.D3D12_RESOURCE_STATE_COPY_DEST, null, Windows.__uuidof<ID3D12Resource>(), (void**)&resultPtr);
 			fixed (char* namePtr = name + "_QueryResult")
 			{
@@ -144,7 +144,7 @@ namespace InfinityEngine.Graphics.RHI.D3D
 		}
 
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public override void Submit(FRHICommandContext commandContext)
+		public override void Submit(RHICommandContext commandContext)
         {
 			if (IsReady) 
 			{
@@ -189,12 +189,12 @@ namespace InfinityEngine.Graphics.RHI.D3D
 		}
 
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public override FRHIQuery GetTemporary(string name)
+		public override RHIQuery GetTemporary(string name)
 		{
-			FD3DQuery query;
+			D3DQuery query;
 			if (m_StackPool.Count == 0)
 			{
-				query = new FD3DQuery(this);
+				query = new D3DQuery(this);
 				countAll++;
 			} else {
 				query = m_StackPool.Pop();
@@ -203,14 +203,14 @@ namespace InfinityEngine.Graphics.RHI.D3D
 		}
 
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public override void ReleaseTemporary(FRHIQuery query)
+		public override void ReleaseTemporary(RHIQuery query)
 		{
-			m_StackPool.Push((FD3DQuery)query);
+			m_StackPool.Push((D3DQuery)query);
 		}
 
 		protected override void Release()
 		{
-			foreach (FD3DQuery query in m_StackPool)
+			foreach (D3DQuery query in m_StackPool)
 			{
 				query.Dispose();
 			}

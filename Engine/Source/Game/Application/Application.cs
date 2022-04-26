@@ -1,37 +1,35 @@
 ﻿using System;
-using InfinityEngine.Core.Object;
-using InfinityEngine.Game.Window;
 using InfinityEngine.Game.System;
 using System.Runtime.InteropServices;
 using System.Runtime.CompilerServices;
 using InfinityEngine.Core.Thread.Sync;
 
-namespace InfinityEngine.Game.Application
+namespace InfinityEngine
 {
-    public abstract partial class FApplication : FDisposal
+    public abstract partial class GameApplication : Disposal
     {
         public static uint GTargetFrameRate = 60;
 
         internal static readonly string WndClassName = "InfinityApp";
 
         internal WNDPROC wndProc;
-        internal FWindow mainWindow { get; private set; }
+        internal Window mainWindow { get; private set; }
         internal readonly IntPtr HInstance = Kernel32.GetModuleHandle(null);
 
-        private FSemaphore m_SemaphoreG2R;
-        private FSemaphore m_SemaphoreR2G;
-        private FGameSystem m_GameSystem;
-        private FPhysicsSystem m_PhysicsSystem;
-        private FGraphicsSystem m_GraphicsSystem;
+        private Semaphore m_SemaphoreG2R;
+        private Semaphore m_SemaphoreR2G;
+        private GameSystem m_GameSystem;
+        private PhysicsSystem m_PhysicsSystem;
+        private GraphicsSystem m_GraphicsSystem;
 
-        public FApplication(in int width, in int height, string name = null)
+        public GameApplication(in int width, in int height, string name = null)
         {
             CreateWindow(width, height, name);
-            m_SemaphoreR2G = new FSemaphore(true);
-            m_SemaphoreG2R = new FSemaphore(false);
-            m_GameSystem = new FGameSystem(End, Play, Tick, m_SemaphoreG2R, m_SemaphoreR2G);
-            m_PhysicsSystem = new FPhysicsSystem();
-            m_GraphicsSystem = new FGraphicsSystem(mainWindow, m_SemaphoreG2R, m_SemaphoreR2G);
+            m_SemaphoreR2G = new Semaphore(true);
+            m_SemaphoreG2R = new Semaphore(false);
+            m_GameSystem = new GameSystem(End, Play, Tick, m_SemaphoreG2R, m_SemaphoreR2G);
+            m_PhysicsSystem = new PhysicsSystem();
+            m_GraphicsSystem = new GraphicsSystem(mainWindow, m_SemaphoreG2R, m_SemaphoreR2G);
         }
 
         protected abstract void Play();
@@ -93,7 +91,7 @@ namespace InfinityEngine.Game.Application
                 throw new InvalidOperationException($"Failed to register window class. Error: {Marshal.GetLastWin32Error()}");
             }
 
-            mainWindow = new FWindow(name, width, height);
+            mainWindow = new Window(name, width, height);
         }
 
         private IntPtr ProcessWindowMessage(IntPtr hWnd, uint msg, IntPtr wParam, IntPtr lParam)

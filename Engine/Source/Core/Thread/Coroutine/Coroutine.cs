@@ -5,7 +5,7 @@ using System.Runtime.CompilerServices;
 namespace InfinityEngine.Core.Thread.Coroutine
 {
     // A container for running multiple routines in parallel. Coroutines can be nested.
-    public class FCoroutineDispatcher
+    public class CoroutineDispatcher
     {
         // How many coroutines are currently running.
         public int count
@@ -16,7 +16,7 @@ namespace InfinityEngine.Core.Thread.Coroutine
         private List<float> m_Delays;
         private List<IEnumerator> m_Dunning;
 
-        public FCoroutineDispatcher()
+        public CoroutineDispatcher()
         {
             this.m_Delays = new List<float>(8);
             this.m_Dunning = new List<IEnumerator>(8);
@@ -147,12 +147,12 @@ namespace InfinityEngine.Core.Thread.Coroutine
         // Reference to the routine's enumerator.
         public IEnumerator enumerator;
         // Reference to the routine's runner.
-        public FCoroutineDispatcher dispatcher;
+        public CoroutineDispatcher dispatcher;
 
         // Construct a coroutine. Never call this manually, only use return values from Coroutines.Run().
         // <param name="runner">The routine's runner.</param>
         // <param name="enumerator">The routine's enumerator.</param>
-        public FCoroutineRef(FCoroutineDispatcher dispatcher, IEnumerator enumerator)
+        public FCoroutineRef(CoroutineDispatcher dispatcher, IEnumerator enumerator)
         {
             this.dispatcher = dispatcher;
             this.enumerator = enumerator;

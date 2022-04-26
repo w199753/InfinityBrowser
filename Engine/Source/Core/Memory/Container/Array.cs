@@ -142,7 +142,7 @@ namespace InfinityEngine.Core.Container
         {
             length = 0;
             m_Capacity = capacity;
-            m_Array = (T**)FMemoryUtil.Malloc(sizeof(T), capacity);
+            m_Array = (T**)MemoryUtility.Malloc(sizeof(T), capacity);
         }
 
         public void Clear()
@@ -154,10 +154,10 @@ namespace InfinityEngine.Core.Container
         {
             if (length >= m_Capacity) {
                 m_Capacity *= 2;
-                T** newArray = (T**)FMemoryUtil.Malloc(sizeof(T*), m_Capacity);
+                T** newArray = (T**)MemoryUtility.Malloc(sizeof(T*), m_Capacity);
                 //ReadOnlySpan<T> span = new ReadOnlySpan<T>(m_Array, length);
                 //span.CopyTo(new Span<T>((void*)newArray, length));
-                FMemoryUtil.Free(m_Array);
+                MemoryUtility.Free(m_Array);
                 m_Array = newArray;
             }
 
@@ -228,14 +228,14 @@ namespace InfinityEngine.Core.Container
         {
             if (keepData)
             {
-                T** newArray = (T**)FMemoryUtil.Malloc(sizeof(T*), newLength);
+                T** newArray = (T**)MemoryUtility.Malloc(sizeof(T*), newLength);
                 //ReadOnlySpan<T> span = new ReadOnlySpan<T>(m_Array, newLength);
                 //span.CopyTo(new Span<T>((void*)newArray, newLength));
-                FMemoryUtil.Free(m_Array);
+                MemoryUtility.Free(m_Array);
                 m_Array = newArray;
             } else {
-                FMemoryUtil.Free(m_Array);
-                m_Array = (T**)FMemoryUtil.Malloc(sizeof(T*), newLength);
+                MemoryUtility.Free(m_Array);
+                m_Array = (T**)MemoryUtility.Malloc(sizeof(T*), newLength);
             }
 
             length = newLength;
@@ -243,7 +243,7 @@ namespace InfinityEngine.Core.Container
 
         public void Dispose()
         {
-            FMemoryUtil.Free(m_Array);
+            MemoryUtility.Free(m_Array);
             m_Array = null;
             m_Capacity = 0;
         }
@@ -299,14 +299,14 @@ namespace InfinityEngine.Core.Container
         {
             length = 0;
             m_Capacity = capacity;
-            m_Array = (T*)FMemoryUtil.Malloc(sizeof(T), capacity);
+            m_Array = (T*)MemoryUtility.Malloc(sizeof(T), capacity);
         }
 
         internal void Init(in int capacity = 64)
         {
             length = 0;
             m_Capacity = capacity;
-            m_Array = (T*)FMemoryUtil.Malloc(sizeof(T), capacity);
+            m_Array = (T*)MemoryUtility.Malloc(sizeof(T), capacity);
         }
 
         public void Clear()
@@ -319,10 +319,10 @@ namespace InfinityEngine.Core.Container
             if (length >= m_Capacity)
             {
                 m_Capacity *= 2;
-                T* newArray = (T*)FMemoryUtil.Malloc(sizeof(T), m_Capacity);
+                T* newArray = (T*)MemoryUtility.Malloc(sizeof(T), m_Capacity);
                 ReadOnlySpan<T> span = new ReadOnlySpan<T>(m_Array, length);
                 span.CopyTo(new Span<T>((void*)newArray, length));
-                FMemoryUtil.Free(m_Array);
+                MemoryUtility.Free(m_Array);
                 m_Array = newArray;
             }
 
@@ -399,14 +399,14 @@ namespace InfinityEngine.Core.Container
         {
             if (keepData)
             {
-                T* newArray = (T*)FMemoryUtil.Malloc(sizeof(T), newLength);
+                T* newArray = (T*)MemoryUtility.Malloc(sizeof(T), newLength);
                 ReadOnlySpan<T> span = new ReadOnlySpan<T>(m_Array, newLength);
                 span.CopyTo(new Span<T>((void*)newArray, newLength));
-                FMemoryUtil.Free(m_Array);
+                MemoryUtility.Free(m_Array);
                 m_Array = newArray;
             } else {
-                FMemoryUtil.Free(m_Array);
-                m_Array = (T*)FMemoryUtil.Malloc(sizeof(T), newLength);
+                MemoryUtility.Free(m_Array);
+                m_Array = (T*)MemoryUtility.Malloc(sizeof(T), newLength);
             }
 
             length = newLength;
@@ -414,7 +414,7 @@ namespace InfinityEngine.Core.Container
 
         public void Dispose()
         {
-            FMemoryUtil.Free(m_Array);
+            MemoryUtility.Free(m_Array);
             m_Array = null;
             m_Capacity = 0;
         }

@@ -6,12 +6,12 @@ using InfinityEngine.Core.Mathmatics.Geometry;
 
 namespace InfinityEngine.Graphics.RHI.Vulkan
 {
-    public unsafe class FVkCommandBuffer : FRHICommandBuffer
+    public unsafe class VKCommandBuffer : RHICommandBuffer
     {
         internal VkCommandPool* nativeCmdPool;
         internal VkCommandBuffer* nativeCmdBuffer;
 
-        internal FVkCommandBuffer(string name, FRHIDevice device, EContextType contextType) : base(name, device, contextType)
+        internal VKCommandBuffer(string name, RHIDevice device, EContextType contextType) : base(name, device, contextType)
         {
 
         }
@@ -36,12 +36,12 @@ namespace InfinityEngine.Graphics.RHI.Vulkan
 
         }
 
-        public override void BeginQuery(FRHIQuery query)
+        public override void BeginQuery(RHIQuery query)
         {
 
         }
 
-        public override void EndQuery(FRHIQuery query)
+        public override void EndQuery(RHIQuery query)
         {
 
         }
@@ -51,37 +51,37 @@ namespace InfinityEngine.Graphics.RHI.Vulkan
 
         }
 
-        public override void Transition(FRHIResource resource, EResourceState stateBefore, EResourceState stateAfter, int subresource = -1)
+        public override void Transition(RHIResource resource, EResourceState stateBefore, EResourceState stateAfter, int subresource = -1)
         {
 
         }
 
-        public override void ClearBuffer(FRHIBuffer buffer)
+        public override void ClearBuffer(RHIBuffer buffer)
         {
 
         }
 
-        public override void ClearTexture(FRHITexture texture)
+        public override void ClearTexture(RHITexture texture)
         {
 
         }
 
-        public override void CopyBufferToBuffer(FRHIBuffer srcBuffer, FRHIBuffer dscBuffer)
+        public override void CopyBufferToBuffer(RHIBuffer srcBuffer, RHIBuffer dscBuffer)
         {
 
         }
 
-        public override void CopyBufferToTexture(FRHIBuffer srcBuffer, FRHITexture dscTexture)
+        public override void CopyBufferToTexture(RHIBuffer srcBuffer, RHITexture dscTexture)
         {
 
         }
 
-        public override void CopyTextureToBuffer(FRHITexture srcTexture, FRHIBuffer dscBuffer)
+        public override void CopyTextureToBuffer(RHITexture srcTexture, RHIBuffer dscBuffer)
         {
 
         }
 
-        public override void CopyTextureToTexture(FRHITexture srcTexture, FRHITexture dscTexture)
+        public override void CopyTextureToTexture(RHITexture srcTexture, RHITexture dscTexture)
         {
 
         }
@@ -96,12 +96,12 @@ namespace InfinityEngine.Graphics.RHI.Vulkan
 
         }
 
-        public override void SetComputePipelineState(FRHIComputePipelineState computePipelineState)
+        public override void SetComputePipelineState(RHIComputePipelineState computePipelineState)
         {
 
         }
 
-        public override void SetComputeResourceBind(in uint slot, FRHIResourceSet resourceSet)
+        public override void SetComputeResourceBind(in uint slot, RHIResourceSet resourceSet)
         {
 
         }
@@ -111,17 +111,17 @@ namespace InfinityEngine.Graphics.RHI.Vulkan
             vkCmdDispatch(*nativeCmdBuffer, sizeX, sizeY, sizeZ);
         }
 
-        public override void DispatchComputeIndirect(FRHIBuffer argsBuffer, in uint argsOffset)
+        public override void DispatchComputeIndirect(RHIBuffer argsBuffer, in uint argsOffset)
         {
 
         }
 
-        public override void SetRayTracePipelineState(FRHIRayTracePipelineState rayTracePipelineState)
+        public override void SetRayTracePipelineState(RHIRayTracePipelineState rayTracePipelineState)
         {
 
         }
 
-        public override void SetRayTraceResourceBind(in uint slot, FRHIResourceSet resourceSet)
+        public override void SetRayTraceResourceBind(in uint slot, RHIResourceSet resourceSet)
         {
 
         }
@@ -131,22 +131,22 @@ namespace InfinityEngine.Graphics.RHI.Vulkan
             
         }
 
-        public override void DispatchRayIndirect(FRHIBuffer argsBuffer, in uint argsOffset)
+        public override void DispatchRayIndirect(RHIBuffer argsBuffer, in uint argsOffset)
         {
 
         }
 
-        public override void SetScissor(in FRect rect)
+        public override void SetScissor(in Rect rect)
         {
 
         }
 
-        public override void SetViewport(in FViewport viewport)
+        public override void SetViewport(in Viewport viewport)
         {
 
         }
 
-        public override void BeginRenderPass(FRHITexture depthBuffer, params FRHITexture[] colorBuffer)
+        public override void BeginRenderPass(RHITexture depthBuffer, params RHITexture[] colorBuffer)
         {
 
         }
@@ -156,7 +156,7 @@ namespace InfinityEngine.Graphics.RHI.Vulkan
 
         }
 
-        public override void ClearRenderTarget(FRHIRenderTargetView renderTargetView, in float4 color)
+        public override void ClearRenderTarget(RHIRenderTargetView renderTargetView, in float4 color)
         {
 
         }
@@ -176,7 +176,7 @@ namespace InfinityEngine.Graphics.RHI.Vulkan
 
         }
 
-        public override void SetShadingRate(FRHITexture texture)
+        public override void SetShadingRate(RHITexture texture)
         {
             
         }
@@ -191,22 +191,22 @@ namespace InfinityEngine.Graphics.RHI.Vulkan
             m_TopologyType = topologyType;
         }
 
-        public override void SetGraphicsPipelineState(FRHIGraphicsPipelineState graphicsPipelineState)
+        public override void SetGraphicsPipelineState(RHIGraphicsPipelineState graphicsPipelineState)
         {
 
         }
 
-        public override void SetIndexBuffer(FRHIIndexBufferView indexBufferView)
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public override void SetVertexBuffer(in uint slot, FRHIVertexBufferView vertexBufferView)
+        public override void SetIndexBuffer(RHIIndexBufferView indexBufferView)
         {
             throw new System.NotImplementedException();
         }
 
-        public override void SetGraphicsResourceBind(in uint slot, FRHIResourceSet resourceSet)
+        public override void SetVertexBuffer(in uint slot, RHIVertexBufferView vertexBufferView)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public override void SetGraphicsResourceBind(in uint slot, RHIResourceSet resourceSet)
         {
             throw new System.NotImplementedException();
         }
@@ -216,12 +216,12 @@ namespace InfinityEngine.Graphics.RHI.Vulkan
             
         }
 
-        public override void DrawMultiIndexInstanced(FRHIBuffer argsBuffer, in uint argsOffset, FRHIBuffer countBuffer, in uint countOffset)
+        public override void DrawMultiIndexInstanced(RHIBuffer argsBuffer, in uint argsOffset, RHIBuffer countBuffer, in uint countOffset)
         {
 
         }
 
-        public override void DrawIndexInstancedIndirect(FRHIBuffer argsBuffer, in uint argsOffset)
+        public override void DrawIndexInstancedIndirect(RHIBuffer argsBuffer, in uint argsOffset)
         {
   
         }

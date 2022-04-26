@@ -11,18 +11,18 @@ namespace InfinityEngine.Rendering.TerrainPipeline
     public class FTerrainSector
     {
         public int[] MaxLODs;
-        public FBound BoundBox;
-        public FTerrainSection[] Sections;
+        public Bound BoundBox;
+        public TerrainSection[] Sections;
         public NativeArray<FTerrainSection> NativeSections;
 
-        public FTerrainSector(in int SectorSize, in int NumSection, in int NumQuad, in float3 SectorPivotPosition, FAABB SectorBound)
+        public FTerrainSector(in int SectorSize, in int NumSection, in int NumQuad, in float3 SectorPivotPosition, AABB SectorBound)
         {
             int SectorSize_Half = SectorSize / 2;
             int SectionSize_Half = NumQuad / 2;
 
             MaxLODs = new int[NumSection * NumSection];
-            Sections = new FTerrainSection[NumSection * NumSection];
-            BoundBox = new FBound(new float3(SectorPivotPosition.x + SectorSize_Half, SectorPivotPosition.y + (SectorBound.size.y / 2), SectorPivotPosition.z + SectorSize_Half), SectorBound.size * 0.5f);
+            Sections = new TerrainSection[NumSection * NumSection];
+            BoundBox = new Bound(new float3(SectorPivotPosition.x + SectorSize_Half, SectorPivotPosition.y + (SectorBound.size.y / 2), SectorPivotPosition.z + SectorSize_Half), SectorBound.size * 0.5f);
 
             for (int SectorSizeX = 0; SectorSizeX <= NumSection - 1; SectorSizeX++)
             {
@@ -32,10 +32,10 @@ namespace InfinityEngine.Rendering.TerrainPipeline
                     float3 SectionPivotPosition = SectorPivotPosition + new float3(NumQuad * SectorSizeX, 0, NumQuad * SectorSizeY);
                     float3 SectionCenterPosition = SectionPivotPosition + new float3(SectionSize_Half, 0, SectionSize_Half);
 
-                    Sections[SectionIndex] = new FTerrainSection();
+                    Sections[SectionIndex] = new TerrainSection();
                     Sections[SectionIndex].PivotPosition = SectionPivotPosition;
                     Sections[SectionIndex].CenterPosition = SectionCenterPosition;
-                    Sections[SectionIndex].BoundingBox = new FAABB(SectionCenterPosition, new float3(NumQuad, 1, NumQuad));
+                    Sections[SectionIndex].BoundingBox = new AABB(SectionCenterPosition, new float3(NumQuad, 1, NumQuad));
                 }
             }
 
@@ -46,7 +46,7 @@ namespace InfinityEngine.Rendering.TerrainPipeline
         {
             if (NativeSections.IsCreated == false)
             {
-                NativeSections = new NativeArray<FTerrainSection>(Sections.Length, Allocator.Persistent);
+                NativeSections = new NativeArray<TerrainSection>(Sections.Length, Allocator.Persistent);
             }
         }
 
@@ -82,7 +82,7 @@ namespace InfinityEngine.Rendering.TerrainPipeline
             for (int i = 0; i < Sections.Length; ++i)
             {
                 ref int MaxLOD = ref MaxLODs[i];
-                ref FSectionLODData LODSetting = ref Sections[i].LODSetting;
+                ref SectionLODData LODSetting = ref Sections[i].LODSetting;
 
                 float CurrentScreenSizeRatio = LOD0ScreenSize;
                 float[] LODScreenRatioSquared = new float[MaxLOD];
@@ -115,7 +115,7 @@ namespace InfinityEngine.Rendering.TerrainPipeline
 
             for (int i = 0; i < NativeSections.Length; ++i)
             {
-                FTerrainSection Section = NativeSections[i];
+                TerrainSection Section = NativeSections[i];
                 float ScreenSize = TerrainUtility.ComputeBoundsScreenRadiusSquared(TerrainUtility.GetBoundRadius(Section.BoundingBox), Section.BoundingBox.center, ViewOringin, Matrix_Proj);
                 Section.LODIndex = math.min(6, TerrainUtility.GetLODFromScreenSize(Section.LODSetting, ScreenSize, 1, out Section.FractionLOD));
                 Section.FractionLOD = math.min(5, Section.FractionLOD);

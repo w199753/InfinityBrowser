@@ -1,5 +1,4 @@
-﻿using InfinityEngine.Core.Object;
-using System.Runtime.CompilerServices;
+﻿using System.Runtime.CompilerServices;
 
 namespace InfinityEngine.Graphics.RHI
 {
@@ -11,11 +10,11 @@ namespace InfinityEngine.Graphics.RHI
         Sampler = 3
     };
 
-    internal abstract class FRHIDescriptorHeapFactory : FDisposal
+    internal abstract class RHIDescriptorHeapFactory : Disposal
     {
         protected EDescriptorType m_Type;
 
-        public FRHIDescriptorHeapFactory(FRHIDevice device, in EDescriptorType type, in uint count, string name)
+        public RHIDescriptorHeapFactory(RHIDevice device, in EDescriptorType type, in uint count, string name)
         {
             m_Type = type;
         }

@@ -1,25 +1,24 @@
 ﻿using System.Threading;
-using InfinityEngine.Core.Object;
 using System.Runtime.CompilerServices;
 
 namespace InfinityEngine.Graphics.RHI
 {
-    internal abstract class FRHICommandContext : FDisposal
+    internal abstract class RHICommandContext : Disposal
     {
         EContextType contextType;
         protected AutoResetEvent m_FenceEvent;
 
-        internal FRHICommandContext(FRHIDevice device, EContextType contextType, string name) 
+        internal RHICommandContext(RHIDevice device, EContextType contextType, string name) 
         { 
             this.contextType = contextType;
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public abstract void SignalQueue(FRHIFence fence);
+        public abstract void SignalQueue(RHIFence fence);
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public abstract void WaitQueue(FRHIFence fence);
+        public abstract void WaitQueue(RHIFence fence);
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public abstract void ExecuteQueue(FRHICommandBuffer cmdBuffer);
+        public abstract void ExecuteQueue(RHICommandBuffer cmdBuffer);
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public abstract void Flush();
         [MethodImpl(MethodImplOptions.AggressiveInlining)]

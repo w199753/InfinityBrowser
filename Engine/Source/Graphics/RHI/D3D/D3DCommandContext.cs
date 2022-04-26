@@ -5,10 +5,10 @@ using System.Runtime.CompilerServices;
 
 namespace InfinityEngine.Graphics.RHI.D3D
 {
-    internal unsafe class FD3DCommandContext : FRHICommandContext
+    internal unsafe class D3DCommandContext : RHICommandContext
     {
         internal bool IsReady = true;
-        private FD3DFence m_Fence;
+        private D3DFence m_Fence;
         private ID3D12CommandQueue* m_NativeCmdQueue;
         private ID3D12CommandAllocator* m_NativeCmdAllocator;
 
@@ -27,11 +27,11 @@ namespace InfinityEngine.Graphics.RHI.D3D
             }
         }
 
-        internal FD3DCommandContext(FRHIDevice device, EContextType contextType, string name) : base(device, contextType, name)
+        internal D3DCommandContext(RHIDevice device, EContextType contextType, string name) : base(device, contextType, name)
         {
-            FD3DDevice d3dDevice = (FD3DDevice)device;
+            D3DDevice d3dDevice = (D3DDevice)device;
 
-            m_Fence = new FD3DFence(device, name);
+            m_Fence = new D3DFence(device, name);
             m_FenceEvent = new AutoResetEvent(false);
 
             D3D12_COMMAND_QUEUE_DESC queueDescriptor;
@@ -57,25 +57,25 @@ namespace InfinityEngine.Graphics.RHI.D3D
             m_NativeCmdAllocator = cmdAllocatorPtr;
         }
 
-        public static implicit operator ID3D12CommandQueue*(FD3DCommandContext cmdContext) { return cmdContext.m_NativeCmdQueue; }
+        public static implicit operator ID3D12CommandQueue*(D3DCommandContext cmdContext) { return cmdContext.m_NativeCmdQueue; }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public override void SignalQueue(FRHIFence fence)
+        public override void SignalQueue(RHIFence fence)
         {
             fence.Signal(this);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public override void WaitQueue(FRHIFence fence)
+        public override void WaitQueue(RHIFence fence)
         {
             fence.WaitOnGPU(this);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public override void ExecuteQueue(FRHICommandBuffer cmdBuffer)
+        public override void ExecuteQueue(RHICommandBuffer cmdBuffer)
         {
             cmdBuffer.Close();
-            FD3DCommandBuffer d3dCmdBuffer = (FD3DCommandBuffer)cmdBuffer;
+            D3DCommandBuffer d3dCmdBuffer = (D3DCommandBuffer)cmdBuffer;
             ID3D12CommandList** ppCommandLists = stackalloc ID3D12CommandList*[1] { (ID3D12CommandList*)d3dCmdBuffer.nativeCmdList };
             m_NativeCmdQueue->ExecuteCommandLists(1, ppCommandLists);
         }

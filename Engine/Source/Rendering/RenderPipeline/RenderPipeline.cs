@@ -1,26 +1,24 @@
-﻿using InfinityEngine.Core.Object;
-using InfinityEngine.Graphics.RDG;
-using InfinityEngine.Graphics.RHI;
+﻿using InfinityEngine.Graphics.RDG;
 using InfinityEngine.Rendering.RenderLoop;
 
 namespace InfinityEngine.Rendering.RenderPipeline
 {
-    public abstract class FRenderPipeline : FDisposal
+    public abstract class RenderPipeline : Disposal
     {
         public string name;
-        protected FRDGBuilder m_GraphBuilder;
+        protected RDGBuilder m_GraphBuilder;
 
-        public FRenderPipeline(string name)
+        public RenderPipeline(string name)
         {
             this.name = name;
-            this.m_GraphBuilder = new FRDGBuilder("GraphBuilder");
+            this.m_GraphBuilder = new RDGBuilder("GraphBuilder");
         }
 
-        public abstract void Init(FRenderContext renderContext);
+        public abstract void Init(RenderContext renderContext);
 
-        public abstract void Render(FRenderContext renderContext);
+        public abstract void Render(RenderContext renderContext);
 
-        public abstract void Release(FRenderContext renderContext);
+        public abstract void Release(RenderContext renderContext);
 
         protected override void Release()
         {

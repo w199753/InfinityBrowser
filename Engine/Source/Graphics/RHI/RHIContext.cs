@@ -1,5 +1,4 @@
 ﻿using System;
-using InfinityEngine.Core.Object;
 using System.Runtime.CompilerServices;
 
 namespace InfinityEngine.Graphics.RHI
@@ -13,13 +12,13 @@ namespace InfinityEngine.Graphics.RHI
 
     internal struct FExecuteInfo
     {
-        public FRHIFence fence;
+        public RHIFence fence;
         public EExecuteType executeType;
-        public FRHICommandBuffer cmdBuffer;
-        public FRHICommandContext cmdContext;
+        public RHICommandBuffer cmdBuffer;
+        public RHICommandContext cmdContext;
     }
 
-    public abstract class FRHIContext : FDisposal
+    public abstract class RHIContext : Disposal
     {
         public virtual bool copyQueueState => false;
         public virtual ulong copyFrequency => 0;
@@ -27,41 +26,41 @@ namespace InfinityEngine.Graphics.RHI
         public virtual ulong graphicsFrequency => 0;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal abstract FRHICommandContext SelectContext(in EContextType contextType);
+        internal abstract RHICommandContext SelectContext(in EContextType contextType);
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public abstract FRHICommandBuffer CreateCommandBuffer(in EContextType contextType, string name);
+        public abstract RHICommandBuffer CreateCommandBuffer(in EContextType contextType, string name);
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public abstract FRHICommandBuffer GetCommandBuffer(in EContextType contextType, string name);
+        public abstract RHICommandBuffer GetCommandBuffer(in EContextType contextType, string name);
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public abstract void ReleaseCommandBuffer(FRHICommandBuffer cmdBuffer);
+        public abstract void ReleaseCommandBuffer(RHICommandBuffer cmdBuffer);
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public abstract void WriteToFence(in EContextType contextType, FRHIFence fence);
+        public abstract void WriteToFence(in EContextType contextType, RHIFence fence);
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public abstract void WaitForFence(in EContextType contextType, FRHIFence fence);
+        public abstract void WaitForFence(in EContextType contextType, RHIFence fence);
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public abstract void ExecuteCommandBuffer(FRHICommandBuffer cmdBuffer);
+        public abstract void ExecuteCommandBuffer(RHICommandBuffer cmdBuffer);
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal abstract void Submit();
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public abstract FRHISwapChain CreateSwapChain(string name, in uint width, in uint height, in IntPtr windowPtr);
+        public abstract RHISwapChain CreateSwapChain(string name, in uint width, in uint height, in IntPtr windowPtr);
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public abstract FRHIFence CreateFence(string name);
+        public abstract RHIFence CreateFence(string name);
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public abstract FRHIFence GetFence(string name);
+        public abstract RHIFence GetFence(string name);
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public abstract void ReleaseFence(FRHIFence fence);
+        public abstract void ReleaseFence(RHIFence fence);
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public abstract FRHIQuery CreateQuery(in EQueryType queryType, string name);
+        public abstract RHIQuery CreateQuery(in EQueryType queryType, string name);
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public abstract FRHIQuery GetQuery(in EQueryType queryType, string name);
+        public abstract RHIQuery GetQuery(in EQueryType queryType, string name);
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public abstract void ReleaseQuery(FRHIQuery query);
+        public abstract void ReleaseQuery(RHIQuery query);
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public abstract FRHIComputePipelineState CreateComputePipelineState(in FRHIComputePipelineDescriptor descriptor);
+        public abstract RHIComputePipelineState CreateComputePipelineState(in RHIComputePipelineDescriptor descriptor);
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public abstract FRHIRayTracePipelineState CreateRayTracePipelineState(in FRHIRayTracePipelineDescriptor descriptor);
+        public abstract RHIRayTracePipelineState CreateRayTracePipelineState(in RHIRayTracePipelineDescriptor descriptor);
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public abstract FRHIGraphicsPipelineState CreateGraphicsPipelineState(in FRHIGraphicsPipelineDescriptor descriptor);
+        public abstract RHIGraphicsPipelineState CreateGraphicsPipelineState(in RHIGraphicsPipelineDescriptor descriptor);
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public abstract void CreateSamplerState();
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -69,42 +68,42 @@ namespace InfinityEngine.Graphics.RHI
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public abstract void CreateResourceInputLayout();
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public abstract FRHIBuffer CreateBuffer(in FBufferDescriptor descriptor);
+        public abstract RHIBuffer CreateBuffer(in BufferDescriptor descriptor);
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public abstract FRHIBufferRef GetBuffer(in FBufferDescriptor descriptor);
+        public abstract RHIBufferRef GetBuffer(in BufferDescriptor descriptor);
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public abstract void ReleaseBuffer(in FRHIBufferRef bufferRef);
+        public abstract void ReleaseBuffer(in RHIBufferRef bufferRef);
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public abstract FRHITexture CreateTexture(in FTextureDescriptor descriptor);
+        public abstract RHITexture CreateTexture(in TextureDescriptor descriptor);
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public abstract FRHITextureRef GetTexture(in FTextureDescriptor descriptor);
+        public abstract RHITextureRef GetTexture(in TextureDescriptor descriptor);
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public abstract void ReleaseTexture(FRHITextureRef textureRef);
+        public abstract void ReleaseTexture(RHITextureRef textureRef);
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public abstract FRHIMemoryReadback CreateMemoryReadback(string requestName, bool bProfiler);
+        public abstract RHIMemoryReadback CreateMemoryReadback(string requestName, bool bProfiler);
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public abstract FRHIIndexBufferView CreateIndexBufferView(FRHIBuffer buffer);
+        public abstract RHIIndexBufferView CreateIndexBufferView(RHIBuffer buffer);
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public abstract FRHIVertexBufferView CreateVertexBufferView(FRHIBuffer buffer);
+        public abstract RHIVertexBufferView CreateVertexBufferView(RHIBuffer buffer);
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public abstract FRHIDeptnStencilView CreateDepthStencilView(FRHITexture texture);
+        public abstract RHIDeptnStencilView CreateDepthStencilView(RHITexture texture);
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public abstract FRHIRenderTargetView CreateRenderTargetView(FRHITexture texture);
+        public abstract RHIRenderTargetView CreateRenderTargetView(RHITexture texture);
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public abstract FRHIConstantBufferView CreateConstantBufferView(FRHIBuffer buffer);
+        public abstract RHIConstantBufferView CreateConstantBufferView(RHIBuffer buffer);
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public abstract FRHIShaderResourceView CreateShaderResourceView(FRHIBuffer buffer);
+        public abstract RHIShaderResourceView CreateShaderResourceView(RHIBuffer buffer);
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public abstract FRHIShaderResourceView CreateShaderResourceView(FRHITexture texture);
+        public abstract RHIShaderResourceView CreateShaderResourceView(RHITexture texture);
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public abstract FRHIUnorderedAccessView CreateUnorderedAccessView(FRHIBuffer buffer);
+        public abstract RHIUnorderedAccessView CreateUnorderedAccessView(RHIBuffer buffer);
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public abstract FRHIUnorderedAccessView CreateUnorderedAccessView(FRHITexture texture);
+        public abstract RHIUnorderedAccessView CreateUnorderedAccessView(RHITexture texture);
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public abstract FRHIResourceSet CreateResourceSet(in uint count);
+        public abstract RHIResourceSet CreateResourceSet(in uint count);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static void SubmitContext(FRHIContext context)
+        public static void SubmitContext(RHIContext context)
         {
             context.Submit();
         }

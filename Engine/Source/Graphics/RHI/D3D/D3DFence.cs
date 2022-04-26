@@ -5,7 +5,7 @@ using TerraFX.Interop.DirectX;
 
 namespace InfinityEngine.Graphics.RHI.D3D
 {
-    public unsafe class FD3DFence : FRHIFence
+    public unsafe class D3DFence : RHIFence
     {
         public override ulong CompletedValue => m_NativeFence->GetCompletedValue();
         public override bool IsCompleted => CompletedValue < m_FenceValue ? false : true;
@@ -13,10 +13,10 @@ namespace InfinityEngine.Graphics.RHI.D3D
         private ulong m_FenceValue;
         private ID3D12Fence* m_NativeFence;
 
-        internal FD3DFence(FRHIDevice device, string name) : base(device, name)
+        internal D3DFence(RHIDevice device, string name) : base(device, name)
         {
             this.name = name;
-            FD3DDevice d3dDevice = (FD3DDevice)device;
+            D3DDevice d3dDevice = (D3DDevice)device;
 
             ID3D12Fence* fencePtr;
             d3dDevice.nativeDevice->CreateFence(0, D3D12_FENCE_FLAGS.D3D12_FENCE_FLAG_NONE, Windows.__uuidof<ID3D12Fence>() , (void**)&fencePtr);
@@ -27,10 +27,10 @@ namespace InfinityEngine.Graphics.RHI.D3D
             m_NativeFence = fencePtr;
         }
 
-        internal override void Signal(FRHICommandContext cmdContext)
+        internal override void Signal(RHICommandContext cmdContext)
         {
             ++m_FenceValue;
-            FD3DCommandContext d3dCmdContext = (FD3DCommandContext)cmdContext;
+            D3DCommandContext d3dCmdContext = (D3DCommandContext)cmdContext;
             d3dCmdContext.nativeCmdQueue->Signal(m_NativeFence, m_FenceValue);
         }
 
@@ -46,9 +46,9 @@ namespace InfinityEngine.Graphics.RHI.D3D
             }
         }
         
-        internal override void WaitOnGPU(FRHICommandContext cmdContext)
+        internal override void WaitOnGPU(RHICommandContext cmdContext)
         {
-            FD3DCommandContext d3dCmdContext = (FD3DCommandContext)cmdContext;
+            D3DCommandContext d3dCmdContext = (D3DCommandContext)cmdContext;
             d3dCmdContext.nativeCmdQueue->Wait(m_NativeFence, m_FenceValue);
         }
 

@@ -22,12 +22,12 @@ namespace InfinityEngine.Graphics.RDG
         public static SharedObjectPool<T> sharedPool => s_Instance.Value;
     }
 
-    public sealed class FRDGObjectPool
+    public sealed class RDGObjectPool
     {
         Dictionary<(Type, int), Stack<object>> m_ArrayPool = new Dictionary<(Type, int), Stack<object>>();
         List<(object, (Type, int))> m_AllocatedArrays = new List<(object, (Type, int))>();
 
-        internal FRDGObjectPool() { }
+        internal RDGObjectPool() { }
 
         public T[] GetTempArray<T>(int size)
         {

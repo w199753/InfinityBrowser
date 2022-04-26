@@ -24,21 +24,21 @@ namespace InfinityEngine.Core.Thread.TaskSystem
             taskData.Execute();
         }
 
-        public static FTaskRef Schedule<T>(this T taskData) where T : struct, ITask
+        public static TaskRef Schedule<T>(this T taskData) where T : struct, ITask
         {
-            return new FTaskRef(Task.Factory.StartNew(taskData.Execute));
+            return new TaskRef(Task.Factory.StartNew(taskData.Execute));
         }
 
-        public static FTaskRef Schedule<T>(this T taskData, in FTaskRef depend) where T : struct, ITask
+        public static TaskRef Schedule<T>(this T taskData, in TaskRef depend) where T : struct, ITask
         {
-            return new FTaskRef(depend.task.ContinueWith(taskData.Execute));
+            return new TaskRef(depend.task.ContinueWith(taskData.Execute));
         }
 
-        public static FTaskRef Schedule<T>(this T taskData, params FTaskRef[] depends) where T : struct, ITask
+        public static TaskRef Schedule<T>(this T taskData, params TaskRef[] depends) where T : struct, ITask
         {
             Task[] dependsTask = new Task[depends.Length];
             for (int i = 0; i < depends.Length; ++i) { dependsTask[i] = depends[i].task; }
-            return new FTaskRef(Task.Factory.ContinueWhenAll(dependsTask, taskData.Execute));
+            return new TaskRef(Task.Factory.ContinueWhenAll(dependsTask, taskData.Execute));
         }
     }
 }

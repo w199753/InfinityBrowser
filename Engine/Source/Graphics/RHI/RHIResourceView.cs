@@ -1,35 +1,34 @@
 ﻿using Vortice.Direct3D12;
-using InfinityEngine.Core.Object;
 
 namespace InfinityEngine.Graphics.RHI
 {
-    public class FRHIResourceView : FDisposal
+    public class RHIResourceView : Disposal
     {
         internal int descriptorIndex;
         internal ulong virtualAddressGPU;
     }
 
-    public class FRHIIndexBufferView : FRHIResourceView
+    public class RHIIndexBufferView : RHIResourceView
     {
 
     }
 
-    public class FRHIVertexBufferView : FRHIResourceView
+    public class RHIVertexBufferView : RHIResourceView
     {
 
     }
 
-    public class FRHIDeptnStencilView : FRHIResourceView
+    public class RHIDeptnStencilView : RHIResourceView
     {
 
     }
 
-    public class FRHIRenderTargetView : FRHIResourceView
+    public class RHIRenderTargetView : RHIResourceView
     {
 
     }
 
-    public class FRHIConstantBufferView : FRHIResourceView
+    public class RHIConstantBufferView : RHIResourceView
     {
         internal int descriptorSize;
         
@@ -43,7 +42,7 @@ namespace InfinityEngine.Graphics.RHI
 
         private CpuDescriptorHandle m_DescriptorHandle;
 
-        public FRHIConstantBufferView(int descriptorSize, int descriptorIndex, CpuDescriptorHandle descriptorHandle)
+        public RHIConstantBufferView(int descriptorSize, int descriptorIndex, CpuDescriptorHandle descriptorHandle)
         {
             this.descriptorSize = descriptorSize;
             this.descriptorIndex = descriptorIndex;
@@ -51,7 +50,7 @@ namespace InfinityEngine.Graphics.RHI
         }
     }
 
-    public class FRHIShaderResourceView : FRHIResourceView
+    public class RHIShaderResourceView : RHIResourceView
     {
         internal int descriptorSize;
 
@@ -65,7 +64,7 @@ namespace InfinityEngine.Graphics.RHI
 
         private CpuDescriptorHandle m_DescriptorHandle;
 
-        public FRHIShaderResourceView(int descriptorSize, int descriptorIndex, CpuDescriptorHandle descriptorHandle)
+        public RHIShaderResourceView(int descriptorSize, int descriptorIndex, CpuDescriptorHandle descriptorHandle)
         {
             this.descriptorSize = descriptorSize;
             this.descriptorIndex = descriptorIndex;
@@ -73,7 +72,7 @@ namespace InfinityEngine.Graphics.RHI
         }
     }
 
-    public class FRHIUnorderedAccessView : FRHIResourceView
+    public class RHIUnorderedAccessView : RHIResourceView
     {
         internal int descriptorSize;
 
@@ -87,7 +86,7 @@ namespace InfinityEngine.Graphics.RHI
 
         private CpuDescriptorHandle m_DescriptorHandle;
 
-        public FRHIUnorderedAccessView(int descriptorSize, int descriptorIndex, CpuDescriptorHandle descriptorHandle)
+        public RHIUnorderedAccessView(int descriptorSize, int descriptorIndex, CpuDescriptorHandle descriptorHandle)
         {
             this.descriptorSize = descriptorSize;
             this.descriptorIndex = descriptorIndex;
@@ -95,14 +94,14 @@ namespace InfinityEngine.Graphics.RHI
         }
     }
 
-    public sealed class FRHIResourceSet : FDisposal
+    public sealed class RHIResourceSet : Disposal
     {
         /*internal int length;
         internal int descriptorIndex;
         internal ID3D12Device6 nativeDevice;
         internal CpuDescriptorHandle descriptorHandle;*/
 
-        internal FRHIResourceSet(FRHIDevice device, FRHIDescriptorHeapFactory descriptorHeapFactory, in int length)
+        internal RHIResourceSet(RHIDevice device, RHIDescriptorHeapFactory descriptorHeapFactory, in int length)
         {
             /*this.length = length;
             this.nativeDevice = device.nativeDevice;
@@ -116,12 +115,12 @@ namespace InfinityEngine.Graphics.RHI
             //return descriptorHandle + nativeDevice.GetDescriptorHandleIncrementSize(DescriptorHeapType.ConstantBufferViewShaderResourceViewUnorderedAccessView) * (descriptorIndex + offset);
         }
 
-        public void SetShaderResourceView(in int slot, FRHIShaderResourceView shaderResourceView)
+        public void SetShaderResourceView(in int slot, RHIShaderResourceView shaderResourceView)
         {
             //nativeDevice.CopyDescriptorsSimple(1, GetDescriptorHandle(slot), shaderResourceView.descriptorHandle, DescriptorHeapType.ConstantBufferViewShaderResourceViewUnorderedAccessView);
         }
 
-        public void SetUnorderedAccessView(in int slot, FRHIUnorderedAccessView unorderedAccessView)
+        public void SetUnorderedAccessView(in int slot, RHIUnorderedAccessView unorderedAccessView)
         {
             //nativeDevice.CopyDescriptorsSimple(1, GetDescriptorHandle(slot), unorderedAccessView.descriptorHandle, DescriptorHeapType.ConstantBufferViewShaderResourceViewUnorderedAccessView);
         }

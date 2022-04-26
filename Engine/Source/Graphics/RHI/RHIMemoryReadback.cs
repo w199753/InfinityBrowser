@@ -1,47 +1,46 @@
-﻿using InfinityEngine.Core.Object;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 
 namespace InfinityEngine.Graphics.RHI
 {
-    public abstract class FRHIMemoryReadback : FDisposal
+    public abstract class RHIMemoryReadback : Disposal
     {
         protected bool m_IsReady;
         protected bool m_IsProfile;
-        protected FRHIFence m_Fence;
-        protected FRHIQuery m_Query;
+        protected RHIFence m_Fence;
+        protected RHIQuery m_Query;
 
         public string name;
         public float gpuTime;
         public bool IsReady => m_IsReady;
 
-        internal FRHIMemoryReadback(FRHIContext context, string requestName, bool bProfiler) { }
+        internal RHIMemoryReadback(RHIContext context, string requestName, bool bProfiler) { }
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public abstract void EnqueueCopy(FRHIContext context, FRHIBuffer buffer);
+        public abstract void EnqueueCopy(RHIContext context, RHIBuffer buffer);
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public abstract void GetData<T>(FRHIContext context, FRHIBuffer buffer, T[] data) where T : struct;
+        public abstract void GetData<T>(RHIContext context, RHIBuffer buffer, T[] data) where T : struct;
     }
 
-    internal class FRHIMemoryReadbackPool : FDisposal
+    internal class RHIMemoryReadbackPool : Disposal
     {
         bool m_IsProfile;
-        FRHIContext m_Context;
-        Stack<FRHIMemoryReadback> m_Pooled;
+        RHIContext m_Context;
+        Stack<RHIMemoryReadback> m_Pooled;
 
         public int countAll { get; private set; }
         public int countActive { get { return countAll - countInactive; } }
         public int countInactive { get { return m_Pooled.Count; } }
 
-        public FRHIMemoryReadbackPool(FRHIContext context, bool bProfile)
+        public RHIMemoryReadbackPool(RHIContext context, bool bProfile)
         {
             m_Context = context;
             m_IsProfile = bProfile;
-            m_Pooled = new Stack<FRHIMemoryReadback>();
+            m_Pooled = new Stack<RHIMemoryReadback>();
         }
 
-        public FRHIMemoryReadback GetTemporary(string name)
+        public RHIMemoryReadback GetTemporary(string name)
         {
-            FRHIMemoryReadback gpuReadback;
+            RHIMemoryReadback gpuReadback;
             if (m_Pooled.Count == 0)
             {
                 gpuReadback = m_Context.CreateMemoryReadback(name, m_IsProfile);
@@ -53,7 +52,7 @@ namespace InfinityEngine.Graphics.RHI
             return gpuReadback;
         }
 
-        public void ReleaseTemporary(FRHIMemoryReadback gpuReadback)
+        public void ReleaseTemporary(RHIMemoryReadback gpuReadback)
         {
             m_Pooled.Push(gpuReadback);
         }
@@ -61,7 +60,7 @@ namespace InfinityEngine.Graphics.RHI
         protected override void Release()
         {
             m_Context = null;
-            foreach (FRHIMemoryReadback gpuReadback in m_Pooled)
+            foreach (RHIMemoryReadback gpuReadback in m_Pooled)
             {
                 gpuReadback.Dispose();
             }

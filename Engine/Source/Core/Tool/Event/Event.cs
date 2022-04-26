@@ -6,12 +6,12 @@ using System.Threading.Tasks;
 
 namespace InfinityEngine.Core.Event
 {
-    public class FEvent<T>
+    public class Event<T>
     {
 
     }
 
-    public class FEvent<T1, T2>
+    public class Event<T1, T2>
     {
 
     }

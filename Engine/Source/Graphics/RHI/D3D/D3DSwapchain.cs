@@ -4,23 +4,23 @@ using System.Runtime.CompilerServices;
 
 namespace InfinityEngine.Graphics.RHI.D3D
 {
-    public unsafe class FD3DSwapChain : FRHISwapChain
+    public unsafe class D3DSwapChain : RHISwapChain
     {
         public override int swapIndex => (int)nativeSwapChain->GetCurrentBackBufferIndex();
 
         internal IDXGISwapChain4* nativeSwapChain;
 
-        internal FD3DSwapChain(FRHIDevice device, FRHICommandContext cmdContext, in void* windowPtr, in uint width, in uint height, string name) : base(device, cmdContext, windowPtr, width, height, name)
+        internal D3DSwapChain(RHIDevice device, RHICommandContext cmdContext, in void* windowPtr, in uint width, in uint height, string name) : base(device, cmdContext, windowPtr, width, height, name)
         {
             for (int i = 0; i < 2; ++i)
             {
-                backBuffers[i] = new FD3DTexture();
+                backBuffers[i] = new D3DTexture();
             }
 
-            FD3DDevice d3dDevice = (FD3DDevice)device;
-            FD3DCommandContext d3dCmdContext = (FD3DCommandContext)cmdContext;
+            D3DDevice d3dDevice = (D3DDevice)device;
+            D3DCommandContext d3dCmdContext = (D3DCommandContext)cmdContext;
 
-            FTextureDescriptor descriptor;
+            TextureDescriptor descriptor;
             {
                 descriptor.name = name;
                 descriptor.width = (int)width;
@@ -41,7 +41,7 @@ namespace InfinityEngine.Graphics.RHI.D3D
                 bufferDesc.Width = width;
                 bufferDesc.Height = height;
                 bufferDesc.RefreshRate = new DXGI_RATIONAL(60, 1);
-                bufferDesc.Format = /*FD3DTextureUtility.GetNativeViewFormat(descriptor.format)*/DXGI_FORMAT.DXGI_FORMAT_R8G8B8A8_UNORM;
+                bufferDesc.Format = /*D3DTextureUtility.GetNativeViewFormat(descriptor.format)*/DXGI_FORMAT.DXGI_FORMAT_R8G8B8A8_UNORM;
                 bufferDesc.Scaling = DXGI_MODE_SCALING.DXGI_MODE_SCALING_UNSPECIFIED;
                 bufferDesc.ScanlineOrdering = DXGI_MODE_SCANLINE_ORDER.DXGI_MODE_SCANLINE_ORDER_UNSPECIFIED;
             }
@@ -73,8 +73,8 @@ namespace InfinityEngine.Graphics.RHI.D3D
             {
                 backbufferResourceA->SetName((ushort*)namePtr);
             }
-            ((FD3DTexture)backBuffers[0]).descriptor = descriptor;
-            ((FD3DTexture)backBuffers[0]).defaultResource = backbufferResourceA;
+            ((D3DTexture)backBuffers[0]).descriptor = descriptor;
+            ((D3DTexture)backBuffers[0]).defaultResource = backbufferResourceA;
 
             ID3D12Resource* backbufferResourceB;
             nativeSwapChain->GetBuffer(1, Windows.__uuidof<ID3D12Resource>(), (void**)&backbufferResourceB);
@@ -82,8 +82,8 @@ namespace InfinityEngine.Graphics.RHI.D3D
             {
                 backbufferResourceB->SetName((ushort*)namePtr);
             }
-            ((FD3DTexture)backBuffers[1]).descriptor = descriptor;
-            ((FD3DTexture)backBuffers[1]).defaultResource = backbufferResourceB;
+            ((D3DTexture)backBuffers[1]).descriptor = descriptor;
+            ((D3DTexture)backBuffers[1]).defaultResource = backbufferResourceB;
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -93,9 +93,9 @@ namespace InfinityEngine.Graphics.RHI.D3D
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public override void InitResourceView(FRHIContext context)
+        public override void InitResourceView(RHIContext context)
         {
-            FD3DContext d3dContext = (FD3DContext)context;
+            D3DContext d3dContext = (D3DContext)context;
 
             for (int i = 0; i < 2; ++i)
             {

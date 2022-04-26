@@ -2,7 +2,7 @@
 using System.Drawing;
 using System.Runtime.InteropServices;
 
-namespace InfinityEngine.Game.Window
+namespace InfinityEngine
 {
     #region Enums
     [Flags]

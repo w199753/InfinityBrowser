@@ -1,5 +1,4 @@
-﻿using InfinityEngine.Core.Object;
-using System.Runtime.CompilerServices;
+﻿using System.Runtime.CompilerServices;
 
 namespace InfinityEngine.Graphics.RHI
 {
@@ -11,19 +10,19 @@ namespace InfinityEngine.Graphics.RHI
 		GenericTimestamp = 1
 	}
 
-    public abstract class FRHIQuery : FDisposal
+    public abstract class RHIQuery : Disposal
 	{
 		internal int indexHead;
 		internal int indexLast;
 
-		internal FRHIQuery(FRHIQueryContext queryContext) { }
+		internal RHIQuery(RHIQueryContext queryContext) { }
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public abstract int GetResult();
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public abstract float GetResult(in ulong frequency);
 	}
 
-	internal abstract class FRHIQueryContext : FDisposal
+	internal abstract class RHIQueryContext : Disposal
 	{
 		public EQueryType queryType;
 		public ulong[]  queryData => m_QueryData;
@@ -35,9 +34,9 @@ namespace InfinityEngine.Graphics.RHI
 		public virtual bool IsReady => true;
 		public virtual bool IsTimeQuery => false;
 
-		public FRHIQueryContext(FRHIDevice device, in EQueryType queryType, in int queryCount, string name) { }
+		public RHIQueryContext(RHIDevice device, in EQueryType queryType, in int queryCount, string name) { }
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public abstract void Submit(FRHICommandContext commandContext);
+		public abstract void Submit(RHICommandContext commandContext);
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public abstract void ResolveData();
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -45,8 +44,8 @@ namespace InfinityEngine.Graphics.RHI
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		internal abstract void Free(in int index);
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public abstract FRHIQuery GetTemporary(string name = null);
+		public abstract RHIQuery GetTemporary(string name = null);
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public abstract void ReleaseTemporary(FRHIQuery query);
+		public abstract void ReleaseTemporary(RHIQuery query);
 	}
 }

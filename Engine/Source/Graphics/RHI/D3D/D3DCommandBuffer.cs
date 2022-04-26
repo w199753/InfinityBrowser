@@ -8,15 +8,15 @@ using System.Runtime.InteropServices;
 
 namespace InfinityEngine.Graphics.RHI.D3D
 {
-    public unsafe class FD3DCommandBuffer : FRHICommandBuffer
+    public unsafe class D3DCommandBuffer : RHICommandBuffer
     {
         internal ID3D12CommandAllocator* nativeCmdPool;
         internal ID3D12GraphicsCommandList5* nativeCmdList;
 
-        internal FD3DCommandBuffer(string name, FRHIDevice device, FRHICommandContext cmdContext, in EContextType contextType) : base(name, device, contextType)
+        internal D3DCommandBuffer(string name, RHIDevice device, RHICommandContext cmdContext, in EContextType contextType) : base(name, device, contextType)
         {
-            FD3DDevice d3dDevice = (FD3DDevice)device;
-            FD3DCommandContext d3dCmdContext = (FD3DCommandContext)cmdContext;
+            D3DDevice d3dDevice = (D3DDevice)device;
+            D3DCommandContext d3dCmdContext = (D3DCommandContext)cmdContext;
             this.nativeCmdPool = d3dCmdContext.nativeCmdAllocator;
 
             ID3D12GraphicsCommandList5* commandListPtr;
@@ -64,9 +64,9 @@ namespace InfinityEngine.Graphics.RHI.D3D
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public override void BeginQuery(FRHIQuery query)
+        public override void BeginQuery(RHIQuery query)
         {
-            FD3DQuery d3dQuery = (FD3DQuery)query;
+            D3DQuery d3dQuery = (D3DQuery)query;
             if (d3dQuery.queryContext.IsReady)
             {
                 if (d3dQuery.queryContext.IsTimeQuery) {
@@ -78,9 +78,9 @@ namespace InfinityEngine.Graphics.RHI.D3D
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public override void EndQuery(FRHIQuery query)
+        public override void EndQuery(RHIQuery query)
         {
-            FD3DQuery d3dQuery = (FD3DQuery)query;
+            D3DQuery d3dQuery = (D3DQuery)query;
             if (d3dQuery.queryContext.IsReady)
             {
                 nativeCmdList->EndQuery(d3dQuery.queryContext.queryHeap, d3dQuery.queryContext.queryType.GetNativeQueryType(), (uint)query.indexLast);
@@ -95,43 +95,43 @@ namespace InfinityEngine.Graphics.RHI.D3D
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public override void Transition(FRHIResource resource, EResourceState stateBefore, EResourceState stateAfter, int subresource = -1)
+        public override void Transition(RHIResource resource, EResourceState stateBefore, EResourceState stateAfter, int subresource = -1)
         {
 
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public override void ClearBuffer(FRHIBuffer buffer)
+        public override void ClearBuffer(RHIBuffer buffer)
         {
 
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public override void ClearTexture(FRHITexture texture)
+        public override void ClearTexture(RHITexture texture)
         {
 
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public override void CopyBufferToBuffer(FRHIBuffer srcBuffer, FRHIBuffer dscBuffer)
+        public override void CopyBufferToBuffer(RHIBuffer srcBuffer, RHIBuffer dscBuffer)
         {
 
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public override void CopyBufferToTexture(FRHIBuffer srcBuffer, FRHITexture dscTexture)
+        public override void CopyBufferToTexture(RHIBuffer srcBuffer, RHITexture dscTexture)
         {
 
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public override void CopyTextureToBuffer(FRHITexture srcTexture, FRHIBuffer dscBuffer)
+        public override void CopyTextureToBuffer(RHITexture srcTexture, RHIBuffer dscBuffer)
         {
 
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public override void CopyTextureToTexture(FRHITexture srcTexture, FRHITexture dscTexture)
+        public override void CopyTextureToTexture(RHITexture srcTexture, RHITexture dscTexture)
         {
 
         }
@@ -149,13 +149,13 @@ namespace InfinityEngine.Graphics.RHI.D3D
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public override void SetComputePipelineState(FRHIComputePipelineState computePipelineState)
+        public override void SetComputePipelineState(RHIComputePipelineState computePipelineState)
         {
 
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public override void SetComputeResourceBind(in uint slot, FRHIResourceSet resourceSet)
+        public override void SetComputeResourceBind(in uint slot, RHIResourceSet resourceSet)
         {
 
         }
@@ -167,19 +167,19 @@ namespace InfinityEngine.Graphics.RHI.D3D
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public override void DispatchComputeIndirect(FRHIBuffer argsBuffer, in uint argsOffset)
+        public override void DispatchComputeIndirect(RHIBuffer argsBuffer, in uint argsOffset)
         {
 
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public override void SetRayTracePipelineState(FRHIRayTracePipelineState rayTracePipelineState)
+        public override void SetRayTracePipelineState(RHIRayTracePipelineState rayTracePipelineState)
         {
 
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public override void SetRayTraceResourceBind(in uint slot, FRHIResourceSet resourceSet)
+        public override void SetRayTraceResourceBind(in uint slot, RHIResourceSet resourceSet)
         {
 
         }
@@ -191,25 +191,25 @@ namespace InfinityEngine.Graphics.RHI.D3D
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public override void DispatchRayIndirect(FRHIBuffer argsBuffer, in uint argsOffset)
+        public override void DispatchRayIndirect(RHIBuffer argsBuffer, in uint argsOffset)
         {
 
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public override void SetScissor(in FRect rect)
+        public override void SetScissor(in Rect rect)
         {
             nativeCmdList->RSSetScissorRects(1, null);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public override void SetViewport(in FViewport viewport)
+        public override void SetViewport(in Viewport viewport)
         {
             nativeCmdList->RSSetViewports(1, null);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public override void BeginRenderPass(FRHITexture depthBuffer, params FRHITexture[] colorBuffer)
+        public override void BeginRenderPass(RHITexture depthBuffer, params RHITexture[] colorBuffer)
         {
 
         }
@@ -221,10 +221,10 @@ namespace InfinityEngine.Graphics.RHI.D3D
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public override void ClearRenderTarget(FRHIRenderTargetView renderTargetView, in float4 color)
+        public override void ClearRenderTarget(RHIRenderTargetView renderTargetView, in float4 color)
         {
             float4 copyColor = color;
-            FD3DRenderTargetView d3dRTV = (FD3DRenderTargetView)renderTargetView;
+            D3DRenderTargetView d3dRTV = (D3DRenderTargetView)renderTargetView;
             nativeCmdList->ClearRenderTargetView(d3dRTV.descriptorHandle, (float*)&copyColor, 0, null);
             //Vortice.Direct3D12.ID3D12GraphicsCommandList
         }
@@ -249,9 +249,9 @@ namespace InfinityEngine.Graphics.RHI.D3D
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public override void SetShadingRate(FRHITexture texture)
+        public override void SetShadingRate(RHITexture texture)
         {
-            FD3DTexture d3dTexture = (FD3DTexture)texture;
+            D3DTexture d3dTexture = (D3DTexture)texture;
             nativeCmdList->RSSetShadingRateImage(d3dTexture.defaultResource);
         }
 
@@ -269,33 +269,33 @@ namespace InfinityEngine.Graphics.RHI.D3D
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public override void SetGraphicsPipelineState(FRHIGraphicsPipelineState graphicsPipelineState)
+        public override void SetGraphicsPipelineState(RHIGraphicsPipelineState graphicsPipelineState)
         {
 
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public override void SetIndexBuffer(FRHIIndexBufferView indexBufferView) 
+        public override void SetIndexBuffer(RHIIndexBufferView indexBufferView) 
         {
             /*D3D12_INDEX_BUFFER_VIEW indexBufferView;
             indexBufferView.Format = DXGI_FORMAT.DXGI_FORMAT_R32_UINT;
             indexBufferView.SizeInBytes = (uint)(indexBuffer.descriptor.count * indexBuffer.descriptor.stride);
-            indexBufferView.BufferLocation = ((FD3DBuffer)indexBuffer).defaultResource->GetGPUVirtualAddress();
+            indexBufferView.BufferLocation = ((D3DBuffer)indexBuffer).defaultResource->GetGPUVirtualAddress();
             nativeCmdList->IASetIndexBuffer(&indexBufferView);*/
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public override void SetVertexBuffer(in uint slot, FRHIVertexBufferView vertexBufferView) 
+        public override void SetVertexBuffer(in uint slot, RHIVertexBufferView vertexBufferView) 
         {
             /*D3D12_VERTEX_BUFFER_VIEW vertexBufferView;
             vertexBufferView.SizeInBytes = (uint)(vertexBuffer.descriptor.count * vertexBuffer.descriptor.stride);
             vertexBufferView.StrideInBytes = (uint)(vertexBuffer.descriptor.stride);
-            vertexBufferView.BufferLocation = ((FD3DBuffer)vertexBuffer).defaultResource->GetGPUVirtualAddress();
+            vertexBufferView.BufferLocation = ((D3DBuffer)vertexBuffer).defaultResource->GetGPUVirtualAddress();
             nativeCmdList->IASetVertexBuffers(slot, 1, &vertexBufferView);*/
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public override void SetGraphicsResourceBind(in uint slot, FRHIResourceSet resourceSet)
+        public override void SetGraphicsResourceBind(in uint slot, RHIResourceSet resourceSet)
         {
             nativeCmdList->SetGraphicsRootDescriptorTable(slot, default);
         }
@@ -307,13 +307,13 @@ namespace InfinityEngine.Graphics.RHI.D3D
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public override void DrawMultiIndexInstanced(FRHIBuffer argsBuffer, in uint argsOffset, FRHIBuffer countBuffer, in uint countOffset)
+        public override void DrawMultiIndexInstanced(RHIBuffer argsBuffer, in uint argsOffset, RHIBuffer countBuffer, in uint countOffset)
         {
             
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public override void DrawIndexInstancedIndirect(FRHIBuffer argsBuffer, in uint argsOffset)
+        public override void DrawIndexInstancedIndirect(RHIBuffer argsBuffer, in uint argsOffset)
         {
 
         }
@@ -324,6 +324,6 @@ namespace InfinityEngine.Graphics.RHI.D3D
             nativeCmdPool->Release();
         }
 
-        public static implicit operator ID3D12GraphicsCommandList5*(FD3DCommandBuffer cmdBuffer) { return cmdBuffer.nativeCmdList; }
+        public static implicit operator ID3D12GraphicsCommandList5*(D3DCommandBuffer cmdBuffer) { return cmdBuffer.nativeCmdList; }
     }
 }

@@ -2,7 +2,7 @@
 
 namespace InfinityEngine.Core.Mathmatics.Geometry
 {
-    [Serializable]
+    /*[Serializable]
     public struct FPlane : IEquatable<FPlane>
     {
         private float m_Distance;
@@ -46,10 +46,10 @@ namespace InfinityEngine.Core.Mathmatics.Geometry
         {
             return distance.GetHashCode() ^ (m_Normal.GetHashCode() << 2);
         }
-    }
+    }*/
 
     [Serializable]
-    public struct FAABB : IEquatable<FAABB>
+    public struct AABB : IEquatable<AABB>
     {
         private float3 m_Center;
         private float3 m_Extents;
@@ -61,7 +61,7 @@ namespace InfinityEngine.Core.Mathmatics.Geometry
         public float3 max { get { return center + extents; } set { SetMinMax(min, value); } }
 
 
-        public FAABB(float3 center, float3 size)
+        public AABB(float3 center, float3 size)
         {
             m_Center = center;
             m_Extents = size * 0.5F;
@@ -69,12 +69,12 @@ namespace InfinityEngine.Core.Mathmatics.Geometry
 
         public override bool Equals(object other)
         {
-            if (!(other is FAABB)) return false;
+            if (!(other is AABB)) return false;
 
-            return Equals((FAABB)other);
+            return Equals((AABB)other);
         }
 
-        public bool Equals(FAABB other)
+        public bool Equals(AABB other)
         {
             return center.Equals(other.center) && extents.Equals(other.extents);
         }
@@ -92,13 +92,12 @@ namespace InfinityEngine.Core.Mathmatics.Geometry
     }
 
     [Serializable]
-    public struct FBound : IEquatable<FBound>
+    public struct Bound : IEquatable<Bound>
     {
         public float3 center;
         public float3 extents;
 
-
-        public FBound(float3 Center, float3 Extents)
+        public Bound(float3 Center, float3 Extents)
         {
             center = Center;
             extents = Extents;
@@ -106,12 +105,12 @@ namespace InfinityEngine.Core.Mathmatics.Geometry
 
         public override bool Equals(object other)
         {
-            if (!(other is FBound)) return false;
+            if (!(other is Bound)) return false;
 
-            return Equals((FBound)other);
+            return Equals((Bound)other);
         }
 
-        public bool Equals(FBound other)
+        public bool Equals(Bound other)
         {
             return center.Equals(other.center) && extents.Equals(other.extents);
         }
@@ -121,12 +120,12 @@ namespace InfinityEngine.Core.Mathmatics.Geometry
             return center.GetHashCode() ^ (extents.GetHashCode() << 2);
         }
 
-        public static implicit operator FBound(FAABB Bound) { return new FBound(Bound.center, Bound.extents); }
-        public static implicit operator FAABB(FBound Bound) { return new FAABB(Bound.center, Bound.extents * 2); }
+        public static implicit operator Bound(AABB Bound) { return new Bound(Bound.center, Bound.extents); }
+        public static implicit operator AABB(Bound Bound) { return new AABB(Bound.center, Bound.extents * 2); }
     }
 
     [Serializable]
-    public struct FSphere : IEquatable<FSphere>
+    public struct Sphere : IEquatable<Sphere>
     {
         private float m_Radius;
         private float3 m_Center;
@@ -135,7 +134,7 @@ namespace InfinityEngine.Core.Mathmatics.Geometry
         public float3 center { get { return m_Center; } set { m_Center = value; } }
 
 
-        public FSphere(float radius, float3 center)
+        public Sphere(float radius, float3 center)
         {
             m_Radius = radius;
             m_Center = center;
@@ -143,12 +142,12 @@ namespace InfinityEngine.Core.Mathmatics.Geometry
 
         public override bool Equals(object other)
         {
-            if (!(other is FSphere)) return false;
+            if (!(other is Sphere)) return false;
 
-            return Equals((FSphere)other);
+            return Equals((Sphere)other);
         }
 
-        public bool Equals(FSphere other)
+        public bool Equals(Sphere other)
         {
             return radius.Equals(other.radius) && center.Equals(other.center);
         }
@@ -161,30 +160,30 @@ namespace InfinityEngine.Core.Mathmatics.Geometry
 
     public static class Geometry
     {
-        public static float CaculateBoundRadius(in FAABB BoundBox)
+        public static float CaculateBoundRadius(in AABB BoundBox)
         {
             float3 Extents = BoundBox.extents;
             return math.max(math.max(math.abs(Extents.x), math.abs(Extents.y)), math.abs(Extents.z));
         }
 
-        public static FAABB CaculateWorldBound(in FAABB LocalBound, in float4x4 Matrix)
+        public static AABB CaculateWorldBound(in AABB LocalBound, in float4x4 Matrix)
         {
             float4 Center = math.mul(Matrix, new float4(LocalBound.center.x, LocalBound.center.y, LocalBound.center.z, 1));
             float4 Extents = math.abs(Matrix.c0 * LocalBound.extents.x) + math.abs(Matrix.c1 * LocalBound.extents.y) + math.abs(Matrix.c2 * LocalBound.extents.z);
 
-            FAABB WorldBound = LocalBound;
+            AABB WorldBound = LocalBound;
             WorldBound.center = Center.xyz;
             WorldBound.extents = Extents.xyz;
 
             return WorldBound;
         }
 
-        public static bool IntersectAABBFrustum(in FAABB bound, FPlane[] plane)
+        public static bool IntersectAABBFrustum(in AABB bound, Plane[] plane)
         {
             for (int i = 0; i < 6; ++i)
             {
-                float3 normal = plane[i].normal;
-                float distance = plane[i].distance;
+                float3 normal = plane[i].Normal;
+                float distance = plane[i].Distance;
 
                 float dist = math.dot(normal, bound.center) + distance;
                 float radius = math.dot(bound.extents, math.abs(normal));

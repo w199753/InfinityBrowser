@@ -126,8 +126,8 @@ namespace InfinityEngine.Core.Container
 
         public TValueSparseArray(in int capacity = 64)
         {
-            m_Array = (TValueArray<T>*)FMemoryUtil.Malloc(sizeof(TValueArray<T>), 1);
-            m_PoolArray = (TValueArray<int>*)FMemoryUtil.Malloc(sizeof(TValueArray<int>), 1);
+            m_Array = (TValueArray<T>*)MemoryUtility.Malloc(sizeof(TValueArray<T>), 1);
+            m_PoolArray = (TValueArray<int>*)MemoryUtility.Malloc(sizeof(TValueArray<int>), 1);
             m_Array->Init(capacity);
             m_PoolArray->Init(capacity / 2);
         }
@@ -160,8 +160,8 @@ namespace InfinityEngine.Core.Container
             m_Array->Dispose();
             m_PoolArray->Dispose();
 
-            FMemoryUtil.Free(m_Array);
-            FMemoryUtil.Free(m_PoolArray);
+            MemoryUtility.Free(m_Array);
+            MemoryUtility.Free(m_PoolArray);
 
             m_Array->length = 0;
             m_PoolArray->length = 0;

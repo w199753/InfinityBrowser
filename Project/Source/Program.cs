@@ -1,15 +1,10 @@
 ﻿using System;
 using System.Threading;
-using InfinityEngine.Core.Container;
-using System.Runtime.InteropServices;
 using InfinityEngine.Core.Thread.TaskSystem;
-using Veldrid.StartupUtilities;
-using Veldrid.Sdl2;
-using Veldrid;
 
 namespace ExampleProject
 {
-    public struct FAsyncTask : ITaskAsync
+    public struct AsyncTask : ITaskAsync
     {
         public void Execute()
         {
@@ -24,7 +19,7 @@ namespace ExampleProject
         }
     }
 
-    public struct FTestTask : ITask
+    public struct TestTask : ITask
     {
         public string PrintData;
         public int SleepTime;
@@ -43,7 +38,7 @@ namespace ExampleProject
         }
     }
 
-    public struct FChildTask : ITask
+    public struct ChildTask : ITask
     {
         public int[] TArray;
 
@@ -56,7 +51,7 @@ namespace ExampleProject
                 Console.WriteLine(TArray[i]);
             }*/
 
-            FTestTask ChildTask;
+            TestTask ChildTask;
             ChildTask.PrintData = "ChildTask";
             ChildTask.SleepTime = 0;
             ChildTask.TArray = TArray;
@@ -104,10 +99,10 @@ namespace ExampleProject
             float decodeFloatC = (encodeDataB >> 8 & 255) / 255.0f;
             float decodeFloatD = (encodeDataB >> 32 & 255) / 255.0f;
 
-            Console.ReadKey();
+            Console.ReadKey();*/
 
             // Bitmask Test
-            int bitMask = 0;
+            /*int bitMask = 0;
 
             int[] maskValue = new int[8] { 0, 1, 1, 0, 0, 0, 1, 1 };
             for (int i = 0; i < 8; ++i)
@@ -120,11 +115,11 @@ namespace ExampleProject
             {
                 outValue[i] = bitMask >> i & 1;
             }
-            Console.ReadKey();
+            Console.ReadKey();*/
 
             // PtrTest
-            int aValue = 100;
-            int** aArray = (int**)FMemoryUtil.Malloc(8, 2);
+            /*int aValue = 100;
+            int** aArray = (int**)InfinityEngine.Core.Memory.MemoryUtility.Malloc(8, 2);
             for (int i = 0; i < 2; i++)
             {
                 aArray[i] = &aValue;
@@ -137,31 +132,31 @@ namespace ExampleProject
             Console.WriteLine(*aArray[0]);
             Console.WriteLine(*aArray[1]);
 
-            FMemoryUtil.Free(aArray);
-            Console.ReadKey();
+            InfinityEngine.Core.Memory.MemoryUtility.Free(aArray);
+            Console.ReadKey();*/
 
             // TaskExample
-            int[] IntArray = new int[10];
+            /*int[] IntArray = new int[10];
 
-            FTestTask TaskA;
+            TestTask TaskA;
             TaskA.SleepTime = 0;
             TaskA.TArray = IntArray;
             TaskA.PrintData = "TaskA";
-            FTaskHandle TaskRefA = TaskA.Schedule();
+            TaskRef TaskRefA = TaskA.Schedule();
 
-            FTestTask TaskB;
+            TestTask TaskB;
             TaskB.SleepTime = 2000;
             TaskB.TArray = IntArray;
             TaskB.PrintData = "TaskB";
-            FTaskHandle TaskRefB = TaskB.Schedule(TaskRefA);
+            TaskRef TaskRefB = TaskB.Schedule(TaskRefA);
 
-            FTestTask TaskC;
+            TestTask TaskC;
             TaskC.SleepTime = 0;
             TaskC.TArray = IntArray;
             TaskC.PrintData = "TaskC";
-            FTaskHandle TaskRefC = TaskC.Schedule(TaskRefA, TaskRefB);
+            TaskRef TaskRefC = TaskC.Schedule(TaskRefA, TaskRefB);
 
-            FChildTask ChildTask;
+            ChildTask ChildTask;
             ChildTask.TArray = IntArray;
             ChildTask.Schedule(TaskRefC).Wait();*/
 
@@ -200,25 +195,25 @@ namespace ExampleProject
 
             MyArray.RemoveAtIndex(3);
             MyArray.Dispose();
-            Console.ReadKey();*/
+            Console.ReadKey();
 
             //TSparseArray Test
-            /*TValueSparseArray<float> MyArray = new TValueSparseArray<float>(3);
-            MyArray.Add(0.1f);
-            MyArray.Add(0.2f);
-            MyArray.Add(0.3f);
-            MyArray.Add(0.4f);
-            MyArray.Add(0.5f);
-            MyArray.Add(0.6f);
+            TValueSparseArray<float> MySparseArray = new TValueSparseArray<float>(3);
+            MySparseArray.Add(0.1f);
+            MySparseArray.Add(0.2f);
+            MySparseArray.Add(0.3f);
+            MySparseArray.Add(0.4f);
+            MySparseArray.Add(0.5f);
+            MySparseArray.Add(0.6f);
 
-            MyArray.Remove(3);
-            MyArray.Add(0.5f);
+            MySparseArray.Remove(3);
+            MySparseArray.Add(0.5f);
 
-            ref float value = ref MyArray[5];
-            value += 0.5f;
+            ref float sparseValue = ref MySparseArray[5];
+            sparseValue += 0.5f;
 
-            MyArray.Remove(5);
-            MyArray.Dispose();
+            MySparseArray.Remove(5);
+            MySparseArray.Dispose();
             Console.ReadKey();*/
 
             /*string shaderSource = @"

@@ -4,20 +4,20 @@ using InfinityEngine.Core.Container;
 
 namespace InfinityEngine.Core.Memory
 {
-    public delegate void TPooledAction<T0>(T0 arg0);
+    public delegate void FPooledAction<T0>(T0 arg0);
 
     public class TObjectPool<T> where T : new()
     {
         readonly Stack<T> m_Stack = new Stack<T>();
-        readonly TPooledAction<T> m_ActionOnGet;
-        readonly TPooledAction<T> m_ActionOnRelease;
+        readonly FPooledAction<T> m_ActionOnGet;
+        readonly FPooledAction<T> m_ActionOnRelease;
         readonly bool m_CollectionCheck = true;
 
         public int countAll { get; private set; }
         public int countActive { get { return countAll - countInactive; } }
         public int countInactive { get { return m_Stack.Count; } }
 
-        public TObjectPool(TPooledAction<T> actionOnGet, TPooledAction<T> actionOnRelease, bool collectionCheck = true)
+        public TObjectPool(FPooledAction<T> actionOnGet, FPooledAction<T> actionOnRelease, bool collectionCheck = true)
         {
             m_ActionOnGet = actionOnGet;
             m_ActionOnRelease = actionOnRelease;

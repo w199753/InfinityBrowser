@@ -2,9 +2,9 @@
 
 namespace InfinityEngine.Graphics.RHI.D3D
 {
-    public class FD3DMemoryReadback : FRHIMemoryReadback
+    public class D3DMemoryReadback : RHIMemoryReadback
     {
-        internal FD3DMemoryReadback(FRHIContext context, string requestName, bool bProfiler) : base(context, requestName, bProfiler)
+        internal D3DMemoryReadback(RHIContext context, string requestName, bool bProfiler) : base(context, requestName, bProfiler)
         {
             name = requestName;
             gpuTime = -1;
@@ -15,11 +15,11 @@ namespace InfinityEngine.Graphics.RHI.D3D
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public override void EnqueueCopy(FRHIContext context, FRHIBuffer buffer)
+        public override void EnqueueCopy(RHIContext context, RHIBuffer buffer)
         {
             if (m_IsReady && context.copyQueueState)
             {
-                FRHICommandBuffer cmdBuffer = context.GetCommandBuffer(EContextType.Copy, name);
+                RHICommandBuffer cmdBuffer = context.GetCommandBuffer(EContextType.Copy, name);
                 cmdBuffer.Clear();
 
                 if (m_IsProfile) 
@@ -41,7 +41,7 @@ namespace InfinityEngine.Graphics.RHI.D3D
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public override void GetData<T>(FRHIContext context, FRHIBuffer buffer, T[] data) where T : struct
+        public override void GetData<T>(RHIContext context, RHIBuffer buffer, T[] data) where T : struct
         {
             if (m_IsReady = m_Fence.IsCompleted)
             {

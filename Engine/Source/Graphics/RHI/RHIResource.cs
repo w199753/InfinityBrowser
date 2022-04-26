@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using InfinityEngine.Core.Object;
 using InfinityEngine.Core.Mathmatics;
 using System.Runtime.CompilerServices;
 
@@ -212,12 +211,12 @@ namespace InfinityEngine.Graphics.RHI
 
     }
 
-    public class FRHIResource : FDisposal
+    public class RHIResource : Disposal
     {
-        public FRHIResource() { }
+        public RHIResource() { }
     }
 
-    public struct FBufferDescriptor
+    public struct BufferDescriptor
     {
         public string name;
 
@@ -227,7 +226,7 @@ namespace InfinityEngine.Graphics.RHI
         public EBufferType bufferType;
         public EStorageType storageType;
 
-        public FBufferDescriptor(in int count, in int stride, in EUsageType usageType, in EStorageType storageType, in EBufferType bufferType = EBufferType.Structured)
+        public BufferDescriptor(in int count, in int stride, in EUsageType usageType, in EStorageType storageType, in EBufferType bufferType = EBufferType.Structured)
         {
             this.name = null;
             this.count = (ulong)count;
@@ -243,39 +242,39 @@ namespace InfinityEngine.Graphics.RHI
         }
     }
 
-    public abstract class FRHIBuffer : FRHIResource
+    public abstract class RHIBuffer : RHIResource
     {
-        internal FBufferDescriptor descriptor;
+        internal BufferDescriptor descriptor;
 
-        internal FRHIBuffer() { }
-        internal FRHIBuffer(FRHIDevice device, in FBufferDescriptor descriptor) { }
+        internal RHIBuffer() { }
+        internal RHIBuffer(RHIDevice device, in BufferDescriptor descriptor) { }
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public abstract void SetData<T>(params T[] data) where T : struct;
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public abstract void Upload(FRHICommandBuffer cmdBuffer);
+        public abstract void Upload(RHICommandBuffer cmdBuffer);
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public abstract void SetData<T>(FRHICommandBuffer cmdBuffer, params T[] data) where T : struct;
+        public abstract void SetData<T>(RHICommandBuffer cmdBuffer, params T[] data) where T : struct;
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public abstract void GetData<T>(T[] data) where T : struct;
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public abstract void Readback(FRHICommandBuffer cmdBuffer);
+        public abstract void Readback(RHICommandBuffer cmdBuffer);
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public abstract void GetData<T>(FRHICommandBuffer cmdBuffer, T[] data) where T : struct;
+        public abstract void GetData<T>(RHICommandBuffer cmdBuffer, T[] data) where T : struct;
     }
 
-    public struct FRHIBufferRef
+    public struct RHIBufferRef
     {
         internal int handle;
-        public FRHIBuffer buffer;
+        public RHIBuffer buffer;
 
-        internal FRHIBufferRef(int handle, FRHIBuffer buffer) 
+        internal RHIBufferRef(int handle, RHIBuffer buffer) 
         { 
            this.handle = handle; 
            this.buffer = buffer; 
         }
     }
 
-    public struct FTextureDescriptor
+    public struct TextureDescriptor
     {
         public string name;
 
@@ -291,7 +290,7 @@ namespace InfinityEngine.Graphics.RHI
         public EStorageType storageType;
         public EGraphicsFormat format;
 
-        public FTextureDescriptor(in int width, in int height, in EUsageType usageType, in EStorageType storageType, in int slices = 1, in ushort mipLevel = 1, in ushort anisoLevel = 4, in ETextureType textureType = ETextureType.Tex2D, in EGraphicsFormat format = EGraphicsFormat.R8G8B8A8_UNorm, in EMSAASample sample = EMSAASample.None, in bool sparse = false)
+        public TextureDescriptor(in int width, in int height, in EUsageType usageType, in EStorageType storageType, in int slices = 1, in ushort mipLevel = 1, in ushort anisoLevel = 4, in ETextureType textureType = ETextureType.Tex2D, in EGraphicsFormat format = EGraphicsFormat.R8G8B8A8_UNorm, in EMSAASample sample = EMSAASample.None, in bool sparse = false)
         {
             this.name = null;
             this.width = width;
@@ -320,27 +319,27 @@ namespace InfinityEngine.Graphics.RHI
         }
     }
 
-    public class FRHITexture : FRHIResource
+    public class RHITexture : RHIResource
     {
-        internal FTextureDescriptor descriptor;
+        internal TextureDescriptor descriptor;
 
-        internal FRHITexture() { }
-        internal FRHITexture(FRHIDevice device, in FTextureDescriptor descriptor) { }
+        internal RHITexture() { }
+        internal RHITexture(RHIDevice device, in TextureDescriptor descriptor) { }
     }
 
-    public struct FRHITextureRef
+    public struct RHITextureRef
     {
         internal int handle;
-        public FRHITexture texture;
+        public RHITexture texture;
 
-        internal FRHITextureRef(int handle, FRHITexture texture) 
+        internal RHITextureRef(int handle, RHITexture texture) 
         { 
             this.handle = handle; 
             this.texture = texture; 
         }
     }
 
-    internal abstract class FRHIResourceCache<Type> where Type : class
+    internal abstract class RHIResourceCache<Type> where Type : class
     {
         protected Dictionary<int, List<Type>> m_ResourcePool = new Dictionary<int, List<Type>>(64);
         abstract protected void ReleaseInternalResource(Type res);
@@ -387,14 +386,14 @@ namespace InfinityEngine.Graphics.RHI
         }
     }
 
-    internal class FRHIBufferCache : FRHIResourceCache<FRHIBuffer>
+    internal class RHIBufferCache : RHIResourceCache<RHIBuffer>
     {
-        protected override void ReleaseInternalResource(FRHIBuffer buffer)
+        protected override void ReleaseInternalResource(RHIBuffer buffer)
         {
             buffer.Dispose();
         }
 
-        protected override string GetResourceName(FRHIBuffer buffer)
+        protected override string GetResourceName(RHIBuffer buffer)
         {
             return buffer.descriptor.name;
         }
@@ -405,14 +404,14 @@ namespace InfinityEngine.Graphics.RHI
         }
     }
 
-    internal class FRHITextureCache : FRHIResourceCache<FRHITexture>
+    internal class RHITextureCache : RHIResourceCache<RHITexture>
     {
-        protected override void ReleaseInternalResource(FRHITexture texture)
+        protected override void ReleaseInternalResource(RHITexture texture)
         {
             texture.Dispose();
         }
 
-        protected override string GetResourceName(FRHITexture texture)
+        protected override string GetResourceName(RHITexture texture)
         {
             return texture.descriptor.name;
         }
@@ -423,23 +422,23 @@ namespace InfinityEngine.Graphics.RHI
         }
     }
 
-    public class FRHIResourcePool
+    public class RHIResourcePool
     {
-        FRHIBufferCache m_BufferPool;
-        FRHITextureCache m_TexturePool;
-        FRHIContext m_Context;
+        RHIBufferCache m_BufferPool;
+        RHITextureCache m_TexturePool;
+        RHIContext m_Context;
 
-        internal FRHIResourcePool(FRHIContext context)
+        internal RHIResourcePool(RHIContext context)
         {
             m_Context = context;
-            m_BufferPool = new FRHIBufferCache();
-            m_TexturePool = new FRHITextureCache();
+            m_BufferPool = new RHIBufferCache();
+            m_TexturePool = new RHITextureCache();
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public FRHIBufferRef GetBuffer(in FBufferDescriptor descriptor)
+        public RHIBufferRef GetBuffer(in BufferDescriptor descriptor)
         {
-            FRHIBuffer buffer;
+            RHIBuffer buffer;
             int handle = descriptor.GetHashCode();
 
             if (!m_BufferPool.Pull(handle, out buffer))
@@ -447,19 +446,19 @@ namespace InfinityEngine.Graphics.RHI
                 buffer = m_Context.CreateBuffer(descriptor);
             }
 
-            return new FRHIBufferRef(handle, buffer);
+            return new RHIBufferRef(handle, buffer);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public void ReleaseBuffer(in FRHIBufferRef bufferRef)
+        public void ReleaseBuffer(in RHIBufferRef bufferRef)
         {
             m_BufferPool.Push(bufferRef.handle, bufferRef.buffer);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public FRHITextureRef GetTexture(in FTextureDescriptor descriptor)
+        public RHITextureRef GetTexture(in TextureDescriptor descriptor)
         {
-            FRHITexture texture;
+            RHITexture texture;
             int handle = descriptor.GetHashCode();
 
             if (!m_TexturePool.Pull(handle, out texture))
@@ -467,11 +466,11 @@ namespace InfinityEngine.Graphics.RHI
                 texture = m_Context.CreateTexture(descriptor);
             }
 
-            return new FRHITextureRef(handle, texture);
+            return new RHITextureRef(handle, texture);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public void ReleaseTexture(in FRHITextureRef textureRef)
+        public void ReleaseTexture(in RHITextureRef textureRef)
         {
             m_TexturePool.Push(textureRef.handle, textureRef.texture);
         }

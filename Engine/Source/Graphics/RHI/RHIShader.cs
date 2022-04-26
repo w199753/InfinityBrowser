@@ -1,20 +1,18 @@
-﻿using InfinityEngine.Core.Object;
-
-namespace InfinityEngine.Graphics.RHI
+﻿namespace InfinityEngine.Graphics.RHI
 {
-    public class FRHIShader : FDisposal
+    public class RHIShader : Disposal
     {
         public string name;
 
-        public FRHIShader() : base()
+        public RHIShader() : base()
         {
 
         }
     }
 
-    public class FRHIComputeShader : FRHIShader
+    public class RHIComputeShader : RHIShader
     {
-        public FRHIComputeShader() : base()
+        public RHIComputeShader() : base()
         {
 
         }
@@ -29,9 +27,9 @@ namespace InfinityEngine.Graphics.RHI
         Pixel = 4
     }
 
-    public class FRHIGraphicsShader : FRHIShader
+    public class RHIGraphicsShader : RHIShader
     {
-        public FRHIGraphicsShader() : base()
+        public RHIGraphicsShader() : base()
         {
 
         }
@@ -44,10 +42,10 @@ namespace InfinityEngine.Graphics.RHI
         RayHitGroup = 2
     }
 
-    public class FRHIRayTraceShader : FRHIShader
+    public class RHIRayTraceShader : RHIShader
     {
         //Intersection, AnyHit, ClosestHit, Miss, RayGeneration
-        public FRHIRayTraceShader() : base()
+        public RHIRayTraceShader() : base()
         {
 
         }

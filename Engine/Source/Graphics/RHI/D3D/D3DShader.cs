@@ -4,7 +4,7 @@ using Vortice.Direct3D12.Shader;
 
 namespace InfinityEngine.Graphics.RHI.D3D
 {
-    internal class FD3DShaderCompiler
+    internal class D3DShaderCompiler
     {
         private static Span<byte> CompileBytecode(DxcShaderStage stage, string shaderSource, string entryPoint)
         {
@@ -24,9 +24,9 @@ namespace InfinityEngine.Graphics.RHI.D3D
         }
     }
 
-    public class FD3DShader : FRHIShader
+    public class D3DShader : RHIShader
     {
-        public FD3DShader() : base()
+        public D3DShader() : base()
         {
 
         }
@@ -37,22 +37,9 @@ namespace InfinityEngine.Graphics.RHI.D3D
         }
     }
 
-    public class FD3DComputeShader : FRHIComputeShader
+    public class D3DComputeShader : RHIComputeShader
     {
-        public FD3DComputeShader() : base()
-        {
-
-        }
-
-        protected override void Release()
-        {
-            base.Release();
-        }
-    }
-
-    public class FD3DGraphicsShader : FRHIGraphicsShader
-    {
-        public FD3DGraphicsShader() : base()
+        public D3DComputeShader() : base()
         {
 
         }
@@ -63,10 +50,23 @@ namespace InfinityEngine.Graphics.RHI.D3D
         }
     }
 
-    public class FD3DRayTraceShader : FRHIRayTraceShader
+    public class D3DGraphicsShader : RHIGraphicsShader
+    {
+        public D3DGraphicsShader() : base()
+        {
+
+        }
+
+        protected override void Release()
+        {
+            base.Release();
+        }
+    }
+
+    public class D3DRayTraceShader : RHIRayTraceShader
     {
         //Intersection, AnyHit, ClosestHit, Miss, RayGeneration
-        public FD3DRayTraceShader() : base()
+        public D3DRayTraceShader() : base()
         {
 
         }

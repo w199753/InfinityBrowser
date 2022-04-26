@@ -1,16 +1,14 @@
-﻿using System;
-using System.Threading;
-using InfinityEngine.Core.Object;
+﻿using System.Threading;
 using System.Runtime.CompilerServices;
 
 namespace InfinityEngine.Game.System
 {
-    internal class FPhysicsSystem : FDisposal
+    internal class PhysicsSystem : Disposal
     {
         private bool IsLoopExit;
         internal Thread physicsThread;
 
-        public FPhysicsSystem()
+        public PhysicsSystem()
         {
             this.IsLoopExit = false;
             this.physicsThread = new Thread(PhysicsFunc);

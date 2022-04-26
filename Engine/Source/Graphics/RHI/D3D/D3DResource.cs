@@ -6,7 +6,7 @@ using System.Runtime.CompilerServices;
 
 namespace InfinityEngine.Graphics.RHI.D3D
 {
-    internal static class FD3DResourceUtility
+    internal static class D3DResourceUtility
     {
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static DXGI_FORMAT GetNativeFormat(this EGraphicsFormat format)
@@ -148,21 +148,21 @@ namespace InfinityEngine.Graphics.RHI.D3D
         }
     }
 
-    public unsafe class FD3DBuffer : FRHIBuffer
+    public unsafe class D3DBuffer : RHIBuffer
     {
         internal ID3D12Resource* uploadResource;
         internal ID3D12Resource* defaultResource;
         internal ID3D12Resource* readbackResource;
 
-        internal FD3DBuffer() : base()
+        internal D3DBuffer() : base()
         {
 
         }
 
-        internal FD3DBuffer(FRHIDevice device, in FBufferDescriptor descriptor) : base(device, descriptor)
+        internal D3DBuffer(RHIDevice device, in BufferDescriptor descriptor) : base(device, descriptor)
         {
             this.descriptor = descriptor;
-            FD3DDevice d3dDevice = (FD3DDevice)device;
+            D3DDevice d3dDevice = (D3DDevice)device;
 
             // GPU Memory
             if ((descriptor.storageType & EStorageType.Default) == EStorageType.Default)
@@ -186,7 +186,7 @@ namespace InfinityEngine.Graphics.RHI.D3D
                     defaultResourceDesc.Format = DXGI_FORMAT.DXGI_FORMAT_UNKNOWN;
                     defaultResourceDesc.SampleDesc.Count = 1;
                     defaultResourceDesc.SampleDesc.Quality = 0;
-                    defaultResourceDesc.Flags = FD3DResourceUtility.GetNativeUsageType(descriptor.usageType);
+                    defaultResourceDesc.Flags = D3DResourceUtility.GetNativeUsageType(descriptor.usageType);
                     defaultResourceDesc.Layout = D3D12_TEXTURE_LAYOUT.D3D12_TEXTURE_LAYOUT_ROW_MAJOR;
                 }
 
@@ -284,11 +284,11 @@ namespace InfinityEngine.Graphics.RHI.D3D
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public override void Upload(FRHICommandBuffer cmdBuffer)
+        public override void Upload(RHICommandBuffer cmdBuffer)
         {
             if ((descriptor.storageType & EStorageType.Static) == EStorageType.Static || (descriptor.storageType & EStorageType.Dynamic) == EStorageType.Dynamic)
             {
-                FD3DCommandBuffer d3dCmdBuffer = (FD3DCommandBuffer)cmdBuffer;
+                D3DCommandBuffer d3dCmdBuffer = (D3DCommandBuffer)cmdBuffer;
                 D3D12_RESOURCE_BARRIER beforeBarrier = D3D12_RESOURCE_BARRIER.InitTransition(defaultResource, D3D12_RESOURCE_STATES.D3D12_RESOURCE_STATE_COMMON, D3D12_RESOURCE_STATES.D3D12_RESOURCE_STATE_COPY_DEST);
                 D3D12_RESOURCE_BARRIER afterBarrier = D3D12_RESOURCE_BARRIER.InitTransition(defaultResource, D3D12_RESOURCE_STATES.D3D12_RESOURCE_STATE_COPY_DEST, D3D12_RESOURCE_STATES.D3D12_RESOURCE_STATE_COMMON);
 
@@ -299,7 +299,7 @@ namespace InfinityEngine.Graphics.RHI.D3D
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public override void SetData<T>(FRHICommandBuffer cmdBuffer, params T[] data) where T : struct
+        public override void SetData<T>(RHICommandBuffer cmdBuffer, params T[] data) where T : struct
         {
             if ((descriptor.storageType & EStorageType.Static) == EStorageType.Static || (descriptor.storageType & EStorageType.Dynamic) == EStorageType.Dynamic)
             {
@@ -309,7 +309,7 @@ namespace InfinityEngine.Graphics.RHI.D3D
                 data.AsSpan().CopyTo(new IntPtr(uploadPtr));
                 uploadResource->Unmap(0, null);
 
-                FD3DCommandBuffer d3dCmdBuffer = (FD3DCommandBuffer)cmdBuffer;
+                D3DCommandBuffer d3dCmdBuffer = (D3DCommandBuffer)cmdBuffer;
                 D3D12_RESOURCE_BARRIER beforeBarrier = D3D12_RESOURCE_BARRIER.InitTransition(defaultResource, D3D12_RESOURCE_STATES.D3D12_RESOURCE_STATE_COMMON, D3D12_RESOURCE_STATES.D3D12_RESOURCE_STATE_COPY_DEST);
                 D3D12_RESOURCE_BARRIER afterBarrier = D3D12_RESOURCE_BARRIER.InitTransition(defaultResource, D3D12_RESOURCE_STATES.D3D12_RESOURCE_STATE_COPY_DEST, D3D12_RESOURCE_STATES.D3D12_RESOURCE_STATE_COMMON);
 
@@ -333,11 +333,11 @@ namespace InfinityEngine.Graphics.RHI.D3D
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public override void Readback(FRHICommandBuffer cmdBuffer)
+        public override void Readback(RHICommandBuffer cmdBuffer)
         {
             if ((descriptor.storageType & EStorageType.Staging) == EStorageType.Staging)
             {
-                FD3DCommandBuffer d3dCmdBuffer = (FD3DCommandBuffer)cmdBuffer;
+                D3DCommandBuffer d3dCmdBuffer = (D3DCommandBuffer)cmdBuffer;
                 D3D12_RESOURCE_BARRIER beforeBarrier = D3D12_RESOURCE_BARRIER.InitTransition(defaultResource, D3D12_RESOURCE_STATES.D3D12_RESOURCE_STATE_COMMON, D3D12_RESOURCE_STATES.D3D12_RESOURCE_STATE_COPY_SOURCE);
                 D3D12_RESOURCE_BARRIER afterBarrier = D3D12_RESOURCE_BARRIER.InitTransition(defaultResource, D3D12_RESOURCE_STATES.D3D12_RESOURCE_STATE_COPY_SOURCE, D3D12_RESOURCE_STATES.D3D12_RESOURCE_STATE_COMMON);
 
@@ -348,11 +348,11 @@ namespace InfinityEngine.Graphics.RHI.D3D
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public override void GetData<T>(FRHICommandBuffer cmdBuffer, T[] data) where T : struct
+        public override void GetData<T>(RHICommandBuffer cmdBuffer, T[] data) where T : struct
         {
             if ((descriptor.storageType & EStorageType.Staging) == EStorageType.Staging)
             {
-                FD3DCommandBuffer d3dCmdBuffer = (FD3DCommandBuffer)cmdBuffer;
+                D3DCommandBuffer d3dCmdBuffer = (D3DCommandBuffer)cmdBuffer;
                 D3D12_RESOURCE_BARRIER beforeBarrier = D3D12_RESOURCE_BARRIER.InitTransition(defaultResource, D3D12_RESOURCE_STATES.D3D12_RESOURCE_STATE_COMMON, D3D12_RESOURCE_STATES.D3D12_RESOURCE_STATE_COPY_SOURCE);
                 D3D12_RESOURCE_BARRIER afterBarrier = D3D12_RESOURCE_BARRIER.InitTransition(defaultResource, D3D12_RESOURCE_STATES.D3D12_RESOURCE_STATE_COPY_SOURCE, D3D12_RESOURCE_STATES.D3D12_RESOURCE_STATE_COMMON);
 
@@ -376,21 +376,21 @@ namespace InfinityEngine.Graphics.RHI.D3D
         }
     }
 
-    public unsafe class FD3DTexture : FRHITexture
+    public unsafe class D3DTexture : RHITexture
     {
         internal ID3D12Resource* uploadResource;
         internal ID3D12Resource* defaultResource;
         internal ID3D12Resource* readbackResource;
 
-        internal FD3DTexture() : base()
+        internal D3DTexture() : base()
         {
 
         }
 
-        internal FD3DTexture(FRHIDevice device, in FTextureDescriptor descriptor) : base(device, descriptor)
+        internal D3DTexture(RHIDevice device, in TextureDescriptor descriptor) : base(device, descriptor)
         {
             this.descriptor = descriptor;
-            FD3DDevice d3dDevice = (FD3DDevice)device;
+            D3DDevice d3dDevice = (D3DDevice)device;
 
             // GPU Memory
             if ((descriptor.storageType & EStorageType.Default) == EStorageType.Default)

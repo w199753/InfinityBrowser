@@ -2,7 +2,7 @@
 
 namespace InfinityEngine.Core.Mathmatics.Geometry
 {
-    public struct FViewport : IEquatable<FViewport>
+    public struct Viewport : IEquatable<Viewport>
     {
         public float TopLeftX;
 
@@ -16,7 +16,7 @@ namespace InfinityEngine.Core.Mathmatics.Geometry
 
         public float MaxDepth;
 
-        public static bool operator ==(in FViewport l, in FViewport r)
+        public static bool operator ==(in Viewport l, in Viewport r)
         {
             if (l.TopLeftX == r.TopLeftX && l.TopLeftY == r.TopLeftY && l.Width == r.Width && l.Height == r.Height && l.MinDepth == r.MinDepth)
             {
@@ -26,12 +26,12 @@ namespace InfinityEngine.Core.Mathmatics.Geometry
             return false;
         }
 
-        public static bool operator !=(in FViewport l, in FViewport r)
+        public static bool operator !=(in Viewport l, in Viewport r)
         {
             return !(l == r);
         }
 
-        public FViewport(float topLeftX, float topLeftY, float width, float height, float minDepth = 0f, float maxDepth = 1f)
+        public Viewport(float topLeftX, float topLeftY, float width, float height, float minDepth = 0f, float maxDepth = 1f)
         {
             TopLeftX = topLeftX;
             TopLeftY = topLeftY;
@@ -43,16 +43,16 @@ namespace InfinityEngine.Core.Mathmatics.Geometry
 
         public override bool Equals(object? obj)
         {
-            if (obj is FViewport)
+            if (obj is Viewport)
             {
-                FViewport other = (FViewport)obj;
+                Viewport other = (Viewport)obj;
                 return Equals(other);
             }
 
             return false;
         }
 
-        public bool Equals(FViewport other)
+        public bool Equals(Viewport other)
         {
             return this == other;
         }

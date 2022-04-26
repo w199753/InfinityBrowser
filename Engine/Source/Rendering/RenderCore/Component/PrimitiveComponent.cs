@@ -1,9 +1,6 @@
-﻿using InfinityEngine.Core.Object;
-using InfinityEngine.Core.ActorComponent;
-
-namespace InfinityEngine.Rendering.Object
+﻿namespace InfinityEngine.Rendering.Object
 {
-    public class FPrimitiveRenderProxy : FDisposal
+    public class PrimitiveRenderProxy : Disposal
     {
         protected override void Release()
         {
@@ -11,9 +8,9 @@ namespace InfinityEngine.Rendering.Object
         }
     }
 
-    public class UPrimitiveComponent : UComponent
+    public class PrimitiveComponent : Component
     {
-        public UPrimitiveComponent()
+        public PrimitiveComponent()
         {
 
         }

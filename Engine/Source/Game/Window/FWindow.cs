@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Drawing;
 
-namespace InfinityEngine.Game.Window
+namespace InfinityEngine
 {
-    internal class FWindow
+    internal class Window
     {
         private const int CW_USEDEFAULT = unchecked((int)0x80000000);
 
@@ -12,7 +12,7 @@ namespace InfinityEngine.Game.Window
         public int height { get; private set; }
         public IntPtr handle { get; private set; }
 
-        public FWindow(string title, int width, int height)
+        public Window(string title, int width, int height)
         {
             this.title = title;
             this.width = width;
@@ -60,7 +60,7 @@ namespace InfinityEngine.Game.Window
                 x = y = windowWidth = windowHeight = CW_USEDEFAULT;
             }
 
-            IntPtr hwnd = User32.CreateWindowEx((int)styleEx, Application.FApplication.WndClassName, title, (int)style, x, y, windowWidth, windowHeight, IntPtr.Zero, IntPtr.Zero, IntPtr.Zero, IntPtr.Zero);
+            IntPtr hwnd = User32.CreateWindowEx((int)styleEx, GameApplication.WndClassName, title, (int)style, x, y, windowWidth, windowHeight, IntPtr.Zero, IntPtr.Zero, IntPtr.Zero, IntPtr.Zero);
             if (hwnd == IntPtr.Zero) {
                 return;
             }

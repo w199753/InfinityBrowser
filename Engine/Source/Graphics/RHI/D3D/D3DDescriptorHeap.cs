@@ -1,14 +1,11 @@
-﻿using System;
-using TerraFX.Interop.Windows;
+﻿using TerraFX.Interop.Windows;
 using TerraFX.Interop.DirectX;
-using InfinityEngine.Core.Object;
-using InfinityEngine.Core.Memory;
 using InfinityEngine.Core.Container;
 using System.Runtime.CompilerServices;
 
 namespace InfinityEngine.Graphics.RHI.D3D
 {
-    internal static class FD3DDescriptorUtil
+    internal static class D3DDescriptorUtil
     {
         public static D3D12_DESCRIPTOR_HEAP_TYPE GetDescriptorType(in EDescriptorType type)
         {
@@ -28,7 +25,7 @@ namespace InfinityEngine.Graphics.RHI.D3D
         }
     }
 
-    internal unsafe class FD3DDescriptorHeapFactory : FRHIDescriptorHeapFactory
+    internal unsafe class D3DDescriptorHeapFactory : RHIDescriptorHeapFactory
     {
         public uint descriptorSize => m_DescriptorSize;
         public D3D12_CPU_DESCRIPTOR_HANDLE cpuStartHandle => m_CPUDescriptorHeap->GetCPUDescriptorHandleForHeapStart();
@@ -39,10 +36,10 @@ namespace InfinityEngine.Graphics.RHI.D3D
         private ID3D12DescriptorHeap* m_CPUDescriptorHeap;
         private ID3D12DescriptorHeap* m_GPUDescriptorHeap;
 
-        public FD3DDescriptorHeapFactory(FRHIDevice device, in EDescriptorType type, in uint count, string name) : base(device, type, count, name)
+        public D3DDescriptorHeapFactory(RHIDevice device, in EDescriptorType type, in uint count, string name) : base(device, type, count, name)
         {
-            FD3DDevice d3dDevice = (FD3DDevice)device;
-            D3D12_DESCRIPTOR_HEAP_TYPE heapType = FD3DDescriptorUtil.GetDescriptorType(type);
+            D3DDevice d3dDevice = (D3DDevice)device;
+            D3D12_DESCRIPTOR_HEAP_TYPE heapType = D3DDescriptorUtil.GetDescriptorType(type);
             m_DescriptorSize = d3dDevice.nativeDevice->GetDescriptorHandleIncrementSize(heapType);
 
             m_CacheMap = new TValueArray<int>((int)count);

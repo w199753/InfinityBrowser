@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using InfinityEngine.Core.Object;
 using InfinityEngine.Core.Mathmatics;
 using System.Runtime.CompilerServices;
 using InfinityEngine.Core.Mathmatics.Geometry;
@@ -49,14 +48,14 @@ namespace InfinityEngine.Graphics.RHI
         Passthrough = 4
     }
 
-    public abstract class FRHICommandBuffer : FDisposal
+    public abstract class RHICommandBuffer : Disposal
     {
         public string name;
         internal int poolIndex;
         internal EContextType contextType;
         protected EPrimitiveTopology m_TopologyType;
 
-        internal FRHICommandBuffer(string name, FRHIDevice device, in EContextType contextType)
+        internal RHICommandBuffer(string name, RHIDevice device, in EContextType contextType)
         {
             this.name = name;
             this.contextType = contextType;
@@ -71,55 +70,55 @@ namespace InfinityEngine.Graphics.RHI
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public abstract void EndEvent();
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public abstract void BeginQuery(FRHIQuery query);
+        public abstract void BeginQuery(RHIQuery query);
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public abstract void EndQuery(FRHIQuery query);
+        public abstract void EndQuery(RHIQuery query);
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public abstract void Barriers(in ReadOnlySpan<FResourceBarrierInfo> barrierBatch);
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public abstract void Transition(FRHIResource resource, EResourceState stateBefore, EResourceState stateAfter, int subresource = -1);
+        public abstract void Transition(RHIResource resource, EResourceState stateBefore, EResourceState stateAfter, int subresource = -1);
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public abstract void ClearBuffer(FRHIBuffer buffer);
+        public abstract void ClearBuffer(RHIBuffer buffer);
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public abstract void ClearTexture(FRHITexture texture);
+        public abstract void ClearTexture(RHITexture texture);
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public abstract void CopyBufferToBuffer(FRHIBuffer srcBuffer, FRHIBuffer dscBuffer);
+        public abstract void CopyBufferToBuffer(RHIBuffer srcBuffer, RHIBuffer dscBuffer);
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public abstract void CopyBufferToTexture(FRHIBuffer srcBuffer, FRHITexture dscTexture);
+        public abstract void CopyBufferToTexture(RHIBuffer srcBuffer, RHITexture dscTexture);
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public abstract void CopyTextureToBuffer(FRHITexture srcTexture, FRHIBuffer dscBuffer);
+        public abstract void CopyTextureToBuffer(RHITexture srcTexture, RHIBuffer dscBuffer);
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public abstract void CopyTextureToTexture(FRHITexture srcTexture, FRHITexture dscTexture);
+        public abstract void CopyTextureToTexture(RHITexture srcTexture, RHITexture dscTexture);
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public abstract void CopyAccelerationStructure();
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public abstract void BuildAccelerationStructure();
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public abstract void SetComputePipelineState(FRHIComputePipelineState computePipelineState);
+        public abstract void SetComputePipelineState(RHIComputePipelineState computePipelineState);
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public abstract void SetComputeResourceBind(in uint slot, FRHIResourceSet resourceSet);
+        public abstract void SetComputeResourceBind(in uint slot, RHIResourceSet resourceSet);
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public abstract void DispatchCompute(in uint sizeX, in uint sizeY, in uint sizeZ);
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public abstract void DispatchComputeIndirect(FRHIBuffer argsBuffer, in uint argsOffset);
+        public abstract void DispatchComputeIndirect(RHIBuffer argsBuffer, in uint argsOffset);
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public abstract void SetRayTracePipelineState(FRHIRayTracePipelineState rayTracePipelineState);
+        public abstract void SetRayTracePipelineState(RHIRayTracePipelineState rayTracePipelineState);
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public abstract void SetRayTraceResourceBind(in uint slot, FRHIResourceSet resourceSet);
+        public abstract void SetRayTraceResourceBind(in uint slot, RHIResourceSet resourceSet);
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public abstract void DispatchRay(in uint sizeX, in uint sizeY, in uint sizeZ);
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public abstract void DispatchRayIndirect(FRHIBuffer argsBuffer, in uint argsOffset);
+        public abstract void DispatchRayIndirect(RHIBuffer argsBuffer, in uint argsOffset);
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public abstract void SetScissor(in FRect rect);
+        public abstract void SetScissor(in Rect rect);
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public abstract void SetViewport(in FViewport viewport);
+        public abstract void SetViewport(in Viewport viewport);
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public abstract void BeginRenderPass(FRHITexture depthBuffer, params FRHITexture[] colorBuffer);
+        public abstract void BeginRenderPass(RHITexture depthBuffer, params RHITexture[] colorBuffer);
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public abstract void EndRenderPass();
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public abstract void ClearRenderTarget(FRHIRenderTargetView renderTargetView, in float4 color);
+        public abstract void ClearRenderTarget(RHIRenderTargetView renderTargetView, in float4 color);
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public abstract void SetStencilRef(in uint refValue);
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -127,47 +126,47 @@ namespace InfinityEngine.Graphics.RHI
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public abstract void SetDepthBound(in float min, in float max);
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public abstract void SetShadingRate(FRHITexture texture);
+        public abstract void SetShadingRate(RHITexture texture);
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public abstract void SetShadingRate(in EShadingRate shadingRate, in EShadingRateCombiner combiner);
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public abstract void SetPrimitiveTopology(in EPrimitiveTopology topologyType);
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public abstract void SetGraphicsPipelineState(FRHIGraphicsPipelineState graphicsPipelineState);
+        public abstract void SetGraphicsPipelineState(RHIGraphicsPipelineState graphicsPipelineState);
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public abstract void SetIndexBuffer(FRHIIndexBufferView indexBufferView);
+        public abstract void SetIndexBuffer(RHIIndexBufferView indexBufferView);
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public abstract void SetVertexBuffer(in uint slot, FRHIVertexBufferView vertexBufferView);
+        public abstract void SetVertexBuffer(in uint slot, RHIVertexBufferView vertexBufferView);
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public abstract void SetGraphicsResourceBind(in uint slot, FRHIResourceSet resourceSet);
+        public abstract void SetGraphicsResourceBind(in uint slot, RHIResourceSet resourceSet);
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public abstract void DrawIndexInstanced(in uint indexCount, in uint startIndex, in int startVertex, in uint instanceCount, in uint startInstance);
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public abstract void DrawMultiIndexInstanced(FRHIBuffer argsBuffer, in uint argsOffset, FRHIBuffer countBuffer, in uint countOffset);
+        public abstract void DrawMultiIndexInstanced(RHIBuffer argsBuffer, in uint argsOffset, RHIBuffer countBuffer, in uint countOffset);
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public abstract void DrawIndexInstancedIndirect(FRHIBuffer argsBuffer, in uint argsOffset);
+        public abstract void DrawIndexInstancedIndirect(RHIBuffer argsBuffer, in uint argsOffset);
     }
 
-    internal class FRHICommandBufferPool : FDisposal
+    internal class RHICommandBufferPool : Disposal
     {
         EContextType m_ContextType;
-        Stack<FRHICommandBuffer> m_Pooled;
-        FRHIContext m_Context;
+        Stack<RHICommandBuffer> m_Pooled;
+        RHIContext m_Context;
 
         public int countAll { get; private set; }
         public int countActive { get { return countAll - countInactive; } }
         public int countInactive { get { return m_Pooled.Count; } }
 
-        internal FRHICommandBufferPool(FRHIContext context, EContextType contextType)
+        internal RHICommandBufferPool(RHIContext context, EContextType contextType)
         {
             m_ContextType = contextType;
             m_Context = context;
-            m_Pooled = new Stack<FRHICommandBuffer>(64);
+            m_Pooled = new Stack<RHICommandBuffer>(64);
         }
 
-        public FRHICommandBuffer GetTemporary(string name)
+        public RHICommandBuffer GetTemporary(string name)
         {
-            FRHICommandBuffer cmdBuffer;
+            RHICommandBuffer cmdBuffer;
             if (m_Pooled.Count == 0) {
                 ++countAll;
                 cmdBuffer = m_Context.CreateCommandBuffer(m_ContextType, name);
@@ -178,7 +177,7 @@ namespace InfinityEngine.Graphics.RHI
             return cmdBuffer;
         }
 
-        public void ReleaseTemporary(FRHICommandBuffer cmdBuffer)
+        public void ReleaseTemporary(RHICommandBuffer cmdBuffer)
         {
             m_Pooled.Push(cmdBuffer);
         }
@@ -186,7 +185,7 @@ namespace InfinityEngine.Graphics.RHI
         protected override void Release()
         {
             m_Context = null;
-            foreach (FRHICommandBuffer cmdBuffer in m_Pooled)
+            foreach (RHICommandBuffer cmdBuffer in m_Pooled)
             {
                 cmdBuffer.Dispose();
             }

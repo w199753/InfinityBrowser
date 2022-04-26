@@ -3,13 +3,13 @@ using TerraFX.Interop.DirectX;
 
 namespace InfinityEngine.Graphics.RHI.D3D
 {
-    internal unsafe class FD3DDevice : FRHIDevice
+    internal unsafe class D3DDevice : RHIDevice
     {
         internal ID3D12Device6* nativeDevice;
         //internal IDXGIAdapter1* nativeAdapter;
         internal IDXGIFactory7* nativeFactory;
 
-        public FD3DDevice()
+        public D3DDevice()
         {
             IDXGIFactory7* factory;
             DirectX.CreateDXGIFactory2(0, Windows.__uuidof<IDXGIFactory7>(), (void**)&factory);
@@ -31,6 +31,6 @@ namespace InfinityEngine.Graphics.RHI.D3D
             nativeFactory->Release();
         }
 
-        public static implicit operator ID3D12Device6*(FD3DDevice device) { return device.nativeDevice; }
+        public static implicit operator ID3D12Device6*(D3DDevice device) { return device.nativeDevice; }
     }
 }

@@ -1,18 +1,18 @@
 ﻿using System;
 
-namespace InfinityEngine.Core.Object
+namespace InfinityEngine
 {
     [Serializable]
-    public class UObject : FDisposal
+    public class Object : Disposal
     {
         public string name;
 
-        public UObject()
+        public Object()
         {
             name = null;
         }
 
-        public UObject(string name)
+        public Object(string name)
         {
             this.name = name;
         }

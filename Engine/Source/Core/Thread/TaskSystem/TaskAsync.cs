@@ -9,14 +9,14 @@ namespace InfinityEngine.Core.Thread.TaskSystem
 
     public static class ITaskAsyncExtension
     {
-        public static FTaskRef Run<T>(this T taskData) where T : struct, ITaskAsync
+        public static TaskRef Run<T>(this T taskData) where T : struct, ITaskAsync
         {
-            return new FTaskRef(Task.Factory.StartNew(taskData.Execute));
+            return new TaskRef(Task.Factory.StartNew(taskData.Execute));
         }
 
-        public static void Run<T>(this T taskData, ref FTaskRef taskRef) where T : struct, ITaskAsync
+        public static void Run<T>(this T taskData, ref TaskRef taskRef) where T : struct, ITaskAsync
         {
-            taskRef = new FTaskRef(Task.Factory.StartNew(taskData.Execute));
+            taskRef = new TaskRef(Task.Factory.StartNew(taskData.Execute));
         }
     }
 }

@@ -1,21 +1,20 @@
 ﻿using System;
-using InfinityEngine.Core.Object;
 
-namespace InfinityEngine.Core.ActorComponent
+namespace InfinityEngine
 {
     [Serializable]
-    public class UComponent : UObject
+    public class Component : Object
     {
-        public AActor owner;
+        public Actor owner;
         internal bool IsConstruct;
 
-        public UComponent()
+        public Component()
         {
             owner = null;
             IsConstruct = true;
         }
 
-        public UComponent(string name) : base(name)
+        public Component(string name) : base(name)
         {
             owner = null;
             IsConstruct = true;

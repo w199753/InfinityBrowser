@@ -5,7 +5,7 @@ using InfinityEngine.Core.Mathmatics.Geometry;
 namespace InfinityEngine.Rendering.TerrainPipeline
 {
     [Serializable]
-    public struct FSectionLODData
+    public struct SectionLODData
     {
         public int LastLODIndex;
         public float LOD0ScreenSizeSquared;
@@ -15,31 +15,30 @@ namespace InfinityEngine.Rendering.TerrainPipeline
     };
 
     [Serializable]
-    public struct FTerrainSection : IComparable<FTerrainSection>, IEquatable<FTerrainSection>
+    public struct TerrainSection : IComparable<TerrainSection>, IEquatable<TerrainSection>
     {
         public int NumQuad;
         public int LODIndex;
         public float FractionLOD;
 
-        public FBound BoundingBox;
+        public Bound BoundingBox;
         public float3 PivotPosition;
         public float3 CenterPosition;
-        public FSectionLODData LODSetting;
+        public SectionLODData LODSetting;
 
-
-        public bool Equals(FTerrainSection Target)
+        public bool Equals(TerrainSection obj)
         {
-            return NumQuad.Equals(Target.NumQuad) && LODIndex.Equals(Target.LODIndex) && FractionLOD.Equals(Target.FractionLOD) && BoundingBox.Equals(Target.BoundingBox) && PivotPosition.Equals(Target.PivotPosition) && CenterPosition.Equals(Target.CenterPosition);
+            return NumQuad.Equals(obj.NumQuad) && LODIndex.Equals(obj.LODIndex) && FractionLOD.Equals(obj.FractionLOD) && BoundingBox.Equals(obj.BoundingBox) && PivotPosition.Equals(obj.PivotPosition) && CenterPosition.Equals(obj.CenterPosition);
         }
 
         public override bool Equals(object obj)
         {
-            return Equals((FTerrainSection)obj);
+            return Equals((TerrainSection)obj);
         }
 
-        public int CompareTo(FTerrainSection Target)
+        public int CompareTo(TerrainSection obj)
         {
-            return LODIndex.CompareTo(Target.LODIndex);
+            return LODIndex.CompareTo(obj.LODIndex);
         }
 
         public override int GetHashCode()

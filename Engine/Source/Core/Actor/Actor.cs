@@ -1,47 +1,46 @@
 ﻿using System;
 using System.Collections;
-using InfinityEngine.Core.Object;
 using InfinityEngine.Core.Container;
 using InfinityEngine.Core.Mathmatics;
 using System.Runtime.CompilerServices;
 using InfinityEngine.Core.Thread.Coroutine;
 
-namespace InfinityEngine.Core.ActorComponent
+namespace InfinityEngine
 {
     [Serializable]
-    public class AActor : UObject, IComparable<AActor>, IEquatable<AActor>
+    public class Actor : Object, IComparable<Actor>, IEquatable<Actor>
     {
-        public AActor parent;
+        public Actor parent;
         public FTransform transform;
 
         private FTransform m_LastTransform;
-        private FCoroutineDispatcher m_CoroutineDispatcher;
+        private CoroutineDispatcher m_CoroutineDispatcher;
 
-        internal TArray<AActor> childs;
-        internal TArray<UComponent> components;
+        internal TArray<Actor> childs;
+        internal TArray<Component> components;
 
-        public AActor()
+        public Actor()
         {
             this.parent = null;
-            this.childs = new TArray<AActor>(8);
-            this.components = new TArray<UComponent>(8);
-            this.m_CoroutineDispatcher = new FCoroutineDispatcher();
+            this.childs = new TArray<Actor>(8);
+            this.components = new TArray<Component>(8);
+            this.m_CoroutineDispatcher = new CoroutineDispatcher();
         }
 
-        public AActor(string name) : base(name)
+        public Actor(string name) : base(name)
         {
             this.parent = null;
-            this.childs = new TArray<AActor>(8);
-            this.components = new TArray<UComponent>(8);
-            this.m_CoroutineDispatcher = new FCoroutineDispatcher();
+            this.childs = new TArray<Actor>(8);
+            this.components = new TArray<Component>(8);
+            this.m_CoroutineDispatcher = new CoroutineDispatcher();
         }
 
-        public AActor(string name, AActor parent) : base(name)
+        public Actor(string name, Actor parent) : base(name)
         {
             this.parent = parent;
-            this.childs = new TArray<AActor>(8);
-            this.components = new TArray<UComponent>(8);
-            this.m_CoroutineDispatcher = new FCoroutineDispatcher();
+            this.childs = new TArray<Actor>(8);
+            this.components = new TArray<Component>(8);
+            this.m_CoroutineDispatcher = new CoroutineDispatcher();
         }
 
         public override string ToString()
@@ -56,15 +55,15 @@ namespace InfinityEngine.Core.ActorComponent
 
         public override bool Equals(object target)
         {
-            return Equals((AActor)target);
+            return Equals((Actor)target);
         }
 
-        public bool Equals(AActor target)
+        public bool Equals(Actor target)
         {
             return name.Equals(target.name) && parent.Equals(target.parent) && childs.Equals(target.childs) && components.Equals(target.components) && transform.Equals(target.transform);
         }
 
-        public int CompareTo(AActor target)
+        public int CompareTo(Actor target)
         {
             return 0;
         }
@@ -116,18 +115,18 @@ namespace InfinityEngine.Core.ActorComponent
             }
         }
 
-        public void SetParent(AActor parent)
+        public void SetParent(Actor parent)
         {
             this.parent = parent;
         }
 
-        public void AddComponent<T>(T component) where T : UComponent
+        public void AddComponent<T>(T component) where T : Component
         {
             component.owner = this;
             components.Add(component);
         }
 
-        public T FindComponent<T>() where T : UComponent
+        public T FindComponent<T>() where T : Component
         {
             for (int i = 0; i < components.length; ++i)
             {
@@ -140,7 +139,7 @@ namespace InfinityEngine.Core.ActorComponent
             return null;
         }
 
-        public void RemoveComponent<T>(T component) where T : UComponent
+        public void RemoveComponent<T>(T component) where T : Component
         {
             for (int i = 0; i < components.length; ++i)
             {
@@ -151,13 +150,13 @@ namespace InfinityEngine.Core.ActorComponent
             }
         }
 
-        public void AddChildActor<T>(T child) where T : AActor
+        public void AddChildActor<T>(T child) where T : Actor
         {
             child.parent = this;
             childs.Add(child);
         }
 
-        public T FindChildActor<T>() where T : AActor
+        public T FindChildActor<T>() where T : Actor
         {
             for (int i = 0; i < childs.length; ++i)
             {
@@ -170,7 +169,7 @@ namespace InfinityEngine.Core.ActorComponent
             return null;
         }
 
-        public void RemoveChildActor<T>(T child) where T : AActor
+        public void RemoveChildActor<T>(T child) where T : Actor
         {
             for (int i = 0; i < childs.length; ++i)
             {

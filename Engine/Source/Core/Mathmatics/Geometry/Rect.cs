@@ -2,7 +2,7 @@
 
 namespace InfinityEngine.Core.Mathmatics.Geometry
 {
-    public struct FRect : IEquatable<FRect>
+    public struct Rect : IEquatable<Rect>
     {
         public int left;
 
@@ -12,7 +12,7 @@ namespace InfinityEngine.Core.Mathmatics.Geometry
 
         public int bottom;
 
-        public FRect(int Left, int Top, int Right, int Bottom)
+        public Rect(int Left, int Top, int Right, int Bottom)
         {
             left = Left;
             top = Top;
@@ -20,7 +20,7 @@ namespace InfinityEngine.Core.Mathmatics.Geometry
             bottom = Bottom;
         }
 
-        public static bool operator ==(in FRect l, in FRect r)
+        public static bool operator ==(in Rect l, in Rect r)
         {
             if (l.left == r.left && l.top == r.top && l.right == r.right)
             {
@@ -30,23 +30,23 @@ namespace InfinityEngine.Core.Mathmatics.Geometry
             return false;
         }
 
-        public static bool operator !=(in FRect l, in FRect r)
+        public static bool operator !=(in Rect l, in Rect r)
         {
             return !(l == r);
         }
 
         public override bool Equals(object obj)
         {
-            if (obj is FRect)
+            if (obj is Rect)
             {
-                FRect other = (FRect)obj;
+                Rect other = (Rect)obj;
                 return Equals(other);
             }
 
             return false;
         }
 
-        public bool Equals(FRect other)
+        public bool Equals(Rect other)
         {
             return this == other;
         }

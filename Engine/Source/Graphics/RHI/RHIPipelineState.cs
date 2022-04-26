@@ -1,33 +1,31 @@
-﻿using InfinityEngine.Core.Object;
-
-namespace InfinityEngine.Graphics.RHI
+﻿namespace InfinityEngine.Graphics.RHI
 {
-    public struct FRHIComputePipelineDescriptor
+    public struct RHIComputePipelineDescriptor
     {
 
     }
 
-    public struct FRHIRayTracePipelineDescriptor
+    public struct RHIRayTracePipelineDescriptor
     {
 
     }
 
-    public struct FRHIGraphicsPipelineDescriptor
+    public struct RHIGraphicsPipelineDescriptor
     {
 
     }
 
-    public class FRHIComputePipelineState
+    public class RHIComputePipelineState
     {
 
     }
 
-    public class FRHIRayTracePipelineState
+    public class RHIRayTracePipelineState
     {
 
     }
 
-    public class FRHIGraphicsPipelineState
+    public class RHIGraphicsPipelineState
     {
 
     }

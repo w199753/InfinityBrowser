@@ -1,28 +1,27 @@
-﻿using InfinityEngine.Core.Object;
-using System.Runtime.CompilerServices;
+﻿using System.Runtime.CompilerServices;
 
 namespace InfinityEngine.Graphics.RHI
 {
-    public unsafe abstract class FRHISwapChain : FDisposal
+    public unsafe abstract class RHISwapChain : Disposal
     {
         public string name;
         public virtual int swapIndex => 0;
-        public FRHITexture backBuffer => backBuffers[swapIndex];
-        public FRHIRenderTargetView backBufferView => backBufferViews[swapIndex];
+        public RHITexture backBuffer => backBuffers[swapIndex];
+        public RHIRenderTargetView backBufferView => backBufferViews[swapIndex];
 
-        protected FRHITexture[] backBuffers;
-        protected FRHIRenderTargetView[] backBufferViews;
+        protected RHITexture[] backBuffers;
+        protected RHIRenderTargetView[] backBufferViews;
 
-        internal FRHISwapChain(FRHIDevice device, FRHICommandContext cmdContext, in void* windowPtr, in uint width, in uint height, string name)
+        internal RHISwapChain(RHIDevice device, RHICommandContext cmdContext, in void* windowPtr, in uint width, in uint height, string name)
         {
             this.name = name;
-            this.backBuffers = new FRHITexture[2];
-            this.backBufferViews = new FRHIRenderTargetView[2];
+            this.backBuffers = new RHITexture[2];
+            this.backBufferViews = new RHIRenderTargetView[2];
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public abstract void Present();
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public abstract void InitResourceView(FRHIContext context);
+        public abstract void InitResourceView(RHIContext context);
     }
 }

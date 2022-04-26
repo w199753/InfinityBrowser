@@ -4,7 +4,7 @@ using System.Runtime.CompilerServices;
 
 namespace InfinityEngine.Graphics.RHI.D3D
 {
-    public unsafe class FD3DContext : FRHIContext
+    public unsafe class D3DContext : RHIContext
     {
         public override bool copyQueueState
         {
@@ -41,54 +41,54 @@ namespace InfinityEngine.Graphics.RHI.D3D
             }
         }
 
-        internal FD3DDevice m_Device;
-        internal FRHIFencePool m_FencePool;
-        internal FRHIResourcePool m_ResourcePool;
-        internal FD3DQueryContext[] m_QueryContext;
-        internal FD3DCommandContext m_CopyContext;
-        internal FD3DCommandContext m_ComputeContext;
-        internal FD3DCommandContext m_GraphicsContext;
+        internal D3DDevice m_Device;
+        internal RHIFencePool m_FencePool;
+        internal RHIResourcePool m_ResourcePool;
+        internal D3DQueryContext[] m_QueryContext;
+        internal D3DCommandContext m_CopyContext;
+        internal D3DCommandContext m_ComputeContext;
+        internal D3DCommandContext m_GraphicsContext;
         internal TArray<FExecuteInfo> m_ExecuteInfos;
-        internal FRHICommandBufferPool m_CopyBufferPool;
-        internal FRHICommandBufferPool m_ComputeBufferPool;
-        internal FRHICommandBufferPool m_GraphicsBufferPool;
-        internal TArray<FRHICommandBuffer> m_ManagedBuffers;
-        internal FD3DDescriptorHeapFactory m_DSVDescriptorFactory;
-        internal FD3DDescriptorHeapFactory m_RTVDescriptorFactory;
-        internal FD3DDescriptorHeapFactory m_SamplerDescriptorFactory;
-        internal FD3DDescriptorHeapFactory m_CbvSrvUavDescriptorFactory;
+        internal RHICommandBufferPool m_CopyBufferPool;
+        internal RHICommandBufferPool m_ComputeBufferPool;
+        internal RHICommandBufferPool m_GraphicsBufferPool;
+        internal TArray<RHICommandBuffer> m_ManagedBuffers;
+        internal D3DDescriptorHeapFactory m_DSVDescriptorFactory;
+        internal D3DDescriptorHeapFactory m_RTVDescriptorFactory;
+        internal D3DDescriptorHeapFactory m_SamplerDescriptorFactory;
+        internal D3DDescriptorHeapFactory m_CbvSrvUavDescriptorFactory;
 
-        public FD3DContext()
+        public D3DContext()
         {
-            m_Device = new FD3DDevice();
-            m_FencePool = new FRHIFencePool(this);
-            m_ResourcePool = new FRHIResourcePool(this);
+            m_Device = new D3DDevice();
+            m_FencePool = new RHIFencePool(this);
+            m_ResourcePool = new RHIResourcePool(this);
             m_ExecuteInfos = new TArray<FExecuteInfo>(32);
-            m_ManagedBuffers = new TArray<FRHICommandBuffer>(32);
+            m_ManagedBuffers = new TArray<RHICommandBuffer>(32);
 
-            m_CopyContext = new FD3DCommandContext(m_Device, EContextType.Copy, "Copy");
-            m_ComputeContext = new FD3DCommandContext(m_Device, EContextType.Compute, "Compute");
-            m_GraphicsContext = new FD3DCommandContext(m_Device, EContextType.Graphics, "Graphics");
+            m_CopyContext = new D3DCommandContext(m_Device, EContextType.Copy, "Copy");
+            m_ComputeContext = new D3DCommandContext(m_Device, EContextType.Compute, "Compute");
+            m_GraphicsContext = new D3DCommandContext(m_Device, EContextType.Graphics, "Graphics");
 
-            m_QueryContext = new FD3DQueryContext[2];
-            m_QueryContext[0] = new FD3DQueryContext(m_Device, SelectContext(EContextType.Copy), EQueryType.CopyTimestamp, 128, "CopyTimestamp");
-            m_QueryContext[1] = new FD3DQueryContext(m_Device, SelectContext(EContextType.Graphics), EQueryType.GenericTimestamp, 128, "GenericTimestamp");
+            m_QueryContext = new D3DQueryContext[2];
+            m_QueryContext[0] = new D3DQueryContext(m_Device, SelectContext(EContextType.Copy), EQueryType.CopyTimestamp, 128, "CopyTimestamp");
+            m_QueryContext[1] = new D3DQueryContext(m_Device, SelectContext(EContextType.Graphics), EQueryType.GenericTimestamp, 128, "GenericTimestamp");
 
-            m_CopyBufferPool = new FRHICommandBufferPool(this, EContextType.Copy);
-            m_ComputeBufferPool = new FRHICommandBufferPool(this, EContextType.Compute);
-            m_GraphicsBufferPool = new FRHICommandBufferPool(this, EContextType.Graphics);
+            m_CopyBufferPool = new RHICommandBufferPool(this, EContextType.Copy);
+            m_ComputeBufferPool = new RHICommandBufferPool(this, EContextType.Compute);
+            m_GraphicsBufferPool = new RHICommandBufferPool(this, EContextType.Graphics);
 
             //TerraFX.Interop.D3D12MemAlloc.D3D12MA_CreateAllocator
-            m_DSVDescriptorFactory = new FD3DDescriptorHeapFactory(m_Device, EDescriptorType.DSV, 256, "DSVDescriptorHeap");
-            m_RTVDescriptorFactory = new FD3DDescriptorHeapFactory(m_Device, EDescriptorType.RTV, 256, "RTVDescriptorHeap");
-            m_SamplerDescriptorFactory = new FD3DDescriptorHeapFactory(m_Device, EDescriptorType.Sampler, 32768, "SamplerDescriptorHeap");
-            m_CbvSrvUavDescriptorFactory = new FD3DDescriptorHeapFactory(m_Device, EDescriptorType.CbvSrvUav, 32768, "CbvSrvUavDescriptorHeap");
+            m_DSVDescriptorFactory = new D3DDescriptorHeapFactory(m_Device, EDescriptorType.DSV, 256, "DSVDescriptorHeap");
+            m_RTVDescriptorFactory = new D3DDescriptorHeapFactory(m_Device, EDescriptorType.RTV, 256, "RTVDescriptorHeap");
+            m_SamplerDescriptorFactory = new D3DDescriptorHeapFactory(m_Device, EDescriptorType.Sampler, 32768, "SamplerDescriptorHeap");
+            m_CbvSrvUavDescriptorFactory = new D3DDescriptorHeapFactory(m_Device, EDescriptorType.CbvSrvUav, 32768, "CbvSrvUavDescriptorHeap");
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal override FRHICommandContext SelectContext(in EContextType contextType)
+        internal override RHICommandContext SelectContext(in EContextType contextType)
         {
-            FRHICommandContext commandContext = m_GraphicsContext;
+            RHICommandContext commandContext = m_GraphicsContext;
 
             switch (contextType)
             {
@@ -105,15 +105,15 @@ namespace InfinityEngine.Graphics.RHI.D3D
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public override FRHICommandBuffer CreateCommandBuffer(in EContextType contextType, string name)
+        public override RHICommandBuffer CreateCommandBuffer(in EContextType contextType, string name)
         {
-            return new FD3DCommandBuffer(name, m_Device, SelectContext(contextType), contextType);
+            return new D3DCommandBuffer(name, m_Device, SelectContext(contextType), contextType);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public override FRHICommandBuffer GetCommandBuffer(in EContextType contextType, string name)
+        public override RHICommandBuffer GetCommandBuffer(in EContextType contextType, string name)
         {
-            FRHICommandBuffer cmdBuffer = null;
+            RHICommandBuffer cmdBuffer = null;
             switch (contextType)
             {
                 case EContextType.Copy:
@@ -135,7 +135,7 @@ namespace InfinityEngine.Graphics.RHI.D3D
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public override void ReleaseCommandBuffer(FRHICommandBuffer cmdBuffer)
+        public override void ReleaseCommandBuffer(RHICommandBuffer cmdBuffer)
         {
             switch (cmdBuffer.contextType)
             {
@@ -156,7 +156,7 @@ namespace InfinityEngine.Graphics.RHI.D3D
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public override void WriteToFence(in EContextType contextType, FRHIFence fence)
+        public override void WriteToFence(in EContextType contextType, RHIFence fence)
         {
 #if RHI_DEFERREDEXECUTE
                 FExecuteInfo executeInfo;
@@ -171,7 +171,7 @@ namespace InfinityEngine.Graphics.RHI.D3D
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public override void WaitForFence(in EContextType contextType, FRHIFence fence)
+        public override void WaitForFence(in EContextType contextType, RHIFence fence)
         {
 #if RHI_DEFERREDEXECUTE
                 FExecuteInfo executeInfo;
@@ -186,7 +186,7 @@ namespace InfinityEngine.Graphics.RHI.D3D
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public override void ExecuteCommandBuffer(FRHICommandBuffer cmdBuffer)
+        public override void ExecuteCommandBuffer(RHICommandBuffer cmdBuffer)
         {
 #if RHI_DEFERREDEXECUTE
                 cmdBuffer.Close();
@@ -208,7 +208,7 @@ namespace InfinityEngine.Graphics.RHI.D3D
             for (int i = 0; i < m_ExecuteInfos.length; ++i)
             {
                 ref FExecuteInfo executeInfo = ref m_ExecuteInfos[i];
-                FD3DCommandContext cmdContext = (FD3DCommandContext)executeInfo.cmdContext;
+                D3DCommandContext cmdContext = (D3DCommandContext)executeInfo.cmdContext;
 
                 switch (executeInfo.executeType)
                 {
@@ -250,33 +250,33 @@ namespace InfinityEngine.Graphics.RHI.D3D
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public override FRHISwapChain CreateSwapChain(string name, in uint width, in uint height, in IntPtr windowPtr)
+        public override RHISwapChain CreateSwapChain(string name, in uint width, in uint height, in IntPtr windowPtr)
         {
-            return new FD3DSwapChain(m_Device, m_GraphicsContext, windowPtr.ToPointer(), width, height, name);
+            return new D3DSwapChain(m_Device, m_GraphicsContext, windowPtr.ToPointer(), width, height, name);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public override FRHIFence CreateFence(string name)
+        public override RHIFence CreateFence(string name)
         {
-            return new FD3DFence(m_Device, name);
+            return new D3DFence(m_Device, name);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public override FRHIFence GetFence(string name)
+        public override RHIFence GetFence(string name)
         {
             return m_FencePool.GetTemporary(name);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public override void ReleaseFence(FRHIFence fence)
+        public override void ReleaseFence(RHIFence fence)
         {
-            m_FencePool.ReleaseTemporary((FD3DFence)fence);
+            m_FencePool.ReleaseTemporary((D3DFence)fence);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public override FRHIQuery CreateQuery(in EQueryType queryType, string name)
+        public override RHIQuery CreateQuery(in EQueryType queryType, string name)
         {
-            FD3DQuery outQuery = null;
+            D3DQuery outQuery = null;
             switch (queryType)
             {
                 case EQueryType.Occlusion:
@@ -288,20 +288,20 @@ namespace InfinityEngine.Graphics.RHI.D3D
                     break;
 
                 case EQueryType.CopyTimestamp:
-                    outQuery = new FD3DQuery(m_QueryContext[0]);
+                    outQuery = new D3DQuery(m_QueryContext[0]);
                     break;
 
                 case EQueryType.GenericTimestamp:
-                    outQuery = new FD3DQuery(m_QueryContext[1]);
+                    outQuery = new D3DQuery(m_QueryContext[1]);
                     break;
             }
             return outQuery;
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public override FRHIQuery GetQuery(in EQueryType queryType, string name)
+        public override RHIQuery GetQuery(in EQueryType queryType, string name)
         {
-            FRHIQuery outQuery = null;
+            RHIQuery outQuery = null;
             switch (queryType)
             {
                 case EQueryType.Occlusion:
@@ -324,9 +324,9 @@ namespace InfinityEngine.Graphics.RHI.D3D
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public override void ReleaseQuery(FRHIQuery query)
+        public override void ReleaseQuery(RHIQuery query)
         {
-            FD3DQuery d3dQuery = (FD3DQuery)query;
+            D3DQuery d3dQuery = (D3DQuery)query;
 
             switch (d3dQuery.queryContext.queryType)
             {
@@ -347,19 +347,19 @@ namespace InfinityEngine.Graphics.RHI.D3D
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public override FRHIComputePipelineState CreateComputePipelineState(in FRHIComputePipelineDescriptor descriptor)
+        public override RHIComputePipelineState CreateComputePipelineState(in RHIComputePipelineDescriptor descriptor)
         {
-            return new FRHIComputePipelineState();
+            return new RHIComputePipelineState();
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public override FRHIRayTracePipelineState CreateRayTracePipelineState(in FRHIRayTracePipelineDescriptor descriptor)
+        public override RHIRayTracePipelineState CreateRayTracePipelineState(in RHIRayTracePipelineDescriptor descriptor)
         {
-            return new FRHIRayTracePipelineState();
+            return new RHIRayTracePipelineState();
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public override FRHIGraphicsPipelineState CreateGraphicsPipelineState(in FRHIGraphicsPipelineDescriptor descriptor)
+        public override RHIGraphicsPipelineState CreateGraphicsPipelineState(in RHIGraphicsPipelineDescriptor descriptor)
         {
             return null;
         }
@@ -383,83 +383,83 @@ namespace InfinityEngine.Graphics.RHI.D3D
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public override FRHIBuffer CreateBuffer(in FBufferDescriptor descriptor)
+        public override RHIBuffer CreateBuffer(in BufferDescriptor descriptor)
         {
-            return new FD3DBuffer(m_Device, descriptor);
+            return new D3DBuffer(m_Device, descriptor);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public override FRHIBufferRef GetBuffer(in FBufferDescriptor descriptor)
+        public override RHIBufferRef GetBuffer(in BufferDescriptor descriptor)
         {
             return m_ResourcePool.GetBuffer(descriptor);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public override void ReleaseBuffer(in FRHIBufferRef bufferRef)
+        public override void ReleaseBuffer(in RHIBufferRef bufferRef)
         {
             m_ResourcePool.ReleaseBuffer(bufferRef);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public override FRHITexture CreateTexture(in FTextureDescriptor descriptor)
+        public override RHITexture CreateTexture(in TextureDescriptor descriptor)
         {
-            return new FD3DTexture(m_Device, descriptor);
+            return new D3DTexture(m_Device, descriptor);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public override FRHITextureRef GetTexture(in FTextureDescriptor descriptor)
+        public override RHITextureRef GetTexture(in TextureDescriptor descriptor)
         {
             return m_ResourcePool.GetTexture(descriptor);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public override void ReleaseTexture(FRHITextureRef textureRef)
+        public override void ReleaseTexture(RHITextureRef textureRef)
         {
             m_ResourcePool.ReleaseTexture(textureRef);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public override FRHIMemoryReadback CreateMemoryReadback(string requestName, bool bProfiler)
+        public override RHIMemoryReadback CreateMemoryReadback(string requestName, bool bProfiler)
         {
-            return new FD3DMemoryReadback(this, requestName, bProfiler);
+            return new D3DMemoryReadback(this, requestName, bProfiler);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public override FRHIIndexBufferView CreateIndexBufferView(FRHIBuffer buffer)
+        public override RHIIndexBufferView CreateIndexBufferView(RHIBuffer buffer)
         {
             throw new NotImplementedException();
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public override FRHIVertexBufferView CreateVertexBufferView(FRHIBuffer buffer)
+        public override RHIVertexBufferView CreateVertexBufferView(RHIBuffer buffer)
         {
             throw new NotImplementedException();
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public override FRHIDeptnStencilView CreateDepthStencilView(FRHITexture texture)
+        public override RHIDeptnStencilView CreateDepthStencilView(RHITexture texture)
         {
-            return new FD3DDeptnStencilView(m_Device, m_DSVDescriptorFactory, texture);
+            return new D3DDeptnStencilView(m_Device, m_DSVDescriptorFactory, texture);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public override FRHIRenderTargetView CreateRenderTargetView(FRHITexture texture)
+        public override RHIRenderTargetView CreateRenderTargetView(RHITexture texture)
         {
-            return new FD3DRenderTargetView(m_Device, m_RTVDescriptorFactory, texture);
+            return new D3DRenderTargetView(m_Device, m_RTVDescriptorFactory, texture);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public override FRHIConstantBufferView CreateConstantBufferView(FRHIBuffer buffer)
+        public override RHIConstantBufferView CreateConstantBufferView(RHIBuffer buffer)
         {
             return null;
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public override FRHIShaderResourceView CreateShaderResourceView(FRHIBuffer buffer)
+        public override RHIShaderResourceView CreateShaderResourceView(RHIBuffer buffer)
         {
             return null;
 
-            /*FD3DBuffer d3dBuffer = (FD3DBuffer)buffer;
+            /*D3DBuffer d3dBuffer = (D3DBuffer)buffer;
             ShaderResourceViewDescription srvDescriptor = new ShaderResourceViewDescription
             {
                 Format = Format.Unknown,
@@ -471,21 +471,21 @@ namespace InfinityEngine.Graphics.RHI.D3D
             CpuDescriptorHandle descriptorHandle = m_DescriptorFactory.GetCPUHandleStart() + m_DescriptorFactory.GetDescriptorSize() * descriptorIndex;
             m_Device.nativeDevice.CreateShaderResourceView(d3dBuffer.defaultResource, srvDescriptor, descriptorHandle);
 
-            return new FRHIShaderResourceView(m_DescriptorFactory.GetDescriptorSize(), descriptorIndex, descriptorHandle);*/
+            return new RHIShaderResourceView(m_DescriptorFactory.GetDescriptorSize(), descriptorIndex, descriptorHandle);*/
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public override FRHIShaderResourceView CreateShaderResourceView(FRHITexture texture)
+        public override RHIShaderResourceView CreateShaderResourceView(RHITexture texture)
         {
             return null;
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public override FRHIUnorderedAccessView CreateUnorderedAccessView(FRHIBuffer buffer)
+        public override RHIUnorderedAccessView CreateUnorderedAccessView(RHIBuffer buffer)
         {
             return null;
 
-            /*FD3DBuffer d3dBuffer = (FD3DBuffer)buffer;
+            /*D3DBuffer d3dBuffer = (D3DBuffer)buffer;
             UnorderedAccessViewDescription uavDescriptor = new UnorderedAccessViewDescription
             {
                 Format = Format.Unknown,
@@ -496,20 +496,20 @@ namespace InfinityEngine.Graphics.RHI.D3D
             CpuDescriptorHandle descriptorHandle = m_DescriptorFactory.GetCPUHandleStart() + m_DescriptorFactory.GetDescriptorSize() * descriptorIndex;
             m_Device.nativeDevice.CreateUnorderedAccessView(d3dBuffer.defaultResource, null, uavDescriptor, descriptorHandle);
 
-            return new FRHIUnorderedAccessView(m_DescriptorFactory.GetDescriptorSize(), descriptorIndex, descriptorHandle);*/
+            return new RHIUnorderedAccessView(m_DescriptorFactory.GetDescriptorSize(), descriptorIndex, descriptorHandle);*/
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public override FRHIUnorderedAccessView CreateUnorderedAccessView(FRHITexture texture)
+        public override RHIUnorderedAccessView CreateUnorderedAccessView(RHITexture texture)
         {
             return null;
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public override FRHIResourceSet CreateResourceSet(in uint count)
+        public override RHIResourceSet CreateResourceSet(in uint count)
         {
             return null;
-            //return new FRHIResourceSet(m_Device, m_DescriptorFactory, count);
+            //return new RHIResourceSet(m_Device, m_DescriptorFactory, count);
         }
 
         protected override void Release()
