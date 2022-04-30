@@ -47,8 +47,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Core\Infinity.Core.csproj" />
-    <ProjectReference Include="..\Graphics\Infinity.Graphics.csproj" />
+    <PackageReference Include="Silk.NET.GLFW" Version="2.15.0" />
   </ItemGroup>
 
 </Project>

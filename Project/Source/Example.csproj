@@ -44,11 +44,11 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\..\Engine\Source\Core\Infinity.Core.csproj" />
-		<ProjectReference Include="..\..\Engine\Source\Game\Infinity.Game.csproj" />
-		<ProjectReference Include="..\..\Engine\Source\Graphics\Infinity.Graphics.csproj" />
-		<ProjectReference Include="..\..\Engine\Source\Physics\Infinity.Physics.csproj" />
-		<ProjectReference Include="..\..\Engine\Source\Rendering\Infinity.Rendering.csproj" />
+	  <ProjectReference Include="..\..\Engine\Source\Core\Infinity.Core.csproj" />
+	  <ProjectReference Include="..\..\Engine\Source\Game\Infinity.Game.csproj" />
+	  <ProjectReference Include="..\..\Engine\Source\Graphics\Infinity.Graphics.csproj" />
+	  <ProjectReference Include="..\..\Engine\Source\Rendering\Infinity.Rendering.csproj" />
+	  <ProjectReference Include="..\..\Engine\Source\Window\Infinity.Window.csproj" />
 	</ItemGroup>
 
 </Project>

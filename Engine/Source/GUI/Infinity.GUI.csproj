@@ -46,9 +46,4 @@
     <PlatformTarget>ARM64</PlatformTarget>
   </PropertyGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\Core\Infinity.Core.csproj" />
-    <ProjectReference Include="..\Graphics\Infinity.Graphics.csproj" />
-  </ItemGroup>
-
 </Project>

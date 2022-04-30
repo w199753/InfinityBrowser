@@ -53,9 +53,4 @@
     <PackageReference Include="YamlDotNet" Version="11.2.1" />
   </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\Core\Infinity.Core.csproj" />
-    <ProjectReference Include="..\Graphics\Infinity.Graphics.csproj" />
-  </ItemGroup>
-
 </Project>
