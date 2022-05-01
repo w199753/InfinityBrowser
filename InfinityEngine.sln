@@ -45,7 +45,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Infinity.GUI", "Engine\Sour
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Infinity.Audio", "Engine\Source\Audio\Infinity.Audio.csproj", "{B38377E7-0BC3-4EE2-A010-3D9489932835}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Infinity.Window", "Engine\Source\Window\Infinity.Window.csproj", "{E4E54E76-B2E0-4930-B3D1-87E892935C1D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Infinity.Windowing", "Engine\Source\Window\Infinity.Windowing.csproj", "{E4E54E76-B2E0-4930-B3D1-87E892935C1D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

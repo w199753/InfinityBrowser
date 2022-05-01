@@ -48,6 +48,7 @@
 		<ProjectReference Include="..\Graphics\Infinity.Graphics.csproj" />
 		<ProjectReference Include="..\Physics\Infinity.Physics.csproj" />
 		<ProjectReference Include="..\Rendering\Infinity.Rendering.csproj" />
+		<ProjectReference Include="..\Window\Infinity.Windowing.csproj" />
 	</ItemGroup>
 
 </Project>

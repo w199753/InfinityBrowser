@@ -1,6 +1,7 @@
 ﻿using System.Threading;
 using InfinityEngine.Graphics;
 using InfinityEngine.Rendering;
+using InfinityEngine.Windowing;
 using System.Runtime.CompilerServices;
 using Semaphore = InfinityEngine.Threading.Semaphore;
 
@@ -26,7 +27,7 @@ namespace InfinityEngine.System
             m_RenderThread.Name = "m_RenderThread";
             m_Context = new D3DContext();
             m_RenderPipeline = new UniversalRenderPipeline("UniversalRP");
-            m_SwapChain = m_Context.CreateSwapChain("SwapChain", (uint)window.width, (uint)window.height, window.handle);
+            m_SwapChain = m_Context.CreateSwapChain("SwapChain", (uint)window.width, (uint)window.height, window.windowPtr);
             m_SwapChain.InitResourceView(m_Context);
             m_RenderContext = new RenderContext(m_Context, m_SwapChain);
         }

@@ -63,18 +63,22 @@ namespace ExampleProject
     {
         static void Main(string[] args)
         {
-            TestApplication App = new TestApplication("InfinityExample", 1280, 720);
+            TestApplication App = new TestApplication(1280, 720, "InfinityExample");
             App.Run();
 
-            /*WindowCreateInfo wci = new WindowCreateInfo
+            /*Glfw glfw = GlfwProvider.GLFW.Value;
+            glfw.Init();
+
+            WindowHandle* window = glfw.CreateWindow(1280, 720, "Windows Window", null, null);
+            glfw.MakeContextCurrent(window);
+
+            while (!glfw.WindowShouldClose(window))
             {
-                X = 100,
-                Y = 100,
-                WindowWidth = 1280,
-                WindowHeight = 720,
-                WindowTitle = "TestWindow",
-            };
-            Sdl2Window window = VeldridStartup.CreateWindow(ref wci);
+                glfw.PollEvents();
+            }
+            glfw.Terminate();*/
+
+            /*Sdl2Window window = new Sdl2Window("TestWindow", 320, 180, 1280, 720, SDL_WindowFlags.Shown, false);
             while (window.Exists)
             {
                 Console.WriteLine("GameLoop");

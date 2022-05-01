@@ -13,7 +13,6 @@ namespace InfinityEngine.System
 
     internal class GameSystem : Disposal
     {
-        private bool IsLoopExit;
         private float m_DeltaTime;
         private Semaphore m_SemaphoreG2R;
         private Semaphore m_SemaphoreR2G;
@@ -25,14 +24,13 @@ namespace InfinityEngine.System
 
         public GameSystem(FGameEndFunc gameEndFunc, FGamePlayFunc gamePlayFunc, FGameTickFunc gameTickFunc, Semaphore semaphoreG2R, Semaphore semaphoreR2G)
         {
-            this.m_GameEndFunc = gameEndFunc;
-            this.m_GamePlayFunc = gamePlayFunc;
-            this.m_GameTickFunc = gameTickFunc;
-            this.m_SemaphoreG2R = semaphoreG2R;
-            this.m_SemaphoreR2G = semaphoreR2G;
-            this.m_TimeCounter = new TimeProfiler();
-            this.m_LastDeltaTimes = new List<float>(64);
-
+            m_GameEndFunc = gameEndFunc;
+            m_GamePlayFunc = gamePlayFunc;
+            m_GameTickFunc = gameTickFunc;
+            m_SemaphoreG2R = semaphoreG2R;
+            m_SemaphoreR2G = semaphoreR2G;
+            m_TimeCounter = new TimeProfiler();
+            m_LastDeltaTimes = new List<float>(64);
             Thread.CurrentThread.Name = "GameThread";
         }
 
@@ -49,27 +47,14 @@ namespace InfinityEngine.System
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public void GameLoop()
+        public void Update()
         {
-            while (!IsLoopExit)
-            {
-                if (User32.PeekMessage(out var msg, IntPtr.Zero, 0, 0, 1))
-                {
-                    User32.TranslateMessage(ref msg);
-                    User32.DispatchMessage(ref msg);
-                    if (msg.Value == (uint)WindowMessage.Quit) { 
-                        IsLoopExit = true; 
-                        break; 
-                    }
-                }
-
-                m_TimeCounter.Start();
-                m_SemaphoreR2G.Wait();
-                Timer.Tick(m_DeltaTime);
-                m_GameTickFunc();
-                m_SemaphoreG2R.Signal();
-                WaitForTargetFPS();
-            }
+            m_TimeCounter.Start();
+            m_SemaphoreR2G.Wait();
+            Timer.Tick(m_DeltaTime);
+            m_GameTickFunc();
+            m_SemaphoreG2R.Signal();
+            WaitForTargetFPS();
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]

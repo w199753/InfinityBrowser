@@ -145,7 +145,7 @@ namespace ExampleProject
     {
         private TestActor m_Actor;
 
-        public TestApplication(string name, int width, int height) : base(width, height, name)
+        public TestApplication(int width, int height, string name) : base(width, height, name)
         {
             m_Actor = new TestActor("TestActor");
         }
