@@ -24,7 +24,7 @@ namespace InfinityEngine.System
             m_SemaphoreG2R = semaphoreG2R;
             m_SemaphoreR2G = semaphoreR2G;
             m_RenderThread = new Thread(GraphicsFunc);
-            m_RenderThread.Name = "m_RenderThread";
+            m_RenderThread.Name = "RenderThread";
             m_Context = new D3DContext();
             m_RenderPipeline = new UniversalRenderPipeline("UniversalRP");
             m_SwapChain = m_Context.CreateSwapChain("SwapChain", (uint)window.width, (uint)window.height, window.windowPtr);

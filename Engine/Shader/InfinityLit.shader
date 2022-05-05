@@ -3,7 +3,7 @@
 	Properties
 	{
         [Header (Microface)]
-        _MainTex ("BaseColor Map", 2D) = "white" {}
+        _AlbedoTex ("albedo Map", 2D) = "white" {}
 	}
 
 	Category
@@ -30,14 +30,14 @@
 				float4 vertexCS : SV_POSITION;
 			};
 
-			cbuffer PerView
+			cbuffer PerCamera
 			{
-				float4x4 Matrix_ViewProjection;
+				float4x4 matrix_VP;
 			};
 			cbuffer PerObject
 			{
-				float4x4 Matrix_ObjectToWorld;
-				float4x4 Matrix_WorldToObject;
+				float4x4 matrix_World;
+				float4x4 matrix_Object;
 			};
 
 			#include "../Private/Common.hlsl"
@@ -47,8 +47,8 @@
 				Varyings Out = (Varyings)0;
 
 				Out.uv0 = In.uv0;
-				float4 WorldPos = mul(Matrix_ObjectToWorld, float4(In.vertexOS.xyz, 1.0));
-				Out.vertexCS = mul(Matrix_ViewProjection, WorldPos);
+				float4 WorldPos = mul(matrix_World, float4(In.vertexOS.xyz, 1.0));
+				Out.vertexCS = mul(matrix_VP, WorldPos);
 				return Out;
 			}
 
@@ -83,22 +83,22 @@
 				float4 vertexCS : SV_POSITION;
 			};
 
-			cbuffer PerView
+			cbuffer PerCamera
 			{
-				float4x4 Matrix_ViewProjection;
+				float4x4 matrix_VP;
 			};
 			cbuffer PerObject
 			{
-				float4x4 Matrix_ObjectToWorld;
-				float4x4 Matrix_WorldToObject;
+				float4x4 matrix_World;
+				float4x4 matrix_Object;
 			};
 			cbuffer PerMaterial
 			{
-				float _SpecularLevel;
-				float4 _BaseColor;
+				float _Specular;
+				float4 _AlbedoColor;
 			};	
-			Texture2D _MainTex; 
-			SamplerState sampler_MainTex;
+			Texture2D _AlbedoTex; 
+			SamplerState sampler_AlbedoTex;
 
 			#include "../Private/Common.hlsl"
 			
@@ -107,17 +107,17 @@
 				Varyings Out = (Varyings)0;
 
 				Out.uv0 = In.uv0;
-				Out.normalWS = normalize(mul((float3x3)Matrix_ObjectToWorld, In.normalOS));
-				Out.vertexWS = mul(Matrix_ObjectToWorld, float4(In.vertexOS.xyz, 1.0));
-				Out.vertexCS = mul(Matrix_ViewProjection, Out.vertexWS);
+				Out.normalWS = normalize(mul((float3x3)matrix_World, In.normalOS));
+				Out.vertexWS = mul(matrix_World, float4(In.vertexOS.xyz, 1.0));
+				Out.vertexCS = mul(matrix_VP, Out.vertexWS);
 				return Out;
 			}
 			
 			void Frag(Varyings In, out float4 GBufferA : SV_Target0, out float4 GBufferB : SV_Target1)
 			{
-				float3 BaseColor = _MainTex.Sample(sampler_MainTex, In.uv0).rgb;
+				float3 albedo = _AlbedoTex.Sample(sampler_AlbedoTex, In.uv0).rgb;
 
-				GBufferA = float4(BaseColor, 1);
+				GBufferA = float4(albedo, 1);
 				GBufferB = float4((In.normalWS * 0.5 + 0.5), 1);
 			}
 			ENDHLSL
@@ -147,22 +147,22 @@
 				float4 vertexCS : SV_POSITION;
 			};
 
-			cbuffer PerView
+			cbuffer PerCamera
 			{
-				float4x4 Matrix_ViewProjection;
+				float4x4 matrix_VP;
 			};
 			cbuffer PerObject
 			{
-				float4x4 Matrix_ObjectToWorld;
-				float4x4 Matrix_WorldToObject;
+				float4x4 matrix_World;
+				float4x4 matrix_Object;
 			};
 			cbuffer PerMaterial
 			{
-				float _SpecularLevel;
-				float4 _BaseColor;
+				float _Specular;
+				float4 _AlbedoColor;
 			};	
-			Texture2D _MainTex; 
-			SamplerState sampler_MainTex;
+			Texture2D _AlbedoTex; 
+			SamplerState sampler_AlbedoTex;
 
 			#include "../Private/Common.hlsl"
 			
@@ -171,19 +171,19 @@
 				Varyings Out = (Varyings)0;
 
 				Out.uv0 = In.uv0;
-				Out.normal = normalize(mul((float3x3)Matrix_ObjectToWorld, In.normalOS));
-				Out.vertexWS = mul(Matrix_ObjectToWorld, float4(In.vertexOS.xyz, 1.0));
-				Out.vertexCS = mul(Matrix_ViewProjection, Out.vertexWS);
+				Out.normal = normalize(mul((float3x3)matrix_World, In.normalOS));
+				Out.vertexWS = mul(matrix_World, float4(In.vertexOS.xyz, 1.0));
+				Out.vertexCS = mul(matrix_VP, Out.vertexWS);
 				return Out;
 			}
 			
 			void Frag(Varyings In, out float4 Diffuse : SV_Target0, out float4 Specular : SV_Target1)
 			{
 				float3 worldPos = In.vertexWS.xyz;
-				float3 BaseColor = _MainTex.Sample(sampler_MainTex, In.uv).rgb;
+				float3 albedo = _AlbedoTex.Sample(sampler_AlbedoTex, In.uv).rgb;
 
-				Diffuse = float4(BaseColor, 1);
-				Specular = float4(BaseColor, 1);
+				Diffuse = float4(albedo, 1);
+				Specular = float4(albedo, 1);
 			}
 			ENDHLSL
 		}
@@ -234,8 +234,8 @@
 
 			cbuffer PerMaterial
 			{
-				float _SpecularLevel;
-				float4 _BaseColor;
+				float _Specular;
+				float4 _AlbedoColor;
 			};	
 			RWTexture2D<float4> UAV_Output;
 

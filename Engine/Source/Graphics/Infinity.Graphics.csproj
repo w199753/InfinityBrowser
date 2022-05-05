@@ -56,10 +56,10 @@
 		<PackageReference Include="Veldrid.MetalBindings" Version="4.9.0-beta1" />
 		<PackageReference Include="Veldrid.RenderDoc" Version="1.0.1" />
 		<PackageReference Include="Veldrid.SPIRV" Version="1.0.14" />
-		<PackageReference Include="Vortice.Direct3D12" Version="2.1.9-beta" />
-		<PackageReference Include="Vortice.DirectX" Version="2.1.9-beta" />
-		<PackageReference Include="Vortice.Dxc" Version="2.1.9-beta" />
-		<PackageReference Include="Vortice.DXGI" Version="2.1.9-beta" />
+		<PackageReference Include="Vortice.Direct3D12" Version="2.1.11-beta" />
+		<PackageReference Include="Vortice.DirectX" Version="2.1.11-beta" />
+		<PackageReference Include="Vortice.Dxc" Version="2.1.11-beta" />
+		<PackageReference Include="Vortice.DXGI" Version="2.1.11-beta" />
 		<PackageReference Include="Vortice.Mathematics" Version="1.4.13" />
 		<PackageReference Include="Vortice.Vulkan" Version="1.5.9" />
 		<PackageReference Include="WaveEngine.HLSLEverywhere" Version="3.3.0.8617-preview" />
