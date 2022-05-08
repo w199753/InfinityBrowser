@@ -1,5 +1,6 @@
 ﻿using System;
 using Silk.NET.GLFW;
+using System.Runtime.InteropServices;
 using System.Runtime.CompilerServices;
 
 namespace InfinityEngine.Windowing
@@ -49,6 +50,11 @@ namespace InfinityEngine.Windowing
 
 			m_Glfw = GlfwProvider.GLFW.Value;
 			m_Glfw.Init();
+			
+			if(OperatingSystem.IsMacOS() || RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
+				m_Glfw.WindowHint(WindowHintClientApi.ClientApi, ClientApi.NoApi);
+
+			//Monitor* monitor = m_Glfw.GetPrimaryMonitor();
 
 			m_Glfwindow = m_Glfw.CreateWindow(width, height, title, null, null);
 			m_Glfw.MakeContextCurrent(m_Glfwindow);
