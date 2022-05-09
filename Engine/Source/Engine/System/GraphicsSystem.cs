@@ -18,7 +18,7 @@ namespace InfinityEngine.System
         private RenderContext m_RenderContext;
         private RenderPipeline m_RenderPipeline;
 
-        public GraphicsSystem(Window window, Semaphore semaphoreG2R, Semaphore semaphoreR2G)
+        public GraphicsSystem(PlatformWindow window, Semaphore semaphoreG2R, Semaphore semaphoreR2G)
         {
             IsLoopExit = false;
             m_SemaphoreG2R = semaphoreG2R;

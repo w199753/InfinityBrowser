@@ -1,0 +1,7 @@
+<Project>
+  <PropertyGroup>
+    <MSBuildProjectExtensionsPath>$(ProjectDir)../../../Intermediate/Game/iOS/</MSBuildProjectExtensionsPath>
+    <BaseIntermediateOutputPath>$(ProjectDir)../../../Intermediate/Game/iOS/</BaseIntermediateOutputPath>
+    <UseHostCompilerIfAvailable>false</UseHostCompilerIfAvailable>
+  </PropertyGroup>
+</Project>

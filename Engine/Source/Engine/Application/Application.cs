@@ -19,7 +19,7 @@ namespace InfinityEngine
             } 
         }
 
-        private Window m_Window;
+        private PlatformWindow m_Window;
         private Semaphore m_SemaphoreG2R;
         private Semaphore m_SemaphoreR2G;
         private GameSystem m_GameSystem;
@@ -28,7 +28,7 @@ namespace InfinityEngine
 
         public GameApplication(in int width, in int height, string name)
         {
-            m_Window = new Window(width, height, name);
+            m_Window = new PlatformWindow(width, height, name);
             m_SemaphoreR2G = new Semaphore(true);
             m_SemaphoreG2R = new Semaphore(false);
             m_GameSystem = new GameSystem(End, Play, Tick, m_SemaphoreG2R, m_SemaphoreR2G);
