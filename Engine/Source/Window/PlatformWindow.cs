@@ -90,14 +90,14 @@ namespace InfinityEngine.Windowing
 		public int width => m_Width;
 		public int height => m_Height;
 		public string title => m_Title;
-		public IntPtr windowPtr => new IntPtr(Silk.NET.Windowing.Sdl.SdlWindowing.GetSysWMInfo(window).Value.Info.Win.Hwnd);
+		//public IntPtr windowPtr => new IntPtr(Silk.NET.Windowing.Sdl.SdlWindowing.GetSysWMInfo(window).Value.Info.Win.Hwnd);
+		public IntPtr windowPtr => window.Native.Win32.Value.Hwnd;
 
 		public PlatformWindow(int width, int height, string title)
 		{
 			m_Title = title;
 			m_Width = width;
 			m_Height = height;
-
 			Window.PrioritizeSdl();
 			WindowOptions options = new WindowOptions(true, new Vector2D<int>(50, 50), new Vector2D<int>(width, height), 60, 60, GraphicsAPI.None, title, WindowState.Normal, WindowBorder.Resizable, true, false, Silk.NET.Windowing.VideoMode.Default);
 			window = Window.Create(options);
@@ -134,6 +134,7 @@ namespace InfinityEngine.Windowing
 				input.Keyboards[i].KeyDown += KeyDown;
 			}
 		}
+		
 		protected override void Release()
 		{
 			base.Release();

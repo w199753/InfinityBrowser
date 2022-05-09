@@ -1,6 +1,6 @@
 ﻿using UIKit;
 
-namespace Infinity.iOSGame
+namespace InfinityEngine.iOSGame
 {
     public class Application
     {
