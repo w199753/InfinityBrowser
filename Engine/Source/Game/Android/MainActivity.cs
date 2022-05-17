@@ -1,25 +1,45 @@
-﻿using Android.App;
-using Android.OS;
-using Android.Runtime;
-using AndroidX.AppCompat.App;
+using Android.App;
+using Silk.NET.Maths;
+using Silk.NET.OpenGLES;
+using System.Diagnostics;
+using Silk.NET.Windowing;
+using Silk.NET.Windowing.Sdl.Android;
 
-namespace InfinityEngine.AndroidGame
+namespace AndroidGame
 {
-    [Activity(Label = "@string/app_name", Theme = "@style/AppTheme", MainLauncher = true)]
-    public class MainActivity : AppCompatActivity
+    [Activity(Label = "@string/app_name", MainLauncher = true)]
+    public class MainActivity : SilkActivity
     {
-        protected override void OnCreate(Bundle savedInstanceState)
-        {
-            base.OnCreate(savedInstanceState);
-            Xamarin.Essentials.Platform.Init(this, savedInstanceState);
-            // Set our view from the "main" layout resource
-            SetContentView(Resource.Layout.activity_main);
-        }
-        public override void OnRequestPermissionsResult(int requestCode, string[] permissions, [GeneratedEnum] Android.Content.PM.Permission[] grantResults)
-        {
-            Xamarin.Essentials.Platform.OnRequestPermissionsResult(requestCode, permissions, grantResults);
+        GL Gl;
+        IView? view;
 
-            base.OnRequestPermissionsResult(requestCode, permissions, grantResults);
+        protected override void OnRun()
+        {
+            var options = ViewOptions.Default;
+            options.API = new GraphicsAPI(ContextAPI.OpenGLES, ContextProfile.Compatability, ContextFlags.Default, new APIVersion(3, 0));
+            view = Silk.NET.Windowing.Window.GetView(options);
+
+            view.Load += OnLoad;
+            view.Render += OnRender;
+            view.Closing += OnClose;
+            view.Run();
+        }
+
+        private unsafe void OnLoad()
+        {
+            Gl = GL.GetApi(view);
+            Gl.ClearColor(1, 0.25f, 0, 1);
+        }
+
+        private unsafe void OnRender(double obj)
+        {
+            Gl.ClearColor(1, 0.25f, 0, 1);
+            Console.WriteLine("Fuck you");
+        }
+
+        private void OnClose()
+        {
+            view?.Dispose();
         }
     }
 }

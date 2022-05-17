@@ -1,6 +1,6 @@
 ﻿using System;
-using InfinityEngine.Core.Mathmatics;
-using InfinityEngine.Core.Mathmatics.Geometry;
+using InfinityEngine.Mathmatics;
+using InfinityEngine.Mathmatics.Geometry;
 
 namespace InfinityEngine.Rendering
 {

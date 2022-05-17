@@ -1,8 +1,8 @@
 using System;
 using System.Runtime.CompilerServices;
-using static InfinityEngine.Core.Mathmatics.math;
+using static InfinityEngine.Mathmatics.math;
 
-namespace InfinityEngine.Core.Mathmatics
+namespace InfinityEngine.Mathmatics
 {
     [Serializable]
     public struct RigidTransform

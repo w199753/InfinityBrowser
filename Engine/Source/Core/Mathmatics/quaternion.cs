@@ -1,8 +1,8 @@
 using System;
 using System.Runtime.CompilerServices;
-using static InfinityEngine.Core.Mathmatics.math;
+using static InfinityEngine.Mathmatics.math;
 
-namespace InfinityEngine.Core.Mathmatics
+namespace InfinityEngine.Mathmatics
 {
     [Serializable]
     public partial struct quaternion : System.IEquatable<quaternion>, IFormattable
@@ -476,7 +476,7 @@ namespace InfinityEngine.Core.Mathmatics
         {
             float4 x = q.value;
             float len = math.dot(x, x);
-            return quaternion(math.select(InfinityEngine.Core.Mathmatics.quaternion.identity.value, x * math.rsqrt(len), len > FLT_MIN_NORMAL));
+            return quaternion(math.select(InfinityEngine.Mathmatics.quaternion.identity.value, x * math.rsqrt(len), len > FLT_MIN_NORMAL));
         }
 
         /// <summary>

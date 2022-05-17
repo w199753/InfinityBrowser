@@ -2,7 +2,7 @@
 using System.Collections;
 using InfinityEngine.Container;
 using InfinityEngine.Threading;
-using InfinityEngine.Core.Mathmatics;
+using InfinityEngine.Mathmatics;
 using System.Runtime.CompilerServices;
 
 namespace InfinityEngine

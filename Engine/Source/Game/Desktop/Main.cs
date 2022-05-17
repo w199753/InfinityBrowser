@@ -3,7 +3,7 @@ using InfinityEngine.Graphics;
 using InfinityEngine.Rendering;
 using InfinityEngine.Analytics;
 
-namespace InfinityEngine.DesktopGame
+namespace InfinityEngine.Game
 {
     [Serializable]
     public class TestComponent : Component

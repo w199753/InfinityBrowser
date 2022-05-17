@@ -1,7 +1,7 @@
 ﻿using System;
 using Apple.Metal;
-using InfinityEngine.Core.Mathmatics;
-using InfinityEngine.Core.Mathmatics.Geometry;
+using InfinityEngine.Mathmatics;
+using InfinityEngine.Mathmatics.Geometry;
 
 namespace InfinityEngine.Graphics
 {

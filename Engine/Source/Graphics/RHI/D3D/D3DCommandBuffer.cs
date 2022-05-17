@@ -1,10 +1,10 @@
 ﻿using System;
 using TerraFX.Interop.Windows;
 using TerraFX.Interop.DirectX;
-using InfinityEngine.Core.Mathmatics;
+using InfinityEngine.Mathmatics;
 using System.Runtime.InteropServices;
 using System.Runtime.CompilerServices;
-using InfinityEngine.Core.Mathmatics.Geometry;
+using InfinityEngine.Mathmatics.Geometry;
 
 namespace InfinityEngine.Graphics
 {

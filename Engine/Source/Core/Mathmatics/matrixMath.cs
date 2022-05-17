@@ -9,7 +9,7 @@
 using System;
 using System.Runtime.CompilerServices;
 
-namespace InfinityEngine.Core.Mathmatics
+namespace InfinityEngine.Mathmatics
 {
     partial class math
     {

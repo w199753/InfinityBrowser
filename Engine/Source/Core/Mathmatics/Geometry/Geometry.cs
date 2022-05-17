@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace InfinityEngine.Core.Mathmatics.Geometry
+namespace InfinityEngine.Mathmatics.Geometry
 {
     /*[Serializable]
     public struct FPlane : IEquatable<FPlane>

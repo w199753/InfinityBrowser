@@ -1,8 +1,8 @@
 ﻿using System;
 using Vortice.Vulkan;
 using static Vortice.Vulkan.Vulkan;
-using InfinityEngine.Core.Mathmatics;
-using InfinityEngine.Core.Mathmatics.Geometry;
+using InfinityEngine.Mathmatics;
+using InfinityEngine.Mathmatics.Geometry;
 
 namespace InfinityEngine.Graphics
 {

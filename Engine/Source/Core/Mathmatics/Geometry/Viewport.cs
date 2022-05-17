@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace InfinityEngine.Core.Mathmatics.Geometry
+namespace InfinityEngine.Mathmatics.Geometry
 {
     public struct Viewport : IEquatable<Viewport>
     {
@@ -41,7 +41,7 @@ namespace InfinityEngine.Core.Mathmatics.Geometry
             MaxDepth = maxDepth;
         }
 
-        public override bool Equals(object? obj)
+        public override bool Equals(object obj)
         {
             if (obj is Viewport)
             {

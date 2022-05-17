@@ -4,7 +4,7 @@ using TerraFX.Interop.Windows;
 using TerraFX.Interop.DirectX;
 using InfinityEngine.Container;
 using System.Collections.Generic;
-using InfinityEngine.Core.Mathmatics;
+using InfinityEngine.Mathmatics;
 using System.Runtime.CompilerServices;
 
 namespace InfinityEngine.Graphics

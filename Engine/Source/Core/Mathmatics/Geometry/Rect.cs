@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace InfinityEngine.Core.Mathmatics.Geometry
+namespace InfinityEngine.Mathmatics.Geometry
 {
     public struct Rect : IEquatable<Rect>
     {

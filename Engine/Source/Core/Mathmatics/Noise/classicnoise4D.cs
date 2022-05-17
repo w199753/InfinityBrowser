@@ -12,9 +12,9 @@
 // https://github.com/stegu/webgl-noise
 //
 
-using static InfinityEngine.Core.Mathmatics.math;
+using static InfinityEngine.Mathmatics.math;
 
-namespace InfinityEngine.Core.Mathmatics
+namespace InfinityEngine.Mathmatics
 {
     public static partial class noise
     {

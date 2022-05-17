@@ -4,12 +4,9 @@ namespace InfinityEngine
 {
     public class Disposal : IDisposable
     {
-        private bool IsDisposed = false;
+        public bool IsDisposed => m_IsDisposed;
 
-        public Disposal()
-        {
-            
-        }
+        private bool m_IsDisposed = false;
 
         ~Disposal()
         {
@@ -20,12 +17,12 @@ namespace InfinityEngine
 
         private void Finalizer()
         {
-            if (!IsDisposed)
+            if (!m_IsDisposed)
             {
                 Release();
             }
 
-            IsDisposed = true;
+            m_IsDisposed = true;
         }
 
         public void Dispose()

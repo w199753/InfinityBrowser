@@ -3,7 +3,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Collections.Generic;
-using InfinityEngine.Core.Mathmatics;
+using InfinityEngine.Mathmatics;
 
 namespace InfinityEngine.Rendering
 {
