@@ -8,6 +8,7 @@
     <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
     <OutputType>Exe</OutputType>
     <PlatformTarget>x64</PlatformTarget>
+	<IntermediateOutputPath>../../../Intermediate/Game/Desktop/</IntermediateOutputPath>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">

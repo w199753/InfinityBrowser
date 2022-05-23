@@ -6,6 +6,7 @@
     <AssemblyName>InfinityEngine.Asset</AssemblyName>
     <RootNamespace>InfinityEngine.Asset</RootNamespace>
     <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
+	<IntermediateOutputPath>../../Intermediate/Asset/</IntermediateOutputPath>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">

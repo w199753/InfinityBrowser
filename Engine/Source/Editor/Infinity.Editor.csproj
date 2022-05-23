@@ -6,6 +6,7 @@
     <AssemblyName>InfinityEngine.Editor</AssemblyName>
     <RootNamespace>InfinityEngine.Editor</RootNamespace>
     <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
+	<IntermediateOutputPath>../../Intermediate/Editor/</IntermediateOutputPath>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">

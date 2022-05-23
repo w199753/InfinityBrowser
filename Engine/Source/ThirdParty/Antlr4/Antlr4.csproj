@@ -34,7 +34,7 @@
     <RootNamespace>Antlr4.Runtime</RootNamespace>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <Platforms>x64;ARM64</Platforms>
-    <BaseIntermediateOutputPath>$(ProjectDir)../../../Intermediate/Asset/</BaseIntermediateOutputPath>
+	<IntermediateOutputPath>../../../Intermediate/ThirdParty/Antlr4/</IntermediateOutputPath>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">

@@ -8,6 +8,7 @@
 		<AssemblyName>InfinityEngine.Rendering</AssemblyName>
 		<RootNamespace>InfinityEngine.Renderer</RootNamespace>
 		<AllowUnsafeBlocks>True</AllowUnsafeBlocks>
+		<IntermediateOutputPath>../../Intermediate/Rendering/</IntermediateOutputPath>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">

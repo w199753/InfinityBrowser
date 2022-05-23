@@ -6,6 +6,7 @@
     <AssemblyName>InfinityEngine.Windowing</AssemblyName>
     <RootNamespace>InfinityEngine.Windowing</RootNamespace>
     <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
+	  <IntermediateOutputPath>../../Intermediate/Windowing/</IntermediateOutputPath>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">

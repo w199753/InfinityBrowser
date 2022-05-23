@@ -8,6 +8,7 @@
 		<AssemblyName>InfinityEngine.Engine</AssemblyName>
 		<RootNamespace>InfinityEngine.Engine</RootNamespace>
 		<AllowUnsafeBlocks>True</AllowUnsafeBlocks>
+		<IntermediateOutputPath>../../Intermediate/Engine/</IntermediateOutputPath>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -43,10 +44,8 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\Asset\Infinity.Asset.csproj" />
 		<ProjectReference Include="..\Core\Infinity.Core.csproj" />
 		<ProjectReference Include="..\Graphics\Infinity.Graphics.csproj" />
-		<ProjectReference Include="..\Physics\Infinity.Physics.csproj" />
 		<ProjectReference Include="..\Rendering\Infinity.Rendering.csproj" />
 		<ProjectReference Include="..\Window\Infinity.Windowing.csproj" />
 	</ItemGroup>

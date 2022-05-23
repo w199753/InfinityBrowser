@@ -8,6 +8,7 @@
 		<AssemblyName>InfinityEngine.Physics</AssemblyName>
 		<RootNamespace>InfinityEngine.Physics</RootNamespace>
 		<AllowUnsafeBlocks>True</AllowUnsafeBlocks>
+		<IntermediateOutputPath>../../Intermediate/Physcis/</IntermediateOutputPath>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
