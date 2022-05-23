@@ -4,9 +4,9 @@ using InfinityEngine.Mathmatics;
 
 namespace InfinityEngine.Rendering
 {
-    public class UniversalRenderPipeline : RenderPipeline
+    public class HybridRenderPipeline : RenderPipeline
     {
-        public UniversalRenderPipeline(string pipelineName) : base(pipelineName) 
+        public HybridRenderPipeline(string pipelineName) : base(pipelineName) 
         {
 
         }
