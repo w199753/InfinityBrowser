@@ -1,8 +1,8 @@
 ﻿using System;
-using InfinityEngine.Graphics;
+using Infinity.Graphics;
 using System.Collections.Generic;
 
-namespace InfinityEngine.Graphics
+namespace Infinity.Graphics
 {
     internal abstract class IRDGPass
     {

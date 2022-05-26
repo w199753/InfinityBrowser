@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Threading;
-using InfinityEngine.Analytics;
+using Infinity.Analytics;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
-using Semaphore = InfinityEngine.Threading.Semaphore;
+using Semaphore = Infinity.Threading.Semaphore;
 
-namespace InfinityEngine.System
+namespace Infinity.System
 {
     internal delegate void FGamePlayFunc();
     internal delegate void FGameTickFunc();

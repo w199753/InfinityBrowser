@@ -1,7 +1,7 @@
 ﻿using System.Threading;
 using System.Runtime.CompilerServices;
 
-namespace InfinityEngine.Graphics
+namespace Infinity.Graphics
 {
     internal abstract class RHICommandContext : Disposal
     {

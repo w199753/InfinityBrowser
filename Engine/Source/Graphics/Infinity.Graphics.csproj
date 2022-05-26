@@ -3,8 +3,8 @@
 	<PropertyGroup>
 		<TargetFramework>net6.0</TargetFramework>
 		<Platforms>x64;ARM64</Platforms>
-		<AssemblyName>InfinityEngine.Graphics</AssemblyName>
-		<RootNamespace>InfinityEngine.Graphics</RootNamespace>
+		<AssemblyName>Infinity.Graphics</AssemblyName>
+		<RootNamespace>Infinity.Graphics</RootNamespace>
 		<AllowUnsafeBlocks>True</AllowUnsafeBlocks>
 		<IntermediateOutputPath>../../Intermediate/Graphics/</IntermediateOutputPath>
 	</PropertyGroup>

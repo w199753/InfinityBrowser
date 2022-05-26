@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace InfinityEngine
+namespace Infinity
 {
     [Serializable]
     public class Object : Disposal

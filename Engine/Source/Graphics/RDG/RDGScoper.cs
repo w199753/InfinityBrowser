@@ -1,8 +1,8 @@
-﻿using InfinityEngine.Graphics;
+﻿using Infinity.Graphics;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 
-namespace InfinityEngine.Graphics
+namespace Infinity.Graphics
 {
     internal class RDGResourceMap<Type> where Type : struct
     {

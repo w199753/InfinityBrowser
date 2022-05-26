@@ -1,7 +1,7 @@
 using System;
 using System.Runtime.CompilerServices;
 
-namespace InfinityEngine.Mathmatics
+namespace Infinity.Mathmatics
 {
     [Serializable]
     public struct half : System.IEquatable<half>, IFormattable

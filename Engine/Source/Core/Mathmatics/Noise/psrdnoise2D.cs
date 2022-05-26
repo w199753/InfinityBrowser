@@ -67,9 +67,9 @@
 // (If you run into problems with this, please let me know.)
 //
 
-using static InfinityEngine.Mathmatics.math;
+using static Infinity.Mathmatics.math;
 
-namespace InfinityEngine.Mathmatics
+namespace Infinity.Mathmatics
 {
     public static partial class noise
     {

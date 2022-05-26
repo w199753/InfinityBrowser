@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace InfinityEngine.Mathmatics
+namespace Infinity.Mathmatics
 {
     [Serializable]
     public struct FTransform : IEquatable<FTransform>

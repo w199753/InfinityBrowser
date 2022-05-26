@@ -1,9 +1,9 @@
 ﻿using System;
-using InfinityEngine.Graphics;
-using InfinityEngine.Rendering;
-using InfinityEngine.Analytics;
+using Infinity.Graphics;
+using Infinity.Rendering;
+using Infinity.Analytics;
 
-namespace InfinityEngine.Game
+namespace Infinity.Game
 {
     [Serializable]
     public class TestComponent : Component

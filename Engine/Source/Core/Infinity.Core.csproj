@@ -5,8 +5,8 @@
 		<TargetFramework>net6.0</TargetFramework>
 		<Platforms>x64;ARM64</Platforms>
 		<Nullable>warnings</Nullable>
-		<AssemblyName>InfinityEngine.Core</AssemblyName>
-		<RootNamespace>InfinityEngine.Core</RootNamespace>
+		<AssemblyName>Infinity.Core</AssemblyName>
+		<RootNamespace>Infinity.Core</RootNamespace>
 		<AllowUnsafeBlocks>True</AllowUnsafeBlocks>
 		<IntermediateOutputPath>../../Intermediate/Core/</IntermediateOutputPath>
 	</PropertyGroup>

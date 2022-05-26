@@ -1,13 +1,13 @@
 ﻿using System;
-using InfinityEngine.Memory;
+using Infinity.Memory;
 using TerraFX.Interop.Windows;
 using TerraFX.Interop.DirectX;
-using InfinityEngine.Container;
+using Infinity.Container;
 using System.Collections.Generic;
-using InfinityEngine.Mathmatics;
+using Infinity.Mathmatics;
 using System.Runtime.CompilerServices;
 
-namespace InfinityEngine.Graphics
+namespace Infinity.Graphics
 {
 	internal static class D3DQueryUtility
 	{

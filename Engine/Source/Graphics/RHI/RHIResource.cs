@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
-using InfinityEngine.Mathmatics;
+using Infinity.Mathmatics;
 using System.Runtime.CompilerServices;
 
-namespace InfinityEngine.Graphics
+namespace Infinity.Graphics
 {
     public enum EUsageType
     {

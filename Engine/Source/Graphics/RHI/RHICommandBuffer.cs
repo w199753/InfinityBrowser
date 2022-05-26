@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using InfinityEngine.Mathmatics;
+using Infinity.Mathmatics;
 using System.Runtime.CompilerServices;
-using InfinityEngine.Mathmatics.Geometry;
+using Infinity.Mathmatics.Geometry;
 
-namespace InfinityEngine.Graphics
+namespace Infinity.Graphics
 {
     public enum EExecuteType
     {

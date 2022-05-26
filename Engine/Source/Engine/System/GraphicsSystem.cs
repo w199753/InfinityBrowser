@@ -1,11 +1,11 @@
 ﻿using System.Threading;
-using InfinityEngine.Graphics;
-using InfinityEngine.Rendering;
-using InfinityEngine.Windowing;
+using Infinity.Graphics;
+using Infinity.Rendering;
+using Infinity.Windowing;
 using System.Runtime.CompilerServices;
-using Semaphore = InfinityEngine.Threading.Semaphore;
+using Semaphore = Infinity.Threading.Semaphore;
 
-namespace InfinityEngine.System
+namespace Infinity.System
 {
     internal class GraphicsSystem : Disposal
     {

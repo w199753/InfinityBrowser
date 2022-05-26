@@ -1,6 +1,6 @@
 ﻿using System.Text;
 
-namespace InfinityEngine.Graphics.ShaderCompiler
+namespace Infinity.Graphics.ShaderCompiler
 {
     public enum EShaderStage
     {

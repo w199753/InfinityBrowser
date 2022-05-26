@@ -1,4 +1,4 @@
-﻿namespace InfinityEngine.Graphics
+﻿namespace Infinity.Graphics
 {
     internal sealed class D3DMemoryHeapFactory : Disposal
     {

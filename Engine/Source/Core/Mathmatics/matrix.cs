@@ -1,7 +1,7 @@
 using System.Runtime.CompilerServices;
-using static InfinityEngine.Mathmatics.math;
+using static Infinity.Mathmatics.math;
 
-namespace InfinityEngine.Mathmatics
+namespace Infinity.Mathmatics
 {
     public partial struct float2x2
     {

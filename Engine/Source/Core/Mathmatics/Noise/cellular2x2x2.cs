@@ -4,9 +4,9 @@
 // See LICENSE file for details.
 // https://github.com/stegu/webgl-noise
 
-using static InfinityEngine.Mathmatics.math;
+using static Infinity.Mathmatics.math;
 
-namespace InfinityEngine.Mathmatics
+namespace Infinity.Mathmatics
 {
     public static partial class noise
     {

@@ -1,8 +1,8 @@
 ﻿using System;
-using InfinityEngine.Mathmatics;
-using InfinityEngine.Mathmatics.Geometry;
+using Infinity.Mathmatics;
+using Infinity.Mathmatics.Geometry;
 
-namespace InfinityEngine.Rendering
+namespace Infinity.Rendering
 {
     [Serializable]
     public struct SectionLODData

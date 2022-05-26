@@ -1,8 +1,8 @@
 ﻿using System;
-using InfinityEngine.Container;
+using Infinity.Container;
 using System.Runtime.CompilerServices;
 
-namespace InfinityEngine.Graphics
+namespace Infinity.Graphics
 {
     public unsafe class D3DContext : RHIContext
     {

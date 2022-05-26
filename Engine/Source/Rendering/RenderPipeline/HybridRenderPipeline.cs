@@ -1,8 +1,8 @@
 ﻿using System;
-using InfinityEngine.Graphics;
-using InfinityEngine.Mathmatics;
+using Infinity.Graphics;
+using Infinity.Mathmatics;
 
-namespace InfinityEngine.Rendering
+namespace Infinity.Rendering
 {
     public class HybridRenderPipeline : RenderPipeline
     {

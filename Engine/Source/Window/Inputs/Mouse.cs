@@ -1,4 +1,4 @@
-﻿namespace InfinityEngine.Windowing.Inputs
+﻿namespace Infinity.Windowing.Inputs
 {
 	public enum EMouseButton
 	{

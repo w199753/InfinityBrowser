@@ -3,7 +3,7 @@ using TerraFX.Interop.Windows;
 using TerraFX.Interop.DirectX;
 using System.Runtime.CompilerServices;
 
-namespace InfinityEngine.Graphics
+namespace Infinity.Graphics
 {
     internal unsafe class D3DCommandContext : RHICommandContext
     {

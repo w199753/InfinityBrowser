@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics;
 
-namespace InfinityEngine
+namespace Infinity
 {
     public class Timer
     {

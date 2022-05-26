@@ -1,7 +1,7 @@
-﻿using InfinityEngine.Container;
+﻿using Infinity.Container;
 using System.Runtime.CompilerServices;
 
-namespace InfinityEngine.Rendering
+namespace Infinity.Rendering
 {
     public delegate void FGraphicsTask(RenderContext renderContext);
 

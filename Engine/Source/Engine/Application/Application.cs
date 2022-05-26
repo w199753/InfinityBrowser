@@ -1,11 +1,11 @@
 ﻿using System;
-using InfinityEngine.System;
-using InfinityEngine.Threading;
-using InfinityEngine.Windowing;
+using Infinity.System;
+using Infinity.Threading;
+using Infinity.Windowing;
 using System.Runtime.InteropServices;
 using System.Runtime.CompilerServices;
 
-namespace InfinityEngine
+namespace Infinity
 {
     public abstract partial class GameApplication : Disposal
     {

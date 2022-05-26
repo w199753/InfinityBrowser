@@ -2,7 +2,7 @@ using System;
 using System.Runtime.InteropServices;
 using System.Runtime.CompilerServices;
 
-namespace InfinityEngine.Mathmatics
+namespace Infinity.Mathmatics
 {
     public static partial class math
     {

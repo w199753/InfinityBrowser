@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace InfinityEngine.Mathmatics.Geometry
+namespace Infinity.Mathmatics.Geometry
 {
     public struct Viewport : IEquatable<Viewport>
     {

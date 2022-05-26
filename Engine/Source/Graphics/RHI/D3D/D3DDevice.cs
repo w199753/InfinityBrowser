@@ -1,7 +1,7 @@
 ﻿using TerraFX.Interop.Windows;
 using TerraFX.Interop.DirectX;
 
-namespace InfinityEngine.Graphics
+namespace Infinity.Graphics
 {
     internal unsafe class D3DDevice : RHIDevice
     {

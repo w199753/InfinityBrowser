@@ -1,6 +1,6 @@
 ﻿using Vortice.Direct3D12;
 
-namespace InfinityEngine.Graphics
+namespace Infinity.Graphics
 {
     public class RHIResourceView : Disposal
     {

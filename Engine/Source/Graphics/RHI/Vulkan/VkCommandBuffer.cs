@@ -1,10 +1,10 @@
 ﻿using System;
 using Vortice.Vulkan;
 using static Vortice.Vulkan.Vulkan;
-using InfinityEngine.Mathmatics;
-using InfinityEngine.Mathmatics.Geometry;
+using Infinity.Mathmatics;
+using Infinity.Mathmatics.Geometry;
 
-namespace InfinityEngine.Graphics
+namespace Infinity.Graphics
 {
     public unsafe class VKCommandBuffer : RHICommandBuffer
     {

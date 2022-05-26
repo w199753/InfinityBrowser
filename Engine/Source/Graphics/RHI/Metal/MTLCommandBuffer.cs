@@ -1,9 +1,9 @@
 ﻿using System;
 using Apple.Metal;
-using InfinityEngine.Mathmatics;
-using InfinityEngine.Mathmatics.Geometry;
+using Infinity.Mathmatics;
+using Infinity.Mathmatics.Geometry;
 
-namespace InfinityEngine.Graphics
+namespace Infinity.Graphics
 {
     public unsafe class MtlCommandBuffer : RHICommandBuffer
     {

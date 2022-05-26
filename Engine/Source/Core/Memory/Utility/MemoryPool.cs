@@ -1,8 +1,8 @@
 ﻿using System;
-using InfinityEngine.Container;
+using Infinity.Container;
 using System.Collections.Generic;
 
-namespace InfinityEngine.Memory
+namespace Infinity.Memory
 {
     public delegate void FPooledAction<T0>(T0 arg0);
 

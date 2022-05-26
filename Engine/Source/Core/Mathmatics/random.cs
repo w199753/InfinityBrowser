@@ -1,9 +1,9 @@
 using System;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
-using static InfinityEngine.Mathmatics.math;
+using static Infinity.Mathmatics.math;
 
-namespace InfinityEngine.Mathmatics
+namespace Infinity.Mathmatics
 {
     /// <summary>
     /// Random Number Generator based on xorshift.

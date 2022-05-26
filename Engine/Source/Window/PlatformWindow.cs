@@ -6,7 +6,7 @@ using Silk.NET.Windowing;
 using System.Runtime.InteropServices;
 using System.Runtime.CompilerServices;
 
-namespace InfinityEngine.Windowing
+namespace Infinity.Windowing
 {
 	/*public sealed unsafe class PlatformWindow : Disposal
 	{

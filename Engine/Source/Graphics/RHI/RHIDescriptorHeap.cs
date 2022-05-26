@@ -1,6 +1,6 @@
 ﻿using System.Runtime.CompilerServices;
 
-namespace InfinityEngine.Graphics
+namespace Infinity.Graphics
 {
     internal enum EDescriptorType
     {

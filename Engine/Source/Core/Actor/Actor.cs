@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections;
-using InfinityEngine.Container;
-using InfinityEngine.Threading;
-using InfinityEngine.Mathmatics;
+using Infinity.Container;
+using Infinity.Threading;
+using Infinity.Mathmatics;
 using System.Runtime.CompilerServices;
 
-namespace InfinityEngine
+namespace Infinity
 {
     [Serializable]
     public class Actor : Object, IComparable<Actor>, IEquatable<Actor>

@@ -3,9 +3,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Collections.Generic;
-using InfinityEngine.Mathmatics;
+using Infinity.Mathmatics;
 
-namespace InfinityEngine.Rendering
+namespace Infinity.Rendering
 {
     /*[Serializable]
     public class FTerrainSector

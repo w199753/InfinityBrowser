@@ -3,10 +3,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Collections.Generic;
-using InfinityEngine.Mathmatics;
-using InfinityEngine.Mathmatics.Geometry;
+using Infinity.Mathmatics;
+using Infinity.Mathmatics.Geometry;
 
-namespace InfinityEngine.Rendering
+namespace Infinity.Rendering
 {
     /*public static class HeightmapLoader
     {

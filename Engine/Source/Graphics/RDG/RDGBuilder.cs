@@ -1,9 +1,9 @@
 ﻿using System;
-using InfinityEngine.Graphics;
-using InfinityEngine.Container;
+using Infinity.Graphics;
+using Infinity.Container;
 using System.Collections.Generic;
 
-namespace InfinityEngine.Graphics
+namespace Infinity.Graphics
 {
     public struct RDGContext
     {

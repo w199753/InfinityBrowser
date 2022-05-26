@@ -1,4 +1,4 @@
-﻿namespace InfinityEngine.Graphics
+﻿namespace Infinity.Graphics
 {
     internal class RHIDevice : Disposal
     {

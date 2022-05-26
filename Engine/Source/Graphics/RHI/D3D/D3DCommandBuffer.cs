@@ -1,12 +1,12 @@
 ﻿using System;
 using TerraFX.Interop.Windows;
 using TerraFX.Interop.DirectX;
-using InfinityEngine.Mathmatics;
+using Infinity.Mathmatics;
 using System.Runtime.InteropServices;
 using System.Runtime.CompilerServices;
-using InfinityEngine.Mathmatics.Geometry;
+using Infinity.Mathmatics.Geometry;
 
-namespace InfinityEngine.Graphics
+namespace Infinity.Graphics
 {
     public unsafe class D3DCommandBuffer : RHICommandBuffer
     {

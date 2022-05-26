@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace InfinityEngine
+namespace Infinity
 {
     public class Disposal : IDisposable
     {

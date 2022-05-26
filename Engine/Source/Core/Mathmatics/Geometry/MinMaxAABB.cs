@@ -1,8 +1,8 @@
 using System;
 using System.Runtime.CompilerServices;
-using static InfinityEngine.Mathmatics.math;
+using static Infinity.Mathmatics.math;
 
-namespace InfinityEngine.Mathmatics.Geometry
+namespace Infinity.Mathmatics.Geometry
 {
     /// <summary>
     /// Axis aligned bounding box (AABB) stored in min and max form.

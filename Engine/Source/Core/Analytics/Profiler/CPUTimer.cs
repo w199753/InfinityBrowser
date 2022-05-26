@@ -2,7 +2,7 @@
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 
-namespace InfinityEngine.Analytics
+namespace Infinity.Analytics
 {
     public class TimeProfiler
     {

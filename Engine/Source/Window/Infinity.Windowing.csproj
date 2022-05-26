@@ -3,8 +3,8 @@
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
     <Platforms>x64;ARM64</Platforms>
-    <AssemblyName>InfinityEngine.Windowing</AssemblyName>
-    <RootNamespace>InfinityEngine.Windowing</RootNamespace>
+    <AssemblyName>Infinity.Windowing</AssemblyName>
+    <RootNamespace>Infinity.Windowing</RootNamespace>
     <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
 	  <IntermediateOutputPath>../../Intermediate/Windowing/</IntermediateOutputPath>
   </PropertyGroup>

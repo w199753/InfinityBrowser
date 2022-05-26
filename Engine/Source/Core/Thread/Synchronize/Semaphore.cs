@@ -1,6 +1,6 @@
 ﻿using System.Threading;
 
-namespace InfinityEngine.Threading
+namespace Infinity.Threading
 {
     public class Semaphore : Disposal
     {

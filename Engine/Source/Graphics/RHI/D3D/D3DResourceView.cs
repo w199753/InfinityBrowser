@@ -1,10 +1,10 @@
 ﻿using System;
-using InfinityEngine.Memory;
+using Infinity.Memory;
 using TerraFX.Interop.Windows;
 using TerraFX.Interop.DirectX;
 using System.Runtime.CompilerServices;
 
-namespace InfinityEngine.Graphics
+namespace Infinity.Graphics
 {
     public unsafe class D3DDeptnStencilView : RHIDeptnStencilView
     {

@@ -1,7 +1,7 @@
 ﻿using System.Threading;
 using System.Runtime.CompilerServices;
 
-namespace InfinityEngine.System
+namespace Infinity.System
 {
     internal class PhysicsSystem : Disposal
     {

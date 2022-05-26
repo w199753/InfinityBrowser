@@ -1,9 +1,9 @@
 ﻿using TerraFX.Interop.Windows;
 using TerraFX.Interop.DirectX;
-using InfinityEngine.Container;
+using Infinity.Container;
 using System.Runtime.CompilerServices;
 
-namespace InfinityEngine.Graphics
+namespace Infinity.Graphics
 {
     internal static class D3DDescriptorUtil
     {

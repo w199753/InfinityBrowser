@@ -1,12 +1,12 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
 		<OutputType>Library</OutputType>
 		<TargetFramework>net6.0</TargetFramework>
 		<Platforms>x64;ARM64</Platforms>
 		<Nullable>warnings</Nullable>
-		<AssemblyName>InfinityEngine.Rendering</AssemblyName>
-		<RootNamespace>InfinityEngine.Renderer</RootNamespace>
+		<AssemblyName>Infinity.Rendering</AssemblyName>
+		<RootNamespace>Infinity.Renderer</RootNamespace>
 		<AllowUnsafeBlocks>True</AllowUnsafeBlocks>
 		<IntermediateOutputPath>../../Intermediate/Rendering/</IntermediateOutputPath>
 	</PropertyGroup>

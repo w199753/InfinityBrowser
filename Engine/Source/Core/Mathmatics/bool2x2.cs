@@ -11,7 +11,7 @@ using System.Runtime.CompilerServices;
 
 #pragma warning disable 0660, 0661
 
-namespace InfinityEngine.Mathmatics
+namespace Infinity.Mathmatics
 {
     [System.Serializable]
     public partial struct bool2x2 : System.IEquatable<bool2x2>

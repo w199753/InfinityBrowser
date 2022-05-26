@@ -1,4 +1,4 @@
-﻿namespace InfinityEngine.Threading
+﻿namespace Infinity.Threading
 {
     class ITaskFor
     {

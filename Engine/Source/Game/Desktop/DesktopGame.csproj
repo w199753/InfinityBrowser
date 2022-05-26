@@ -4,7 +4,7 @@
     <TargetFramework>net6.0</TargetFramework>
     <Platforms>x64;ARM64</Platforms>
     <AssemblyName>DesktopGame</AssemblyName>
-    <RootNamespace>InfinityEngine.Game</RootNamespace>
+    <RootNamespace>Infinity.Game</RootNamespace>
     <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
     <OutputType>Exe</OutputType>
     <PlatformTarget>x64</PlatformTarget>

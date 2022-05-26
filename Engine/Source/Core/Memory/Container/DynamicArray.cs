@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace InfinityEngine.Container
+namespace Infinity.Container
 {
     public class TDynamicArray<T> where T : new()
     {

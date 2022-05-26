@@ -11,7 +11,7 @@ using System.Runtime.CompilerServices;
 
 #pragma warning disable 0660, 0661
 
-namespace InfinityEngine.Mathmatics
+namespace Infinity.Mathmatics
 {
     [System.Serializable]
     public partial struct uint4x4 : System.IEquatable<uint4x4>, IFormattable
