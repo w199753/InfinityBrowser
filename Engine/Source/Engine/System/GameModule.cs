@@ -5,13 +5,13 @@ using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using Semaphore = Infinity.Threading.Semaphore;
 
-namespace Infinity.System
+namespace Infinity
 {
     internal delegate void FGamePlayFunc();
     internal delegate void FGameTickFunc();
     internal delegate void FGameEndFunc();
 
-    internal class GameSystem : Disposal
+    internal class GameModule : Disposal
     {
         private float m_DeltaTime;
         private Semaphore m_SemaphoreG2R;
@@ -22,7 +22,7 @@ namespace Infinity.System
         private TimeProfiler m_TimeCounter;
         private List<float> m_LastDeltaTimes;
 
-        public GameSystem(FGameEndFunc gameEndFunc, FGamePlayFunc gamePlayFunc, FGameTickFunc gameTickFunc, Semaphore semaphoreG2R, Semaphore semaphoreR2G)
+        public GameModule(FGameEndFunc gameEndFunc, FGamePlayFunc gamePlayFunc, FGameTickFunc gameTickFunc, Semaphore semaphoreG2R, Semaphore semaphoreR2G)
         {
             m_GameEndFunc = gameEndFunc;
             m_GamePlayFunc = gamePlayFunc;
@@ -63,9 +63,9 @@ namespace Infinity.System
             long elapsed = 0;
             int deltaTimeSmoothing = 2;
 
-            if (GameApplication.GTargetFrameRate > 0)
+            if (Application.GTargetFrameRate > 0)
             {
-                long targetMax = 1000000L / GameApplication.GTargetFrameRate;
+                long targetMax = 1000000L / Application.GTargetFrameRate;
 
                 while(true)
                 {

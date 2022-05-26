@@ -141,7 +141,7 @@ namespace Infinity.Game
         }
     }
 
-    public class TestApplication : GameApplication
+    public class TestApplication : Application
     {
         private TestActor m_Actor;
 

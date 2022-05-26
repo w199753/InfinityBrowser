@@ -5,20 +5,20 @@ using Infinity.Windowing;
 using System.Runtime.CompilerServices;
 using Semaphore = Infinity.Threading.Semaphore;
 
-namespace Infinity.System
+namespace Infinity
 {
-    internal class GraphicsSystem : Disposal
+    internal class GraphicsModule : Disposal
     {
-        private bool IsLoopExit;
+        private bool m_LoopExit;
         private Thread m_RenderThread;
         private Semaphore m_SemaphoreG2R;
         private Semaphore m_SemaphoreR2G;
         private RenderContext m_RenderContext;
         private SceneRenderer m_SceneRenderer;
 
-        public GraphicsSystem(PlatformWindow window, Semaphore semaphoreG2R, Semaphore semaphoreR2G)
+        public GraphicsModule(PlatformWindow window, Semaphore semaphoreG2R, Semaphore semaphoreR2G)
         {
-            IsLoopExit = false;
+            m_LoopExit = false;
             m_SemaphoreG2R = semaphoreG2R;
             m_SemaphoreR2G = semaphoreR2G;
             m_RenderThread = new Thread(GraphicsFunc);
@@ -34,7 +34,7 @@ namespace Infinity.System
 
         public void Exit()
         {
-            IsLoopExit = true;
+            m_LoopExit = true;
             m_SemaphoreG2R.Signal();
             m_RenderThread.Join();
         }
@@ -47,7 +47,7 @@ namespace Infinity.System
             m_SceneRenderer.Init();
             m_SemaphoreG2R.Signal();
 
-            while (!IsLoopExit)
+            while (!m_LoopExit)
             {
                 m_SemaphoreG2R.Wait();
                 ProcessGraphicsTasks();
