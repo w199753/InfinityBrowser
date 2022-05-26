@@ -22,11 +22,11 @@ namespace Infinity.Rendering
 
         public RenderContext(in uint width, in uint height, in IntPtr window)
         {
-            // CreateInstance And SelectGPU
+            // Create Instance And SelectGPU
             m_Instance = RHIInstance.CreateByPlatform();
             m_Gpu = m_Instance?.GetGpu(0);
 
-            // CreateDevice
+            // Create Device
             RHIQueueInfo[] queueInfos = new RHIQueueInfo[3];
             {
                 queueInfos[0].count = 1;
@@ -41,7 +41,7 @@ namespace Infinity.Rendering
             deviceCreateInfo.queueInfos = queueInfosView;
             m_Device = m_Gpu?.CreateDevice(deviceCreateInfo);
 
-            // GetQueue
+            // Get GPUQueue
             m_Queues = new RHIQueue[3];
             m_Queues[0] = m_Device?.GetQueue(EQueueType.Blit, 0);
             m_Queues[1] = m_Device?.GetQueue(EQueueType.Compute, 0);
@@ -50,7 +50,7 @@ namespace Infinity.Rendering
             // Create FrameFence
             m_FrameFence = m_Device?.CreateFence();
 
-            // CreateSwapChain
+            // Create SwapChain
             RHISwapChainCreateInfo swapChainCreateInfo = new RHISwapChainCreateInfo();
             swapChainCreateInfo.count = 2;
             swapChainCreateInfo.extent = new int2(1280, 720);
