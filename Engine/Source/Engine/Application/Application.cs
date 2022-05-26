@@ -23,7 +23,7 @@ namespace Infinity
         private Semaphore m_SemaphoreG2R;
         private Semaphore m_SemaphoreR2G;
         private GameSystem m_GameSystem;
-        private PhysicsSystem m_PhysicsSystem;
+        //private PhysicsSystem m_PhysicsSystem;
         private GraphicsSystem m_GraphicsSystem;
 
         public GameApplication(in int width, in int height, string name)
@@ -32,7 +32,7 @@ namespace Infinity
             m_SemaphoreR2G = new Semaphore(true);
             m_SemaphoreG2R = new Semaphore(false);
             m_GameSystem = new GameSystem(End, Play, Tick, m_SemaphoreG2R, m_SemaphoreR2G);
-            m_PhysicsSystem = new PhysicsSystem();
+            //m_PhysicsSystem = new PhysicsSystem();
             m_GraphicsSystem = new GraphicsSystem(m_Window, m_SemaphoreG2R, m_SemaphoreR2G);
         }
 
@@ -52,7 +52,7 @@ namespace Infinity
         private void PlatformRun()
         {
             m_GameSystem.Start();
-            m_PhysicsSystem.Start();
+            //m_PhysicsSystem.Start();
             m_GraphicsSystem.Start();
 
             while (IsRunning)
@@ -65,19 +65,18 @@ namespace Infinity
         private void PlatformExit()
         {
             m_GameSystem.Exit();
-            m_PhysicsSystem.Exit();
+            //m_PhysicsSystem.Exit();
             m_GraphicsSystem.Exit();
         }
 
         protected override void Release()
         {
             m_GameSystem.Dispose();
-            m_PhysicsSystem.Dispose();
+            //m_PhysicsSystem.Dispose();
             m_GraphicsSystem.Dispose();
-
-            m_Window.Dispose();
             m_SemaphoreR2G.Dispose();
             m_SemaphoreG2R.Dispose();
+            m_Window.Dispose();
         }
     }
 }

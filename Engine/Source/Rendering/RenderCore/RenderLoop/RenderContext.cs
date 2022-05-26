@@ -39,16 +39,16 @@ namespace Infinity.Rendering
             Memory<RHIQueueInfo> queueInfosView = new Memory<RHIQueueInfo>(queueInfos);
             RHIDeviceCreateInfo deviceCreateInfo = new RHIDeviceCreateInfo();
             deviceCreateInfo.queueInfos = queueInfosView;
-            m_Device = m_Gpu?.CreateDevice(deviceCreateInfo);
+            m_Device = m_Gpu.CreateDevice(deviceCreateInfo);
 
             // Get GPUQueue
             m_Queues = new RHIQueue[3];
-            m_Queues[0] = m_Device?.GetQueue(EQueueType.Blit, 0);
-            m_Queues[1] = m_Device?.GetQueue(EQueueType.Compute, 0);
-            m_Queues[2] = m_Device?.GetQueue(EQueueType.Graphics, 0);
+            m_Queues[0] = m_Device.GetQueue(EQueueType.Blit, 0);
+            m_Queues[1] = m_Device.GetQueue(EQueueType.Compute, 0);
+            m_Queues[2] = m_Device.GetQueue(EQueueType.Graphics, 0);
 
             // Create FrameFence
-            m_FrameFence = m_Device?.CreateFence();
+            m_FrameFence = m_Device.CreateFence();
 
             // Create SwapChain
             RHISwapChainCreateInfo swapChainCreateInfo = new RHISwapChainCreateInfo();
@@ -69,8 +69,8 @@ namespace Infinity.Rendering
             viewCreateInfo.format = EPixelFormat.RGBA8_UNORM;
             viewCreateInfo.dimension = ETextureViewDimension.Tex2D;
             m_SwapChainViews = new RHITextureView[2];
-            m_SwapChainViews[0] = m_SwapChain?.GetTexture(0)?.CreateTextureView(viewCreateInfo);
-            m_SwapChainViews[1] = m_SwapChain?.GetTexture(1)?.CreateTextureView(viewCreateInfo);
+            m_SwapChainViews[0] = m_SwapChain.GetTexture(0).CreateTextureView(viewCreateInfo);
+            m_SwapChainViews[1] = m_SwapChain.GetTexture(1).CreateTextureView(viewCreateInfo);
         }
 
         public void Cull()
@@ -309,8 +309,8 @@ namespace Infinity.Rendering
 
         protected override void Release()
         {
-            m_SwapChainViews[1].Dispose();
             m_SwapChainViews[0].Dispose();
+            m_SwapChainViews[1].Dispose();
             m_SwapChain.Dispose();
             m_FrameFence.Dispose();
             m_Queues[0].Dispose();

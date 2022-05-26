@@ -37,8 +37,9 @@ namespace Infinity.Graphics
 
         public D3DFence(D3DDevice device)
         {
-            ID3D12Fence* fence;
-            Debug.Assert(SUCCEEDED(device.NativeDevice->CreateFence(0, D3D12_FENCE_FLAGS.D3D12_FENCE_FLAG_NONE, Windows.__uuidof<ID3D12Fence>(), (void**)&fence)));
+            ID3D12Fence* fence = null;
+            bool success = SUCCEEDED(device.NativeDevice->CreateFence(0, D3D12_FENCE_FLAGS.D3D12_FENCE_FLAG_NONE, __uuidof<ID3D12Fence>(), (void**)&fence));
+            Debug.Assert(success);
             m_NativeFence = fence;
 
             m_FenceEvent = new AutoResetEvent(false);
