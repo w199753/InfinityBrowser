@@ -8,7 +8,7 @@
 
 	Category
 	{
-		Kernel
+		Pass
 		{
 			Tags {"Name" = "Depth", "Type" = "Graphics"}
 			ZWrite On ZTest LEqual Cull Back 
@@ -59,7 +59,7 @@
 			ENDHLSL
 		}
 
-		Kernel
+		Pass
 		{
 			Tags {"Name" = "GBuffer", "Type" = "Graphics"}
 			ZWrite On ZTest LEqual Cull Back 
@@ -123,7 +123,7 @@
 			ENDHLSL
 		}
 
-		Kernel
+		Pass
 		{
 			Tags {"Name" = "Forward", "Type" = "Graphics"}
 			ZWrite Off ZTest Equal Cull Back 
@@ -188,7 +188,7 @@
 			ENDHLSL
 		}
 
-		Kernel
+		Pass
 		{
 			Tags {"Name" = "Blur", "Type" = "Compute"}
 
@@ -211,7 +211,7 @@
 			ENDHLSL
 		}
 
-		Kernel
+		Pass
 		{
 			Tags {"Name" = "RTAO", "Type" = "RayTracing"}
 

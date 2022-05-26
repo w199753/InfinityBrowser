@@ -8,7 +8,7 @@ namespace Infinity.Game
     [Serializable]
     public class TestComponent : Component
     {
-        int numData = 100000;
+        /*int numData = 100000;
         int[] readData;
         float cpuTime
         {
@@ -22,13 +22,13 @@ namespace Infinity.Game
         }
         RHIBufferRef bufferRef;
         TimeProfiler timeProfiler;
-        RHIMemoryReadback gpuReadback;
+        RHIMemoryReadback gpuReadback;*/
 
         public override void OnEnable()
         {
             Console.WriteLine("Enable Component");
 
-            readData = new int[numData];
+            /*readData = new int[numData];
             timeProfiler = new TimeProfiler();
 
             GraphicsUtility.AddTask((RenderContext renderContext) =>
@@ -53,12 +53,12 @@ namespace Infinity.Game
                 cmdBuffer.EndEvent();
                 renderContext.ExecuteCommandBuffer(cmdBuffer);
                 renderContext.ReleaseCommandBuffer(cmdBuffer);
-            });
+            });*/
         }
 
         public override void OnUpdate(in float deltaTime)
         {
-            GraphicsUtility.AddTask((RenderContext renderContext) =>
+            /*GraphicsUtility.AddTask((RenderContext renderContext) =>
             {
                 gpuReadback.EnqueueCopy(renderContext, buffer);
 
@@ -69,17 +69,17 @@ namespace Infinity.Game
                 Console.WriteLine("||");
                 Console.WriteLine("CPUCopy : " + cpuTime + "ms");
                 Console.WriteLine("GPUCopy : " + gpuTime + "ms");
-            });
+            });*/
         }
 
         public override void OnDisable()
         {
-            GraphicsUtility.AddTask((RenderContext renderContext) =>
+            /*GraphicsUtility.AddTask((RenderContext renderContext) =>
             {
                 gpuReadback.Dispose();
                 renderContext.ReleaseBuffer(bufferRef);
                 Console.WriteLine("Release RenderProxy");
-            });
+            });*/
 
             Console.WriteLine("Disable Component");
         }

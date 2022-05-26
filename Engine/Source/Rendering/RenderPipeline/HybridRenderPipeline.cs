@@ -6,6 +6,10 @@ namespace Infinity.Rendering
 {
     public class HybridRenderPipeline : RenderPipeline
     {
+        RHICommandPool m_CommandPool;
+        RHICommandBuffer m_CommandBuffer;
+        RHIGraphicsPassColorAttachment[] m_ColorAttachments;
+
         public HybridRenderPipeline(string pipelineName) : base(pipelineName) 
         {
 
@@ -14,24 +18,62 @@ namespace Infinity.Rendering
         public override void Init(RenderContext renderContext)
         {
             Console.WriteLine("Init RenderPipeline");
+
+            m_CommandPool = renderContext.CreateCommandPool(EQueueType.Graphics);
+            m_CommandBuffer = m_CommandPool.CreateCommandBuffer();
+            m_ColorAttachments = new RHIGraphicsPassColorAttachment[1];
+            {
+                m_ColorAttachments[0].clearValue = new float4(1, 0.25f, 0, 1);
+                m_ColorAttachments[0].loadOp = ELoadOp.Clear;
+                m_ColorAttachments[0].storeOp = EStoreOp.Store;
+                m_ColorAttachments[0].resolveTarget = null;
+            }
         }
 
         public override void Render(RenderContext renderContext)
         {
-            RHICommandBuffer cmdBuffer = renderContext.GetCommandBuffer("ClearRenderTarget");
-            cmdBuffer.Clear();
+            m_CommandPool.Reset();
 
-            cmdBuffer.BeginEvent("ClearBackBuffer");
-            cmdBuffer.ClearRenderTarget(renderContext.backBufferView, new float4(1, 0.25f, 0.125f, 1));
-            cmdBuffer.EndEvent();
+            using (m_CommandBuffer.BeginScoped())
+            {
+                m_ColorAttachments[0].view = renderContext.BackBufferView;
 
-            renderContext.ExecuteCommandBuffer(cmdBuffer);
-            renderContext.ReleaseCommandBuffer(cmdBuffer);
+                RHIBlitEncoder blitEncoder = m_CommandBuffer.GetBlitEncoder();
+                RHIGraphicsEncoder graphicsEncoder = m_CommandBuffer.GetGraphicsEncoder();
+
+                using (blitEncoder.BeginScopedPass())
+                {
+                    blitEncoder.ResourceBarrier(RHIBarrier.Transition(renderContext.BackBuffer, ETextureState.Present, ETextureState.RnederTarget));
+                }
+
+                RHIGraphicsPassBeginInfo graphicsPassBeginInfo = new RHIGraphicsPassBeginInfo();
+                graphicsPassBeginInfo.colorAttachments = new Memory<RHIGraphicsPassColorAttachment>(m_ColorAttachments);
+                graphicsPassBeginInfo.depthStencilAttachment = null;
+                using (graphicsEncoder.BeginScopedPass(graphicsPassBeginInfo))
+                {
+                    //graphicsEncoder.SetPipeline(pipeline);
+                    graphicsEncoder.SetScissor(0, 0, 1280, 720);
+                    graphicsEncoder.SetViewport(0, 0, 1280, 720, 0, 1);
+                    //graphicsEncoder.SetPrimitiveTopology(EPrimitiveTopology.TriangleList);
+                    //graphicsEncoder.SetVertexBuffer(0, vertexBufferView);
+                    //graphicsEncoder.Draw(3, 1, 0, 0);
+                }
+
+                using (blitEncoder.BeginScopedPass())
+                {
+                    blitEncoder.ResourceBarrier(RHIBarrier.Transition(renderContext.BackBuffer, ETextureState.RnederTarget, ETextureState.Present));
+                }
+            }
+
+            renderContext.ExecuteCommandBuffer(m_CommandBuffer);
         }
 
         public override void Release(RenderContext renderContext)
         {
             Console.WriteLine("Release RenderPipeline");
+
+            m_CommandPool?.Dispose();
+            m_CommandBuffer?.Dispose();
         }
     }
 }

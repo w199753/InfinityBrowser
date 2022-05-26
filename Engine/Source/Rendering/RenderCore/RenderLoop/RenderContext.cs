@@ -1,27 +1,76 @@
 ﻿using System;
 using Infinity.Graphics;
+using Infinity.Mathmatics;
 using System.Runtime.CompilerServices;
 
 namespace Infinity.Rendering
 {
     public sealed class RenderContext : Disposal
     {
-        public ulong computeFrequency => m_Instance.computeFrequency;
-        public ulong graphicsFrequency => m_Instance.graphicsFrequency;
-        public RHIContext Instance => m_Instance;
-        public RHISwapChain SwapChain => m_SwapChain;
+        public ulong computeFrequency => 0;
+        public ulong graphicsFrequency => 0;
+        public RHITexture BackBuffer => m_SwapChain.GetTexture(m_SwapChain.GetBackBufferIndex());
+        public RHITextureView BackBufferView => m_SwapChainViews[m_SwapChain.GetBackBufferIndex()];
 
-        internal RHITexture backBuffer => m_SwapChain.backBuffer;
-        internal RHIRenderTargetView backBufferView => m_SwapChain.backBufferView;
-
-        private RHIContext m_Instance;
+        private RHIInstance m_Instance;
+        private RHIGPU m_Gpu;
+        private RHIDevice m_Device;
+        private RHIQueue[] m_Queues;
+        private RHIFence m_FrameFence;
         private RHISwapChain m_SwapChain;
+        private RHITextureView[] m_SwapChainViews;
 
         public RenderContext(in uint width, in uint height, in IntPtr window)
         {
-            m_Instance = new D3DContext();
-            m_SwapChain = m_Instance.CreateSwapChain("SwapChain", width, height, window);
-            m_SwapChain.InitResourceView(m_Instance);
+            // CreateInstance And SelectGPU
+            m_Instance = RHIInstance.CreateByPlatform();
+            m_Gpu = m_Instance?.GetGpu(0);
+
+            // CreateDevice
+            RHIQueueInfo[] queueInfos = new RHIQueueInfo[3];
+            {
+                queueInfos[0].count = 1;
+                queueInfos[0].type = EQueueType.Blit;
+                queueInfos[1].count = 1;
+                queueInfos[1].type = EQueueType.Compute;
+                queueInfos[2].count = 1;
+                queueInfos[2].type = EQueueType.Graphics;
+            }
+            Memory<RHIQueueInfo> queueInfosView = new Memory<RHIQueueInfo>(queueInfos);
+            RHIDeviceCreateInfo deviceCreateInfo = new RHIDeviceCreateInfo();
+            deviceCreateInfo.queueInfos = queueInfosView;
+            m_Device = m_Gpu?.CreateDevice(deviceCreateInfo);
+
+            // GetQueue
+            m_Queues = new RHIQueue[3];
+            m_Queues[0] = m_Device?.GetQueue(EQueueType.Blit, 0);
+            m_Queues[1] = m_Device?.GetQueue(EQueueType.Compute, 0);
+            m_Queues[2] = m_Device?.GetQueue(EQueueType.Graphics, 0);
+
+            // Create FrameFence
+            m_FrameFence = m_Device?.CreateFence();
+
+            // CreateSwapChain
+            RHISwapChainCreateInfo swapChainCreateInfo = new RHISwapChainCreateInfo();
+            swapChainCreateInfo.count = 2;
+            swapChainCreateInfo.extent = new int2(1280, 720);
+            swapChainCreateInfo.format = EPixelFormat.RGBA8_UNORM;
+            swapChainCreateInfo.presentMode = EPresentMode.VSync;
+            swapChainCreateInfo.window = window;
+            swapChainCreateInfo.presentQueue = m_Queues[2];
+            m_SwapChain = m_Device?.CreateSwapChain(swapChainCreateInfo);
+
+            RHITextureViewCreateInfo viewCreateInfo = new RHITextureViewCreateInfo();
+            viewCreateInfo.mipLevelNum = 1;
+            viewCreateInfo.baseMipLevel = 0;
+            viewCreateInfo.arrayLayerNum = 1;
+            viewCreateInfo.baseArrayLayer = 0;
+            viewCreateInfo.aspect = ETextureAspect.Color;
+            viewCreateInfo.format = EPixelFormat.RGBA8_UNORM;
+            viewCreateInfo.dimension = ETextureViewDimension.Tex2D;
+            m_SwapChainViews = new RHITextureView[2];
+            m_SwapChainViews[0] = m_SwapChain?.GetTexture(0)?.CreateTextureView(viewCreateInfo);
+            m_SwapChainViews[1] = m_SwapChain?.GetTexture(1)?.CreateTextureView(viewCreateInfo);
         }
 
         public void Cull()
@@ -59,66 +108,50 @@ namespace Infinity.Rendering
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public RHICommandBuffer CreateCommandBuffer(string name = null, in EContextType contextType = EContextType.Graphics)
+        public void Submit()
         {
-            return m_Instance.CreateCommandBuffer(contextType, name);
+            m_Queues[(int)EQueueType.Graphics].Submit(null, m_FrameFence);
+            m_SwapChain.Present();
+            m_FrameFence.Wait();
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public RHICommandBuffer GetCommandBuffer(string name = null, in EContextType contextType = EContextType.Graphics)
+        public RHICommandPool CreateCommandPool(in EQueueType queueType)
         {
-            return m_Instance.GetCommandBuffer(contextType, name);
+            return m_Queues[(int)queueType].CreateCommandPool();
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public void ReleaseCommandBuffer(RHICommandBuffer cmdBuffer)
+        public RHICommandBuffer GetCommandPool(in EQueueType queueType)
         {
-            m_Instance.ReleaseCommandBuffer(cmdBuffer);
+            throw new NotImplementedException();
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public void WriteToFence(in EContextType contextType, RHIFence fence)
+        public void ExecuteCommandBuffer(RHICommandBuffer cmdBuffer, RHIFence fence = null)
         {
-            m_Instance.WriteToFence(contextType, fence);
+            m_Queues[(int)EQueueType.Graphics].Submit(cmdBuffer, fence);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public void WaitForFence(in EContextType contextType, RHIFence fence)
+        public void ExecuteCommandBufferAsync(RHICommandBuffer cmdBuffer, RHIFence fence = null)
         {
-            m_Instance.WaitForFence(contextType, fence);
+            m_Queues[(int)EQueueType.Compute].Submit(cmdBuffer, fence);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public void ExecuteCommandBuffer(RHICommandBuffer cmdBuffer)
+        public RHIFence CreateFence()
         {
-            m_Instance.ExecuteCommandBuffer(cmdBuffer);
+            return m_Device?.CreateFence();
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public RHISwapChain CreateSwapChain(in uint width, in uint height, in IntPtr windowPtr, string name)
+        public RHIFence GetFence()
         {
-            return m_Instance.CreateSwapChain(name, width, height, windowPtr);
+            throw new NotImplementedException();
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public RHIFence CreateFence(string name)
-        {
-            return m_Instance.CreateFence(name);
-        }
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public RHIFence GetFence(string name)
-        {
-            return m_Instance.GetFence(name);
-        }
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public void ReleaseFence(RHIFence fence)
-        {
-            m_Instance.ReleaseFence(fence);
-        }
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        /*[MethodImpl(MethodImplOptions.AggressiveInlining)]
         public RHIQuery CreateQuery(in EQueryType queryType, string name)
         {
             return m_Instance.CreateQuery(queryType, name);
@@ -272,14 +305,22 @@ namespace Infinity.Rendering
         public RHIResourceSet CreateResourceSet(in uint count)
         {
             return m_Instance.CreateResourceSet(count);
-        }
+        }*/
 
         protected override void Release()
         {
+            m_SwapChainViews[1].Dispose();
+            m_SwapChainViews[0].Dispose();
             m_SwapChain.Dispose();
+            m_FrameFence.Dispose();
+            m_Queues[0].Dispose();
+            m_Queues[1].Dispose();
+            m_Queues[2].Dispose();
+            m_Device.Dispose();
+            m_Gpu.Dispose();
             m_Instance.Dispose();
         }
 
-        public static implicit operator RHIContext(RenderContext renderContext) { return renderContext.m_Instance; }
+        //public static implicit operator RHIContext(RenderContext renderContext) { return renderContext.m_Instance; }
     }
 }

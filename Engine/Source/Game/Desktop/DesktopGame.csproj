@@ -50,11 +50,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Core\Infinity.Core.csproj" />
     <ProjectReference Include="..\..\Engine\Infinity.Engine.csproj" />
-    <ProjectReference Include="..\..\Graphics\Infinity.Graphics.csproj" />
-    <ProjectReference Include="..\..\Rendering\Infinity.Rendering.csproj" />
-    <ProjectReference Include="..\..\Window\Infinity.Windowing.csproj" />
   </ItemGroup>
 
 </Project>

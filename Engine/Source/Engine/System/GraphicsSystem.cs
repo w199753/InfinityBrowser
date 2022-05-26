@@ -53,8 +53,7 @@ namespace Infinity.System
                     m_SceneRenderer.Init(); 
                 }
                 m_SceneRenderer.Render();
-                RHIContext.SubmitContext(m_RenderContext.Instance);
-                m_RenderContext.SwapChain.Present();
+                m_RenderContext.Submit();
                 m_SemaphoreR2G.Signal();
             }
         }

@@ -5,12 +5,12 @@ namespace Infinity.Rendering
     public abstract class RenderPipeline : Disposal
     {
         public string name;
-        protected RDGBuilder m_GraphBuilder;
+        //protected RDGBuilder m_GraphBuilder;
 
         public RenderPipeline(string name)
         {
             this.name = name;
-            this.m_GraphBuilder = new RDGBuilder("GraphBuilder");
+            //this.m_GraphBuilder = new RDGBuilder("GraphBuilder");
         }
 
         public abstract void Init(RenderContext renderContext);
@@ -21,7 +21,7 @@ namespace Infinity.Rendering
 
         protected override void Release()
         {
-            m_GraphBuilder?.Dispose();
+            //m_GraphBuilder?.Dispose();
         }
     }
 }

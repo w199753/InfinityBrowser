@@ -4,7 +4,7 @@
 		<OutputType>Library</OutputType>
 		<TargetFramework>net6.0</TargetFramework>
 		<Platforms>x64;ARM64</Platforms>
-		<Nullable>warnings</Nullable>
+		<Nullable>disable</Nullable>
 		<AssemblyName>Infinity.Rendering</AssemblyName>
 		<RootNamespace>Infinity.Renderer</RootNamespace>
 		<AllowUnsafeBlocks>True</AllowUnsafeBlocks>
@@ -40,7 +40,8 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\Graphics\Infinity.Graphics.csproj" />
+	  <ProjectReference Include="..\Graphics\RHI\Infinity.RHI.csproj" />
+	  <ProjectReference Include="..\Graphics\ShaderLab\Infinity.Shaderlab.csproj" />
 	</ItemGroup>
 
 </Project>

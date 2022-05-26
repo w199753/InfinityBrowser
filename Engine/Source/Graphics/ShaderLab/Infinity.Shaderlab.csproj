@@ -1,0 +1,64 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>net6.0</TargetFramework>
+		<Platforms>x64;ARM64</Platforms>
+		<AssemblyName>Infinity.Shaderlab</AssemblyName>
+		<RootNamespace>Infinity.Shaderlab</RootNamespace>
+		<AllowUnsafeBlocks>True</AllowUnsafeBlocks>
+		<IntermediateOutputPath>../../../Intermediate/Graphics/Shaderlab/</IntermediateOutputPath>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+		<PlatformTarget>x64</PlatformTarget>
+		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+		<WarningLevel>3</WarningLevel>
+		<OutputPath>../../../Binaries/Graphics/Shaderlab/Win64/Debug/</OutputPath>
+		<TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+		<WarningsAsErrors />
+		<DefineConstants>$(DefineConstants)TRACE;</DefineConstants>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+		<TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+		<WarningsAsErrors></WarningsAsErrors>
+		<OutputPath>../../../Binaries/Graphics/Shaderlab/Win64/Release/</OutputPath>
+		<WarningLevel>3</WarningLevel>
+		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+		<Optimize>true</Optimize>
+		<PlatformTarget>x64</PlatformTarget>
+		<DefineConstants>$(DefineConstants)TRACE;</DefineConstants>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM64'">
+		<PlatformTarget>ARM64</PlatformTarget>
+		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+		<WarningLevel>3</WarningLevel>
+		<OutputPath>../../../Binaries/Graphics/Shaderlab/ARM64/Debug/</OutputPath>
+		<TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+		<WarningsAsErrors />
+		<DefineConstants>$(DefineConstants)TRACE;</DefineConstants>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM64'">
+		<TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+		<WarningsAsErrors></WarningsAsErrors>
+		<OutputPath>../../../Binaries/Graphics/Shaderlab/ARM64/Release/</OutputPath>
+		<WarningLevel>3</WarningLevel>
+		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+		<Optimize>true</Optimize>
+		<PlatformTarget>ARM64</PlatformTarget>
+		<DefineConstants>$(DefineConstants)TRACE;</DefineConstants>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Vortice.Dxc" Version="2.1.11-beta" />
+		<PackageReference Include="WaveEngine.HLSLEverywhere" Version="3.3.0.8617-preview" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\..\Core\Infinity.Core.csproj" />
+		<ProjectReference Include="..\..\ThirdParty\Antlr4\Antlr4.csproj" />
+	</ItemGroup>
+
+</Project>

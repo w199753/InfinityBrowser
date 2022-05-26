@@ -1,116 +1,85 @@
-﻿using TerraFX.Interop.Windows;
+﻿using System.Diagnostics;
+using TerraFX.Interop.Windows;
 using TerraFX.Interop.DirectX;
-using System.Runtime.CompilerServices;
+using static TerraFX.Interop.Windows.Windows;
 
 namespace Infinity.Graphics
 {
-    public unsafe class D3DSwapChain : RHISwapChain
+#pragma warning disable CS8600, CS8602, CA1416, CS8602, CS8604
+    internal unsafe class D3DSwapChain : RHISwapChain
     {
-        public override int swapIndex => (int)nativeSwapChain->GetCurrentBackBufferIndex();
+        private int m_Count;
+        private D3DDevice m_D3DDevice;
+        private EPresentMode m_PresentMode;
+        private D3DTexture[] m_Textures;
+        private IDXGISwapChain4* m_NativeSwapChain;
 
-        internal IDXGISwapChain4* nativeSwapChain;
-
-        internal D3DSwapChain(RHIDevice device, RHICommandContext cmdContext, in void* windowPtr, in uint width, in uint height, string name) : base(device, cmdContext, windowPtr, width, height, name)
+        public D3DSwapChain(D3DDevice device, in RHISwapChainCreateInfo createInfo)
         {
-            for (int i = 0; i < 2; ++i)
-            {
-                backBuffers[i] = new D3DTexture();
-            }
+            m_D3DDevice = device;
+            m_Count = createInfo.count;
+            m_PresentMode = createInfo.presentMode;
 
-            D3DDevice d3dDevice = (D3DDevice)device;
-            D3DCommandContext d3dCmdContext = (D3DCommandContext)cmdContext;
-
-            TextureDescriptor descriptor;
-            {
-                descriptor.name = name;
-                descriptor.width = (int)width;
-                descriptor.height = (int)height;
-                descriptor.slices = 1;
-                descriptor.sparse = false;
-                descriptor.mipLevel = 1;
-                descriptor.anisoLevel = 1;
-                descriptor.sample = EMSAASample.None;
-                descriptor.usageType = EUsageType.RenderTarget;
-                descriptor.textureType = ETextureType.Tex2D;
-                descriptor.storageType = EStorageType.Default;
-                descriptor.format = EGraphicsFormat.R8G8B8A8_UNorm;
-            }
-
-            DXGI_MODE_DESC bufferDesc;
-            {
-                bufferDesc.Width = width;
-                bufferDesc.Height = height;
-                bufferDesc.RefreshRate = new DXGI_RATIONAL(60, 1);
-                bufferDesc.Format = /*D3DTextureUtility.GetNativeViewFormat(descriptor.format)*/DXGI_FORMAT.DXGI_FORMAT_R8G8B8A8_UNORM;
-                bufferDesc.Scaling = DXGI_MODE_SCALING.DXGI_MODE_SCALING_UNSPECIFIED;
-                bufferDesc.ScanlineOrdering = DXGI_MODE_SCANLINE_ORDER.DXGI_MODE_SCANLINE_ORDER_UNSPECIFIED;
-            }
-
-            DXGI_SAMPLE_DESC sampleDesc;
-            {
-                sampleDesc.Count = 1;
-                sampleDesc.Quality = 0;
-            }
-
-            DXGI_SWAP_CHAIN_DESC swapChainDesc;
-            {
-                swapChainDesc.Windowed = true;
-                swapChainDesc.BufferCount = 2;
-                swapChainDesc.BufferDesc = bufferDesc;
-                swapChainDesc.SampleDesc = sampleDesc;
-                swapChainDesc.OutputWindow = new HWND(windowPtr);
-                swapChainDesc.BufferUsage = DXGI.DXGI_USAGE_RENDER_TARGET_OUTPUT;
-                swapChainDesc.SwapEffect = DXGI_SWAP_EFFECT.DXGI_SWAP_EFFECT_FLIP_DISCARD;
-            }
-
-            IDXGISwapChain* swapChainPtr;
-            d3dDevice.nativeFactory->CreateSwapChain((IUnknown*)d3dCmdContext.nativeCmdQueue, &swapChainDesc, &swapChainPtr);
-            nativeSwapChain = (IDXGISwapChain4*)swapChainPtr;
-
-            ID3D12Resource* backbufferResourceA;
-            nativeSwapChain->GetBuffer(0, Windows.__uuidof<ID3D12Resource>(), (void**)&backbufferResourceA);
-            fixed (char* namePtr = name + "_BackBuffer0")
-            {
-                backbufferResourceA->SetName((ushort*)namePtr);
-            }
-            ((D3DTexture)backBuffers[0]).descriptor = descriptor;
-            ((D3DTexture)backBuffers[0]).defaultResource = backbufferResourceA;
-
-            ID3D12Resource* backbufferResourceB;
-            nativeSwapChain->GetBuffer(1, Windows.__uuidof<ID3D12Resource>(), (void**)&backbufferResourceB);
-            fixed (char* namePtr = name + "_BackBuffer1")
-            {
-                backbufferResourceB->SetName((ushort*)namePtr);
-            }
-            ((D3DTexture)backBuffers[1]).descriptor = descriptor;
-            ((D3DTexture)backBuffers[1]).defaultResource = backbufferResourceB;
+            m_Textures = new D3DTexture[m_Count];
+            CreateDX12SwapChain(createInfo);
+            FetchTextures();
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public override RHITexture GetTexture(in int index)
+        {
+            return m_Textures[index];
+        }
+
+        public override int GetBackBufferIndex()
+        {
+            return (int)m_NativeSwapChain->GetCurrentBackBufferIndex();
+        }
+
         public override void Present()
         {
-            nativeSwapChain->Present(1, 0);
+            m_NativeSwapChain->Present(D3DUtility.ConvertToNativeSyncInterval(m_PresentMode), 0);
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public override void InitResourceView(RHIContext context)
+        private void FetchTextures()
         {
-            D3DContext d3dContext = (D3DContext)context;
-
-            for (int i = 0; i < 2; ++i)
+            for (int i = 0; i < m_Count; ++i)
             {
-                backBufferViews[i] = d3dContext.CreateRenderTargetView(backBuffers[i]);
+                ID3D12Resource* dx12Resource = null;
+                bool success = SUCCEEDED(m_NativeSwapChain->GetBuffer((uint)i, __uuidof<ID3D12Resource>(), (void**)&dx12Resource));
+                Debug.Assert(success);
+                m_Textures[i] = new D3DTexture(m_D3DDevice, dx12Resource);
             }
+        }
+
+        private void CreateDX12SwapChain(in RHISwapChainCreateInfo createInfo) 
+        {
+            D3DQueue d3dQueue = (D3DQueue)createInfo.presentQueue;
+            D3DInstance d3dInstance = m_D3DDevice.D3DGpu.D3DInstance;
+
+            DXGI_SWAP_CHAIN_DESC1 desc = new DXGI_SWAP_CHAIN_DESC1();
+            desc.BufferCount = (uint)createInfo.count;
+            desc.Width = (uint)createInfo.extent.x;
+            desc.Height = (uint)createInfo.extent.y;
+            desc.Format = /*D3DUtility.GetNativeFormat(createInfo.format)*/DXGI_FORMAT.DXGI_FORMAT_R8G8B8A8_UNORM;
+            desc.BufferUsage = DXGI.DXGI_USAGE_RENDER_TARGET_OUTPUT;
+            desc.SwapEffect = /*D3DUtility.GetNativeSwapEffect(createInfo.presentMode)*/ DXGI_SWAP_EFFECT.DXGI_SWAP_EFFECT_FLIP_DISCARD;
+            desc.SampleDesc.Count = 1;
+
+            IDXGISwapChain1* dx12SwapChain1;
+            bool success = SUCCEEDED(d3dInstance.DXGIFactory->CreateSwapChainForHwnd((IUnknown*)d3dQueue.NativeCommandQueue, new HWND(createInfo.window.ToPointer()), &desc, null, null, &dx12SwapChain1));
+            Debug.Assert(success);
+            m_NativeSwapChain = (IDXGISwapChain4*)dx12SwapChain1;
         }
 
         protected override void Release()
         {
-            nativeSwapChain->Release();
+            m_NativeSwapChain->Release();
 
-            for (int i = 0; i < 2; ++i)
+            for (int i = 0; i < m_Textures.Length; ++i)
             {
-                backBufferViews[i].Dispose();
+                m_Textures[i].Dispose();
             }
         }
     }
+#pragma warning restore CS8600, CS8602, CA1416, CS8602, CS8604
 }
