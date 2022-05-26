@@ -42,16 +42,11 @@ namespace Infinity.System
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void GraphicsFunc()
         {
-            bool isInit = true;
-
             while (!IsLoopExit)
             {
                 m_SemaphoreG2R.Wait();
                 ProcessGraphicsTasks();
-                if (isInit) {
-                    isInit = false;
-                    m_SceneRenderer.Init(); 
-                }
+                m_SceneRenderer.Init();
                 m_SceneRenderer.Render();
                 m_RenderContext.Submit();
                 m_SemaphoreR2G.Signal();

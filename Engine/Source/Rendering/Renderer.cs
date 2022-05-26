@@ -8,10 +8,12 @@ namespace Infinity.Rendering
 {
     public abstract class Renderer : Disposal
     {
+        protected bool m_InitState;
         protected RenderContext m_RenderContext;
 
         public Renderer(RenderContext renderContext)
         {
+            m_InitState = false;
             m_RenderContext = renderContext;
         }
 
@@ -49,7 +51,11 @@ namespace Infinity.Rendering
 
         public override void Init()
         {
+            if(m_InitState) { return; }
+
             m_RenderPipeline.Init(m_RenderContext);
+
+            m_InitState = true;
         }
 
         public override void Render()
