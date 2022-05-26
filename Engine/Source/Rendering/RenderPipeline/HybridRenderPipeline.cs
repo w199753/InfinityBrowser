@@ -19,7 +19,7 @@ namespace Infinity.Rendering
         {
             Console.WriteLine("Init RenderPipeline");
 
-            m_CommandPool = renderContext.CreateCommandPool(EQueueType.Graphics);
+            m_CommandPool = renderContext.CreateCommandPool(EContextType.Graphics);
             m_CommandBuffer = m_CommandPool.CreateCommandBuffer();
             m_ColorAttachments = new RHIGraphicsPassColorAttachment[1];
             {
@@ -65,7 +65,7 @@ namespace Infinity.Rendering
                 }
             }
 
-            renderContext.ExecuteCommandBuffer(m_CommandBuffer);
+            renderContext.ExecuteCommandBuffer(m_CommandBuffer, null);
         }
 
         public override void Release(RenderContext renderContext)

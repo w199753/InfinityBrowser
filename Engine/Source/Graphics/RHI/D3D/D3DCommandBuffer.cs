@@ -28,7 +28,8 @@ namespace Infinity.Graphics
 
         public D3DCommandBuffer(D3DDevice device, D3DCommandPool cmdPool)
         {
-            m_D3DCommandPool = cmdPool as D3DCommandPool;
+            m_QueueType = cmdPool.Type;
+            m_D3DCommandPool = cmdPool;
 
             ID3D12GraphicsCommandList5* commandList;
             bool success = SUCCEEDED(device.NativeDevice->CreateCommandList(0, D3DUtility.ConvertToNativeQueueType(m_D3DCommandPool.Type), m_D3DCommandPool.NativeCommandAllocator, null, __uuidof<ID3D12GraphicsCommandList5>(), (void**)&commandList));

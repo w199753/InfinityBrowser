@@ -5,6 +5,13 @@ using System.Runtime.CompilerServices;
 
 namespace Infinity.Rendering
 {
+    public enum EContextType
+    {
+        Compute = 1,
+        Graphics = 2,
+        MAX
+    }
+
     public sealed class RenderContext : Disposal
     {
         public ulong computeFrequency => 0;
@@ -116,13 +123,13 @@ namespace Infinity.Rendering
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public RHICommandPool CreateCommandPool(in EQueueType queueType)
+        public RHICommandPool CreateCommandPool(in EContextType contextType)
         {
-            return m_Queues[(int)queueType].CreateCommandPool();
+            return m_Queues[(int)contextType].CreateCommandPool();
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public RHICommandBuffer GetCommandPool(in EQueueType queueType)
+        public RHICommandBuffer GetCommandPool(in EContextType contextType)
         {
             throw new NotImplementedException();
         }
@@ -130,13 +137,7 @@ namespace Infinity.Rendering
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void ExecuteCommandBuffer(RHICommandBuffer cmdBuffer, RHIFence fence = null)
         {
-            m_Queues[(int)EQueueType.Graphics].Submit(cmdBuffer, fence);
-        }
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public void ExecuteCommandBufferAsync(RHICommandBuffer cmdBuffer, RHIFence fence = null)
-        {
-            m_Queues[(int)EQueueType.Compute].Submit(cmdBuffer, fence);
+            m_Queues[(int)cmdBuffer.QueueType].Submit(cmdBuffer, fence);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]

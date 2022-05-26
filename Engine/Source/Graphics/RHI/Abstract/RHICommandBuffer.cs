@@ -19,6 +19,11 @@ namespace Infinity.Graphics
 
     public abstract class RHICommandBuffer : Disposal
     {
+
+        public EQueueType QueueType => m_QueueType;
+
+        protected EQueueType m_QueueType;
+
         public abstract void Begin();
         public abstract RHIScopedCommandBufferRef BeginScoped();
         public abstract RHIBlitEncoder GetBlitEncoder();
