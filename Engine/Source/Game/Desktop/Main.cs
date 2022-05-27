@@ -172,7 +172,7 @@ namespace Infinity.Game
         static void Main(string[] args)
         {
             TestApplication App = new TestApplication(1280, 720, "InfinityExample");
-            App.Run();
+            App.Execute();
 
             /*Console.WriteLine("Fuck you");
             Console.ReadKey();*/

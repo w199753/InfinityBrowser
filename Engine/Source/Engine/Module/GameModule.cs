@@ -49,8 +49,8 @@ namespace Infinity
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void Update()
         {
-            m_TimeCounter.Start();
             m_SemaphoreR2G.Wait();
+            m_TimeCounter.Start();
             Timer.Tick(m_DeltaTime);
             m_GameTickFunc();
             m_SemaphoreG2R.Signal();

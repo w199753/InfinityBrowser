@@ -9,11 +9,11 @@ namespace Infinity.Threading
         public bool IsCompleted { get { return m_Completed; } }
         private AutoResetEvent m_SignalEvent;
 
-        public Semaphore(in bool initState = false, string name = null)
+        public Semaphore(in bool signald = false, string name = null)
         {
             this.name = name;
             this.m_Completed = false;
-            this.m_SignalEvent = new AutoResetEvent(initState);
+            this.m_SignalEvent = new AutoResetEvent(signald);
         }
 
         public void Signal()

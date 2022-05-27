@@ -41,7 +41,7 @@ namespace Infinity
 
         protected abstract void End();
 
-        public void Run()
+        public void Execute()
         {
             PlatformRun();
             PlatformExit();

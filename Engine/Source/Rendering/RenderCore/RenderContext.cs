@@ -26,6 +26,7 @@ namespace Infinity.Rendering
         private RHIFence m_FrameFence;
         private RHISwapChain m_SwapChain;
         private RHITextureView[] m_SwapChainViews;
+        private RHICommandPool[] m_CommandPools;
 
         public RenderContext(in uint width, in uint height, in IntPtr window)
         {
@@ -78,6 +79,12 @@ namespace Infinity.Rendering
             m_SwapChainViews = new RHITextureView[2];
             m_SwapChainViews[0] = m_SwapChain.GetTexture(0).CreateTextureView(viewCreateInfo);
             m_SwapChainViews[1] = m_SwapChain.GetTexture(1).CreateTextureView(viewCreateInfo);
+
+            //Create CommandPool
+            m_CommandPools = new RHICommandPool[3];
+            m_CommandPools[0] = m_Queues[(int)EQueueType.Blit].CreateCommandPool();
+            m_CommandPools[1] = m_Queues[(int)EQueueType.Compute].CreateCommandPool();
+            m_CommandPools[2] = m_Queues[(int)EQueueType.Graphics].CreateCommandPool();
         }
 
         public void Cull()
@@ -115,7 +122,15 @@ namespace Infinity.Rendering
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public void Submit()
+        public void BeginFrame()
+        {
+            m_CommandPools[0].Reset();
+            m_CommandPools[1].Reset();
+            m_CommandPools[2].Reset();
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public void EndFrame()
         {
             m_Queues[(int)EQueueType.Graphics].Submit(null, m_FrameFence);
             m_SwapChain.Present();
@@ -123,13 +138,13 @@ namespace Infinity.Rendering
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public RHICommandPool CreateCommandPool(in EContextType contextType)
+        public RHICommandBuffer CreateCommandBuffer(in EContextType contextType)
         {
-            return m_Queues[(int)contextType].CreateCommandPool();
+            return m_CommandPools[(int)contextType].CreateCommandBuffer();
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public RHICommandBuffer GetCommandPool(in EContextType contextType)
+        public RHICommandBuffer GetCommandBuffer(in EContextType contextType)
         {
             throw new NotImplementedException();
         }
@@ -314,6 +329,9 @@ namespace Infinity.Rendering
             m_SwapChainViews[1].Dispose();
             m_SwapChain.Dispose();
             m_FrameFence.Dispose();
+            m_CommandPools[0].Dispose();
+            m_CommandPools[1].Dispose();
+            m_CommandPools[2].Dispose();
             m_Queues[0].Dispose();
             m_Queues[1].Dispose();
             m_Queues[2].Dispose();

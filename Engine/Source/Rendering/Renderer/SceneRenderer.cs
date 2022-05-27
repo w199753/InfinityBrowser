@@ -6,38 +6,6 @@ using System.Threading.Tasks;
 
 namespace Infinity.Rendering
 {
-    public abstract class Renderer : Disposal
-    {
-        protected RenderContext m_RenderContext;
-
-        public Renderer(RenderContext renderContext)
-        {
-            m_RenderContext = renderContext;
-        }
-
-        public abstract void Init();
-
-        public abstract void Render();
-    }
-
-    public class GUIRenderer : Renderer
-    {
-        public GUIRenderer(RenderContext renderContext) : base(renderContext)
-        {
-
-        }
-
-        public override void Init()
-        {
-            throw new NotImplementedException();
-        }
-
-        public override void Render()
-        {
-            throw new NotImplementedException();
-        }
-    }
-
     public class SceneRenderer : Renderer
     {
         private HybridRenderPipeline m_RenderPipeline;

@@ -23,7 +23,7 @@ namespace Infinity
             m_SemaphoreR2G = semaphoreR2G;
             m_RenderThread = new Thread(GraphicsFunc);
             m_RenderThread.Name = "RenderThread";
-            m_RenderContext = new RenderContext((uint)window.width, (uint)window.height, window.windowPtr);
+            m_RenderContext = new RenderContext((uint)window.Width, (uint)window.Height, window.WindowPtr);
             m_SceneRenderer = new SceneRenderer(m_RenderContext);
         }
 
@@ -43,16 +43,19 @@ namespace Infinity
         public void GraphicsFunc()
         {
             m_SemaphoreG2R.Wait();
+            m_RenderContext.BeginFrame();
             ProcessGraphicsTasks();
             m_SceneRenderer.Init();
+            m_RenderContext.EndFrame();
             m_SemaphoreG2R.Signal();
 
             while (!m_LoopExit)
             {
                 m_SemaphoreG2R.Wait();
+                m_RenderContext.BeginFrame();
                 ProcessGraphicsTasks();
                 m_SceneRenderer.Render();
-                m_RenderContext.Submit();
+                m_RenderContext.EndFrame();
                 m_SemaphoreR2G.Signal();
             }
         }
