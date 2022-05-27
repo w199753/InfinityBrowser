@@ -16,8 +16,8 @@ namespace Infinity.Rendering
     {
         public ulong computeFrequency => 0;
         public ulong graphicsFrequency => 0;
-        public RHITexture BackBuffer => m_SwapChain.GetTexture(m_SwapChain.GetBackBufferIndex());
-        public RHITextureView BackBufferView => m_SwapChainViews[m_SwapChain.GetBackBufferIndex()];
+        public RHITexture BackBuffer => m_SwapChain.GetTexture(m_SwapChain.BackBufferIndex);
+        public RHITextureView BackBufferView => m_SwapChainViews[m_SwapChain.BackBufferIndex];
 
         private RHIInstance m_Instance;
         private RHIGPU m_Gpu;

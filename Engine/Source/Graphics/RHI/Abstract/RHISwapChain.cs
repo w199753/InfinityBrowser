@@ -15,8 +15,12 @@ namespace Infinity.Graphics
 
     public abstract class RHISwapChain : Disposal
     {
+        public abstract int BackBufferIndex
+        {
+            get;
+        }
+
         public abstract RHITexture GetTexture(in int index);
-        public abstract int GetBackBufferIndex();
         public abstract void Present();
     }
 }

@@ -8,6 +8,14 @@ namespace Infinity.Graphics
 #pragma warning disable CS8600, CS8602, CA1416, CS8602, CS8604
     internal unsafe class D3DSwapChain : RHISwapChain
     {
+        public override int BackBufferIndex
+        {
+            get
+            {
+                return (int)m_NativeSwapChain->GetCurrentBackBufferIndex();
+            }
+        }
+
         private int m_Count;
         private D3DDevice m_D3DDevice;
         private EPresentMode m_PresentMode;
@@ -28,11 +36,6 @@ namespace Infinity.Graphics
         public override RHITexture GetTexture(in int index)
         {
             return m_Textures[index];
-        }
-
-        public override int GetBackBufferIndex()
-        {
-            return (int)m_NativeSwapChain->GetCurrentBackBufferIndex();
         }
 
         public override void Present()
