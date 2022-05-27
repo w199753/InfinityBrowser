@@ -156,7 +156,7 @@ namespace Infinity.Container
                 m_Capacity *= 2;
                 T** newArray = (T**)MemoryUtility.Malloc(sizeof(T*), m_Capacity);
                 //ReadOnlySpan<T> span = new ReadOnlySpan<T>(m_Array, length);
-                //span.CopyTo(new Span<T>((void*)newArray, length));
+                //span.CopyTo(new Span<T>(newArray, length));
                 MemoryUtility.Free(m_Array);
                 m_Array = newArray;
             }
@@ -230,7 +230,7 @@ namespace Infinity.Container
             {
                 T** newArray = (T**)MemoryUtility.Malloc(sizeof(T*), newLength);
                 //ReadOnlySpan<T> span = new ReadOnlySpan<T>(m_Array, newLength);
-                //span.CopyTo(new Span<T>((void*)newArray, newLength));
+                //span.CopyTo(new Span<T>(newArray, newLength));
                 MemoryUtility.Free(m_Array);
                 m_Array = newArray;
             } else {
@@ -321,7 +321,7 @@ namespace Infinity.Container
                 m_Capacity *= 2;
                 T* newArray = (T*)MemoryUtility.Malloc(sizeof(T), m_Capacity);
                 ReadOnlySpan<T> span = new ReadOnlySpan<T>(m_Array, length);
-                span.CopyTo(new Span<T>((void*)newArray, length));
+                span.CopyTo(new Span<T>(newArray, length));
                 MemoryUtility.Free(m_Array);
                 m_Array = newArray;
             }
@@ -361,8 +361,6 @@ namespace Infinity.Container
 
         public void RemoveAtIndex(in int index)
         {
-            //int lastIndex = length - 1;
-
             Span<T> copySpan = new Span<T>(m_Array, length);
             Span<T> dscSpan = copySpan.Slice(index, length - index);
             Span<T> srcSpan = copySpan.Slice(index + 1, length - (index + 1));
@@ -401,7 +399,7 @@ namespace Infinity.Container
             {
                 T* newArray = (T*)MemoryUtility.Malloc(sizeof(T), newLength);
                 ReadOnlySpan<T> span = new ReadOnlySpan<T>(m_Array, newLength);
-                span.CopyTo(new Span<T>((void*)newArray, newLength));
+                span.CopyTo(new Span<T>(newArray, newLength));
                 MemoryUtility.Free(m_Array);
                 m_Array = newArray;
             } else {
