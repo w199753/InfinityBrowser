@@ -86,24 +86,24 @@ namespace Infinity.Game
     }
 
     [Serializable]
-    public class TestActor : Actor
+    public class TestEntity : Entity
     {
         //FTaskHandle m_AsynTaskRef;
         private TestComponent m_Component;
 
-        public TestActor() : base()
+        public TestEntity() : base()
         {
             m_Component = new TestComponent();
             //AddComponent(m_Component);
         }
 
-        public TestActor(string name) : base(name)
+        public TestEntity(string name) : base(name)
         {
             m_Component = new TestComponent();
             //AddComponent(m_Component);
         }
 
-        public TestActor(string name, Actor parent) : base(name, parent)
+        public TestEntity(string name, Entity parent) : base(name, parent)
         {
             m_Component = new TestComponent();
             //AddComponent(m_Component);
@@ -143,26 +143,26 @@ namespace Infinity.Game
 
     public class TestApplication : Application
     {
-        private TestActor m_Actor;
+        private TestEntity m_Entity;
 
         public TestApplication(int width, int height, string name) : base(width, height, name)
         {
-            m_Actor = new TestActor("TestActor");
+            m_Entity = new TestEntity("TestEntity");
         }
 
         protected override void Play()
         {
-            m_Actor.OnEnable();
+            m_Entity.OnEnable();
         }
 
         protected override void Tick()
         {
-            m_Actor.OnUpdate(Timer.DeltaTime);
+            m_Entity.OnUpdate(Timer.DeltaTime);
         }
 
         protected override void End()
         {
-            m_Actor.OnDisable();
+            m_Entity.OnDisable();
         }
     }
 

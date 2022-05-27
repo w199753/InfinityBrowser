@@ -5,7 +5,7 @@ namespace Infinity
     [Serializable]
     public class Component : Object
     {
-        public Actor owner;
+        public Entity owner;
         internal bool IsConstruct;
 
         public Component()

@@ -8,37 +8,37 @@ using System.Runtime.CompilerServices;
 namespace Infinity
 {
     [Serializable]
-    public class Actor : Object, IComparable<Actor>, IEquatable<Actor>
+    public class Entity : Object, IComparable<Entity>, IEquatable<Entity>
     {
-        public Actor parent;
+        public Entity parent;
         public FTransform transform;
 
         private FTransform m_LastTransform;
         private CoroutineDispatcher m_CoroutineDispatcher;
 
-        internal TArray<Actor> childs;
+        internal TArray<Entity> childs;
         internal TArray<Component> components;
 
-        public Actor()
+        public Entity()
         {
             this.parent = null;
-            this.childs = new TArray<Actor>(8);
+            this.childs = new TArray<Entity>(8);
             this.components = new TArray<Component>(8);
             this.m_CoroutineDispatcher = new CoroutineDispatcher();
         }
 
-        public Actor(string name) : base(name)
+        public Entity(string name) : base(name)
         {
             this.parent = null;
-            this.childs = new TArray<Actor>(8);
+            this.childs = new TArray<Entity>(8);
             this.components = new TArray<Component>(8);
             this.m_CoroutineDispatcher = new CoroutineDispatcher();
         }
 
-        public Actor(string name, Actor parent) : base(name)
+        public Entity(string name, Entity parent) : base(name)
         {
             this.parent = parent;
-            this.childs = new TArray<Actor>(8);
+            this.childs = new TArray<Entity>(8);
             this.components = new TArray<Component>(8);
             this.m_CoroutineDispatcher = new CoroutineDispatcher();
         }
@@ -55,15 +55,15 @@ namespace Infinity
 
         public override bool Equals(object target)
         {
-            return Equals((Actor)target);
+            return Equals((Entity)target);
         }
 
-        public bool Equals(Actor target)
+        public bool Equals(Entity target)
         {
             return name.Equals(target.name) && parent.Equals(target.parent) && childs.Equals(target.childs) && components.Equals(target.components) && transform.Equals(target.transform);
         }
 
-        public int CompareTo(Actor target)
+        public int CompareTo(Entity target)
         {
             return 0;
         }
@@ -115,7 +115,7 @@ namespace Infinity
             }
         }
 
-        public void SetParent(Actor parent)
+        public void SetParent(Entity parent)
         {
             this.parent = parent;
         }
@@ -150,13 +150,13 @@ namespace Infinity
             }
         }
 
-        public void AddChildActor<T>(T child) where T : Actor
+        public void AddChildActor<T>(T child) where T : Entity
         {
             child.parent = this;
             childs.Add(child);
         }
 
-        public T FindChildActor<T>() where T : Actor
+        public T FindChildActor<T>() where T : Entity
         {
             for (int i = 0; i < childs.length; ++i)
             {
@@ -169,7 +169,7 @@ namespace Infinity
             return null;
         }
 
-        public void RemoveChildActor<T>(T child) where T : Actor
+        public void RemoveChildActor<T>(T child) where T : Entity
         {
             for (int i = 0; i < childs.length; ++i)
             {
