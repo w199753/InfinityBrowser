@@ -27,18 +27,18 @@ namespace Infinity.Threading
         // <param name="delay">How many seconds to delay before starting.</param>
         // <param name="routine">The routine to run.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public FCoroutineRef Start(in float delay, IEnumerator routine)
+        public CoroutineRef Start(in float delay, IEnumerator routine)
         {
             m_Delays.Add(delay);
             m_Dunning.Add(routine);
-            return new FCoroutineRef(this, routine);
+            return new CoroutineRef(this, routine);
         }
 
         // Start a coroutine.
         // <returns>A handle to the new coroutine.</returns>
         // <param name="routine">The routine to run.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public FCoroutineRef Start(IEnumerator routine)
+        public CoroutineRef Start(IEnumerator routine)
         {
             return Start(0, routine);
         }
@@ -61,7 +61,7 @@ namespace Infinity.Threading
         // <returns>True if the routine was actually stopped.</returns>
         // <param name="routine">The routine to stop.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public bool Stop(in FCoroutineRef routine)
+        public bool Stop(in CoroutineRef routine)
         {
             return routine.Stop();
         }
@@ -87,7 +87,7 @@ namespace Infinity.Threading
         // <returns>True if the routine is running.</returns>
         // <param name="routine">The routine to check.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public bool IsRunning(in FCoroutineRef routine)
+        public bool IsRunning(in CoroutineRef routine)
         {
             return routine.IsRunning;
         }
@@ -137,7 +137,7 @@ namespace Infinity.Threading
     }
 
     // A handle to a (potentially running) coroutine.
-    public struct FCoroutineRef
+    public struct CoroutineRef
     {
         // True if the enumerator is currently running.
         public bool IsRunning
@@ -152,7 +152,7 @@ namespace Infinity.Threading
         // Construct a coroutine. Never call this manually, only use return values from Coroutines.Run().
         // <param name="runner">The routine's runner.</param>
         // <param name="enumerator">The routine's enumerator.</param>
-        public FCoroutineRef(CoroutineDispatcher dispatcher, IEnumerator enumerator)
+        public CoroutineRef(CoroutineDispatcher dispatcher, IEnumerator enumerator)
         {
             this.dispatcher = dispatcher;
             this.enumerator = enumerator;

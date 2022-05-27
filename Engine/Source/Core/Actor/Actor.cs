@@ -180,12 +180,12 @@ namespace Infinity
             }
         }
 
-        public FCoroutineRef StartCoroutine(in float delay, IEnumerator routine)
+        public CoroutineRef StartCoroutine(in float delay, IEnumerator routine)
         {
             return m_CoroutineDispatcher.Start(delay, routine);
         }
 
-        public FCoroutineRef StartCoroutine(IEnumerator routine)
+        public CoroutineRef StartCoroutine(IEnumerator routine)
         {
             return m_CoroutineDispatcher.Start(routine);
         }
@@ -195,7 +195,7 @@ namespace Infinity
             return m_CoroutineDispatcher.Stop(routine);
         }
 
-        public bool StopCoroutine(in FCoroutineRef routine)
+        public bool StopCoroutine(in CoroutineRef routine)
         {
             return m_CoroutineDispatcher.Stop(routine);
         }
