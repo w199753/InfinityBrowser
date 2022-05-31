@@ -2,6 +2,8 @@
 using Infinity.Graphics;
 using Infinity.Rendering;
 using Infinity.Analytics;
+using Infinity.Threading;
+using System.Collections;
 
 namespace Infinity.Game
 {
@@ -109,10 +111,20 @@ namespace Infinity.Game
             //AddComponent(m_Component);
         }
 
+        IEnumerator TestWaitSeconds()
+        {
+            Console.WriteLine("Start WaitSeconds");
+            yield return new WaitForSeconds(5);
+            Console.WriteLine("After 5 Seconds");
+            yield return new WaitForSeconds(5);
+            Console.WriteLine("After 10 Seconds");
+        }
+
         public override void OnEnable()
         {
             base.OnEnable();
             AddComponent(m_Component);
+            StartCoroutine(TestWaitSeconds());
             Console.WriteLine("Enable Actor");
         }
 

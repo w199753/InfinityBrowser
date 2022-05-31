@@ -1,98 +1,122 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 
 namespace Infinity.Threading
 {
-    public class CoroutineDispatcher
+    public interface IYieldInstruction
+    {
+        bool Update(in float deltaTime);
+    }
+
+    public class WaitForFrames : IYieldInstruction
+    {
+        float m_Frames;
+
+        public WaitForFrames(in float frames)
+        {
+            m_Frames = frames;
+        }
+
+        public bool Update(in float deltaTime)
+        {
+            m_Frames -= 1;
+            return m_Frames <= 0;
+        }
+    }
+
+    public class WaitForSeconds : IYieldInstruction
+    {
+        float m_Seconds;
+
+        public WaitForSeconds(in float seconds)
+        {
+            m_Seconds = seconds;
+        }
+
+        public bool Update(in float deltaTime)
+        {
+            m_Seconds -= deltaTime;
+            return m_Seconds <= 0;
+        }
+    }
+
+    public class CoroutineProcessor
     {
         public int Count
         {
-            get { return m_Dunning.Count; }
+            get { return m_Coroutines.Count; }
         }
 
-        private List<float> m_Delays;
-        private List<IEnumerator> m_Dunning;
+        private LinkedList<IEnumerator> m_Coroutines;
 
-        public CoroutineDispatcher()
+        public CoroutineProcessor()
         {
-            m_Delays = new List<float>(8);
-            m_Dunning = new List<IEnumerator>(8);
+            m_Coroutines = new LinkedList<IEnumerator>();
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public CoroutineRef Start(IEnumerator routine, in float delay = 0)
+        public CoroutineRef Start(IEnumerator routine)
         {
-            m_Delays.Add(delay);
-            m_Dunning.Add(routine);
+            m_Coroutines.AddLast(routine);
             return new CoroutineRef(this, routine);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public bool Stop(IEnumerator routine)
+        public void Stop(IEnumerator routine)
         {
-            int i = m_Dunning.IndexOf(routine);
-            if (i < 0)
+            try
             {
-                return false;
+                m_Coroutines.Remove(routine);
             }
-
-            m_Delays[i] = 0f;
-            m_Dunning[i] = null;
-            return true;
+            catch (Exception exception) 
+            { 
+                Console.WriteLine(exception.ToString()); 
+            }
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void StopAll()
         {
-            m_Delays.Clear();
-            m_Dunning.Clear();
+            m_Coroutines.Clear();
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public bool IsRunning(IEnumerator routine)
         {
-            return m_Dunning.Contains(routine);
+            return m_Coroutines.Contains(routine);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public bool OnUpdate(in float deltaTime)
+        public void OnUpdate(in float deltaTime)
         {
-            if (m_Dunning.Count > 0)
+            var routine = m_Coroutines.First;
+            while (routine != null)
             {
-                for (int i = 0; i < m_Dunning.Count; i++)
+                IEnumerator ie = routine.Value;
+                bool ret = true;
+                if (ie.Current is IYieldInstruction)
                 {
-                    if (m_Delays[i] > 0f)
+                    IYieldInstruction wait = (IYieldInstruction)ie.Current;
+
+                    if (wait.Update(deltaTime))
                     {
-                        m_Delays[i] -= deltaTime;
-                    }
-                    else if (m_Dunning[i] == null || !MoveNext(m_Dunning[i], i))
-                    {
-                        m_Dunning.RemoveAt(i);
-                        m_Delays.RemoveAt(--i);
+                        ret = ie.MoveNext();
                     }
                 }
-                return true;
+                else
+                {
+                    ret = ie.MoveNext();
+                }
+
+                if (!ret)
+                {
+                    m_Coroutines.Remove(routine);
+                }
+
+                routine = routine.Next;
             }
-            return false;
-        }
-
-        bool MoveNext(IEnumerator routine, in int index)
-        {
-            if (routine.Current is IEnumerator)
-            {
-                if (MoveNext((IEnumerator)routine.Current, index))
-                    return true;
-
-                m_Delays[index] = 0f;
-            }
-
-            bool result = routine.MoveNext();
-
-            if (routine.Current is float)
-                m_Delays[index] = (float)routine.Current;
-
-            return result;
         }
     }
 
@@ -112,7 +136,7 @@ namespace Infinity.Threading
                 return m_Enumerator; 
             }
         }
-        public CoroutineDispatcher dispatcher
+        public CoroutineProcessor dispatcher
         {
             get 
             { 
@@ -121,18 +145,12 @@ namespace Infinity.Threading
         }
 
         private IEnumerator m_Enumerator;
-        private CoroutineDispatcher m_Dispatcher;
+        private CoroutineProcessor m_Dispatcher;
 
-        public CoroutineRef(CoroutineDispatcher dispatcher, IEnumerator enumerator)
+        public CoroutineRef(CoroutineProcessor dispatcher, IEnumerator enumerator)
         {
             m_Dispatcher = dispatcher;
             m_Enumerator = enumerator;
-        }
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal bool Stop()
-        {
-            return IsRunning && m_Dispatcher.Stop(m_Enumerator);
         }
 
         public IEnumerator Wait()

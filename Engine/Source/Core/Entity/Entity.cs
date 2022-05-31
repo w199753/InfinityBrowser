@@ -14,7 +14,7 @@ namespace Infinity
         public FTransform transform;
 
         private FTransform m_LastTransform;
-        private CoroutineDispatcher m_CoroutineDispatcher;
+        private CoroutineProcessor m_CoroutineProcessor;
 
         internal TArray<Entity> childs;
         internal TArray<Component> components;
@@ -24,7 +24,7 @@ namespace Infinity
             this.parent = null;
             this.childs = new TArray<Entity>(8);
             this.components = new TArray<Component>(8);
-            this.m_CoroutineDispatcher = new CoroutineDispatcher();
+            this.m_CoroutineProcessor = new CoroutineProcessor();
         }
 
         public Entity(string name) : base(name)
@@ -32,7 +32,7 @@ namespace Infinity
             this.parent = null;
             this.childs = new TArray<Entity>(8);
             this.components = new TArray<Component>(8);
-            this.m_CoroutineDispatcher = new CoroutineDispatcher();
+            this.m_CoroutineProcessor = new CoroutineProcessor();
         }
 
         public Entity(string name, Entity parent) : base(name)
@@ -40,7 +40,7 @@ namespace Infinity
             this.parent = parent;
             this.childs = new TArray<Entity>(8);
             this.components = new TArray<Component>(8);
-            this.m_CoroutineDispatcher = new CoroutineDispatcher();
+            this.m_CoroutineProcessor = new CoroutineProcessor();
         }
 
         public override string ToString()
@@ -104,7 +104,7 @@ namespace Infinity
                 components[i].OnUpdate(deltaTime);
             }
 
-            m_CoroutineDispatcher.OnUpdate(deltaTime);
+            m_CoroutineProcessor.OnUpdate(deltaTime);
         }
 
         public virtual void OnDisable() 
@@ -180,19 +180,19 @@ namespace Infinity
             }
         }
 
-        public CoroutineRef StartCoroutine(IEnumerator routine, in float delay = 0)
+        public CoroutineRef StartCoroutine(IEnumerator routine)
         {
-            return m_CoroutineDispatcher.Start(routine, delay);
+            return m_CoroutineProcessor.Start(routine);
         }
 
-        public bool StopCoroutine(in CoroutineRef routine)
+        public void StopCoroutine(in CoroutineRef routine)
         {
-            return m_CoroutineDispatcher.Stop(routine.enumerator);
+            m_CoroutineProcessor.Stop(routine.enumerator);
         }
 
         public void StopAllCoroutine()
         {
-            m_CoroutineDispatcher.StopAll();
+            m_CoroutineProcessor.StopAll();
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
