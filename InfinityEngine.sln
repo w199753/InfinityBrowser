@@ -16,50 +16,50 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Example", "Project\Source\E
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ThirdParty", "ThirdParty", "{6424241A-886C-423F-B143-186FE7AEA81C}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Antlr4", "Engine\Source\ThirdParty\Antlr4\Antlr4.csproj", "{06994188-1C74-434D-B7E2-5FCBDEA9574B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Antlr4", "Source\ThirdParty\Antlr4\Antlr4.csproj", "{06994188-1C74-434D-B7E2-5FCBDEA9574B}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Shader", "Shader", "{8AFD4933-9D61-4994-8BAD-A7C7484D5ED8}"
 	ProjectSection(SolutionItems) = preProject
-		Engine\Shader\InfinityLit.shader = Engine\Shader\InfinityLit.shader
+		Shader\InfinityLit.shader = Shader\InfinityLit.shader
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Source", "Source", "{6C469758-77F5-4360-A3A4-58D11F9C9F21}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Infinity.Asset", "Engine\Source\Asset\Infinity.Asset.csproj", "{968B37AC-6CC6-41A6-8CB0-7F8E9E736DC7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Infinity.Asset", "Source\Asset\Infinity.Asset.csproj", "{968B37AC-6CC6-41A6-8CB0-7F8E9E736DC7}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Infinity.Core", "Engine\Source\Core\Infinity.Core.csproj", "{08E5DDD1-CC03-44FA-BD97-07841CB90467}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Infinity.Core", "Source\Core\Infinity.Core.csproj", "{08E5DDD1-CC03-44FA-BD97-07841CB90467}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Infinity.Editor", "Engine\Source\Editor\Infinity.Editor.csproj", "{D7A1D177-80E6-4889-8B70-E13A15606FA5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Infinity.Editor", "Source\Editor\Infinity.Editor.csproj", "{D7A1D177-80E6-4889-8B70-E13A15606FA5}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Infinity.Physics", "Engine\Source\Physics\Infinity.Physics.csproj", "{DF75FF93-A66C-4183-9868-BB9D88EEA318}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Infinity.Physics", "Source\Physics\Infinity.Physics.csproj", "{DF75FF93-A66C-4183-9868-BB9D88EEA318}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Infinity.Rendering", "Engine\Source\Rendering\Infinity.Rendering.csproj", "{8415ABE0-1294-4EA5-B457-70FEC52A1A36}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Infinity.Rendering", "Source\Rendering\Infinity.Rendering.csproj", "{8415ABE0-1294-4EA5-B457-70FEC52A1A36}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Infinity.GUI", "Engine\Source\GUI\Infinity.GUI.csproj", "{2A526F66-A3DE-4B19-8CEF-7F1659544E4E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Infinity.GUI", "Source\GUI\Infinity.GUI.csproj", "{2A526F66-A3DE-4B19-8CEF-7F1659544E4E}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Infinity.Audio", "Engine\Source\Audio\Infinity.Audio.csproj", "{B38377E7-0BC3-4EE2-A010-3D9489932835}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Infinity.Audio", "Source\Audio\Infinity.Audio.csproj", "{B38377E7-0BC3-4EE2-A010-3D9489932835}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Infinity.Windowing", "Engine\Source\Window\Infinity.Windowing.csproj", "{E4E54E76-B2E0-4930-B3D1-87E892935C1D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Infinity.Windowing", "Source\Window\Infinity.Windowing.csproj", "{E4E54E76-B2E0-4930-B3D1-87E892935C1D}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Apple", "Apple", "{25D79109-0900-4EB8-A302-974F67900965}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Apple.Metal", "Engine\Source\ThirdParty\Apple\Metal\Apple.Metal.csproj", "{72B210C6-3BB9-46D3-B496-6973205F4FA7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Apple.Metal", "Source\ThirdParty\Apple\Metal\Apple.Metal.csproj", "{72B210C6-3BB9-46D3-B496-6973205F4FA7}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Infinity.Engine", "Engine\Source\Engine\Infinity.Engine.csproj", "{83128C42-61A9-4313-BEFA-CECEDC47F147}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Infinity.Engine", "Source\Engine\Infinity.Engine.csproj", "{83128C42-61A9-4313-BEFA-CECEDC47F147}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Game", "Game", "{A8C427E6-4B96-4B42-AD38-CD0DFF63755E}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DesktopGame", "Engine\Source\Game\Desktop\DesktopGame.csproj", "{1EE6ECE0-F34D-464E-AD3C-A12B30A134F5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DesktopGame", "Source\Game\Desktop\DesktopGame.csproj", "{1EE6ECE0-F34D-464E-AD3C-A12B30A134F5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AndroidGame", "Engine\Source\Game\Android\AndroidGame.csproj", "{09C4E70A-3425-405B-8929-2BA800677229}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AndroidGame", "Source\Game\Android\AndroidGame.csproj", "{09C4E70A-3425-405B-8929-2BA800677229}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "iOSGame", "Engine\Source\Game\iOS\iOSGame.csproj", "{ECE7B369-7A6A-4B91-B700-9DB5DA74D197}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "iOSGame", "Source\Game\iOS\iOSGame.csproj", "{ECE7B369-7A6A-4B91-B700-9DB5DA74D197}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Graphics", "Graphics", "{5E09497A-A848-4CEE-B6DA-D88C418FDDD0}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Infinity.Shaderlab", "Engine\Source\Graphics\ShaderLab\Infinity.Shaderlab.csproj", "{0CD7D801-4C6C-449D-959F-5C6DEB1CD734}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Infinity.Shaderlab", "Source\Graphics\ShaderLab\Infinity.Shaderlab.csproj", "{0CD7D801-4C6C-449D-959F-5C6DEB1CD734}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Infinity.RHI", "Engine\Source\Graphics\RHI\Infinity.RHI.csproj", "{2AA815F9-27F7-43BA-9A31-7F2C089893D7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Infinity.RHI", "Source\Graphics\RHI\Infinity.RHI.csproj", "{2AA815F9-27F7-43BA-9A31-7F2C089893D7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
