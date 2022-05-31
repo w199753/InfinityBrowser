@@ -5,19 +5,43 @@ namespace Infinity
     [Serializable]
     public class Component : Object
     {
-        public Entity owner;
-        internal bool IsConstruct;
+        internal Entity Owner
+        { 
+            get 
+            {
+                return m_Owner;
+            }
+            set 
+            {
+                m_Owner = value;
+            }
+        }
+
+        internal bool IsConstruct
+        {
+            get
+            {
+                return m_IsConstruct;
+            }
+            set
+            {
+                m_IsConstruct = value;
+            }
+        }
+
+        private Entity m_Owner;
+        private bool m_IsConstruct;
 
         public Component()
         {
-            owner = null;
-            IsConstruct = true;
+            m_Owner = null;
+            m_IsConstruct = true;
         }
 
         public Component(string name) : base(name)
         {
-            owner = null;
-            IsConstruct = true;
+            m_Owner = null;
+            m_IsConstruct = true;
         }
 
         public virtual void OnEnable() { }

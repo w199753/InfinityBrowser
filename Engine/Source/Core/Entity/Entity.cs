@@ -10,59 +10,62 @@ namespace Infinity
     [Serializable]
     public class Entity : Object, IComparable<Entity>, IEquatable<Entity>
     {
-        public Entity parent;
-        public FTransform transform;
-
-        private FTransform m_LastTransform;
+        private Entity m_Parent;
+        private int m_TransformHash;
+        private FTransform m_Transform;
+        private TArray<Entity> m_Childs;
+        private TArray<Component> m_Components;
         private CoroutineProcessor m_CoroutineProcessor;
-
-        internal TArray<Entity> childs;
-        internal TArray<Component> components;
 
         public Entity()
         {
-            this.parent = null;
-            this.childs = new TArray<Entity>(8);
-            this.components = new TArray<Component>(8);
-            this.m_CoroutineProcessor = new CoroutineProcessor();
+            m_Parent = null;
+            m_Childs = new TArray<Entity>(8);
+            m_Components = new TArray<Component>(8);
+            m_CoroutineProcessor = new CoroutineProcessor();
         }
 
         public Entity(string name) : base(name)
         {
-            this.parent = null;
-            this.childs = new TArray<Entity>(8);
-            this.components = new TArray<Component>(8);
-            this.m_CoroutineProcessor = new CoroutineProcessor();
+            m_Parent = null;
+            m_Childs = new TArray<Entity>(8);
+            m_Components = new TArray<Component>(8);
+            m_CoroutineProcessor = new CoroutineProcessor();
         }
 
         public Entity(string name, Entity parent) : base(name)
         {
-            this.parent = parent;
-            this.childs = new TArray<Entity>(8);
-            this.components = new TArray<Component>(8);
-            this.m_CoroutineProcessor = new CoroutineProcessor();
+            m_Parent = parent;
+            m_Childs = new TArray<Entity>(8);
+            m_Components = new TArray<Component>(8);
+            m_CoroutineProcessor = new CoroutineProcessor();
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public override string ToString()
         {
             return name;
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public override int GetHashCode()
         {
             return base.GetHashCode();
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public override bool Equals(object target)
         {
             return Equals((Entity)target);
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public bool Equals(Entity target)
         {
-            return name.Equals(target.name) && parent.Equals(target.parent) && childs.Equals(target.childs) && components.Equals(target.components) && transform.Equals(target.transform);
+            return name.Equals(target.name) && m_Parent.Equals(target.m_Parent) && m_Childs.Equals(target.m_Childs) && m_Components.Equals(target.m_Components) && m_Transform.Equals(target.m_Transform);
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public int CompareTo(Entity target)
         {
             return 0;
@@ -70,38 +73,39 @@ namespace Infinity
         
         public virtual void OnEnable()
         {
-            for (int i = 0; i < components.length; ++i)
+            for (int i = 0; i < m_Components.length; ++i)
             {
-                components[i].OnEnable();
-                components[i].IsConstruct = false;
+                m_Components[i].OnEnable();
+                m_Components[i].IsConstruct = false;
             }
         }
 
         public virtual void OnTransform()
         {
-            for (int i = 0; i < components.length; ++i)
+            for (int i = 0; i < m_Components.length; ++i)
             {
-                components[i].OnTransform();
+                m_Components[i].OnTransform();
             }
         }
 
         public virtual void OnUpdate(in float deltaTime)
         {
-            if (!transform.Equals(m_LastTransform)) 
+            int transformHash = m_Transform.GetHashCode();
+            if (!transformHash.Equals(m_TransformHash)) 
             {
                 OnTransform();
-                m_LastTransform = transform;
+                m_TransformHash = transformHash;
             }
 
-            for (int i = 0; i < components.length; ++i)
+            for (int i = 0; i < m_Components.length; ++i)
             {
-                if (components[i].IsConstruct)
+                if (m_Components[i].IsConstruct)
                 {
-                    components[i].OnEnable();
-                    components[i].IsConstruct = false;
+                    m_Components[i].OnEnable();
+                    m_Components[i].IsConstruct = false;
                 }
 
-                components[i].OnUpdate(deltaTime);
+                m_Components[i].OnUpdate(deltaTime);
             }
 
             m_CoroutineProcessor.OnUpdate(deltaTime);
@@ -109,30 +113,30 @@ namespace Infinity
 
         public virtual void OnDisable() 
         {
-            for (int i = 0; i < components.length; ++i)
+            for (int i = 0; i < m_Components.length; ++i)
             {
-                components[i].OnDisable();
+                m_Components[i].OnDisable();
             }
         }
 
         public void SetParent(Entity parent)
         {
-            this.parent = parent;
+            this.m_Parent = parent;
         }
 
         public void AddComponent<T>(T component) where T : Component
         {
-            component.owner = this;
-            components.Add(component);
+            component.Owner = this;
+            m_Components.Add(component);
         }
 
         public T FindComponent<T>() where T : Component
         {
-            for (int i = 0; i < components.length; ++i)
+            for (int i = 0; i < m_Components.length; ++i)
             {
-                if (components[i].GetType() == typeof(T))
+                if (m_Components[i].GetType() == typeof(T))
                 {
-                    return (T)components[i];
+                    return (T)m_Components[i];
                 }
             }
 
@@ -141,28 +145,28 @@ namespace Infinity
 
         public void RemoveComponent<T>(T component) where T : Component
         {
-            for (int i = 0; i < components.length; ++i)
+            for (int i = 0; i < m_Components.length; ++i)
             {
-                if (components[i] == component)
+                if (m_Components[i] == component)
                 {
-                    components.RemoveAtIndex(i);
+                    m_Components.RemoveAtIndex(i);
                 }
             }
         }
 
         public void AddChildActor<T>(T child) where T : Entity
         {
-            child.parent = this;
-            childs.Add(child);
+            child.m_Parent = this;
+            m_Childs.Add(child);
         }
 
         public T FindChildActor<T>() where T : Entity
         {
-            for (int i = 0; i < childs.length; ++i)
+            for (int i = 0; i < m_Childs.length; ++i)
             {
-                if (childs[i].GetType() == typeof(T))
+                if (m_Childs[i].GetType() == typeof(T))
                 {
-                    return (T)childs[i];
+                    return (T)m_Childs[i];
                 }
             }
 
@@ -171,25 +175,28 @@ namespace Infinity
 
         public void RemoveChildActor<T>(T child) where T : Entity
         {
-            for (int i = 0; i < childs.length; ++i)
+            for (int i = 0; i < m_Childs.length; ++i)
             {
-                if (childs[i] == child)
+                if (m_Childs[i] == child)
                 {
-                    childs.RemoveAtIndex(i);
+                    m_Childs.RemoveAtIndex(i);
                 }
             }
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public CoroutineRef StartCoroutine(IEnumerator routine)
         {
             return m_CoroutineProcessor.Start(routine);
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void StopCoroutine(in CoroutineRef routine)
         {
             m_CoroutineProcessor.Stop(routine.enumerator);
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void StopAllCoroutine()
         {
             m_CoroutineProcessor.StopAll();
@@ -198,13 +205,13 @@ namespace Infinity
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void SetActorPosition(in float3 position)
         {
-            transform.position = position;
+            m_Transform.position = position;
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void SetActorRotation(in quaternion rotation)
         {
-            transform.rotation = rotation;
+            m_Transform.rotation = rotation;
         }
     }
 }

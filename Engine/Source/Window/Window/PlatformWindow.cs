@@ -66,9 +66,9 @@ namespace Infinity.Windowing
         {
             if (state)
             {
-                Console.WriteLine("GetFocus");
+                //Console.WriteLine("GetFocus");
             } else {
-                Console.WriteLine("LossFocus");
+                //Console.WriteLine("LossFocus");
             }
         }
 
