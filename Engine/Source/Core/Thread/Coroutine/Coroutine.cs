@@ -4,11 +4,9 @@ using System.Runtime.CompilerServices;
 
 namespace Infinity.Threading
 {
-    // A container for running multiple routines in parallel. Coroutines can be nested.
     public class CoroutineDispatcher
     {
-        // How many coroutines are currently running.
-        public int count
+        public int Count
         {
             get { return m_Dunning.Count; }
         }
@@ -18,55 +16,32 @@ namespace Infinity.Threading
 
         public CoroutineDispatcher()
         {
-            this.m_Delays = new List<float>(8);
-            this.m_Dunning = new List<IEnumerator>(8);
+            m_Delays = new List<float>(8);
+            m_Dunning = new List<IEnumerator>(8);
         }
 
-        // Start a coroutine.
-        // <returns>A handle to the new coroutine.</returns>
-        // <param name="delay">How many seconds to delay before starting.</param>
-        // <param name="routine">The routine to run.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public CoroutineRef Start(in float delay, IEnumerator routine)
+        public CoroutineRef Start(IEnumerator routine, in float delay = 0)
         {
             m_Delays.Add(delay);
             m_Dunning.Add(routine);
             return new CoroutineRef(this, routine);
         }
 
-        // Start a coroutine.
-        // <returns>A handle to the new coroutine.</returns>
-        // <param name="routine">The routine to run.</param>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public CoroutineRef Start(IEnumerator routine)
-        {
-            return Start(0, routine);
-        }
-
-        // Stop the specified routine.
-        // <returns>True if the routine was actually stopped.</returns>
-        // <param name="routine">The routine to stop.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public bool Stop(IEnumerator routine)
         {
             int i = m_Dunning.IndexOf(routine);
             if (i < 0)
+            {
                 return false;
-            m_Dunning[i] = null;
+            }
+
             m_Delays[i] = 0f;
+            m_Dunning[i] = null;
             return true;
         }
 
-        // Stop the specified routine.
-        // <returns>True if the routine was actually stopped.</returns>
-        // <param name="routine">The routine to stop.</param>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public bool Stop(in CoroutineRef routine)
-        {
-            return routine.Stop();
-        }
-
-        // Stop all running routines.
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void StopAll()
         {
@@ -74,27 +49,12 @@ namespace Infinity.Threading
             m_Dunning.Clear();
         }
 
-        // Check if the routine is currently running.
-        // <returns>True if the routine is running.</returns>
-        // <param name="routine">The routine to check.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public bool IsRunning(IEnumerator routine)
         {
             return m_Dunning.Contains(routine);
         }
 
-        // Check if the routine is currently running.
-        // <returns>True if the routine is running.</returns>
-        // <param name="routine">The routine to check.</param>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public bool IsRunning(in CoroutineRef routine)
-        {
-            return routine.IsRunning;
-        }
-
-        // Update all running coroutines.
-        // <returns>True if any routines were updated.</returns>
-        // <param name="deltaTime">How many seconds have passed sinced the last update.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public bool OnUpdate(in float deltaTime)
         {
@@ -136,42 +96,49 @@ namespace Infinity.Threading
         }
     }
 
-    // A handle to a (potentially running) coroutine.
     public struct CoroutineRef
     {
-        // True if the enumerator is currently running.
         public bool IsRunning
         {
-            get { return enumerator != null && dispatcher.IsRunning(enumerator); }
+            get 
+            { 
+                return enumerator != null && dispatcher.IsRunning(enumerator); 
+            }
         }
-        // Reference to the routine's enumerator.
-        public IEnumerator enumerator;
-        // Reference to the routine's runner.
-        public CoroutineDispatcher dispatcher;
+        public IEnumerator enumerator
+        {
+            get 
+            { 
+                return m_Enumerator; 
+            }
+        }
+        public CoroutineDispatcher dispatcher
+        {
+            get 
+            { 
+                return m_Dispatcher; 
+            }
+        }
 
-        // Construct a coroutine. Never call this manually, only use return values from Coroutines.Run().
-        // <param name="runner">The routine's runner.</param>
-        // <param name="enumerator">The routine's enumerator.</param>
+        private IEnumerator m_Enumerator;
+        private CoroutineDispatcher m_Dispatcher;
+
         public CoroutineRef(CoroutineDispatcher dispatcher, IEnumerator enumerator)
         {
-            this.dispatcher = dispatcher;
-            this.enumerator = enumerator;
+            m_Dispatcher = dispatcher;
+            m_Enumerator = enumerator;
         }
 
-        // Stop this coroutine if it is running.
-        // <returns>True if the coroutine was stopped.</returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal bool Stop()
         {
-            return IsRunning && dispatcher.Stop(enumerator);
+            return IsRunning && m_Dispatcher.Stop(m_Enumerator);
         }
 
-        // A routine to wait until this coroutine has finished running.
-        // <returns>The wait enumerator.</returns>
         public IEnumerator Wait()
         {
-            if (enumerator != null)
-                while (dispatcher.IsRunning(enumerator))
+            if (m_Enumerator != null)
+                while (m_Dispatcher.IsRunning(m_Enumerator))
                     yield return null;
         }
     }

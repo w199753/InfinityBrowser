@@ -180,24 +180,14 @@ namespace Infinity
             }
         }
 
-        public CoroutineRef StartCoroutine(in float delay, IEnumerator routine)
+        public CoroutineRef StartCoroutine(IEnumerator routine, in float delay = 0)
         {
-            return m_CoroutineDispatcher.Start(delay, routine);
-        }
-
-        public CoroutineRef StartCoroutine(IEnumerator routine)
-        {
-            return m_CoroutineDispatcher.Start(routine);
-        }
-
-        public bool StopCoroutine(IEnumerator routine)
-        {
-            return m_CoroutineDispatcher.Stop(routine);
+            return m_CoroutineDispatcher.Start(routine, delay);
         }
 
         public bool StopCoroutine(in CoroutineRef routine)
         {
-            return m_CoroutineDispatcher.Stop(routine);
+            return m_CoroutineDispatcher.Stop(routine.enumerator);
         }
 
         public void StopAllCoroutine()
