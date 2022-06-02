@@ -33,8 +33,8 @@ namespace Infinity.Windowing
 			m_Width = width;
 			m_Height = height;
 
-			Window.PrioritizeSdl();
-			WindowOptions options = new WindowOptions(true, new Vector2D<int>(50, 50), new Vector2D<int>(width, height), 60, 60, GraphicsAPI.None, title, WindowState.Normal, WindowBorder.Resizable, true, false, Silk.NET.Windowing.VideoMode.Default);
+			//Window.PrioritizeSdl();
+			WindowOptions options = new WindowOptions(true, new Vector2D<int>(256, 256), new Vector2D<int>(width, height), 60, 60, GraphicsAPI.None, title, WindowState.Normal, WindowBorder.Resizable, true, false, Silk.NET.Windowing.VideoMode.Default);
             m_Window = Window.Create(options);
             m_Window.Resize += OnResize;
             m_Window.FocusChanged += OnFocus;
