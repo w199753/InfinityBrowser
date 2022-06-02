@@ -162,7 +162,7 @@ namespace Infinity.Graphics
                 case ETextureState.Present:
                     return D3D12_RESOURCE_STATES.D3D12_RESOURCE_STATE_PRESENT;
 
-                case ETextureState.RnederTarget:
+                case ETextureState.RenderTarget:
                     return D3D12_RESOURCE_STATES.D3D12_RESOURCE_STATE_RENDER_TARGET;
 
                 default:

@@ -80,7 +80,7 @@ namespace Infinity.Graphics
                 heap = textureView.NativeDescriptorHeap;
                 handle = textureView.NativeGpuDescriptorHandle;
             }
-            else if (bindType == EBindingType.UniformBuffer || bindType == EBindingType.StorageBuffer)
+            else if (bindType == EBindingType.Buffer || bindType == EBindingType.UniformBuffer || bindType == EBindingType.StorageBuffer)
             {
                 D3DBufferView bufferView = element.bufferView as D3DBufferView;
                 heap = bufferView.NativeDescriptorHeap;

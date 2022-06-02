@@ -24,8 +24,13 @@ namespace Infinity.Graphics
 
         protected EQueueType m_QueueType;
 
+        public RHIScopedCommandBufferRef BeginScoped()
+        {
+            Begin();
+            return new RHIScopedCommandBufferRef(this);
+        }
+
         public abstract void Begin();
-        public abstract RHIScopedCommandBufferRef BeginScoped();
         public abstract RHIBlitEncoder GetBlitEncoder();
         public abstract RHIComputeEncoder GetComputeEncoder();
         public abstract RHIGraphicsEncoder GetGraphicsEncoder();

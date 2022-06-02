@@ -21,12 +21,6 @@ namespace Infinity.Graphics
             // TODO
         }
 
-        public override RHIScopedBlitPassRef BeginScopedPass()
-        {
-            BeginPass();
-            return new RHIScopedBlitPassRef(this);
-        }
-
         public override void CopyBufferToBuffer(RHIBuffer src, in int srcOffset, RHIBuffer dst, in int dstOffset, in int size)
         {
             // TODO
@@ -76,6 +70,46 @@ namespace Infinity.Graphics
         }
 
         public override void ResourceBarrier(in Memory<RHIBarrier> barriers)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void EndPass()
+        {
+
+        }
+
+        protected override void Release()
+        {
+            m_D3DCommandBuffer = null;
+        }
+    }
+
+    internal unsafe class D3DComputeEncoder : RHIComputeEncoder
+    {
+        private D3DCommandBuffer? m_D3DCommandBuffer;
+
+        public D3DComputeEncoder(D3DCommandBuffer cmdBuffer)
+        {
+            m_D3DCommandBuffer = cmdBuffer;
+        }
+
+        public override void BeginPass()
+        {
+  
+        }
+
+        public override void SetPipeline(RHIComputePipeline pipeline)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void SetBindGroup(in uint layoutIndex, RHIBindGroup bindGroup)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void Dispatch(in uint groupCountX, in uint groupCountY, in uint groupCountZ)
         {
             throw new NotImplementedException();
         }
@@ -145,12 +179,6 @@ namespace Infinity.Graphics
 
                 m_D3DCommandBuffer.NativeCommandList->ClearDepthStencilView(dsvHandle.Value, D3DUtility.GetDX12ClearFlagByDSA(depthStencilAttachment.Value), depthStencilAttachment.Value.depthClearValue, Convert.ToByte(depthStencilAttachment.Value.stencilClearValue), 0, null);
             }
-        }
-
-        public override RHIScopedGraphicsPassRef BeginScopedPass(in RHIGraphicsPassBeginInfo beginInfo)
-        {
-            BeginPass(beginInfo);
-            return new RHIScopedGraphicsPassRef(this);
         }
 
         public override void SetPipeline(RHIGraphicsPipeline pipeline)

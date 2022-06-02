@@ -43,12 +43,6 @@ namespace Infinity.Graphics
             m_NativeCommandList->Reset(m_D3DCommandPool.NativeCommandAllocator, null);
         }
 
-        public override RHIScopedCommandBufferRef BeginScoped()
-        {
-            Begin();
-            return new RHIScopedCommandBufferRef(this);
-        }
-
         public override RHIBlitEncoder GetBlitEncoder()
         {
             return new D3DBlitEncoder(this);
@@ -56,7 +50,7 @@ namespace Infinity.Graphics
 
         public override RHIComputeEncoder GetComputeEncoder()
         {
-            throw new NotImplementedException();
+            return new D3DComputeEncoder(this);
         }
 
         public override RHIGraphicsEncoder GetGraphicsEncoder()

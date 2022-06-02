@@ -88,8 +88,13 @@ namespace Infinity.Graphics
 
     public abstract class RHIBlitEncoder : Disposal
     {
+        public RHIScopedBlitPassRef BeginScopedPass()
+        {
+            BeginPass();
+            return new RHIScopedBlitPassRef(this);
+        }
+
         public abstract void BeginPass();
-        public abstract RHIScopedBlitPassRef BeginScopedPass();
         public abstract void CopyBufferToBuffer(RHIBuffer src, in int srcOffset, RHIBuffer dst, in int dstOffset, in int size);
         public abstract void CopyBufferToTexture(RHIBuffer src, RHITexture dst, in RHITextureSubResourceInfo subResourceInfo, in int3 size);
         public abstract void CopyTextureToBuffer(RHITexture src, RHIBuffer dst, in RHITextureSubResourceInfo subResourceInfo, in int3 size);
@@ -97,24 +102,39 @@ namespace Infinity.Graphics
         public abstract void ResourceBarrier(in RHIBarrier barrier);
         public abstract void ResourceBarrier(in Memory<RHIBarrier> barriers);
         public abstract void EndPass();
-        // TODO WriteTimeStamp(...), #see https://gpuweb.github.io/gpuweb/#dom-gpucommandencoder-writetimestamp
-        // TODO ResolveQuerySet(...), #see https://gpuweb.github.io/gpuweb/#dom-gpucommandencoder-resolvequeryset
+        // TODO PushDebugMark(...)
+        // TODO PullDebugMark(...)
+        // TODO WriteTimeStamp(...)
+        // TODO ResolveQuerySet(...)
     }
 
     public abstract class RHIComputeEncoder : Disposal
     {
+        public RHIScopedComputePassRef BeginScopedPass()
+        {
+            BeginPass();
+            return new RHIScopedComputePassRef(this);
+        }
+
         public abstract void BeginPass();
-        public abstract RHIScopedComputePassRef BeginScopedPass();
         public abstract void SetPipeline(RHIComputePipeline pipeline);
         public abstract void SetBindGroup(in uint layoutIndex, RHIBindGroup bindGroup);
         public abstract void Dispatch(in uint groupCountX, in uint groupCountY, in uint groupCountZ);
         public abstract void EndPass();
+        // TODO PushDebugMark(...)
+        // TODO PullDebugMark(...)
+        // TODO DispatchIndirect(...)
     }
 
     public abstract class RHIGraphicsEncoder : Disposal
     {
+        public RHIScopedGraphicsPassRef BeginScopedPass(in RHIGraphicsPassBeginInfo beginInfo)
+        {
+            BeginPass(beginInfo);
+            return new RHIScopedGraphicsPassRef(this);
+        }
+
         public abstract void BeginPass(in RHIGraphicsPassBeginInfo beginInfo);
-        public abstract RHIScopedGraphicsPassRef BeginScopedPass(in RHIGraphicsPassBeginInfo beginInfo);
         public abstract void SetPipeline(RHIGraphicsPipeline pipeline);
         public abstract void SetScissor(in uint left, in uint top, in uint right, in uint bottom);
         public abstract void SetViewport(in float x, in float y, in float width, in float height, in float minDepth, in float maxDepth);
@@ -126,11 +146,11 @@ namespace Infinity.Graphics
         public abstract void SetPrimitiveTopology(in EPrimitiveTopology primitiveTopology);
         public abstract void Draw(in uint vertexCount, in uint instanceCount, in uint firstVertex, in uint firstInstance);
         public abstract void DrawIndexed(in uint indexCount, in uint instanceCount, in uint firstIndex, in uint baseVertex, in uint firstInstance);
+        // TODO PushDebugMark(...)
+        // TODO PullDebugMark(...)
         // TODO DrawIndirect(...)
         // TODO DrawIndexedIndirect(...)
-        // TODO DrawMultiIndirect(...)
-        // TODO BeginOcclusionQuery(...)
-        // TODO EndOcclusionQuery(...)
+        // TODO DrawMultiIndexedIndirect(...)
         // TODO ExecuteBundles(...)
         public abstract void EndPass();
     }

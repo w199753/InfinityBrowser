@@ -105,7 +105,6 @@ namespace Infinity.Graphics
 
         public RHIShader? vertexShader;
         public RHIShader? fragmentShader;
-        // TODO more shader?
 
         public RHIVertexState vertex;
         public RHIFragmentState fragment;
@@ -114,18 +113,13 @@ namespace Infinity.Graphics
         public RHIDepthStencilState depthStencil;
     }
 
-    public abstract class RHIPipeline : Disposal
+    public abstract class RHIComputePipeline : Disposal
     {
 
     }
 
-    public abstract class RHIComputePipeline : RHIPipeline 
+    public abstract class RHIGraphicsPipeline : Disposal
     {
-        public RHIComputePipeline(in RHIComputePipelineCreateInfo createInfo) { }
-    }
 
-    public abstract class RHIGraphicsPipeline : RHIPipeline
-    {
-        public RHIGraphicsPipeline(in RHIGraphicsPipelineCreateInfo createInfo) { }
     }
 }

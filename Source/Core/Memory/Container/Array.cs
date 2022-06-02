@@ -284,6 +284,13 @@ namespace Infinity.Container
     public unsafe struct TValueArray<T> : IDisposable where T : unmanaged
     {
         public int length;
+        public T* ArrayPtr
+        {
+            get
+            {
+                return m_Array;
+            }
+        }
         public ref T this[int index]
         {
             get

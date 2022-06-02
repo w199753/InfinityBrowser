@@ -344,7 +344,7 @@
     {
         Undefined,
         Present,
-        RnederTarget,
+        RenderTarget,
         MAX
     }
 

@@ -39,7 +39,7 @@ namespace Infinity.Rendering
 
                 using (blitEncoder.BeginScopedPass())
                 {
-                    blitEncoder.ResourceBarrier(RHIBarrier.Transition(renderContext.BackBuffer, ETextureState.Present, ETextureState.RnederTarget));
+                    blitEncoder.ResourceBarrier(RHIBarrier.Transition(renderContext.BackBuffer, ETextureState.Present, ETextureState.RenderTarget));
                 }
 
                 RHIGraphicsPassBeginInfo graphicsPassBeginInfo = new RHIGraphicsPassBeginInfo();
@@ -57,7 +57,7 @@ namespace Infinity.Rendering
 
                 using (blitEncoder.BeginScopedPass())
                 {
-                    blitEncoder.ResourceBarrier(RHIBarrier.Transition(renderContext.BackBuffer, ETextureState.RnederTarget, ETextureState.Present));
+                    blitEncoder.ResourceBarrier(RHIBarrier.Transition(renderContext.BackBuffer, ETextureState.RenderTarget, ETextureState.Present));
                 }
             }
 
