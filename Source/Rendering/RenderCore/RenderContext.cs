@@ -28,11 +28,11 @@ namespace Infinity.Rendering
         private RHITextureView[] m_SwapChainViews;
         private RHICommandPool[] m_CommandPools;
 
-        public RenderContext(in uint width, in uint height, in IntPtr window)
+        public RenderContext(in int width, in int height, in IntPtr window)
         {
             // Create Instance And SelectGPU
             m_Instance = RHIInstance.CreateByPlatform();
-            m_Gpu = m_Instance?.GetGpu(0);
+            m_Gpu = m_Instance.GetGpu(0);
 
             // Create Device
             RHIQueueInfo[] queueInfos = new RHIQueueInfo[3];
@@ -61,12 +61,12 @@ namespace Infinity.Rendering
             // Create SwapChain
             RHISwapChainCreateInfo swapChainCreateInfo = new RHISwapChainCreateInfo();
             swapChainCreateInfo.count = 2;
-            swapChainCreateInfo.extent = new int2(1280, 720);
+            swapChainCreateInfo.extent = new int2(width, height);
             swapChainCreateInfo.format = EPixelFormat.RGBA8_UNORM;
             swapChainCreateInfo.presentMode = EPresentMode.VSync;
             swapChainCreateInfo.window = window;
             swapChainCreateInfo.presentQueue = m_Queues[2];
-            m_SwapChain = m_Device?.CreateSwapChain(swapChainCreateInfo);
+            m_SwapChain = m_Device.CreateSwapChain(swapChainCreateInfo);
 
             RHITextureViewCreateInfo viewCreateInfo = new RHITextureViewCreateInfo();
             viewCreateInfo.mipLevelNum = 1;

@@ -4,7 +4,7 @@ namespace Infinity.Graphics
 {
     public abstract class RHIInstance : Disposal
     {
-        public abstract int? GpuCount
+        public abstract int GpuCount
         {
             get;
         }
@@ -13,7 +13,7 @@ namespace Infinity.Graphics
             get;
         }
 
-        public abstract RHIGPU? GetGpu(in int index);
+        public abstract RHIGPU GetGpu(in int index);
 
         internal static ERHIBackend GetPlatformRHIBackend(in bool bForceVulkan)
         {
@@ -32,7 +32,7 @@ namespace Infinity.Graphics
             return rhiType;
         }
 
-        public static RHIInstance? CreateByBackend(ERHIBackend type)
+        public static RHIInstance CreateByBackend(ERHIBackend type)
         {
             switch (type)
             {
@@ -50,7 +50,7 @@ namespace Infinity.Graphics
             }
         }
 
-        public static RHIInstance? CreateByPlatform(in bool bForceVulkan = false)
+        public static RHIInstance CreateByPlatform(in bool bForceVulkan = false)
         {
             return CreateByBackend(GetPlatformRHIBackend(bForceVulkan));
         }

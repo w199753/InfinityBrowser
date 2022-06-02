@@ -7,10 +7,10 @@ namespace Infinity.Graphics
 {
     internal unsafe class MtlInstance : RHIInstance
     {
-        public override int? GpuCount => m_GPUs?.Count;
+        public override int GpuCount => m_GPUs.Count;
         public override ERHIBackend RHIType => ERHIBackend.Metal;
 
-        private List<MtlGPU>? m_GPUs;
+        private List<MtlGPU> m_GPUs;
 
         public MtlInstance()
         {
@@ -33,20 +33,20 @@ namespace Infinity.Graphics
             m_GPUs = new List<MtlGPU>(gpuCount);
             for (int i = 0; i < gpuCount; ++i)
             {
-                m_GPUs?.Add(new MtlGPU(this, IntPtr.Add(gpusPtr, i)));
+                m_GPUs.Add(new MtlGPU(this, IntPtr.Add(gpusPtr, i)));
             }
         }
 
-        public override RHIGPU? GetGpu(in int index)
+        public override RHIGPU GetGpu(in int index)
         {
-            return m_GPUs?[index];
+            return m_GPUs[index];
         }
 
         protected override void Release()
         {
-            for (int i = 0; i < m_GPUs?.Count; ++i)
+            for (int i = 0; i < m_GPUs.Count; ++i)
             {
-                m_GPUs?[i].Dispose();
+                m_GPUs[i].Dispose();
             }
         }
     }

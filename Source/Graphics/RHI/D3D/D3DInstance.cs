@@ -15,10 +15,10 @@ namespace Infinity.Graphics
                 return m_DXGIFactory;
             }
         }
-        public override int? GpuCount => m_GPUs?.Count;
+        public override int GpuCount => m_GPUs.Count;
         public override ERHIBackend RHIType => ERHIBackend.DirectX12;
 
-        private List<D3DGPU>? m_GPUs;
+        private List<D3DGPU> m_GPUs;
         private IDXGIFactory7* m_DXGIFactory;
 
         public D3DInstance()
@@ -54,14 +54,14 @@ namespace Infinity.Graphics
 
             for (uint i = 0; SUCCEEDED(m_DXGIFactory->EnumAdapters1(i, &adapter)); ++i)
             {
-                m_GPUs?.Add(new D3DGPU(this, adapter));
+                m_GPUs.Add(new D3DGPU(this, adapter));
                 adapter = null;
             }
         }
 
-        public override RHIGPU? GetGpu(in int index)
+        public override RHIGPU GetGpu(in int index)
         {
-            return m_GPUs?[index];
+            return m_GPUs[index];
         }
 
         protected override void Release()

@@ -120,7 +120,7 @@ namespace Infinity.Graphics
         public D3DDevice(D3DGPU gpu, in RHIDeviceCreateInfo createInfo) 
         {
             m_D3DGpu = gpu;
-            CreateDevice();
+            CreateDevice(gpu.DXGIAdapter);
             CreateDescriptorHeaps();
             CreateQueues(createInfo);
         }
@@ -259,10 +259,10 @@ namespace Infinity.Graphics
             m_CbvSrvUavHeap.Free(index);
         }
 
-        private void CreateDevice()
+        private void CreateDevice(in IDXGIAdapter1* adapter)
         {
             ID3D12Device6* device;
-            bool success = SUCCEEDED(DirectX.D3D12CreateDevice((IUnknown*)m_D3DGpu.DXGIAdapter, D3D_FEATURE_LEVEL.D3D_FEATURE_LEVEL_12_1, __uuidof<ID3D12Device6>(), (void**)&device));
+            bool success = SUCCEEDED(DirectX.D3D12CreateDevice((IUnknown*)adapter, D3D_FEATURE_LEVEL.D3D_FEATURE_LEVEL_12_1, __uuidof<ID3D12Device6>(), (void**)&device));
             Debug.Assert(success);
             m_NativeDevice = device;
         }

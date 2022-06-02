@@ -23,7 +23,7 @@ namespace Infinity
             m_SemaphoreR2G = semaphoreR2G;
             m_RenderThread = new Thread(GraphicsFunc);
             m_RenderThread.Name = "RenderThread";
-            m_RenderContext = new RenderContext((uint)window.Width, (uint)window.Height, window.WindowPtr);
+            m_RenderContext = new RenderContext(window.Width, window.Height, window.WindowPtr);
             m_SceneRenderer = new SceneRenderer(m_RenderContext);
         }
 
