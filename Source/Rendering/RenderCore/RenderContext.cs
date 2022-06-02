@@ -158,7 +158,7 @@ namespace Infinity.Rendering
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public RHIFence CreateFence()
         {
-            return m_Device?.CreateFence();
+            return m_Device.CreateFence();
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
