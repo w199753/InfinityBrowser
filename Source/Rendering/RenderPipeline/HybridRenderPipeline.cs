@@ -64,7 +64,7 @@ namespace Infinity.Rendering
             renderContext.ExecuteCommandBuffer(m_CommandBuffer, null);
         }
 
-        public override void Release(RenderContext renderContext)
+        protected override void Release()
         {
             Console.WriteLine("Release RenderPipeline");
 

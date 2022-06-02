@@ -43,12 +43,12 @@ namespace Infinity
 
         public void Execute()
         {
-            PlatformRun();
-            PlatformExit();
+            Run();
+            Exit();
             Dispose();
         }
 
-        private void PlatformRun()
+        private void Run()
         {
             m_GameModule.Start();
             //m_PhysicsModule.Start();
@@ -61,7 +61,7 @@ namespace Infinity
             }
         }
 
-        private void PlatformExit()
+        private void Exit()
         {
             m_GameModule.Exit();
             //m_PhysicsModule.Exit();
@@ -70,12 +70,12 @@ namespace Infinity
 
         protected override void Release()
         {
+            m_Window.Dispose();
+            m_SemaphoreR2G.Dispose();
+            m_SemaphoreG2R.Dispose();
             m_GameModule.Dispose();
             //m_PhysicsModule.Dispose();
             m_GraphicsModule.Dispose();
-            m_SemaphoreR2G.Dispose();
-            m_SemaphoreG2R.Dispose();
-            m_Window.Dispose();
         }
     }
 }

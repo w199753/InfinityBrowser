@@ -27,7 +27,7 @@ namespace Infinity.Rendering
 
         protected override void Release()
         {
-            m_RenderPipeline.Release(m_RenderContext);
+            m_RenderPipeline.Dispose();
         }
     }
 }

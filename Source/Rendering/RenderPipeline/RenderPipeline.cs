@@ -17,7 +17,7 @@ namespace Infinity.Rendering
 
         public abstract void Render(RenderContext renderContext);
 
-        public abstract void Release(RenderContext renderContext);
+        //public abstract void Release(RenderContext renderContext);
 
         protected override void Release()
         {
