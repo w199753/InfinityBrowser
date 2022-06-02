@@ -15,7 +15,6 @@ namespace Infinity.Graphics
 
         public abstract RHIGPU? GetGpu(in int index);
 
-
         internal static ERHIBackend GetPlatformRHIBackend(in bool bForceVulkan)
         {
             ERHIBackend rhiType = bForceVulkan ? ERHIBackend.Vulkan : ERHIBackend.DirectX12;

@@ -8,7 +8,7 @@ namespace Infinity.Graphics
     internal struct D3DBindGroupParameter
     {
         public int slot;
-        public EBindingType bindingType;
+        public EBindingType bindType;
         public D3D12_GPU_DESCRIPTOR_HANDLE dx12GpuDescriptorHandle;
     }
 
@@ -44,43 +44,47 @@ namespace Infinity.Graphics
         {
             D3DBindGroupLayout bindGroupLayout = createInfo.layout as D3DBindGroupLayout;
             Debug.Assert(bindGroupLayout != null);
+
             m_BindGroupLayout = bindGroupLayout;
             m_BindingParameters = new List<D3DBindGroupParameter>(32);
 
-            for (int i = 0; i < createInfo.entryCount; ++i)
+            for (int i = 0; i < createInfo.elementCount; ++i)
             {
-                ref RHIBindGroupEntry entry = ref createInfo.entries.Span[i];
+                ref RHIBindGroupElement element = ref createInfo.elements.Span[i];
+                D3DRootParameterKeyInfo keyInfo = bindGroupLayout.RootParameterKeyInfos[i];
 
                 D3D12_GPU_DESCRIPTOR_HANDLE handle = default;
-                GetDescriptorHandleAndHeap(ref handle, ref m_NativeDescriptorHeap, entry);
+                GetDescriptorHandleAndHeap(ref handle, ref m_NativeDescriptorHeap, keyInfo.bindType, element);
 
                 D3DBindGroupParameter bidning;
-                bidning.slot = entry.slot;
-                bidning.bindingType = entry.type;
+                //bidning.slot = element.slot;
+                bidning.slot = keyInfo.slot;
+                //bidning.bindType = element.type;
+                bidning.bindType = keyInfo.bindType;
                 bidning.dx12GpuDescriptorHandle = handle;
                 m_BindingParameters.Add(bidning);
             }
         }
 
-        internal unsafe static void GetDescriptorHandleAndHeap(ref D3D12_GPU_DESCRIPTOR_HANDLE handle, ref ID3D12DescriptorHeap* heap, in RHIBindGroupEntry entry)
+        internal unsafe static void GetDescriptorHandleAndHeap(ref D3D12_GPU_DESCRIPTOR_HANDLE handle, ref ID3D12DescriptorHeap* heap, in EBindingType bindType, in RHIBindGroupElement element)
         {
-            if (entry.type == EBindingType.UniformBuffer || entry.type == EBindingType.StorageBuffer)
+            if (bindType == EBindingType.Sampler)
             {
-                D3DBufferView bufferView = entry.bufferView as D3DBufferView;
-                heap = bufferView.NativeDescriptorHeap;
-                handle = bufferView.NativeGpuDescriptorHandle;
+                D3DSampler sampler = element.sampler as D3DSampler;
+                heap = sampler.NativeDescriptorHeap;
+                handle = sampler.NativeGpuDescriptorHandle;
             }
-            else if (entry.type == EBindingType.Texture || entry.type == EBindingType.StorageTexture)
+            else if (bindType == EBindingType.Texture || bindType == EBindingType.StorageTexture)
             {
-                D3DTextureView textureView = entry.textureView as D3DTextureView;
+                D3DTextureView textureView = element.textureView as D3DTextureView;
                 heap = textureView.NativeDescriptorHeap;
                 handle = textureView.NativeGpuDescriptorHandle;
             }
-            else if (entry.type == EBindingType.Sampler)
+            else if (bindType == EBindingType.UniformBuffer || bindType == EBindingType.StorageBuffer)
             {
-                D3DSampler sampler = entry.sampler as D3DSampler;
-                heap = sampler.NativeDescriptorHeap;
-                handle = sampler.NativeGpuDescriptorHandle;
+                D3DBufferView bufferView = element.bufferView as D3DBufferView;
+                heap = bufferView.NativeDescriptorHeap;
+                handle = bufferView.NativeGpuDescriptorHandle;
             }
         }
 

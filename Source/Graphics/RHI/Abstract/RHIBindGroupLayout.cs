@@ -2,18 +2,18 @@
 
 namespace Infinity.Graphics
 {
-    public struct RHIBindGroupLayoutEntry
+    public struct RHIBindGroupLayoutElement
     {
         public int slot;
-        public EBindingType type;
+        public EBindingType bindType;
         public EShaderStageFlags shaderVisibility;
     }
-
+    
     public struct RHIBindGroupLayoutCreateInfo
     {
-        public int entryCount;
         public int layoutIndex;
-        public Memory<RHIBindGroupLayoutEntry> entries;
+        public int elementCount => elements.Length;
+        public Memory<RHIBindGroupLayoutElement> elements;
     }
 
     public abstract class RHIBindGroupLayout : Disposal

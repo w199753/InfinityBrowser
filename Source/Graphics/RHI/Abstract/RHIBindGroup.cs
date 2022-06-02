@@ -2,10 +2,10 @@
 
 namespace Infinity.Graphics
 {
-    public struct RHIBindGroupEntry
+    public struct RHIBindGroupElement
     {
-        public int slot;
-        public EBindingType type;
+        //public int slot;
+        //public EBindingType bindType;
         public RHISampler sampler;
         public RHIBufferView bufferView;
         public RHITextureView textureView;
@@ -13,9 +13,9 @@ namespace Infinity.Graphics
 
     public struct RHIBindGroupCreateInfo
     {
-        public int entryCount;
+        public int elementCount => elements.Length;
         public RHIBindGroupLayout layout;
-        public Memory<RHIBindGroupEntry> entries;
+        public Memory<RHIBindGroupElement> elements;
     }
 
     public abstract class RHIBindGroup : Disposal

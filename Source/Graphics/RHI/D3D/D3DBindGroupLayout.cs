@@ -8,7 +8,7 @@ namespace Infinity.Graphics
     {
         public int slot;
         public int layoutIndex;
-        public EBindingType bindingType;
+        public EBindingType bindType;
         public EShaderStageFlags shaderStage;
     }
 
@@ -46,40 +46,40 @@ namespace Infinity.Graphics
             m_NativeRootParameters = new List<D3D12_ROOT_PARAMETER1>(16);
             m_RootParameterKeyInfos = new List<D3DRootParameterKeyInfo>(16);
 
-            Dictionary<EShaderStageFlags, List<RHIBindGroupLayoutEntry>> visiblityMap = new Dictionary<EShaderStageFlags, List<RHIBindGroupLayoutEntry>>();
-            visiblityMap.TryAdd(EShaderStageFlags.Vertex, new List<RHIBindGroupLayoutEntry>(32));
-            visiblityMap.TryAdd(EShaderStageFlags.Fragment, new List<RHIBindGroupLayoutEntry>(32));
-            visiblityMap.TryAdd(EShaderStageFlags.Compute, new List<RHIBindGroupLayoutEntry>(32));
-            for (int i = 0; i < createInfo.entryCount; ++i)
+            Dictionary<EShaderStageFlags, List<RHIBindGroupLayoutElement>> visiblityMap = new Dictionary<EShaderStageFlags, List<RHIBindGroupLayoutElement>>();
+            visiblityMap.TryAdd(EShaderStageFlags.Vertex, new List<RHIBindGroupLayoutElement>(32));
+            visiblityMap.TryAdd(EShaderStageFlags.Fragment, new List<RHIBindGroupLayoutElement>(32));
+            visiblityMap.TryAdd(EShaderStageFlags.Compute, new List<RHIBindGroupLayoutElement>(32));
+            for (int i = 0; i < createInfo.elementCount; ++i)
             {
-                foreach (KeyValuePair<EShaderStageFlags, List<RHIBindGroupLayoutEntry>> visiblity in visiblityMap)
+                foreach (KeyValuePair<EShaderStageFlags, List<RHIBindGroupLayoutElement>> visiblity in visiblityMap)
                 {
-                    if ((createInfo.entries.Span[i].shaderVisibility & visiblity.Key) == visiblity.Key)
+                    if ((createInfo.elements.Span[i].shaderVisibility & visiblity.Key) == visiblity.Key)
                     {
                         continue;
                     }
-                    visiblity.Value.Add(createInfo.entries.Span[i]);
+                    visiblity.Value.Add(createInfo.elements.Span[i]);
                 }
             }
 
-            foreach (KeyValuePair<EShaderStageFlags, List<RHIBindGroupLayoutEntry>> visiblity in visiblityMap)
+            foreach (KeyValuePair<EShaderStageFlags, List<RHIBindGroupLayoutElement>> visiblity in visiblityMap)
             {
-                foreach (RHIBindGroupLayoutEntry entry in visiblity.Value)
+                foreach (RHIBindGroupLayoutElement element in visiblity.Value)
                 {
                     m_NativeRootParameters.Add(default);
                     {
                         D3D12_DESCRIPTOR_RANGE1 dx12DescriptorRange = new D3D12_DESCRIPTOR_RANGE1();
-                        dx12DescriptorRange.Init(/*D3DUtility.GetNativeBindingType(entry.type)*/D3D12_DESCRIPTOR_RANGE_TYPE.D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 1, (uint)entry.slot, (uint)createInfo.layoutIndex, D3D12_DESCRIPTOR_RANGE_FLAGS.D3D12_DESCRIPTOR_RANGE_FLAG_DATA_STATIC);
+                        dx12DescriptorRange.Init(/*D3DUtility.GetNativeBindingType(entry.type)*/D3D12_DESCRIPTOR_RANGE_TYPE.D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 1, (uint)element.slot, (uint)createInfo.layoutIndex, D3D12_DESCRIPTOR_RANGE_FLAGS.D3D12_DESCRIPTOR_RANGE_FLAG_DATA_STATIC);
                         m_NativeRootParameters[m_NativeRootParameters.Count - 1].InitAsDescriptorTable(1, &dx12DescriptorRange, /*D3DUtility.GetNativeShaderStage(visiblity.Key)*/D3D12_SHADER_VISIBILITY.D3D12_SHADER_VISIBILITY_ALL);
                     }
 
                     m_RootParameterKeyInfos.Add(default);
                     {
                         D3DRootParameterKeyInfo keyInfo;
-                        keyInfo.slot = entry.slot;
-                        keyInfo.bindingType = entry.type;
-                        keyInfo.shaderStage = visiblity.Key;
+                        keyInfo.slot = element.slot;
                         keyInfo.layoutIndex = createInfo.layoutIndex;
+                        keyInfo.bindType = element.bindType;
+                        keyInfo.shaderStage = visiblity.Key;
                         m_RootParameterKeyInfos[m_RootParameterKeyInfos.Count - 1] = keyInfo;
                     }
                 }

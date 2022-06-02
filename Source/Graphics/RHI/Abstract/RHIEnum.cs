@@ -175,6 +175,7 @@
 
     public enum EBindingType
     {
+        Buffer,
         Texture,
         Sampler,
         UniformBuffer,
