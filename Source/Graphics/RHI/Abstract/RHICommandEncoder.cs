@@ -5,7 +5,8 @@ namespace Infinity.Graphics
 {
     public struct RHITextureSubResourceInfo
     {
-        public uint mipLevels;
+        public uint slice;
+        public uint mipLevel;
         public uint3 origin;
         public ETextureAspect aspect;
     }

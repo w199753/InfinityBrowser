@@ -24,7 +24,9 @@ namespace Infinity.Graphics
 
         public override void CopyBufferToBuffer(RHIBuffer src, in int srcOffset, RHIBuffer dst, in int dstOffset, in int size)
         {
-            throw new NotImplementedException();
+            D3DBuffer srcBuffer = src as D3DBuffer;
+            D3DBuffer dstBuffer = dst as D3DBuffer;
+            m_D3DCommandBuffer.NativeCommandList->CopyBufferRegion(dstBuffer.NativeResource, (ulong)dstOffset, srcBuffer.NativeResource, (ulong)srcOffset, (ulong)size);
         }
 
         public override void CopyBufferToTexture(RHIBuffer src, RHITexture dst, in RHITextureSubResourceInfo subResourceInfo, in int3 size)
@@ -39,7 +41,11 @@ namespace Infinity.Graphics
 
         public override void CopyTextureToTexture(RHITexture src, in RHITextureSubResourceInfo srcSubResourceInfo, RHITexture dst, in RHITextureSubResourceInfo dstSubResourceInfo, in int3 size)
         {
-            throw new NotImplementedException();
+            //D3DTexture srcTexture = src as D3DTexture;
+            //D3DTexture dstTexture = dst as D3DTexture;
+
+            //D3D12_TEXTURE_COPY_LOCATION srcLocation = new D3D12_TEXTURE_COPY_LOCATION(srcTexture.NativeResource, new D3D12_PLACED_SUBRESOURCE_FOOTPRINT());
+            //m_D3DCommandBuffer.NativeCommandList->CopyTextureRegion();
         }
 
         public override void ResourceBarrier(in RHIBarrier barrier)
@@ -72,7 +78,38 @@ namespace Infinity.Graphics
 
         public override void ResourceBarrier(in Memory<RHIBarrier> barriers)
         {
-            throw new NotImplementedException();
+            ID3D12Resource* resource;
+            D3D12_RESOURCE_STATES beforeState;
+            D3D12_RESOURCE_STATES afterState;
+            D3D12_RESOURCE_BARRIER* resourceBarriers = stackalloc D3D12_RESOURCE_BARRIER[barriers.Length];
+
+            for(int i = 0; i < barriers.Length; ++i)
+            {
+                ref RHIBarrier barrier = ref barriers.Span[i];
+
+                if (barrier.Type == EResourceType.Buffer)
+                {
+                    D3DBuffer buffer = barrier.Buffer.handle as D3DBuffer;
+                    Debug.Assert(buffer != null);
+
+                    resource = buffer.NativeResource;
+                    beforeState = D3DUtility.ConvertToNativeBufferState(barrier.Buffer.before);
+                    afterState = D3DUtility.ConvertToNativeBufferState(barrier.Buffer.after);
+                }
+                else
+                {
+                    D3DTexture texture = barrier.Texture.handle as D3DTexture;
+                    Debug.Assert(texture != null);
+
+                    resource = texture.NativeResource;
+                    beforeState = D3DUtility.ConvertToNativeTextureState(barrier.Texture.before);
+                    afterState = D3DUtility.ConvertToNativeTextureState(barrier.Texture.after);
+                }
+
+                resourceBarriers[i] = D3D12_RESOURCE_BARRIER.InitTransition(resource, beforeState, afterState);
+            }
+
+            m_D3DCommandBuffer.NativeCommandList->ResourceBarrier((uint)barriers.Length, resourceBarriers);
         }
 
         public override void EndPass()
