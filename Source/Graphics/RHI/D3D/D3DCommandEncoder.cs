@@ -89,7 +89,7 @@ namespace Infinity.Graphics
     internal unsafe class D3DComputeEncoder : RHIComputeEncoder
     {
         private D3DCommandBuffer m_D3DCommandBuffer;
-        private D3DComputePipeline m_ComputePipeline;
+        private D3DComputePipeline m_D3DComputePipeline;
 
         public D3DComputeEncoder(D3DCommandBuffer cmdBuffer)
         {
@@ -103,20 +103,20 @@ namespace Infinity.Graphics
 
         public override void SetPipeline(RHIComputePipeline pipeline)
         {
-            m_ComputePipeline = pipeline as D3DComputePipeline;
-            Debug.Assert(m_ComputePipeline != null);
+            m_D3DComputePipeline = pipeline as D3DComputePipeline;
+            Debug.Assert(m_D3DComputePipeline != null);
 
-            m_D3DCommandBuffer.NativeCommandList->SetPipelineState(m_ComputePipeline.NativePipelineState);
-            m_D3DCommandBuffer.NativeCommandList->SetGraphicsRootSignature(m_ComputePipeline.PipelineLayout.NativeRootSignature);
+            m_D3DCommandBuffer.NativeCommandList->SetPipelineState(m_D3DComputePipeline.NativePipelineState);
+            m_D3DCommandBuffer.NativeCommandList->SetComputeRootSignature(m_D3DComputePipeline.PipelineLayout.NativeRootSignature);
         }
 
         public override void SetBindGroup(in int layoutIndex, RHIBindGroup bindGroup)
         {
             D3DBindGroup d3dBindGroup = bindGroup as D3DBindGroup;
             D3DBindGroupLayout bindGroupLayout = d3dBindGroup.BindGroupLayout;
-            D3DPipelineLayout pipelineLayout = m_ComputePipeline.PipelineLayout;
+            D3DPipelineLayout pipelineLayout = m_D3DComputePipeline.PipelineLayout;
 
-            Debug.Assert(m_ComputePipeline != null);
+            Debug.Assert(m_D3DComputePipeline != null);
             Debug.Assert(layoutIndex == bindGroupLayout.LayoutIndex);
 
             List<D3DBindGroupParameter> bindings = d3dBindGroup.BindingParameters;
@@ -156,6 +156,7 @@ namespace Infinity.Graphics
     internal unsafe class D3DGraphicsEncoder : RHIGraphicsEncoder
     {
         private D3DCommandBuffer m_D3DCommandBuffer;
+        private D3DGraphicsPipeline m_D3DGraphicsPipeline;
 
         public D3DGraphicsEncoder(D3DCommandBuffer cmdBuffer)
         {
@@ -211,7 +212,11 @@ namespace Infinity.Graphics
 
         public override void SetPipeline(RHIGraphicsPipeline pipeline)
         {
-            throw new NotImplementedException();
+            m_D3DGraphicsPipeline = pipeline as D3DGraphicsPipeline;
+            Debug.Assert(m_D3DGraphicsPipeline != null);
+
+            m_D3DCommandBuffer.NativeCommandList->SetPipelineState(m_D3DGraphicsPipeline.NativePipelineState);
+            m_D3DCommandBuffer.NativeCommandList->SetGraphicsRootSignature(m_D3DGraphicsPipeline.PipelineLayout.NativeRootSignature);
         }
 
         public override void SetScissor(in uint left, in uint top, in uint right, in uint bottom)

@@ -1,6 +1,5 @@
 ﻿using System.Diagnostics;
 using TerraFX.Interop.DirectX;
-using System.Collections.Generic;
 using static TerraFX.Interop.Windows.Windows;
 
 namespace Infinity.Graphics
@@ -30,14 +29,14 @@ namespace Infinity.Graphics
         {
             m_PipelineLayout = createInfo.layout as D3DPipelineLayout;
 
-            D3DShader computeShader = createInfo.computeShader as D3DShader;
+            D3DShader computeShader = createInfo.shader as D3DShader;
 
             D3D12_COMPUTE_PIPELINE_STATE_DESC desc = new D3D12_COMPUTE_PIPELINE_STATE_DESC();
             desc.CS = computeShader.NativeShaderBytecode;
             desc.pRootSignature = m_PipelineLayout.NativeRootSignature;
 
             ID3D12PipelineState* pipelineState;
-            bool success = SUCCEEDED(device.NativeDevice->CreateComputePipelineState(&desc, __uuidof<ID3D12RootSignature>(), (void**)&pipelineState));
+            bool success = SUCCEEDED(device.NativeDevice->CreateComputePipelineState(&desc, __uuidof<ID3D12PipelineState>(), (void**)&pipelineState));
             Debug.Assert(success);
             m_NativePipelineState = pipelineState;
         }

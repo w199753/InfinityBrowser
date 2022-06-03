@@ -95,17 +95,15 @@ namespace Infinity.Graphics
 
     public struct RHIComputePipelineCreateInfo
     {
-        public RHIPipelineLayout? layout;
-        public RHIShader? computeShader;
+        public RHIShader shader;
+        public RHIPipelineLayout layout;
     }
 
     public struct RHIGraphicsPipelineCreateInfo
     {
-        public RHIPipelineLayout? layout;
-
-        public RHIShader? vertexShader;
-        public RHIShader? fragmentShader;
-
+        public RHIShader vertexShader;
+        public RHIShader fragmentShader;
+        public RHIPipelineLayout layout;
         public RHIVertexState vertex;
         public RHIFragmentState fragment;
         public RHIPrimitiveState primitive;

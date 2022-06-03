@@ -182,17 +182,17 @@ namespace Infinity.Graphics
 
         public override RHIPipelineLayout CreatePipelineLayout(in RHIPipelineLayoutCreateInfo createInfo)
         {
-            throw new NotImplementedException();
+            return new D3DPipelineLayout(this, createInfo);
         }
 
         public override RHIComputePipeline CreateComputePipeline(in RHIComputePipelineCreateInfo createInfo)
         {
-            throw new NotImplementedException();
+            return new D3DComputePipeline(this, createInfo);
         }
 
         public override RHIGraphicsPipeline CreateGraphicsPipeline(in RHIGraphicsPipelineCreateInfo createInfo)
         {
-            throw new NotImplementedException();
+            return new D3DGraphicsPipeline(this, createInfo);
         }
 
         public D3DDescriptorInfo AllocateDsvDescriptor(in int count)
