@@ -3,8 +3,8 @@
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
     <Platforms>x64;ARM64</Platforms>
-    <AssemblyName>InfinityEngine.Audio</AssemblyName>
-    <RootNamespace>InfinityEngine.Audio</RootNamespace>
+    <AssemblyName>Infinity.Audio</AssemblyName>
+    <RootNamespace>Infinity.Audio</RootNamespace>
     <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
 	<IntermediateOutputPath>../../Intermediate/Audio/</IntermediateOutputPath>
   </PropertyGroup>

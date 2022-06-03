@@ -3,10 +3,11 @@
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
     <Platforms>x64;ARM64</Platforms>
-    <AssemblyName>InfinityEngine.Editor</AssemblyName>
-    <RootNamespace>InfinityEngine.Editor</RootNamespace>
+    <AssemblyName>Infinity.Editor</AssemblyName>
+    <RootNamespace>Infinity.Editor</RootNamespace>
     <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
 	<IntermediateOutputPath>../../Intermediate/Editor/</IntermediateOutputPath>
+	<OutputType>Exe</OutputType>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -46,5 +47,9 @@
     <Optimize>true</Optimize>
     <PlatformTarget>ARM64</PlatformTarget>
   </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Engine\Infinity.Engine.csproj" />
+  </ItemGroup>
 
 </Project>

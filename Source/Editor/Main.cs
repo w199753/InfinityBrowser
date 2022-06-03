@@ -5,7 +5,7 @@ using Infinity.Analytics;
 using Infinity.Threading;
 using System.Collections;
 
-namespace Infinity.Game
+namespace Infinity.Editor
 {
     [Serializable]
     public class TestComponent : Component
@@ -183,8 +183,11 @@ namespace Infinity.Game
     {
         static void Main(string[] args)
         {
-            TestApplication App = new TestApplication(1280, 720, "InfinityExample");
+            TestApplication App = new TestApplication(1280, 720, "Infinity Editor");
             App.Execute();
+
+            /*Console.WriteLine("Fuck you");
+            Console.ReadKey();*/
         }
     }
 }

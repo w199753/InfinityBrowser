@@ -5,8 +5,8 @@
 		<TargetFramework>net6.0</TargetFramework>
 		<Platforms>x64;ARM64</Platforms>
 		<Nullable>warnings</Nullable>
-		<AssemblyName>InfinityEngine.Physics</AssemblyName>
-		<RootNamespace>InfinityEngine.Physics</RootNamespace>
+		<AssemblyName>Infinity.Physics</AssemblyName>
+		<RootNamespace>Infinity.Physics</RootNamespace>
 		<AllowUnsafeBlocks>True</AllowUnsafeBlocks>
 		<IntermediateOutputPath>../../Intermediate/Physcis/</IntermediateOutputPath>
 	</PropertyGroup>
