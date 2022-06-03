@@ -183,7 +183,7 @@ namespace Infinity.Editor
     {
         static void Main(string[] args)
         {
-            TestApplication App = new TestApplication(1280, 720, "Infinity Editor");
+            TestApplication App = new TestApplication(1600, 900, "Infinity Editor");
             App.Execute();
 
             /*Console.WriteLine("Fuck you");
