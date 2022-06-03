@@ -118,7 +118,7 @@ namespace Infinity.Graphics
 
         public abstract void BeginPass();
         public abstract void SetPipeline(RHIComputePipeline pipeline);
-        public abstract void SetBindGroup(in uint layoutIndex, RHIBindGroup bindGroup);
+        public abstract void SetBindGroup(in int layoutIndex, RHIBindGroup bindGroup);
         public abstract void Dispatch(in uint groupCountX, in uint groupCountY, in uint groupCountZ);
         public abstract void EndPass();
         // TODO PushDebugMark(...)

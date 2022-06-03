@@ -5,10 +5,10 @@ using static TerraFX.Interop.Windows.Windows;
 
 namespace Infinity.Graphics
 {
-#pragma warning disable CS0169, CS0649, CS8600, CS8602, CS8604, CS8618, CA1416
+#pragma warning disable CS0169, CS0649, CS8600, CS8601, CS8602, CS8604, CS8618, CA1416
     internal unsafe class D3DComputePipeline : RHIComputePipeline
     {
-        public D3DPipelineLayout? PipelineLayout
+        public D3DPipelineLayout PipelineLayout
         {
             get
             {
@@ -23,7 +23,7 @@ namespace Infinity.Graphics
             }
         }
 
-        private D3DPipelineLayout? m_PipelineLayout;
+        private D3DPipelineLayout m_PipelineLayout;
         private ID3D12PipelineState* m_NativePipelineState;
 
         public D3DComputePipeline(D3DDevice device, in RHIComputePipelineCreateInfo createInfo)
@@ -50,7 +50,7 @@ namespace Infinity.Graphics
 
     internal unsafe class D3DGraphicsPipeline : RHIGraphicsPipeline
     {
-        public D3DPipelineLayout? PipelineLayout
+        public D3DPipelineLayout PipelineLayout
         {
             get
             {
@@ -65,7 +65,7 @@ namespace Infinity.Graphics
             }
         }
 
-        private D3DPipelineLayout? m_PipelineLayout;
+        private D3DPipelineLayout m_PipelineLayout;
         private ID3D12PipelineState* m_NativePipelineState;
 
         public D3DGraphicsPipeline(D3DDevice device, in RHIGraphicsPipelineCreateInfo createInfo)
@@ -78,5 +78,5 @@ namespace Infinity.Graphics
             //m_NativePipelineState->Release();
         }
     }
-#pragma warning restore CS0169, CS0649, CS8600, CS8602, CS8604, CS8618, CA1416
+#pragma warning restore CS0169, CS0649, CS8600, CS8601, CS8602, CS8604, CS8618, CA1416
 }

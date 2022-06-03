@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
 using Infinity.Container;
 using TerraFX.Interop.DirectX;
 using System.Collections.Generic;
@@ -29,9 +30,15 @@ namespace Infinity.Graphics
         public D3DPipelineLayout(D3DDevice device, in RHIPipelineLayoutCreateInfo createInfo)
         {
             m_RootDescriptorParameterIndexMap = new Dictionary<EShaderStageFlags, Dictionary<int, D3DBindingTypeAndRootParameterIndex>>(4);
-            m_RootDescriptorParameterIndexMap.TryAdd(EShaderStageFlags.Vertex, new Dictionary<int, D3DBindingTypeAndRootParameterIndex>(6));
-            m_RootDescriptorParameterIndexMap.TryAdd(EShaderStageFlags.Fragment, new Dictionary<int, D3DBindingTypeAndRootParameterIndex>(6));
-            m_RootDescriptorParameterIndexMap.TryAdd(EShaderStageFlags.Compute, new Dictionary<int, D3DBindingTypeAndRootParameterIndex>(6));
+            foreach (EShaderStageFlags shaderStage in Enum.GetValues(typeof(EShaderStageFlags)))
+            {
+                if (shaderStage == EShaderStageFlags.MAX) { continue; }
+
+                m_RootDescriptorParameterIndexMap.TryAdd(shaderStage, new Dictionary<int, D3DBindingTypeAndRootParameterIndex>(6));
+            }
+            //m_RootDescriptorParameterIndexMap.TryAdd(EShaderStageFlags.Vertex, new Dictionary<int, D3DBindingTypeAndRootParameterIndex>(6));
+            //m_RootDescriptorParameterIndexMap.TryAdd(EShaderStageFlags.Fragment, new Dictionary<int, D3DBindingTypeAndRootParameterIndex>(6));
+            //m_RootDescriptorParameterIndexMap.TryAdd(EShaderStageFlags.Compute, new Dictionary<int, D3DBindingTypeAndRootParameterIndex>(6));
 
             TValueArray<D3D12_ROOT_PARAMETER1> rootParameters = new TValueArray<D3D12_ROOT_PARAMETER1>(16);
 
@@ -72,10 +79,10 @@ namespace Infinity.Graphics
             m_NativeRootSignature = rootSignature;
         }
 
-        public D3DBindingTypeAndRootParameterIndex QueryRootDescriptorParameterIndex(in EShaderStageFlags shaderStage, in int layoutIndex, in int binding)
+        public D3DBindingTypeAndRootParameterIndex? QueryRootDescriptorParameterIndex(in EShaderStageFlags shaderStage, in int layoutIndex, in int sloot)
         {
             m_RootDescriptorParameterIndexMap.TryGetValue(shaderStage, out Dictionary<int, D3DBindingTypeAndRootParameterIndex> map);
-            map.TryGetValue((layoutIndex << 8) + binding, out D3DBindingTypeAndRootParameterIndex parameter);
+            map.TryGetValue((layoutIndex << 8) + sloot, out D3DBindingTypeAndRootParameterIndex parameter);
             return parameter;
         }
 

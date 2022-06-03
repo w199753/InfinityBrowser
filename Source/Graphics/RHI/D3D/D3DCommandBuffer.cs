@@ -8,7 +8,7 @@ namespace Infinity.Graphics
 #pragma warning disable CS8600, CS8602, CS8604, CS8618, CA1416
     internal unsafe class D3DCommandBuffer : RHICommandBuffer
     {
-        public D3DCommandPool? D3DCommandPool
+        public D3DCommandPool D3DCommandPool
         {
             get
             {
@@ -23,7 +23,7 @@ namespace Infinity.Graphics
             }
         }
 
-        private D3DCommandPool? m_D3DCommandPool;
+        private D3DCommandPool m_D3DCommandPool;
         private ID3D12GraphicsCommandList5* m_NativeCommandList;
 
         public D3DCommandBuffer(D3DDevice device, D3DCommandPool cmdPool)

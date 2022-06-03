@@ -60,12 +60,12 @@ namespace Infinity.Rendering
 
             // Create SwapChain
             RHISwapChainCreateInfo swapChainCreateInfo = new RHISwapChainCreateInfo();
-            swapChainCreateInfo.count = 2;
+            swapChainCreateInfo.count = 3;
             swapChainCreateInfo.extent = new int2(width, height);
             swapChainCreateInfo.format = EPixelFormat.RGBA8_UNORM;
             swapChainCreateInfo.presentMode = EPresentMode.VSync;
             swapChainCreateInfo.window = window;
-            swapChainCreateInfo.presentQueue = m_Queues[2];
+            swapChainCreateInfo.presentQueue = m_Queues[(int)EQueueType.Graphics];
             m_SwapChain = m_Device.CreateSwapChain(swapChainCreateInfo);
 
             RHITextureViewCreateInfo viewCreateInfo = new RHITextureViewCreateInfo();
@@ -76,9 +76,10 @@ namespace Infinity.Rendering
             viewCreateInfo.aspect = ETextureAspect.Color;
             viewCreateInfo.format = EPixelFormat.RGBA8_UNORM;
             viewCreateInfo.dimension = ETextureViewDimension.Tex2D;
-            m_SwapChainViews = new RHITextureView[2];
+            m_SwapChainViews = new RHITextureView[3];
             m_SwapChainViews[0] = m_SwapChain.GetTexture(0).CreateTextureView(viewCreateInfo);
             m_SwapChainViews[1] = m_SwapChain.GetTexture(1).CreateTextureView(viewCreateInfo);
+            m_SwapChainViews[2] = m_SwapChain.GetTexture(2).CreateTextureView(viewCreateInfo);
 
             //Create CommandPool
             m_CommandPools = new RHICommandPool[3];
@@ -119,6 +120,21 @@ namespace Infinity.Rendering
         private void CullLightProbe()
         {
 
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public void BeginInit()
+        {
+            m_CommandPools[0].Reset();
+            m_CommandPools[1].Reset();
+            m_CommandPools[2].Reset();
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public void EndInit()
+        {
+            m_Queues[(int)EQueueType.Graphics].Submit(null, m_FrameFence);
+            m_FrameFence.Wait();
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]

@@ -287,10 +287,6 @@ namespace Infinity.Graphics
                 }
 
                 queueCountMap.TryAdd(queueInfo.type, (int)queueInfo.count);
-                /*if(queueCountMap.TryAdd(queueInfo.type, 0))
-                {
-                    queueCountMap[queueInfo.type] += (int)queueInfo.count;
-                }*/
             }
 
             m_Queues = new Dictionary<EQueueType, List<D3DQueue>>(3);

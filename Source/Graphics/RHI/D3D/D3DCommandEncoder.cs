@@ -1,15 +1,16 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
 using Infinity.Mathmatics;
 using TerraFX.Interop.Windows;
 using TerraFX.Interop.DirectX;
-using System;
+using System.Collections.Generic;
 
 namespace Infinity.Graphics
 {
-#pragma warning disable CS8600, CS8602, CS8604, CS8618, CA1416
+#pragma warning disable CS8600, CS8601, CS8602, CS8604, CS8618, CA1416
     internal unsafe class D3DBlitEncoder : RHIBlitEncoder
     {
-        private D3DCommandBuffer? m_D3DCommandBuffer;
+        private D3DCommandBuffer m_D3DCommandBuffer;
 
         public D3DBlitEncoder(D3DCommandBuffer cmdBuffer)
         {
@@ -18,27 +19,27 @@ namespace Infinity.Graphics
 
         public override void BeginPass()
         {
-            // TODO
+            
         }
 
         public override void CopyBufferToBuffer(RHIBuffer src, in int srcOffset, RHIBuffer dst, in int dstOffset, in int size)
         {
-            // TODO
+            throw new NotImplementedException();
         }
 
         public override void CopyBufferToTexture(RHIBuffer src, RHITexture dst, in RHITextureSubResourceInfo subResourceInfo, in int3 size)
         {
-            // TODO
+            throw new NotImplementedException();
         }
 
         public override void CopyTextureToBuffer(RHITexture src, RHIBuffer dst, in RHITextureSubResourceInfo subResourceInfo, in int3 size)
         {
-            // TODO
+            throw new NotImplementedException();
         }
 
         public override void CopyTextureToTexture(RHITexture src, in RHITextureSubResourceInfo srcSubResourceInfo, RHITexture dst, in RHITextureSubResourceInfo dstSubResourceInfo, in int3 size)
         {
-            // TODO
+            throw new NotImplementedException();
         }
 
         public override void ResourceBarrier(in RHIBarrier barrier)
@@ -87,7 +88,8 @@ namespace Infinity.Graphics
 
     internal unsafe class D3DComputeEncoder : RHIComputeEncoder
     {
-        private D3DCommandBuffer? m_D3DCommandBuffer;
+        private D3DCommandBuffer m_D3DCommandBuffer;
+        private D3DComputePipeline m_ComputePipeline;
 
         public D3DComputeEncoder(D3DCommandBuffer cmdBuffer)
         {
@@ -101,17 +103,43 @@ namespace Infinity.Graphics
 
         public override void SetPipeline(RHIComputePipeline pipeline)
         {
-            throw new NotImplementedException();
+            m_ComputePipeline = pipeline as D3DComputePipeline;
+            Debug.Assert(m_ComputePipeline != null);
+
+            m_D3DCommandBuffer.NativeCommandList->SetPipelineState(m_ComputePipeline.NativePipelineState);
+            m_D3DCommandBuffer.NativeCommandList->SetGraphicsRootSignature(m_ComputePipeline.PipelineLayout.NativeRootSignature);
         }
 
-        public override void SetBindGroup(in uint layoutIndex, RHIBindGroup bindGroup)
+        public override void SetBindGroup(in int layoutIndex, RHIBindGroup bindGroup)
         {
-            throw new NotImplementedException();
+            D3DBindGroup d3dBindGroup = bindGroup as D3DBindGroup;
+            D3DBindGroupLayout bindGroupLayout = d3dBindGroup.BindGroupLayout;
+            D3DPipelineLayout pipelineLayout = m_ComputePipeline.PipelineLayout;
+
+            Debug.Assert(m_ComputePipeline != null);
+            Debug.Assert(layoutIndex == bindGroupLayout.LayoutIndex);
+
+            List<D3DBindGroupParameter> bindings = d3dBindGroup.BindingParameters;
+            foreach(D3DBindGroupParameter binding in bindings) 
+            {
+                foreach (EShaderStageFlags shaderStage in Enum.GetValues(typeof(EShaderStageFlags)))
+                {
+                    if(shaderStage == EShaderStageFlags.MAX) { continue; }
+
+                    D3DBindingTypeAndRootParameterIndex? parameter = pipelineLayout.QueryRootDescriptorParameterIndex(shaderStage, layoutIndex, binding.slot);
+                    if (!parameter.HasValue)
+                    {
+                        return;
+                    }
+                    Debug.Assert(parameter.Value.bindType == binding.bindType);
+                    m_D3DCommandBuffer.NativeCommandList->SetGraphicsRootDescriptorTable((uint)parameter.Value.index, binding.dx12GpuDescriptorHandle);
+                }
+            }
         }
 
         public override void Dispatch(in uint groupCountX, in uint groupCountY, in uint groupCountZ)
         {
-            throw new NotImplementedException();
+            m_D3DCommandBuffer.NativeCommandList->Dispatch(groupCountX, groupCountY, groupCountZ);
         }
 
         public override void EndPass()
@@ -121,13 +149,13 @@ namespace Infinity.Graphics
 
         protected override void Release()
         {
-            m_D3DCommandBuffer = null;
+
         }
     }
 
     internal unsafe class D3DGraphicsEncoder : RHIGraphicsEncoder
     {
-        private D3DCommandBuffer? m_D3DCommandBuffer;
+        private D3DCommandBuffer m_D3DCommandBuffer;
 
         public D3DGraphicsEncoder(D3DCommandBuffer cmdBuffer)
         {
@@ -250,8 +278,8 @@ namespace Infinity.Graphics
 
         protected override void Release()
         {
-            m_D3DCommandBuffer = null;
+
         }
     }
-#pragma warning restore CS8600, CS8602, CS8604, CS8618, CA1416
+#pragma warning restore CS8600, CS8601, CS8602, CS8604, CS8618, CA1416
 }

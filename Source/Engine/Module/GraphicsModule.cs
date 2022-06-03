@@ -43,10 +43,10 @@ namespace Infinity
         public void GraphicsFunc()
         {
             m_SemaphoreG2R.Wait();
-            m_RenderContext.BeginFrame();
+            m_RenderContext.BeginInit();
             ProcessGraphicsTasks();
             m_SceneRenderer.Init();
-            m_RenderContext.EndFrame();
+            m_RenderContext.EndInit();
             m_SemaphoreG2R.Signal();
 
             while (!m_LoopExit)
