@@ -41,6 +41,11 @@ namespace Infinity.Graphics
         {
             m_NativeCommandList->Close();
             m_NativeCommandList->Reset(m_D3DCommandPool.NativeCommandAllocator, null);
+
+            ID3D12DescriptorHeap** resourceBarriers = stackalloc ID3D12DescriptorHeap*[2];
+            resourceBarriers[0] = m_D3DCommandPool.D3DDevice.SamplerHeap.DescriptorHeap;
+            resourceBarriers[1] = m_D3DCommandPool.D3DDevice.CbvSrvUavHeap.DescriptorHeap;
+            m_NativeCommandList->SetDescriptorHeaps(2, &*resourceBarriers);
         }
 
         public override RHIBlitEncoder GetBlitEncoder()

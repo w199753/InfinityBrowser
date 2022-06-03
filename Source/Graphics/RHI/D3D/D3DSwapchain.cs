@@ -64,7 +64,7 @@ namespace Infinity.Graphics
             desc.Width = (uint)createInfo.extent.x;
             desc.Height = (uint)createInfo.extent.y;
             desc.Format = /*D3DUtility.GetNativeFormat(createInfo.format)*/DXGI_FORMAT.DXGI_FORMAT_R8G8B8A8_UNORM;
-            desc.BufferUsage = DXGI.DXGI_USAGE_RENDER_TARGET_OUTPUT;
+            desc.BufferUsage = createInfo.frameBufferOnly ? DXGI.DXGI_USAGE_RENDER_TARGET_OUTPUT : (DXGI.DXGI_USAGE_SHADER_INPUT | DXGI.DXGI_USAGE_RENDER_TARGET_OUTPUT);
             desc.SwapEffect = /*D3DUtility.GetNativeSwapEffect(createInfo.presentMode)*/ DXGI_SWAP_EFFECT.DXGI_SWAP_EFFECT_FLIP_DISCARD;
             desc.SampleDesc.Count = 1;
 

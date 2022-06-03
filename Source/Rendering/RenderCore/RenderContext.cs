@@ -61,6 +61,7 @@ namespace Infinity.Rendering
             // Create SwapChain
             RHISwapChainCreateInfo swapChainCreateInfo = new RHISwapChainCreateInfo();
             swapChainCreateInfo.count = 3;
+            swapChainCreateInfo.frameBufferOnly = true;
             swapChainCreateInfo.extent = new int2(width, height);
             swapChainCreateInfo.format = EPixelFormat.RGBA8_UNORM;
             swapChainCreateInfo.presentMode = EPresentMode.VSync;

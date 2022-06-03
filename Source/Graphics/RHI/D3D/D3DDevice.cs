@@ -43,26 +43,14 @@ namespace Infinity.Graphics
             m_DescriptorSize = device->GetDescriptorHandleIncrementSize(type);
 
             D3D12_DESCRIPTOR_HEAP_DESC descriptorInfo;
-            descriptorInfo.Flags = flag;
             descriptorInfo.Type = type;
+            descriptorInfo.Flags = flag;
             descriptorInfo.NumDescriptors = count;
 
             ID3D12DescriptorHeap* descriptorHeap;
             bool success = SUCCEEDED(device->CreateDescriptorHeap(&descriptorInfo, __uuidof<ID3D12DescriptorHeap>(), (void**)&descriptorHeap));
             Debug.Assert(success);
             m_DescriptorHeap = descriptorHeap;
-
-            /*if (type == D3D12_DESCRIPTOR_HEAP_TYPE.D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV) 
-            {
-                D3D12_DESCRIPTOR_HEAP_DESC descriptorGPU;
-                descriptorGPU.Flags = D3D12_DESCRIPTOR_HEAP_FLAGS.D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE;
-                descriptorGPU.Type = type;
-                descriptorGPU.NumDescriptors = count;
-                ID3D12DescriptorHeap* gpuHeapPtr;
-                success = SUCCEEDED(device->CreateDescriptorHeap(&descriptorGPU, __uuidof<ID3D12DescriptorHeap>(), (void**)&gpuHeapPtr));
-                Debug.Assert(success);
-                m_DescriptorHeap = gpuHeapPtr;
-            }*/
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -99,6 +87,34 @@ namespace Infinity.Graphics
             get
             {
                 return m_D3DGpu;
+            }
+        }
+        public D3DDescriptorHeap DsvHeap
+        {
+            get
+            {
+                return m_DsvHeap;
+            }
+        }
+        public D3DDescriptorHeap RtvHeap
+        {
+            get
+            {
+                return m_RtvHeap;
+            }
+        }
+        public D3DDescriptorHeap SamplerHeap
+        {
+            get
+            {
+                return m_SamplerHeap;
+            }
+        }
+        public D3DDescriptorHeap CbvSrvUavHeap
+        {
+            get
+            {
+                return m_CbvSrvUavHeap;
             }
         }
         public ID3D12Device6* NativeDevice
@@ -269,9 +285,9 @@ namespace Infinity.Graphics
 
         private void CreateDescriptorHeaps()
         {
-            m_DsvHeap = new D3DDescriptorHeap(m_NativeDevice, D3D12_DESCRIPTOR_HEAP_TYPE.D3D12_DESCRIPTOR_HEAP_TYPE_DSV, D3D12_DESCRIPTOR_HEAP_FLAGS.D3D12_DESCRIPTOR_HEAP_FLAG_NONE, 256);
-            m_RtvHeap = new D3DDescriptorHeap(m_NativeDevice, D3D12_DESCRIPTOR_HEAP_TYPE.D3D12_DESCRIPTOR_HEAP_TYPE_RTV, D3D12_DESCRIPTOR_HEAP_FLAGS.D3D12_DESCRIPTOR_HEAP_FLAG_NONE, 512);
-            m_SamplerHeap = new D3DDescriptorHeap(m_NativeDevice, D3D12_DESCRIPTOR_HEAP_TYPE.D3D12_DESCRIPTOR_HEAP_TYPE_SAMPLER, D3D12_DESCRIPTOR_HEAP_FLAGS.D3D12_DESCRIPTOR_HEAP_FLAG_NONE, 4096);
+            m_DsvHeap = new D3DDescriptorHeap(m_NativeDevice, D3D12_DESCRIPTOR_HEAP_TYPE.D3D12_DESCRIPTOR_HEAP_TYPE_DSV, D3D12_DESCRIPTOR_HEAP_FLAGS.D3D12_DESCRIPTOR_HEAP_FLAG_NONE, 1024);
+            m_RtvHeap = new D3DDescriptorHeap(m_NativeDevice, D3D12_DESCRIPTOR_HEAP_TYPE.D3D12_DESCRIPTOR_HEAP_TYPE_RTV, D3D12_DESCRIPTOR_HEAP_FLAGS.D3D12_DESCRIPTOR_HEAP_FLAG_NONE, 1024);
+            m_SamplerHeap = new D3DDescriptorHeap(m_NativeDevice, D3D12_DESCRIPTOR_HEAP_TYPE.D3D12_DESCRIPTOR_HEAP_TYPE_SAMPLER, D3D12_DESCRIPTOR_HEAP_FLAGS.D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE, 2048);
             m_CbvSrvUavHeap = new D3DDescriptorHeap(m_NativeDevice, D3D12_DESCRIPTOR_HEAP_TYPE.D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV, D3D12_DESCRIPTOR_HEAP_FLAGS.D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE, 32768);
         }
 

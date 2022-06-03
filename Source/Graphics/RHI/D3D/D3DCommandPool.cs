@@ -7,6 +7,13 @@ namespace Infinity.Graphics
 #pragma warning disable CS8600, CS8602, CS8604, CS8618, CA1416
     internal unsafe class D3DCommandPool : RHICommandPool
     {
+        public D3DDevice D3DDevice
+        {
+            get
+            {
+                return m_D3DDevice;
+            }
+        }
         public ID3D12CommandAllocator* NativeCommandAllocator
         {
             get

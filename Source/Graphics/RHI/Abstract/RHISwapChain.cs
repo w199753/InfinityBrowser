@@ -5,6 +5,7 @@ namespace Infinity.Graphics
 {
     public struct RHISwapChainCreateInfo
     {
+        public bool frameBufferOnly;
         public int count;
         public int2 extent;
         public IntPtr window;
