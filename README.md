@@ -1,2 +1,2 @@
-# InfinityEngine
-基于点网的渲染引擎架构探索.
+# InfinityBrowser
+dotnet based render engine research.
