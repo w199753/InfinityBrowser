@@ -6,7 +6,6 @@ namespace Infinity.Rendering
 {
     public class HybridRenderPipeline : RenderPipeline
     {
-        RHICommandBuffer m_CommandBuffer;
         RHIGraphicsPassColorAttachment[] m_ColorAttachments;
 
         public HybridRenderPipeline(string pipelineName) : base(pipelineName) 
@@ -18,7 +17,6 @@ namespace Infinity.Rendering
         {
             Console.WriteLine("Init RenderPipeline");
 
-            m_CommandBuffer = renderContext.CreateCommandBuffer(EContextType.Graphics);
             m_ColorAttachments = new RHIGraphicsPassColorAttachment[1];
             {
                 m_ColorAttachments[0].clearValue = new float4(1, 0.25f, 0, 1);
@@ -30,6 +28,8 @@ namespace Infinity.Rendering
 
         public override void Render(RenderContext renderContext)
         {
+            RHICommandBuffer m_CommandBuffer = renderContext.GetCommandBuffer(EContextType.Graphics);
+
             using (m_CommandBuffer.BeginScoped())
             {
                 m_ColorAttachments[0].view = renderContext.BackBufferView;
@@ -61,14 +61,13 @@ namespace Infinity.Rendering
                 }
             }
 
-            renderContext.ExecuteCommandBuffer(m_CommandBuffer, null);
+            renderContext.ExecuteCommandBuffer(m_CommandBuffer);
+            renderContext.ReleaseCommandBuffer(m_CommandBuffer);
         }
 
         protected override void Release()
         {
             Console.WriteLine("Release RenderPipeline");
-
-            m_CommandBuffer?.Dispose();
         }
     }
 }

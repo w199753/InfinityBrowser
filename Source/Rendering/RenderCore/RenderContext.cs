@@ -1,6 +1,7 @@
 ﻿using System;
 using Infinity.Graphics;
 using Infinity.Mathmatics;
+using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 
 namespace Infinity.Rendering
@@ -10,6 +11,51 @@ namespace Infinity.Rendering
         Compute = 1,
         Graphics = 2,
         MAX
+    }
+
+    internal class CommandBufferPool : Disposal
+    {
+        RHICommandPool m_CommandPool;
+        Stack<RHICommandBuffer> m_Pooled;
+
+        public int countAll { get; private set; }
+        public int countActive { get { return countAll - countInactive; } }
+        public int countInactive { get { return m_Pooled.Count; } }
+
+        internal CommandBufferPool(RHICommandPool commandPool)
+        {
+            m_CommandPool = commandPool;
+            m_Pooled = new Stack<RHICommandBuffer>(64);
+        }
+
+        public RHICommandBuffer Pull()
+        {
+            RHICommandBuffer cmdBuffer;
+            if (m_Pooled.Count == 0)
+            {
+                ++countAll;
+                cmdBuffer = m_CommandPool.CreateCommandBuffer();
+            }
+            else
+            {
+                cmdBuffer = m_Pooled.Pop();
+            }
+
+            return cmdBuffer;
+        }
+
+        public void Push(RHICommandBuffer cmdBuffer)
+        {
+            m_Pooled.Push(cmdBuffer);
+        }
+
+        protected override void Release()
+        {
+            foreach (RHICommandBuffer cmdBuffer in m_Pooled)
+            {
+                cmdBuffer.Dispose();
+            }
+        }
     }
 
     public sealed class RenderContext : Disposal
@@ -27,6 +73,7 @@ namespace Infinity.Rendering
         private RHISwapChain m_SwapChain;
         private RHITextureView[] m_SwapChainViews;
         private RHICommandPool[] m_CommandPools;
+        private CommandBufferPool[] m_CommandBufferPools;
 
         public RenderContext(in int width, in int height, in IntPtr window)
         {
@@ -87,6 +134,11 @@ namespace Infinity.Rendering
             m_CommandPools[0] = m_Queues[(int)EQueueType.Blit].CreateCommandPool();
             m_CommandPools[1] = m_Queues[(int)EQueueType.Compute].CreateCommandPool();
             m_CommandPools[2] = m_Queues[(int)EQueueType.Graphics].CreateCommandPool();
+
+            m_CommandBufferPools = new CommandBufferPool[3];
+            m_CommandBufferPools[0] = new CommandBufferPool(m_CommandPools[0]);
+            m_CommandBufferPools[1] = new CommandBufferPool(m_CommandPools[1]);
+            m_CommandBufferPools[2] = new CommandBufferPool(m_CommandPools[2]);
         }
 
         public void Cull()
@@ -155,15 +207,15 @@ namespace Infinity.Rendering
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public RHICommandBuffer CreateCommandBuffer(in EContextType contextType)
+        public RHICommandBuffer GetCommandBuffer(in EContextType contextType)
         {
-            return m_CommandPools[(int)contextType].CreateCommandBuffer();
+            return m_CommandBufferPools[(int)contextType].Pull();
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public RHICommandBuffer GetCommandBuffer(in EContextType contextType)
+        public void ReleaseCommandBuffer(RHICommandBuffer cmdBuffer)
         {
-            throw new NotImplementedException();
+            m_CommandBufferPools[(int)cmdBuffer.QueueType].Push(cmdBuffer);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -257,6 +309,9 @@ namespace Infinity.Rendering
             m_SwapChainViews[1].Dispose();
             m_SwapChain.Dispose();
             m_FrameFence.Dispose();
+            m_CommandBufferPools[0].Dispose();
+            m_CommandBufferPools[1].Dispose();
+            m_CommandBufferPools[2].Dispose();
             m_CommandPools[0].Dispose();
             m_CommandPools[1].Dispose();
             m_CommandPools[2].Dispose();

@@ -19,7 +19,6 @@ namespace Infinity.Graphics
 
     public abstract class RHICommandBuffer : Disposal
     {
-
         public EQueueType QueueType => m_QueueType;
 
         protected EQueueType m_QueueType;
