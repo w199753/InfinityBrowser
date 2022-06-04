@@ -6,13 +6,13 @@ using static TerraFX.Interop.Windows.Windows;
 
 namespace Infinity.Graphics
 {
-    internal unsafe class D3DBuffer : RHIBuffer
+    internal unsafe class Dx12Buffer : RHIBuffer
     {
-        public D3DDevice D3DDevice
+        public Dx12Device Dx12Device
         {
             get
             {
-                return m_D3DDevice;
+                return m_Dx12Device;
             }
         }
         public EBufferUsageFlags Usages
@@ -31,20 +31,20 @@ namespace Infinity.Graphics
         }
 
         private EMapMode m_MapMode;
-        private D3DDevice m_D3DDevice;
+        private Dx12Device m_Dx12Device;
         private EBufferUsageFlags m_Usages;
         private ID3D12Resource* m_NativeResource;
 
-        public D3DBuffer(D3DDevice device, in RHIBufferCreateInfo createInfo)
+        public Dx12Buffer(Dx12Device device, in RHIBufferCreateInfo createInfo)
         {
-            m_D3DDevice = device;
+            m_Dx12Device = device;
             m_Usages = createInfo.usages;
-            m_MapMode = D3DUtility.GetMapModeByUsage(createInfo.usages);
+            m_MapMode = Dx12Utility.GetMapModeByUsage(createInfo.usages);
 
             ID3D12Resource* dx12Resource;
             D3D12_RESOURCE_DESC resourceDesc = D3D12_RESOURCE_DESC.Buffer((ulong)createInfo.size);
-            D3D12_HEAP_PROPERTIES heapProperties = new D3D12_HEAP_PROPERTIES(D3DUtility.GetDX12HeapTypeByUsage(createInfo.usages));
-            bool success = SUCCEEDED(m_D3DDevice.NativeDevice->CreateCommittedResource(&heapProperties, D3D12_HEAP_FLAGS.D3D12_HEAP_FLAG_NONE, &resourceDesc, D3DUtility.GetDX12ResourceStateByUsage(createInfo.usages), null, Windows.__uuidof<ID3D12Resource>(), (void**)&dx12Resource));
+            D3D12_HEAP_PROPERTIES heapProperties = new D3D12_HEAP_PROPERTIES(Dx12Utility.GetDX12HeapTypeByUsage(createInfo.usages));
+            bool success = SUCCEEDED(m_Dx12Device.NativeDevice->CreateCommittedResource(&heapProperties, D3D12_HEAP_FLAGS.D3D12_HEAP_FLAG_NONE, &resourceDesc, Dx12Utility.GetDX12ResourceStateByUsage(createInfo.usages), null, Windows.__uuidof<ID3D12Resource>(), (void**)&dx12Resource));
             Debug.Assert(success);
             m_NativeResource = dx12Resource;
         }
@@ -67,7 +67,7 @@ namespace Infinity.Graphics
 
         public override RHIBufferView CreateBufferView(in RHIBufferViewCreateInfo createInfo)
         {
-            return new D3DBufferView(this, createInfo);
+            return new Dx12BufferView(this, createInfo);
         }
 
         protected override void Release()

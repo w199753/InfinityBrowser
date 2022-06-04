@@ -7,7 +7,7 @@ using static TerraFX.Interop.Windows.Windows;
 
 namespace Infinity.Graphics
 {
-    internal unsafe class D3DFence : RHIFence
+    internal unsafe class Dx12Fence : RHIFence
     {
         public ID3D12Fence* NativeFence
         {
@@ -35,7 +35,7 @@ namespace Infinity.Graphics
         private ID3D12Fence* m_NativeFence;
         private AutoResetEvent m_FenceEvent;
 
-        public D3DFence(D3DDevice device)
+        public Dx12Fence(Dx12Device device)
         {
             ID3D12Fence* fence = null;
             bool success = SUCCEEDED(device.NativeDevice->CreateFence(0, D3D12_FENCE_FLAGS.D3D12_FENCE_FLAG_NONE, __uuidof<ID3D12Fence>(), (void**)&fence));

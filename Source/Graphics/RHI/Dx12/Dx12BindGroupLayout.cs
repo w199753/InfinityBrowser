@@ -4,7 +4,7 @@ using System.Collections.Generic;
 namespace Infinity.Graphics
 {
 #pragma warning disable CS8600, CS8602, CS8604, CS8618, CA1416
-    internal struct D3DRootParameterKeyInfo
+    internal struct Dx12RootParameterKeyInfo
     {
         public int slot;
         public int layoutIndex;
@@ -12,7 +12,7 @@ namespace Infinity.Graphics
         public EShaderStageFlags shaderStage;
     }
 
-    internal unsafe class D3DBindGroupLayout : RHIBindGroupLayout
+    internal unsafe class Dx12BindGroupLayout : RHIBindGroupLayout
     {
         public int LayoutIndex
         {
@@ -28,7 +28,7 @@ namespace Infinity.Graphics
                 return m_NativeRootParameters;
             }
         }
-        public List<D3DRootParameterKeyInfo> RootParameterKeyInfos
+        public List<Dx12RootParameterKeyInfo> RootParameterKeyInfos
         {
             get
             {
@@ -38,13 +38,13 @@ namespace Infinity.Graphics
 
         private int m_LayoutIndex;
         private List<D3D12_ROOT_PARAMETER1> m_NativeRootParameters;
-        private List<D3DRootParameterKeyInfo> m_RootParameterKeyInfos;
+        private List<Dx12RootParameterKeyInfo> m_RootParameterKeyInfos;
 
-        public D3DBindGroupLayout(in RHIBindGroupLayoutCreateInfo createInfo)
+        public Dx12BindGroupLayout(in RHIBindGroupLayoutCreateInfo createInfo)
         {
             m_LayoutIndex = createInfo.layoutIndex;
             m_NativeRootParameters = new List<D3D12_ROOT_PARAMETER1>(16);
-            m_RootParameterKeyInfos = new List<D3DRootParameterKeyInfo>(16);
+            m_RootParameterKeyInfos = new List<Dx12RootParameterKeyInfo>(16);
 
             Dictionary<EShaderStageFlags, List<RHIBindGroupLayoutElement>> visiblityMap = new Dictionary<EShaderStageFlags, List<RHIBindGroupLayoutElement>>();
             visiblityMap.TryAdd(EShaderStageFlags.Vertex, new List<RHIBindGroupLayoutElement>(32));
@@ -69,13 +69,13 @@ namespace Infinity.Graphics
                     m_NativeRootParameters.Add(default);
                     {
                         D3D12_DESCRIPTOR_RANGE1 dx12DescriptorRange = new D3D12_DESCRIPTOR_RANGE1();
-                        dx12DescriptorRange.Init(/*D3DUtility.GetNativeBindingType(entry.type)*/D3D12_DESCRIPTOR_RANGE_TYPE.D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 1, (uint)element.slot, (uint)createInfo.layoutIndex, D3D12_DESCRIPTOR_RANGE_FLAGS.D3D12_DESCRIPTOR_RANGE_FLAG_DATA_STATIC);
-                        m_NativeRootParameters[m_NativeRootParameters.Count - 1].InitAsDescriptorTable(1, &dx12DescriptorRange, /*D3DUtility.GetNativeShaderStage(visiblity.Key)*/D3D12_SHADER_VISIBILITY.D3D12_SHADER_VISIBILITY_ALL);
+                        dx12DescriptorRange.Init(/*Dx12Utility.GetNativeBindingType(entry.type)*/D3D12_DESCRIPTOR_RANGE_TYPE.D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 1, (uint)element.slot, (uint)createInfo.layoutIndex, D3D12_DESCRIPTOR_RANGE_FLAGS.D3D12_DESCRIPTOR_RANGE_FLAG_DATA_STATIC);
+                        m_NativeRootParameters[m_NativeRootParameters.Count - 1].InitAsDescriptorTable(1, &dx12DescriptorRange, /*Dx12Utility.GetNativeShaderStage(visiblity.Key)*/D3D12_SHADER_VISIBILITY.D3D12_SHADER_VISIBILITY_ALL);
                     }
 
                     m_RootParameterKeyInfos.Add(default);
                     {
-                        D3DRootParameterKeyInfo keyInfo;
+                        Dx12RootParameterKeyInfo keyInfo;
                         keyInfo.slot = element.slot;
                         keyInfo.layoutIndex = createInfo.layoutIndex;
                         keyInfo.bindType = element.bindType;

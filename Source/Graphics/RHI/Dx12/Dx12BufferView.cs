@@ -2,7 +2,7 @@
 
 namespace Infinity.Graphics
 {
-    internal unsafe class D3DBufferView : RHIBufferView
+    internal unsafe class Dx12BufferView : RHIBufferView
     {
         public ID3D12DescriptorHeap* NativeDescriptorHeap
         {
@@ -41,43 +41,43 @@ namespace Infinity.Graphics
         }
 
         private int m_HeapIndex;
-        private D3DBuffer m_D3DBuffer;
+        private Dx12Buffer m_Dx12Buffer;
         private ID3D12DescriptorHeap* m_NativeDescriptorHeap;
         private D3D12_INDEX_BUFFER_VIEW m_NativeIndexBufferView;
         private D3D12_VERTEX_BUFFER_VIEW m_NativeVertexBufferView;
         private D3D12_CPU_DESCRIPTOR_HANDLE m_NativeCpuDescriptorHandle;
         private D3D12_GPU_DESCRIPTOR_HANDLE m_NativeGpuDescriptorHandle;
 
-        public D3DBufferView(D3DBuffer buffer, in RHIBufferViewCreateInfo createInfo)
+        public Dx12BufferView(Dx12Buffer buffer, in RHIBufferViewCreateInfo createInfo)
         {
-            m_D3DBuffer = buffer;
+            m_Dx12Buffer = buffer;
 
-            if (D3DUtility.IsIndexBuffer(m_D3DBuffer.Usages))
+            if (Dx12Utility.IsIndexBuffer(m_Dx12Buffer.Usages))
             {
                 m_NativeIndexBufferView.SizeInBytes = (uint)createInfo.size;
-                m_NativeIndexBufferView.Format = /*D3DUtility.GetNativeFormat(createInfo.index.format)*/ DXGI_FORMAT.DXGI_FORMAT_R16_UINT;
-                m_NativeIndexBufferView.BufferLocation = m_D3DBuffer.NativeResource->GetGPUVirtualAddress() + (ulong)createInfo.offset;
+                m_NativeIndexBufferView.Format = /*Dx12Utility.GetNativeFormat(createInfo.index.format)*/ DXGI_FORMAT.DXGI_FORMAT_R16_UINT;
+                m_NativeIndexBufferView.BufferLocation = m_Dx12Buffer.NativeResource->GetGPUVirtualAddress() + (ulong)createInfo.offset;
             }
-            else if (D3DUtility.IsVertexBuffer(m_D3DBuffer.Usages))
+            else if (Dx12Utility.IsVertexBuffer(m_Dx12Buffer.Usages))
             {
                 m_NativeVertexBufferView.SizeInBytes = (uint)createInfo.size;
                 m_NativeVertexBufferView.StrideInBytes = (uint)createInfo.vertex.stride;
-                m_NativeVertexBufferView.BufferLocation = m_D3DBuffer.NativeResource->GetGPUVirtualAddress() + (ulong)createInfo.offset;
+                m_NativeVertexBufferView.BufferLocation = m_Dx12Buffer.NativeResource->GetGPUVirtualAddress() + (ulong)createInfo.offset;
             }
-            else if (D3DUtility.IsConstantBuffer(m_D3DBuffer.Usages))
+            else if (Dx12Utility.IsConstantBuffer(m_Dx12Buffer.Usages))
             {
                 D3D12_CONSTANT_BUFFER_VIEW_DESC desc = new D3D12_CONSTANT_BUFFER_VIEW_DESC();
                 desc.SizeInBytes = (uint)createInfo.size;
-                desc.BufferLocation = m_D3DBuffer.NativeResource->GetGPUVirtualAddress() + (ulong)createInfo.offset;
+                desc.BufferLocation = m_Dx12Buffer.NativeResource->GetGPUVirtualAddress() + (ulong)createInfo.offset;
 
-                D3DDescriptorInfo allocation = m_D3DBuffer.D3DDevice.AllocateCbvSrvUavDescriptor(1);
+                Dx12DescriptorInfo allocation = m_Dx12Buffer.Dx12Device.AllocateCbvSrvUavDescriptor(1);
                 m_HeapIndex = allocation.index;
                 m_NativeDescriptorHeap = allocation.descriptorHeap;
                 m_NativeCpuDescriptorHandle = allocation.cpuHandle;
                 m_NativeGpuDescriptorHandle = allocation.gpuHandle;
-                m_D3DBuffer.D3DDevice.NativeDevice->CreateConstantBufferView(&desc, m_NativeCpuDescriptorHandle);
+                m_Dx12Buffer.Dx12Device.NativeDevice->CreateConstantBufferView(&desc, m_NativeCpuDescriptorHandle);
             }
-            else if (D3DUtility.IsUnorderedAccessBuffer(m_D3DBuffer.Usages))
+            else if (Dx12Utility.IsUnorderedAccessBuffer(m_Dx12Buffer.Usages))
             {
                 D3D12_UNORDERED_ACCESS_VIEW_DESC desc = new D3D12_UNORDERED_ACCESS_VIEW_DESC();
                 desc.Format = DXGI_FORMAT.DXGI_FORMAT_UNKNOWN;
@@ -85,20 +85,20 @@ namespace Infinity.Graphics
                 desc.Buffer.FirstElement = (ulong)createInfo.offset;
                 desc.ViewDimension = D3D12_UAV_DIMENSION.D3D12_UAV_DIMENSION_BUFFER;
 
-                D3DDescriptorInfo allocation = m_D3DBuffer.D3DDevice.AllocateCbvSrvUavDescriptor(1);
+                Dx12DescriptorInfo allocation = m_Dx12Buffer.Dx12Device.AllocateCbvSrvUavDescriptor(1);
                 m_HeapIndex = allocation.index;
                 m_NativeDescriptorHeap = allocation.descriptorHeap;
                 m_NativeCpuDescriptorHandle = allocation.cpuHandle;
                 m_NativeGpuDescriptorHandle = allocation.gpuHandle;
-                m_D3DBuffer.D3DDevice.NativeDevice->CreateUnorderedAccessView(m_D3DBuffer.NativeResource, null, &desc, m_NativeCpuDescriptorHandle);
+                m_Dx12Buffer.Dx12Device.NativeDevice->CreateUnorderedAccessView(m_Dx12Buffer.NativeResource, null, &desc, m_NativeCpuDescriptorHandle);
             }
         }
 
         protected override void Release()
         {
-            if (D3DUtility.IsConstantBuffer(m_D3DBuffer.Usages) || D3DUtility.IsUnorderedAccessBuffer(m_D3DBuffer.Usages))
+            if (Dx12Utility.IsConstantBuffer(m_Dx12Buffer.Usages) || Dx12Utility.IsUnorderedAccessBuffer(m_Dx12Buffer.Usages))
             {
-                m_D3DBuffer.D3DDevice.FreeCbvSrvUavDescriptor(m_HeapIndex);
+                m_Dx12Buffer.Dx12Device.FreeCbvSrvUavDescriptor(m_HeapIndex);
             }
         }
     }

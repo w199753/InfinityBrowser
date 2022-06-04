@@ -5,9 +5,9 @@ using static TerraFX.Interop.Windows.Windows;
 namespace Infinity.Graphics
 {
 #pragma warning disable CS0169, CS0649, CS8600, CS8601, CS8602, CS8604, CS8618, CA1416
-    internal unsafe class D3DComputePipeline : RHIComputePipeline
+    internal unsafe class Dx12ComputePipeline : RHIComputePipeline
     {
-        public D3DPipelineLayout PipelineLayout
+        public Dx12PipelineLayout PipelineLayout
         {
             get
             {
@@ -22,14 +22,14 @@ namespace Infinity.Graphics
             }
         }
 
-        private D3DPipelineLayout m_PipelineLayout;
+        private Dx12PipelineLayout m_PipelineLayout;
         private ID3D12PipelineState* m_NativePipelineState;
 
-        public D3DComputePipeline(D3DDevice device, in RHIComputePipelineCreateInfo createInfo)
+        public Dx12ComputePipeline(Dx12Device device, in RHIComputePipelineCreateInfo createInfo)
         {
-            m_PipelineLayout = createInfo.layout as D3DPipelineLayout;
+            m_PipelineLayout = createInfo.layout as Dx12PipelineLayout;
 
-            D3DShader computeShader = createInfo.shader as D3DShader;
+            Dx12Shader computeShader = createInfo.shader as Dx12Shader;
 
             D3D12_COMPUTE_PIPELINE_STATE_DESC desc = new D3D12_COMPUTE_PIPELINE_STATE_DESC();
             desc.CS = computeShader.NativeShaderBytecode;
@@ -47,9 +47,9 @@ namespace Infinity.Graphics
         }
     }
 
-    internal unsafe class D3DGraphicsPipeline : RHIGraphicsPipeline
+    internal unsafe class Dx12GraphicsPipeline : RHIGraphicsPipeline
     {
-        public D3DPipelineLayout PipelineLayout
+        public Dx12PipelineLayout PipelineLayout
         {
             get
             {
@@ -64,12 +64,12 @@ namespace Infinity.Graphics
             }
         }
 
-        private D3DPipelineLayout m_PipelineLayout;
+        private Dx12PipelineLayout m_PipelineLayout;
         private ID3D12PipelineState* m_NativePipelineState;
 
-        public D3DGraphicsPipeline(D3DDevice device, in RHIGraphicsPipelineCreateInfo createInfo)
+        public Dx12GraphicsPipeline(Dx12Device device, in RHIGraphicsPipelineCreateInfo createInfo)
         {
-            //m_PipelineLayout = createInfo.layout as D3DPipelineLayout;
+            //m_PipelineLayout = createInfo.layout as Dx12PipelineLayout;
         }
 
         protected override void Release()

@@ -10,7 +10,7 @@ using static TerraFX.Interop.Windows.Windows;
 namespace Infinity.Graphics
 {
 #pragma warning disable CS8600, CS8602, CS8604, CS8618, CA1416
-    internal unsafe struct D3DDescriptorInfo
+    internal unsafe struct Dx12DescriptorInfo
     {
         public int index;
         public ID3D12DescriptorHeap* descriptorHeap;
@@ -18,7 +18,7 @@ namespace Infinity.Graphics
         public D3D12_GPU_DESCRIPTOR_HANDLE gpuHandle;
     };
 
-    internal unsafe class D3DDescriptorHeap : Disposal
+    internal unsafe class Dx12DescriptorHeap : Disposal
     {
         public uint DescriptorSize => m_DescriptorSize;
         public D3D12_DESCRIPTOR_HEAP_TYPE Type => m_Type;
@@ -31,7 +31,7 @@ namespace Infinity.Graphics
         private D3D12_DESCRIPTOR_HEAP_TYPE m_Type;
         private ID3D12DescriptorHeap* m_DescriptorHeap;
 
-        public D3DDescriptorHeap(ID3D12Device6* device, in D3D12_DESCRIPTOR_HEAP_TYPE type, in D3D12_DESCRIPTOR_HEAP_FLAGS flag, in uint count)
+        public Dx12DescriptorHeap(ID3D12Device6* device, in D3D12_DESCRIPTOR_HEAP_TYPE type, in D3D12_DESCRIPTOR_HEAP_FLAGS flag, in uint count)
         {
             m_CacheMap = new TValueArray<int>((int)count);
             for (int i = 0; i < (int)count; ++i)
@@ -80,37 +80,37 @@ namespace Infinity.Graphics
         }
     }
 
-    internal unsafe class D3DDevice : RHIDevice
+    internal unsafe class Dx12Device : RHIDevice
     {
-        public D3DGPU D3DGpu
+        public Dx12GPU Dx12Gpu
         {
             get
             {
-                return m_D3DGpu;
+                return m_Dx12Gpu;
             }
         }
-        public D3DDescriptorHeap DsvHeap
+        public Dx12DescriptorHeap DsvHeap
         {
             get
             {
                 return m_DsvHeap;
             }
         }
-        public D3DDescriptorHeap RtvHeap
+        public Dx12DescriptorHeap RtvHeap
         {
             get
             {
                 return m_RtvHeap;
             }
         }
-        public D3DDescriptorHeap SamplerHeap
+        public Dx12DescriptorHeap SamplerHeap
         {
             get
             {
                 return m_SamplerHeap;
             }
         }
-        public D3DDescriptorHeap CbvSrvUavHeap
+        public Dx12DescriptorHeap CbvSrvUavHeap
         {
             get
             {
@@ -125,17 +125,17 @@ namespace Infinity.Graphics
             }
         }
 
-        private D3DGPU m_D3DGpu;
+        private Dx12GPU m_Dx12Gpu;
         private ID3D12Device6* m_NativeDevice;
-        private D3DDescriptorHeap m_DsvHeap;
-        private D3DDescriptorHeap m_RtvHeap;
-        private D3DDescriptorHeap m_SamplerHeap;
-        private D3DDescriptorHeap m_CbvSrvUavHeap;
-        private Dictionary<EQueueType, List<D3DQueue>> m_Queues;
+        private Dx12DescriptorHeap m_DsvHeap;
+        private Dx12DescriptorHeap m_RtvHeap;
+        private Dx12DescriptorHeap m_SamplerHeap;
+        private Dx12DescriptorHeap m_CbvSrvUavHeap;
+        private Dictionary<EQueueType, List<Dx12Queue>> m_Queues;
 
-        public D3DDevice(D3DGPU gpu, in RHIDeviceCreateInfo createInfo) 
+        public Dx12Device(Dx12GPU gpu, in RHIDeviceCreateInfo createInfo) 
         {
-            m_D3DGpu = gpu;
+            m_Dx12Gpu = gpu;
             CreateDevice(gpu.DXGIAdapter);
             CreateDescriptorHeaps();
             CreateQueues(createInfo);
@@ -143,14 +143,14 @@ namespace Infinity.Graphics
 
         public override int GetQueueCount(in EQueueType type)
         {
-            bool hashValue = m_Queues.TryGetValue(type, out List<D3DQueue> queueArray);
+            bool hashValue = m_Queues.TryGetValue(type, out List<Dx12Queue> queueArray);
             Debug.Assert(hashValue);
             return queueArray.Count;
         }
 
         public override RHIQueue GetQueue(in EQueueType type, in int index)
         {
-            bool hashValue = m_Queues.TryGetValue(type, out List<D3DQueue> queueArray);
+            bool hashValue = m_Queues.TryGetValue(type, out List<Dx12Queue> queueArray);
             Debug.Assert(hashValue);
             Debug.Assert(index >= 0 && index < queueArray?.Count);
             return queueArray[index];
@@ -158,63 +158,63 @@ namespace Infinity.Graphics
 
         public override RHIFence CreateFence()
         {
-            return new D3DFence(this);
+            return new Dx12Fence(this);
         }
 
         public override RHISwapChain CreateSwapChain(in RHISwapChainCreateInfo createInfo)
         {
-            return new D3DSwapChain(this, createInfo);
+            return new Dx12SwapChain(this, createInfo);
         }
 
         public override RHIBuffer CreateBuffer(in RHIBufferCreateInfo createInfo)
         {
-            return new D3DBuffer(this, createInfo);
+            return new Dx12Buffer(this, createInfo);
         }
 
         public override RHITexture CreateTexture(in RHITextureCreateInfo createInfo)
         {
-            return new D3DTexture(this, createInfo);
+            return new Dx12Texture(this, createInfo);
         }
 
         public override RHISampler CreateSampler(in RHISamplerCreateInfo createInfo)
         {
-            return new D3DSampler(this, createInfo);
+            return new Dx12Sampler(this, createInfo);
         }
 
         public override RHIShader CreateShader(in RHIShaderCreateInfo createInfo)
         {
-            return new D3DShader(createInfo);
+            return new Dx12Shader(createInfo);
         }
 
         public override RHIBindGroupLayout CreateBindGroupLayout(in RHIBindGroupLayoutCreateInfo createInfo)
         {
-            return new D3DBindGroupLayout(createInfo);
+            return new Dx12BindGroupLayout(createInfo);
         }
 
         public override RHIBindGroup CreateBindGroup(in RHIBindGroupCreateInfo createInfo)
         {
-            return new D3DBindGroup(createInfo);
+            return new Dx12BindGroup(createInfo);
         }
 
         public override RHIPipelineLayout CreatePipelineLayout(in RHIPipelineLayoutCreateInfo createInfo)
         {
-            return new D3DPipelineLayout(this, createInfo);
+            return new Dx12PipelineLayout(this, createInfo);
         }
 
         public override RHIComputePipeline CreateComputePipeline(in RHIComputePipelineCreateInfo createInfo)
         {
-            return new D3DComputePipeline(this, createInfo);
+            return new Dx12ComputePipeline(this, createInfo);
         }
 
         public override RHIGraphicsPipeline CreateGraphicsPipeline(in RHIGraphicsPipelineCreateInfo createInfo)
         {
-            return new D3DGraphicsPipeline(this, createInfo);
+            return new Dx12GraphicsPipeline(this, createInfo);
         }
 
-        public D3DDescriptorInfo AllocateDsvDescriptor(in int count)
+        public Dx12DescriptorInfo AllocateDsvDescriptor(in int count)
         {
             int index = m_DsvHeap.Allocate();
-            D3DDescriptorInfo descriptorInfo;
+            Dx12DescriptorInfo descriptorInfo;
             descriptorInfo.index = index;
             descriptorInfo.cpuHandle = m_DsvHeap.CpuStartHandle.Offset(index, m_DsvHeap.DescriptorSize);
             descriptorInfo.gpuHandle = m_DsvHeap.GpuStartHandle.Offset(index, m_DsvHeap.DescriptorSize);
@@ -222,10 +222,10 @@ namespace Infinity.Graphics
             return descriptorInfo;
         }
 
-        public D3DDescriptorInfo AllocateRtvDescriptor(in int count)
+        public Dx12DescriptorInfo AllocateRtvDescriptor(in int count)
         {
             int index = m_RtvHeap.Allocate();
-            D3DDescriptorInfo descriptorInfo;
+            Dx12DescriptorInfo descriptorInfo;
             descriptorInfo.index = index;
             descriptorInfo.cpuHandle = m_RtvHeap.CpuStartHandle.Offset(index, m_RtvHeap.DescriptorSize);
             descriptorInfo.gpuHandle = m_RtvHeap.GpuStartHandle.Offset(index, m_RtvHeap.DescriptorSize);
@@ -233,10 +233,10 @@ namespace Infinity.Graphics
             return descriptorInfo;
         }
 
-        public D3DDescriptorInfo AllocateSamplerDescriptor(in int count)
+        public Dx12DescriptorInfo AllocateSamplerDescriptor(in int count)
         {
             int index = m_SamplerHeap.Allocate();
-            D3DDescriptorInfo descriptorInfo;
+            Dx12DescriptorInfo descriptorInfo;
             descriptorInfo.index = index;
             descriptorInfo.cpuHandle = m_SamplerHeap.CpuStartHandle.Offset(index, m_SamplerHeap.DescriptorSize);
             descriptorInfo.gpuHandle = m_SamplerHeap.GpuStartHandle.Offset(index, m_SamplerHeap.DescriptorSize);
@@ -244,10 +244,10 @@ namespace Infinity.Graphics
             return descriptorInfo;
         }
 
-        public D3DDescriptorInfo AllocateCbvSrvUavDescriptor(in int count)
+        public Dx12DescriptorInfo AllocateCbvSrvUavDescriptor(in int count)
         {
             int index = m_CbvSrvUavHeap.Allocate();
-            D3DDescriptorInfo descriptorInfo;
+            Dx12DescriptorInfo descriptorInfo;
             descriptorInfo.index = index;
             descriptorInfo.cpuHandle = m_CbvSrvUavHeap.CpuStartHandle.Offset(index, m_CbvSrvUavHeap.DescriptorSize);
             descriptorInfo.gpuHandle = m_CbvSrvUavHeap.GpuStartHandle.Offset(index, m_CbvSrvUavHeap.DescriptorSize);
@@ -285,10 +285,10 @@ namespace Infinity.Graphics
 
         private void CreateDescriptorHeaps()
         {
-            m_DsvHeap = new D3DDescriptorHeap(m_NativeDevice, D3D12_DESCRIPTOR_HEAP_TYPE.D3D12_DESCRIPTOR_HEAP_TYPE_DSV, D3D12_DESCRIPTOR_HEAP_FLAGS.D3D12_DESCRIPTOR_HEAP_FLAG_NONE, 1024);
-            m_RtvHeap = new D3DDescriptorHeap(m_NativeDevice, D3D12_DESCRIPTOR_HEAP_TYPE.D3D12_DESCRIPTOR_HEAP_TYPE_RTV, D3D12_DESCRIPTOR_HEAP_FLAGS.D3D12_DESCRIPTOR_HEAP_FLAG_NONE, 1024);
-            m_SamplerHeap = new D3DDescriptorHeap(m_NativeDevice, D3D12_DESCRIPTOR_HEAP_TYPE.D3D12_DESCRIPTOR_HEAP_TYPE_SAMPLER, D3D12_DESCRIPTOR_HEAP_FLAGS.D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE, 2048);
-            m_CbvSrvUavHeap = new D3DDescriptorHeap(m_NativeDevice, D3D12_DESCRIPTOR_HEAP_TYPE.D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV, D3D12_DESCRIPTOR_HEAP_FLAGS.D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE, 32768);
+            m_DsvHeap = new Dx12DescriptorHeap(m_NativeDevice, D3D12_DESCRIPTOR_HEAP_TYPE.D3D12_DESCRIPTOR_HEAP_TYPE_DSV, D3D12_DESCRIPTOR_HEAP_FLAGS.D3D12_DESCRIPTOR_HEAP_FLAG_NONE, 1024);
+            m_RtvHeap = new Dx12DescriptorHeap(m_NativeDevice, D3D12_DESCRIPTOR_HEAP_TYPE.D3D12_DESCRIPTOR_HEAP_TYPE_RTV, D3D12_DESCRIPTOR_HEAP_FLAGS.D3D12_DESCRIPTOR_HEAP_FLAG_NONE, 1024);
+            m_SamplerHeap = new Dx12DescriptorHeap(m_NativeDevice, D3D12_DESCRIPTOR_HEAP_TYPE.D3D12_DESCRIPTOR_HEAP_TYPE_SAMPLER, D3D12_DESCRIPTOR_HEAP_FLAGS.D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE, 2048);
+            m_CbvSrvUavHeap = new Dx12DescriptorHeap(m_NativeDevice, D3D12_DESCRIPTOR_HEAP_TYPE.D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV, D3D12_DESCRIPTOR_HEAP_FLAGS.D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE, 32768);
         }
 
         private void CreateQueues(in RHIDeviceCreateInfo createInfo)
@@ -305,24 +305,24 @@ namespace Infinity.Graphics
                 queueCountMap.TryAdd(queueInfo.type, (int)queueInfo.count);
             }
 
-            m_Queues = new Dictionary<EQueueType, List<D3DQueue>>(3);
+            m_Queues = new Dictionary<EQueueType, List<Dx12Queue>>(3);
             foreach (KeyValuePair<EQueueType, int> iter in queueCountMap)
             {
-                List<D3DQueue> tempQueues = new List<D3DQueue>(iter.Value);
+                List<Dx12Queue> tempQueues = new List<Dx12Queue>(iter.Value);
 
                 D3D12_COMMAND_QUEUE_DESC queueDesc = new D3D12_COMMAND_QUEUE_DESC();
                 queueDesc.Flags = D3D12_COMMAND_QUEUE_FLAGS.D3D12_COMMAND_QUEUE_FLAG_NONE;
-                queueDesc.Type = D3DUtility.ConvertToNativeQueueType(iter.Key);
+                queueDesc.Type = Dx12Utility.ConvertToNativeQueueType(iter.Key);
                 for (int i = 0; i < iter.Value; ++i)
                 {
                     ID3D12CommandQueue* commandQueue;
                     bool success = SUCCEEDED(m_NativeDevice->CreateCommandQueue(&queueDesc, __uuidof<ID3D12CommandQueue>(), (void**)&commandQueue));
                     Debug.Assert(success);
 
-                    D3DCommandQueueCreateInfo queueCreateInfo;
+                    Dx12CommandQueueCreateInfo queueCreateInfo;
                     queueCreateInfo.cmdQueue = commandQueue;
                     queueCreateInfo.queueType = iter.Key;
-                    tempQueues.Add(new D3DQueue(this, queueCreateInfo));
+                    tempQueues.Add(new Dx12Queue(this, queueCreateInfo));
                 }
 
                 m_Queues.TryAdd(iter.Key, tempQueues);
@@ -335,7 +335,7 @@ namespace Infinity.Graphics
             m_RtvHeap.Dispose();
             m_SamplerHeap.Dispose();
             m_CbvSrvUavHeap.Dispose();
-            foreach (KeyValuePair<EQueueType, List<D3DQueue>> iter in m_Queues)
+            foreach (KeyValuePair<EQueueType, List<Dx12Queue>> iter in m_Queues)
             {
                 for (int i = 0; i < iter.Value.Count; ++i)
                 {

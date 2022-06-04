@@ -8,13 +8,13 @@ using System.Collections.Generic;
 namespace Infinity.Graphics
 {
 #pragma warning disable CS8600, CS8601, CS8602, CS8604, CS8618, CA1416
-    internal unsafe class D3DBlitEncoder : RHIBlitEncoder
+    internal unsafe class Dx12BlitEncoder : RHIBlitEncoder
     {
-        private D3DCommandBuffer m_D3DCommandBuffer;
+        private Dx12CommandBuffer m_Dx12CommandBuffer;
 
-        public D3DBlitEncoder(D3DCommandBuffer cmdBuffer)
+        public Dx12BlitEncoder(Dx12CommandBuffer cmdBuffer)
         {
-            m_D3DCommandBuffer = cmdBuffer;
+            m_Dx12CommandBuffer = cmdBuffer;
         }
 
         public override void BeginPass()
@@ -24,9 +24,9 @@ namespace Infinity.Graphics
 
         public override void CopyBufferToBuffer(RHIBuffer src, in int srcOffset, RHIBuffer dst, in int dstOffset, in int size)
         {
-            D3DBuffer srcBuffer = src as D3DBuffer;
-            D3DBuffer dstBuffer = dst as D3DBuffer;
-            m_D3DCommandBuffer.NativeCommandList->CopyBufferRegion(dstBuffer.NativeResource, (ulong)dstOffset, srcBuffer.NativeResource, (ulong)srcOffset, (ulong)size);
+            Dx12Buffer srcBuffer = src as Dx12Buffer;
+            Dx12Buffer dstBuffer = dst as Dx12Buffer;
+            m_Dx12CommandBuffer.NativeCommandList->CopyBufferRegion(dstBuffer.NativeResource, (ulong)dstOffset, srcBuffer.NativeResource, (ulong)srcOffset, (ulong)size);
         }
 
         public override void CopyBufferToTexture(RHIBuffer src, RHITexture dst, in RHITextureSubResourceInfo subResourceInfo, in int3 size)
@@ -41,11 +41,11 @@ namespace Infinity.Graphics
 
         public override void CopyTextureToTexture(RHITexture src, in RHITextureSubResourceInfo srcSubResourceInfo, RHITexture dst, in RHITextureSubResourceInfo dstSubResourceInfo, in int3 size)
         {
-            //D3DTexture srcTexture = src as D3DTexture;
-            //D3DTexture dstTexture = dst as D3DTexture;
+            //Dx12Texture srcTexture = src as Dx12Texture;
+            //Dx12Texture dstTexture = dst as Dx12Texture;
 
             //D3D12_TEXTURE_COPY_LOCATION srcLocation = new D3D12_TEXTURE_COPY_LOCATION(srcTexture.NativeResource, new D3D12_PLACED_SUBRESOURCE_FOOTPRINT());
-            //m_D3DCommandBuffer.NativeCommandList->CopyTextureRegion();
+            //m_Dx12CommandBuffer.NativeCommandList->CopyTextureRegion();
         }
 
         public override void ResourceBarrier(in RHIBarrier barrier)
@@ -55,25 +55,25 @@ namespace Infinity.Graphics
             D3D12_RESOURCE_STATES afterState;
             if (barrier.Type == EResourceType.Buffer)
             {
-                D3DBuffer buffer = barrier.Buffer.handle as D3DBuffer;
+                Dx12Buffer buffer = barrier.Buffer.handle as Dx12Buffer;
                 Debug.Assert(buffer != null);
 
                 resource = buffer.NativeResource;
-                beforeState = D3DUtility.ConvertToNativeBufferState(barrier.Buffer.before);
-                afterState = D3DUtility.ConvertToNativeBufferState(barrier.Buffer.after);
+                beforeState = Dx12Utility.ConvertToNativeBufferState(barrier.Buffer.before);
+                afterState = Dx12Utility.ConvertToNativeBufferState(barrier.Buffer.after);
             }
             else
             {
-                D3DTexture texture = barrier.Texture.handle as D3DTexture;
+                Dx12Texture texture = barrier.Texture.handle as Dx12Texture;
                 Debug.Assert(texture != null);
 
                 resource = texture.NativeResource;
-                beforeState = D3DUtility.ConvertToNativeTextureState(barrier.Texture.before);
-                afterState = D3DUtility.ConvertToNativeTextureState(barrier.Texture.after);
+                beforeState = Dx12Utility.ConvertToNativeTextureState(barrier.Texture.before);
+                afterState = Dx12Utility.ConvertToNativeTextureState(barrier.Texture.after);
             }
 
             D3D12_RESOURCE_BARRIER resourceBarrier = D3D12_RESOURCE_BARRIER.InitTransition(resource, beforeState, afterState);
-            m_D3DCommandBuffer.NativeCommandList->ResourceBarrier(1, &resourceBarrier);
+            m_Dx12CommandBuffer.NativeCommandList->ResourceBarrier(1, &resourceBarrier);
         }
 
         public override void ResourceBarrier(in Memory<RHIBarrier> barriers)
@@ -89,27 +89,27 @@ namespace Infinity.Graphics
 
                 if (barrier.Type == EResourceType.Buffer)
                 {
-                    D3DBuffer buffer = barrier.Buffer.handle as D3DBuffer;
+                    Dx12Buffer buffer = barrier.Buffer.handle as Dx12Buffer;
                     Debug.Assert(buffer != null);
 
                     resource = buffer.NativeResource;
-                    beforeState = D3DUtility.ConvertToNativeBufferState(barrier.Buffer.before);
-                    afterState = D3DUtility.ConvertToNativeBufferState(barrier.Buffer.after);
+                    beforeState = Dx12Utility.ConvertToNativeBufferState(barrier.Buffer.before);
+                    afterState = Dx12Utility.ConvertToNativeBufferState(barrier.Buffer.after);
                 }
                 else
                 {
-                    D3DTexture texture = barrier.Texture.handle as D3DTexture;
+                    Dx12Texture texture = barrier.Texture.handle as Dx12Texture;
                     Debug.Assert(texture != null);
 
                     resource = texture.NativeResource;
-                    beforeState = D3DUtility.ConvertToNativeTextureState(barrier.Texture.before);
-                    afterState = D3DUtility.ConvertToNativeTextureState(barrier.Texture.after);
+                    beforeState = Dx12Utility.ConvertToNativeTextureState(barrier.Texture.before);
+                    afterState = Dx12Utility.ConvertToNativeTextureState(barrier.Texture.after);
                 }
 
                 resourceBarriers[i] = D3D12_RESOURCE_BARRIER.InitTransition(resource, beforeState, afterState);
             }
 
-            m_D3DCommandBuffer.NativeCommandList->ResourceBarrier((uint)barriers.Length, resourceBarriers);
+            m_Dx12CommandBuffer.NativeCommandList->ResourceBarrier((uint)barriers.Length, resourceBarriers);
         }
 
         public override void EndPass()
@@ -119,18 +119,18 @@ namespace Infinity.Graphics
 
         protected override void Release()
         {
-            m_D3DCommandBuffer = null;
+            m_Dx12CommandBuffer = null;
         }
     }
 
-    internal unsafe class D3DComputeEncoder : RHIComputeEncoder
+    internal unsafe class Dx12ComputeEncoder : RHIComputeEncoder
     {
-        private D3DCommandBuffer m_D3DCommandBuffer;
-        private D3DComputePipeline m_D3DComputePipeline;
+        private Dx12CommandBuffer m_Dx12CommandBuffer;
+        private Dx12ComputePipeline m_Dx12ComputePipeline;
 
-        public D3DComputeEncoder(D3DCommandBuffer cmdBuffer)
+        public Dx12ComputeEncoder(Dx12CommandBuffer cmdBuffer)
         {
-            m_D3DCommandBuffer = cmdBuffer;
+            m_Dx12CommandBuffer = cmdBuffer;
         }
 
         public override void BeginPass()
@@ -140,43 +140,43 @@ namespace Infinity.Graphics
 
         public override void SetPipeline(RHIComputePipeline pipeline)
         {
-            m_D3DComputePipeline = pipeline as D3DComputePipeline;
-            Debug.Assert(m_D3DComputePipeline != null);
+            m_Dx12ComputePipeline = pipeline as Dx12ComputePipeline;
+            Debug.Assert(m_Dx12ComputePipeline != null);
 
-            m_D3DCommandBuffer.NativeCommandList->SetPipelineState(m_D3DComputePipeline.NativePipelineState);
-            m_D3DCommandBuffer.NativeCommandList->SetComputeRootSignature(m_D3DComputePipeline.PipelineLayout.NativeRootSignature);
+            m_Dx12CommandBuffer.NativeCommandList->SetPipelineState(m_Dx12ComputePipeline.NativePipelineState);
+            m_Dx12CommandBuffer.NativeCommandList->SetComputeRootSignature(m_Dx12ComputePipeline.PipelineLayout.NativeRootSignature);
         }
 
         public override void SetBindGroup(in int layoutIndex, RHIBindGroup bindGroup)
         {
-            D3DBindGroup d3dBindGroup = bindGroup as D3DBindGroup;
-            D3DBindGroupLayout bindGroupLayout = d3dBindGroup.BindGroupLayout;
-            D3DPipelineLayout pipelineLayout = m_D3DComputePipeline.PipelineLayout;
+            Dx12BindGroup d3dBindGroup = bindGroup as Dx12BindGroup;
+            Dx12BindGroupLayout bindGroupLayout = d3dBindGroup.BindGroupLayout;
+            Dx12PipelineLayout pipelineLayout = m_Dx12ComputePipeline.PipelineLayout;
 
-            Debug.Assert(m_D3DComputePipeline != null);
+            Debug.Assert(m_Dx12ComputePipeline != null);
             Debug.Assert(layoutIndex == bindGroupLayout.LayoutIndex);
 
-            List<D3DBindGroupParameter> bindings = d3dBindGroup.BindingParameters;
-            foreach(D3DBindGroupParameter binding in bindings) 
+            List<Dx12BindGroupParameter> bindings = d3dBindGroup.BindingParameters;
+            foreach(Dx12BindGroupParameter binding in bindings) 
             {
                 foreach (EShaderStageFlags shaderStage in Enum.GetValues(typeof(EShaderStageFlags)))
                 {
                     if(shaderStage == EShaderStageFlags.MAX) { continue; }
 
-                    D3DBindingTypeAndRootParameterIndex? parameter = pipelineLayout.QueryRootDescriptorParameterIndex(shaderStage, layoutIndex, binding.slot);
+                    Dx12BindingTypeAndRootParameterIndex? parameter = pipelineLayout.QueryRootDescriptorParameterIndex(shaderStage, layoutIndex, binding.slot);
                     if (!parameter.HasValue)
                     {
                         return;
                     }
                     Debug.Assert(parameter.Value.bindType == binding.bindType);
-                    m_D3DCommandBuffer.NativeCommandList->SetGraphicsRootDescriptorTable((uint)parameter.Value.index, binding.dx12GpuDescriptorHandle);
+                    m_Dx12CommandBuffer.NativeCommandList->SetGraphicsRootDescriptorTable((uint)parameter.Value.index, binding.dx12GpuDescriptorHandle);
                 }
             }
         }
 
         public override void Dispatch(in uint groupCountX, in uint groupCountY, in uint groupCountZ)
         {
-            m_D3DCommandBuffer.NativeCommandList->Dispatch(groupCountX, groupCountY, groupCountZ);
+            m_Dx12CommandBuffer.NativeCommandList->Dispatch(groupCountX, groupCountY, groupCountZ);
         }
 
         public override void EndPass()
@@ -190,14 +190,14 @@ namespace Infinity.Graphics
         }
     }
 
-    internal unsafe class D3DGraphicsEncoder : RHIGraphicsEncoder
+    internal unsafe class Dx12GraphicsEncoder : RHIGraphicsEncoder
     {
-        private D3DCommandBuffer m_D3DCommandBuffer;
-        private D3DGraphicsPipeline m_D3DGraphicsPipeline;
+        private Dx12CommandBuffer m_Dx12CommandBuffer;
+        private Dx12GraphicsPipeline m_Dx12GraphicsPipeline;
 
-        public D3DGraphicsEncoder(D3DCommandBuffer cmdBuffer)
+        public Dx12GraphicsEncoder(Dx12CommandBuffer cmdBuffer)
         {
-            m_D3DCommandBuffer = cmdBuffer;
+            m_Dx12CommandBuffer = cmdBuffer;
         }
 
         public override void BeginPass(in RHIGraphicsPassBeginInfo beginInfo)
@@ -206,7 +206,7 @@ namespace Infinity.Graphics
             D3D12_CPU_DESCRIPTOR_HANDLE* rtvHandles = stackalloc D3D12_CPU_DESCRIPTOR_HANDLE[beginInfo.colorAttachmentCount];
             for (int i = 0; i < beginInfo.colorAttachmentCount; ++i)
             {
-                D3DTextureView textureView = beginInfo.colorAttachments.Span[i].view as D3DTextureView;
+                Dx12TextureView textureView = beginInfo.colorAttachments.Span[i].view as Dx12TextureView;
                 Debug.Assert(textureView != null);
 
                 rtvHandles[i] = textureView.NativeCpuDescriptorHandle;
@@ -215,12 +215,12 @@ namespace Infinity.Graphics
             D3D12_CPU_DESCRIPTOR_HANDLE? dsvHandle = null;
             if (beginInfo.depthStencilAttachment != null)
             {
-                D3DTextureView textureView = beginInfo.depthStencilAttachment?.view as D3DTextureView;
+                Dx12TextureView textureView = beginInfo.depthStencilAttachment?.view as Dx12TextureView;
                 Debug.Assert(textureView != null);
 
                 dsvHandle = textureView.NativeCpuDescriptorHandle;
             }
-            m_D3DCommandBuffer.NativeCommandList->OMSetRenderTargets((uint)beginInfo.colorAttachmentCount, rtvHandles, false, dsvHandle.HasValue ? (D3D12_CPU_DESCRIPTOR_HANDLE*)&dsvHandle : null);
+            m_Dx12CommandBuffer.NativeCommandList->OMSetRenderTargets((uint)beginInfo.colorAttachmentCount, rtvHandles, false, dsvHandle.HasValue ? (D3D12_CPU_DESCRIPTOR_HANDLE*)&dsvHandle : null);
 
             // clear render targets
             for (int i = 0; i < beginInfo.colorAttachmentCount; ++i)
@@ -233,7 +233,7 @@ namespace Infinity.Graphics
                 }
 
                 float4 clearValue = colorAttachment.clearValue;
-                m_D3DCommandBuffer.NativeCommandList->ClearRenderTargetView(rtvHandles[i], (float*)&clearValue, 0, null);
+                m_Dx12CommandBuffer.NativeCommandList->ClearRenderTargetView(rtvHandles[i], (float*)&clearValue, 0, null);
             }
             if (dsvHandle.HasValue)
             {
@@ -243,40 +243,40 @@ namespace Infinity.Graphics
                     return;
                 }
 
-                m_D3DCommandBuffer.NativeCommandList->ClearDepthStencilView(dsvHandle.Value, D3DUtility.GetDX12ClearFlagByDSA(depthStencilAttachment.Value), depthStencilAttachment.Value.depthClearValue, Convert.ToByte(depthStencilAttachment.Value.stencilClearValue), 0, null);
+                m_Dx12CommandBuffer.NativeCommandList->ClearDepthStencilView(dsvHandle.Value, Dx12Utility.GetDX12ClearFlagByDSA(depthStencilAttachment.Value), depthStencilAttachment.Value.depthClearValue, Convert.ToByte(depthStencilAttachment.Value.stencilClearValue), 0, null);
             }
         }
 
         public override void SetPipeline(RHIGraphicsPipeline pipeline)
         {
-            m_D3DGraphicsPipeline = pipeline as D3DGraphicsPipeline;
-            Debug.Assert(m_D3DGraphicsPipeline != null);
+            m_Dx12GraphicsPipeline = pipeline as Dx12GraphicsPipeline;
+            Debug.Assert(m_Dx12GraphicsPipeline != null);
 
-            m_D3DCommandBuffer.NativeCommandList->SetPipelineState(m_D3DGraphicsPipeline.NativePipelineState);
-            m_D3DCommandBuffer.NativeCommandList->SetGraphicsRootSignature(m_D3DGraphicsPipeline.PipelineLayout.NativeRootSignature);
+            m_Dx12CommandBuffer.NativeCommandList->SetPipelineState(m_Dx12GraphicsPipeline.NativePipelineState);
+            m_Dx12CommandBuffer.NativeCommandList->SetGraphicsRootSignature(m_Dx12GraphicsPipeline.PipelineLayout.NativeRootSignature);
         }
 
         public override void SetScissor(in uint left, in uint top, in uint right, in uint bottom)
         {
             RECT scissor = new RECT((int)left, (int)top, (int)right, (int)bottom);
-            m_D3DCommandBuffer.NativeCommandList->RSSetScissorRects(1, &scissor);
+            m_Dx12CommandBuffer.NativeCommandList->RSSetScissorRects(1, &scissor);
         }
 
         public override void SetViewport(in float x, in float y, in float width, in float height, in float minDepth, in float maxDepth)
         {
             D3D12_VIEWPORT viewport = new D3D12_VIEWPORT(x, y, width, height, minDepth, maxDepth);
-            m_D3DCommandBuffer.NativeCommandList->RSSetViewports(1, &viewport);
+            m_Dx12CommandBuffer.NativeCommandList->RSSetViewports(1, &viewport);
         }
 
         public override void SetBlendConstant(in float constants)
         {
             float tempConstants = constants;
-            m_D3DCommandBuffer.NativeCommandList->OMSetBlendFactor(&tempConstants);
+            m_Dx12CommandBuffer.NativeCommandList->OMSetBlendFactor(&tempConstants);
         }
 
         public override void SetStencilReference(in uint reference)
         {
-            m_D3DCommandBuffer.NativeCommandList->OMSetStencilRef(reference);
+            m_Dx12CommandBuffer.NativeCommandList->OMSetStencilRef(reference);
         }
 
         public override void SetBindGroup(in uint layoutIndex, RHIBindGroup bindGroup)
@@ -286,31 +286,31 @@ namespace Infinity.Graphics
 
         public override void SetIndexBuffer(RHIBufferView bufferView)
         {
-            D3DBufferView d3dBufferView = bufferView as D3DBufferView;
+            Dx12BufferView d3dBufferView = bufferView as Dx12BufferView;
             D3D12_INDEX_BUFFER_VIEW indexBufferView = d3dBufferView.NativeIndexBufferView;
-            m_D3DCommandBuffer.NativeCommandList->IASetIndexBuffer(&indexBufferView);
+            m_Dx12CommandBuffer.NativeCommandList->IASetIndexBuffer(&indexBufferView);
         }
 
         public override void SetVertexBuffer(in uint slot, RHIBufferView bufferView)
         {
-            D3DBufferView d3dBufferView = bufferView as D3DBufferView;
+            Dx12BufferView d3dBufferView = bufferView as Dx12BufferView;
             D3D12_VERTEX_BUFFER_VIEW vertexBufferView = d3dBufferView.NativeVertexBufferView;
-            m_D3DCommandBuffer.NativeCommandList->IASetVertexBuffers(slot, 1, &vertexBufferView);
+            m_Dx12CommandBuffer.NativeCommandList->IASetVertexBuffers(slot, 1, &vertexBufferView);
         }
 
         public override void SetPrimitiveTopology(in EPrimitiveTopology primitiveTopology)
         {
-            m_D3DCommandBuffer.NativeCommandList->IASetPrimitiveTopology(D3DUtility.ConvertToNativePrimitiveTopology(primitiveTopology));
+            m_Dx12CommandBuffer.NativeCommandList->IASetPrimitiveTopology(Dx12Utility.ConvertToNativePrimitiveTopology(primitiveTopology));
         }
 
         public override void Draw(in uint vertexCount, in uint instanceCount, in uint firstVertex, in uint firstInstance)
         {
-            m_D3DCommandBuffer.NativeCommandList->DrawInstanced(vertexCount, instanceCount, firstVertex, firstInstance);
+            m_Dx12CommandBuffer.NativeCommandList->DrawInstanced(vertexCount, instanceCount, firstVertex, firstInstance);
         }
 
         public override void DrawIndexed(in uint indexCount, in uint instanceCount, in uint firstIndex, in uint baseVertex, in uint firstInstance)
         {
-            m_D3DCommandBuffer.NativeCommandList->DrawIndexedInstanced(indexCount, instanceCount, firstIndex, (int)baseVertex, firstInstance);
+            m_Dx12CommandBuffer.NativeCommandList->DrawIndexedInstanced(indexCount, instanceCount, firstIndex, (int)baseVertex, firstInstance);
         }
 
         public override void EndPass()

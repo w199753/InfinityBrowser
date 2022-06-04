@@ -5,7 +5,7 @@ using System.Collections.Generic;
 namespace Infinity.Graphics
 {
 #pragma warning disable CS8600, CS8602
-    internal static class D3DUtility
+    internal static class Dx12Utility
     {
         internal static D3D12_COMMAND_LIST_TYPE ConvertToNativeQueueType(in EQueueType queueType)
         {
@@ -175,10 +175,10 @@ namespace Infinity.Graphics
             switch (primitiveTopology)
             {
                 case EPrimitiveTopology.PointList:
-                    return D3D_PRIMITIVE_TOPOLOGY.D3D10_PRIMITIVE_TOPOLOGY_POINTLIST;
+                    return D3D_PRIMITIVE_TOPOLOGY.D3D_PRIMITIVE_TOPOLOGY_POINTLIST;
 
                 case EPrimitiveTopology.LineList:
-                    return D3D_PRIMITIVE_TOPOLOGY.D3D10_PRIMITIVE_TOPOLOGY_LINELIST;
+                    return D3D_PRIMITIVE_TOPOLOGY.D3D_PRIMITIVE_TOPOLOGY_LINELIST;
 
                 case EPrimitiveTopology.LineStrip:
                     return D3D_PRIMITIVE_TOPOLOGY.D3D_PRIMITIVE_TOPOLOGY_LINESTRIP;
@@ -202,7 +202,7 @@ namespace Infinity.Graphics
                     return D3D_PRIMITIVE_TOPOLOGY.D3D_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP_ADJ;
 
                 default:
-                    return D3D_PRIMITIVE_TOPOLOGY.D3D10_PRIMITIVE_TOPOLOGY_UNDEFINED;
+                    return D3D_PRIMITIVE_TOPOLOGY.D3D_PRIMITIVE_TOPOLOGY_UNDEFINED;
             }
         }
 

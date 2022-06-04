@@ -4,13 +4,13 @@ using TerraFX.Interop.DirectX;
 namespace Infinity.Graphics
 {
 #pragma warning disable CS8600, CS8602
-    internal unsafe struct D3DCommandQueueCreateInfo
+    internal unsafe struct Dx12CommandQueueCreateInfo
     {
         public EQueueType queueType;
         public ID3D12CommandQueue* cmdQueue;
     }
 
-    internal unsafe class D3DQueue : RHIQueue
+    internal unsafe class Dx12Queue : RHIQueue
     {
         public ID3D12CommandQueue* NativeCommandQueue
         {
@@ -20,34 +20,34 @@ namespace Infinity.Graphics
             }
         }
 
-        private D3DDevice m_D3DDevice;
+        private Dx12Device m_Dx12Device;
         private EQueueType m_QueueType;
         private ID3D12CommandQueue* m_NativeCommandQueue;
 
-        public D3DQueue(D3DDevice device, in D3DCommandQueueCreateInfo createInfo)
+        public Dx12Queue(Dx12Device device, in Dx12CommandQueueCreateInfo createInfo)
         {
-            m_D3DDevice = device;
+            m_Dx12Device = device;
             m_QueueType = createInfo.queueType;
             m_NativeCommandQueue = createInfo.cmdQueue;
         }
 
         public override RHICommandPool CreateCommandPool()
         {
-            return new D3DCommandPool(m_D3DDevice, m_QueueType);
+            return new Dx12CommandPool(m_Dx12Device, m_QueueType);
         }
 
         public override void Submit(RHICommandBuffer cmdBuffer, RHIFence fence)
         {
             if (cmdBuffer != null)
             {
-                D3DCommandBuffer d3dCommandBuffer = cmdBuffer as D3DCommandBuffer;
+                Dx12CommandBuffer d3dCommandBuffer = cmdBuffer as Dx12CommandBuffer;
                 ID3D12CommandList** ppCommandLists = stackalloc ID3D12CommandList*[1] { (ID3D12CommandList*)d3dCommandBuffer.NativeCommandList };
                 m_NativeCommandQueue->ExecuteCommandLists(1, ppCommandLists);
             }
 
             if (fence != null)
             {
-                D3DFence d3dFence = fence as D3DFence;
+                Dx12Fence d3dFence = fence as Dx12Fence;
                 d3dFence.Reset();
                 m_NativeCommandQueue->Signal(d3dFence.NativeFence, 1);
             }

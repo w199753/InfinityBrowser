@@ -43,7 +43,7 @@ namespace Infinity.Graphics
                     return new VkInstance();
 
                 case ERHIBackend.DirectX12:
-                    return new D3DInstance();
+                    return new Dx12Instance();
 
                 default:
                     return null;

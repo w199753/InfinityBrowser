@@ -6,7 +6,7 @@ using static TerraFX.Interop.Windows.Windows;
 namespace Infinity.Graphics
 {
 #pragma warning disable CA1416
-    internal unsafe class D3DInstance : RHIInstance
+    internal unsafe class Dx12Instance : RHIInstance
     {
         public IDXGIFactory7* DXGIFactory
         {
@@ -18,12 +18,12 @@ namespace Infinity.Graphics
         public override int GpuCount => m_GPUs.Count;
         public override ERHIBackend RHIType => ERHIBackend.DirectX12;
 
-        private List<D3DGPU> m_GPUs;
+        private List<Dx12GPU> m_GPUs;
         private IDXGIFactory7* m_DXGIFactory;
 
-        public D3DInstance()
+        public Dx12Instance()
         {
-            m_GPUs = new List<D3DGPU>(4);
+            m_GPUs = new List<Dx12GPU>(4);
             CreateDX12Factory();
             EnumerateAdapters();
         }
@@ -54,7 +54,7 @@ namespace Infinity.Graphics
 
             for (uint i = 0; SUCCEEDED(m_DXGIFactory->EnumAdapters1(i, &adapter)); ++i)
             {
-                m_GPUs.Add(new D3DGPU(this, adapter));
+                m_GPUs.Add(new Dx12GPU(this, adapter));
                 adapter = null;
             }
         }

@@ -3,13 +3,13 @@
 namespace Infinity.Graphics
 {
 #pragma warning disable CA1416
-    internal unsafe class D3DGPU : RHIGPU
+    internal unsafe class Dx12GPU : RHIGPU
     {
-        public D3DInstance D3DInstance
+        public Dx12Instance Dx12Instance
         {
             get
             {
-                return m_D3DInstance;
+                return m_Dx12Instance;
             }
         }
         public IDXGIAdapter1* DXGIAdapter
@@ -20,13 +20,13 @@ namespace Infinity.Graphics
             }
         }
 
-        private D3DInstance m_D3DInstance;
+        private Dx12Instance m_Dx12Instance;
         private IDXGIAdapter1* m_DXGIAdapter;
 
-        public D3DGPU(D3DInstance instance, in IDXGIAdapter1* adapter)
+        public Dx12GPU(Dx12Instance instance, in IDXGIAdapter1* adapter)
         {
             m_DXGIAdapter = adapter;
-            m_D3DInstance = instance;
+            m_Dx12Instance = instance;
         }
 
         public override RHIGpuProperty GetProperty()
@@ -43,7 +43,7 @@ namespace Infinity.Graphics
 
         public override RHIDevice CreateDevice(in RHIDeviceCreateInfo createInfo)
         {
-            return new D3DDevice(this, createInfo);
+            return new Dx12Device(this, createInfo);
         }
 
         protected override void Release()
