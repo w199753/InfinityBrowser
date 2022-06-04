@@ -178,62 +178,39 @@ namespace Infinity.Rendering
             return m_Device.CreateFence();
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public RHIFence GetFence()
-        {
-            throw new NotImplementedException();
-        }
-
         /*[MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public RHIQuery CreateQuery(in EQueryType queryType, string name)
-        {
-            return m_Instance.CreateQuery(queryType, name);
-        }
-
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public RHIQuery GetQuery(in EQueryType queryType, string name)
         {
-            return m_Instance.GetQuery(queryType, name);;
+            
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void ReleaseQuery(RHIQuery query)
         {
-            m_Instance.ReleaseQuery(query);
+
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public RHIComputePipelineState CreateComputePipelineState(in RHIComputePipelineDescriptor descriptor)
         {
-            return m_Instance.CreateComputePipelineState(descriptor);
+            
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public RHIRayTracePipelineState CreateRayTracePipelineState(in RHIRayTracePipelineDescriptor descriptor)
         {
-            return m_Instance.CreateRayTracePipelineState(descriptor);
+            
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public RHIGraphicsPipelineState CreateGraphicsPipelineState(in RHIGraphicsPipelineDescriptor descriptor)
         {
-            return m_Instance.CreateGraphicsPipelineState(descriptor);
+            
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public void CreateSamplerState()
-        {
-
-        }
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public void CreateVertexInputLayout()
-        {
-
-        }
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public void CreateResourceInputLayout()
+        public void CreateSampler()
         {
 
         }
@@ -272,72 +249,6 @@ namespace Infinity.Rendering
         public void ReleaseTexture(RHITextureRef textureRef)
         {
             m_Instance.ReleaseTexture(textureRef);
-        }
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public RHIMemoryReadback CreateMemoryReadback(string requestName, bool bProfiler = false)
-        {
-            return m_Instance.CreateMemoryReadback(requestName, bProfiler);
-        }
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public RHIIndexBufferView CreateIndexBufferView(RHIBuffer buffer)
-        {
-            return m_Instance.CreateIndexBufferView(buffer);
-        }
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public RHIVertexBufferView CreateVertexBufferView(RHIBuffer buffer)
-        {
-            return m_Instance.CreateVertexBufferView(buffer);
-        }
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public RHIDeptnStencilView CreateDepthStencilView(RHITexture texture)
-        {
-            return m_Instance.CreateDepthStencilView(texture);
-        }
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public RHIRenderTargetView CreateRenderTargetView(RHITexture texture)
-        {
-            return m_Instance.CreateRenderTargetView(texture);
-        }
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public RHIConstantBufferView CreateConstantBufferView(RHIBuffer buffer)
-        {
-            return m_Instance.CreateConstantBufferView(buffer);
-        }
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public RHIShaderResourceView CreateShaderResourceView(RHIBuffer buffer)
-        {
-            return m_Instance.CreateShaderResourceView(buffer);
-        }
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public RHIShaderResourceView CreateShaderResourceView(RHITexture texture)
-        {
-            return m_Instance.CreateShaderResourceView(texture);
-        }
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public RHIUnorderedAccessView CreateUnorderedAccessView(RHIBuffer buffer)
-        {
-            return m_Instance.CreateUnorderedAccessView(buffer);
-        }
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public RHIUnorderedAccessView CreateUnorderedAccessView(RHITexture texture)
-        {
-            return m_Instance.CreateUnorderedAccessView(texture);
-        }
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public RHIResourceSet CreateResourceSet(in uint count)
-        {
-            return m_Instance.CreateResourceSet(count);
         }*/
 
         protected override void Release()
