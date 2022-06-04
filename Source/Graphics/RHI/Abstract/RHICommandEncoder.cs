@@ -141,7 +141,7 @@ namespace Infinity.Graphics
         public abstract void SetViewport(in float x, in float y, in float width, in float height, in float minDepth, in float maxDepth);
         public abstract void SetBlendConstant(in float constants);
         public abstract void SetStencilReference(in uint reference);
-        public abstract void SetBindGroup(in uint layoutIndex, RHIBindGroup bindGroup);
+        public abstract void SetBindGroup(in int layoutIndex, RHIBindGroup bindGroup);
         public abstract void SetIndexBuffer(RHIBufferView bufferView);
         public abstract void SetVertexBuffer(in uint slot, RHIBufferView bufferView);
         public abstract void SetPrimitiveTopology(in EPrimitiveTopology primitiveTopology);

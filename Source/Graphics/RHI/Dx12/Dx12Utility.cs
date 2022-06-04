@@ -206,6 +206,44 @@ namespace Infinity.Graphics
             }
         }
 
+        internal static D3D12_DESCRIPTOR_RANGE_TYPE ConvertToDX12BindType(in EBindingType bindType)
+        {
+            switch (bindType)
+            {
+                case EBindingType.Buffer:
+                case EBindingType.Texture:
+                    return D3D12_DESCRIPTOR_RANGE_TYPE.D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
+
+                case EBindingType.Sampler:
+                    return D3D12_DESCRIPTOR_RANGE_TYPE.D3D12_DESCRIPTOR_RANGE_TYPE_SAMPLER;
+
+                case EBindingType.UniformBuffer:
+                    return D3D12_DESCRIPTOR_RANGE_TYPE.D3D12_DESCRIPTOR_RANGE_TYPE_CBV;
+
+                case EBindingType.StorageBuffer:
+                case EBindingType.StorageTexture:
+                    return D3D12_DESCRIPTOR_RANGE_TYPE.D3D12_DESCRIPTOR_RANGE_TYPE_UAV;
+
+                default:
+                    return D3D12_DESCRIPTOR_RANGE_TYPE.D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
+            }
+        }
+
+        internal static D3D12_SHADER_VISIBILITY ConvertToDX12ShaderStage(in EShaderStageFlags shaderStage)
+        {
+            switch (shaderStage)
+            {
+                case EShaderStageFlags.Vertex:
+                    return D3D12_SHADER_VISIBILITY.D3D12_SHADER_VISIBILITY_VERTEX;
+
+                case EShaderStageFlags.Fragment:
+                    return D3D12_SHADER_VISIBILITY.D3D12_SHADER_VISIBILITY_PIXEL;
+
+                default:
+                    return D3D12_SHADER_VISIBILITY.D3D12_SHADER_VISIBILITY_ALL;
+            }
+        }
+
         internal static D3D12_CLEAR_FLAGS GetDX12ClearFlagByDSA(in RHIGraphicsPassDepthStencilAttachment depthStencilAttachment)
         {
             D3D12_CLEAR_FLAGS result = new D3D12_CLEAR_FLAGS();

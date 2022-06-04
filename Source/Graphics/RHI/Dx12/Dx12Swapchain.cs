@@ -56,8 +56,8 @@ namespace Infinity.Graphics
 
         private void CreateDX12SwapChain(in RHISwapChainCreateInfo createInfo) 
         {
-            Dx12Queue d3dQueue = (Dx12Queue)createInfo.presentQueue;
-            Dx12Instance d3dInstance = m_Dx12Device.Dx12Gpu.Dx12Instance;
+            Dx12Queue dx12Queue = (Dx12Queue)createInfo.presentQueue;
+            Dx12Instance dx12Instance = m_Dx12Device.Dx12Gpu.Dx12Instance;
 
             DXGI_SWAP_CHAIN_DESC1 desc = new DXGI_SWAP_CHAIN_DESC1();
             desc.BufferCount = (uint)createInfo.count;
@@ -69,7 +69,7 @@ namespace Infinity.Graphics
             desc.SampleDesc.Count = 1;
 
             IDXGISwapChain1* dx12SwapChain1;
-            bool success = SUCCEEDED(d3dInstance.DXGIFactory->CreateSwapChainForHwnd((IUnknown*)d3dQueue.NativeCommandQueue, new HWND(createInfo.window.ToPointer()), &desc, null, null, &dx12SwapChain1));
+            bool success = SUCCEEDED(dx12Instance.DXGIFactory->CreateSwapChainForHwnd((IUnknown*)dx12Queue.NativeCommandQueue, new HWND(createInfo.window.ToPointer()), &desc, null, null, &dx12SwapChain1));
             Debug.Assert(success);
             m_NativeSwapChain = (IDXGISwapChain4*)dx12SwapChain1;
         }

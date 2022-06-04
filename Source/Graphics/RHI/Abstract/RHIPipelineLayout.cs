@@ -3,8 +3,8 @@
 #pragma warning disable CS8602 
     public struct RHIPipelineLayoutCreateInfo
     {
-        public int bindGroupCount => bindGroupLayouts == null ? bindGroupLayouts.Length : 0;
-        public RHIBindGroupLayout[]? bindGroupLayouts;
+        public int bindGroupCount => bindGroupLayouts.Length;
+        public RHIBindGroupLayout[] bindGroupLayouts;
         // TODO pipeline constant
         // uint32 pipelineConstantNum;
         // PipelineConstantLayout pipelineConstants;

@@ -40,16 +40,16 @@ namespace Infinity.Graphics
         {
             if (cmdBuffer != null)
             {
-                Dx12CommandBuffer d3dCommandBuffer = cmdBuffer as Dx12CommandBuffer;
-                ID3D12CommandList** ppCommandLists = stackalloc ID3D12CommandList*[1] { (ID3D12CommandList*)d3dCommandBuffer.NativeCommandList };
+                Dx12CommandBuffer dx12CommandBuffer = cmdBuffer as Dx12CommandBuffer;
+                ID3D12CommandList** ppCommandLists = stackalloc ID3D12CommandList*[1] { (ID3D12CommandList*)dx12CommandBuffer.NativeCommandList };
                 m_NativeCommandQueue->ExecuteCommandLists(1, ppCommandLists);
             }
 
             if (fence != null)
             {
-                Dx12Fence d3dFence = fence as Dx12Fence;
-                d3dFence.Reset();
-                m_NativeCommandQueue->Signal(d3dFence.NativeFence, 1);
+                Dx12Fence dx12Fence = fence as Dx12Fence;
+                dx12Fence.Reset();
+                m_NativeCommandQueue->Signal(dx12Fence.NativeFence, 1);
             }
         }
 

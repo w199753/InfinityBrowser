@@ -28,17 +28,17 @@ namespace Infinity.Graphics
                 return m_NativeDescriptorHeap;
             }
         }
-        public List<Dx12BindGroupParameter> BindingParameters
+        public Dx12BindGroupParameter[] BindParameters
         {
             get
             {
-                return m_BindingParameters;
+                return m_BindParameters;
             }
         }
 
         private Dx12BindGroupLayout m_BindGroupLayout;
         private ID3D12DescriptorHeap* m_NativeDescriptorHeap;
-        private List<Dx12BindGroupParameter> m_BindingParameters;
+        private Dx12BindGroupParameter[] m_BindParameters;
 
         public Dx12BindGroup(in RHIBindGroupCreateInfo createInfo)
         {
@@ -46,7 +46,7 @@ namespace Infinity.Graphics
             Debug.Assert(bindGroupLayout != null);
 
             m_BindGroupLayout = bindGroupLayout;
-            m_BindingParameters = new List<Dx12BindGroupParameter>(32);
+            m_BindParameters = new Dx12BindGroupParameter[createInfo.elementCount];
 
             for (int i = 0; i < createInfo.elementCount; ++i)
             {
@@ -56,13 +56,12 @@ namespace Infinity.Graphics
                 D3D12_GPU_DESCRIPTOR_HANDLE handle = default;
                 GetDescriptorHandleAndHeap(ref handle, ref m_NativeDescriptorHeap, keyInfo.bindType, element);
 
-                Dx12BindGroupParameter bidning;
+                ref Dx12BindGroupParameter bidning = ref m_BindParameters[i];
                 //bidning.slot = element.slot;
                 bidning.slot = keyInfo.slot;
                 //bidning.bindType = element.type;
                 bidning.bindType = keyInfo.bindType;
                 bidning.dx12GpuDescriptorHandle = handle;
-                m_BindingParameters.Add(bidning);
             }
         }
 
@@ -91,7 +90,6 @@ namespace Infinity.Graphics
         protected override void Release()
         {
             m_NativeDescriptorHeap = null;
-            m_BindingParameters.Clear();
         }
     }
 #pragma warning restore CS8600, CS8602, CS8604, CS8618, CA1416
