@@ -32,8 +32,10 @@ namespace Infinity.Graphics
             Dx12Shader computeShader = createInfo.shader as Dx12Shader;
 
             D3D12_COMPUTE_PIPELINE_STATE_DESC desc = new D3D12_COMPUTE_PIPELINE_STATE_DESC();
-            desc.CS = computeShader.NativeShaderBytecode;
+            desc.CS.BytecodeLength = computeShader.NativeShaderBytecode.BytecodeLength;
+            desc.CS.pShaderBytecode = computeShader.NativeShaderBytecode.pShaderBytecode;
             desc.pRootSignature = m_PipelineLayout.NativeRootSignature;
+            desc.Flags = D3D12_PIPELINE_STATE_FLAGS.D3D12_PIPELINE_STATE_FLAG_NONE;
 
             ID3D12PipelineState* pipelineState;
             bool success = SUCCEEDED(device.NativeDevice->CreateComputePipelineState(&desc, __uuidof<ID3D12PipelineState>(), (void**)&pipelineState));

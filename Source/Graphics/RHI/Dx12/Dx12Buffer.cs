@@ -42,7 +42,7 @@ namespace Infinity.Graphics
             m_MapMode = Dx12Utility.GetMapModeByUsage(createInfo.usages);
 
             ID3D12Resource* dx12Resource;
-            D3D12_RESOURCE_DESC resourceDesc = D3D12_RESOURCE_DESC.Buffer((ulong)createInfo.size);
+            D3D12_RESOURCE_DESC resourceDesc = D3D12_RESOURCE_DESC.Buffer((ulong)createInfo.size, Dx12Utility.GetDX12ResourceFlagByUsage(createInfo.usages));
             D3D12_HEAP_PROPERTIES heapProperties = new D3D12_HEAP_PROPERTIES(Dx12Utility.GetDX12HeapTypeByUsage(createInfo.usages));
             bool success = SUCCEEDED(m_Dx12Device.NativeDevice->CreateCommittedResource(&heapProperties, D3D12_HEAP_FLAGS.D3D12_HEAP_FLAG_NONE, &resourceDesc, Dx12Utility.GetDX12ResourceStateByUsage(createInfo.usages), null, Windows.__uuidof<ID3D12Resource>(), (void**)&dx12Resource));
             Debug.Assert(success);

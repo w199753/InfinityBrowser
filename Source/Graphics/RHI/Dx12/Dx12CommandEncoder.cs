@@ -3,6 +3,7 @@ using System.Diagnostics;
 using Infinity.Mathmatics;
 using TerraFX.Interop.Windows;
 using TerraFX.Interop.DirectX;
+using System.Runtime.InteropServices;
 
 namespace Infinity.Graphics
 {
@@ -16,9 +17,9 @@ namespace Infinity.Graphics
             m_Dx12CommandBuffer = cmdBuffer;
         }
 
-        public override void BeginPass()
+        public override void BeginPass(string name)
         {
-            
+            PushDebugGroup(name);
         }
 
         public override void CopyBufferToBuffer(RHIBuffer src, in int srcOffset, RHIBuffer dst, in int dstOffset, in int size)
@@ -111,9 +112,21 @@ namespace Infinity.Graphics
             m_Dx12CommandBuffer.NativeCommandList->ResourceBarrier((uint)barriers.Length, resourceBarriers);
         }
 
+        public override void PushDebugGroup(string name)
+        {
+            IntPtr namePtr = Marshal.StringToHGlobalUni(name);
+            m_Dx12CommandBuffer.NativeCommandList->BeginEvent(0, namePtr.ToPointer(), (uint)name.Length * 2);
+            Marshal.FreeHGlobal(namePtr);
+        }
+
+        public override void PopDebugGroup()
+        {
+            m_Dx12CommandBuffer.NativeCommandList->EndEvent();
+        }
+
         public override void EndPass()
         {
-
+            PopDebugGroup();
         }
 
         protected override void Release()
@@ -132,9 +145,9 @@ namespace Infinity.Graphics
             m_Dx12CommandBuffer = cmdBuffer;
         }
 
-        public override void BeginPass()
+        public override void BeginPass(string name)
         {
-  
+            PushDebugGroup(name);
         }
 
         public override void SetPipeline(RHIComputePipeline pipeline)
@@ -146,7 +159,7 @@ namespace Infinity.Graphics
             m_Dx12CommandBuffer.NativeCommandList->SetComputeRootSignature(m_Dx12ComputePipeline.PipelineLayout.NativeRootSignature);
         }
 
-        public override void SetBindGroup(in int layoutIndex, RHIBindGroup bindGroup)
+        public override void SetBindGroup(RHIBindGroup bindGroup, in int layoutIndex)
         {
             Dx12BindGroup dx12BindGroup = bindGroup as Dx12BindGroup;
             Dx12BindGroupLayout bindGroupLayout = dx12BindGroup.BindGroupLayout;
@@ -163,7 +176,7 @@ namespace Infinity.Graphics
                 if (parameter.HasValue)
                 {
                     Debug.Assert(parameter.Value.bindType == bindParameter.bindType);
-                    m_Dx12CommandBuffer.NativeCommandList->SetGraphicsRootDescriptorTable((uint)parameter.Value.index, bindParameter.dx12GpuDescriptorHandle);
+                    m_Dx12CommandBuffer.NativeCommandList->SetComputeRootDescriptorTable((uint)parameter.Value.index, bindParameter.dx12GpuDescriptorHandle);
                 }
             }
         }
@@ -173,9 +186,21 @@ namespace Infinity.Graphics
             m_Dx12CommandBuffer.NativeCommandList->Dispatch(groupCountX, groupCountY, groupCountZ);
         }
 
+        public override void PushDebugGroup(string name)
+        {
+            IntPtr namePtr = Marshal.StringToHGlobalUni(name);
+            m_Dx12CommandBuffer.NativeCommandList->BeginEvent(0, namePtr.ToPointer(), (uint)name.Length * 2);
+            Marshal.FreeHGlobal(namePtr);
+        }
+
+        public override void PopDebugGroup()
+        {
+            m_Dx12CommandBuffer.NativeCommandList->EndEvent();
+        }
+
         public override void EndPass()
         {
-
+            PopDebugGroup();
         }
 
         protected override void Release()
@@ -196,6 +221,8 @@ namespace Infinity.Graphics
 
         public override void BeginPass(in RHIGraphicsPassBeginInfo beginInfo)
         {
+            PushDebugGroup(beginInfo.name);
+
             // set render targets
             D3D12_CPU_DESCRIPTOR_HANDLE* rtvHandles = stackalloc D3D12_CPU_DESCRIPTOR_HANDLE[beginInfo.colorAttachmentCount];
             for (int i = 0; i < beginInfo.colorAttachmentCount; ++i)
@@ -273,7 +300,7 @@ namespace Infinity.Graphics
             m_Dx12CommandBuffer.NativeCommandList->OMSetStencilRef(reference);
         }
 
-        public override void SetBindGroup(in int layoutIndex, RHIBindGroup bindGroup)
+        public override void SetBindGroup(RHIBindGroup bindGroup, in int layoutIndex)
         {
             Dx12BindGroup dx12BindGroup = bindGroup as Dx12BindGroup;
             Dx12BindGroupLayout bindGroupLayout = dx12BindGroup.BindGroupLayout;
@@ -332,9 +359,21 @@ namespace Infinity.Graphics
             m_Dx12CommandBuffer.NativeCommandList->DrawIndexedInstanced(indexCount, instanceCount, firstIndex, (int)baseVertex, firstInstance);
         }
 
+        public override void PushDebugGroup(string name)
+        {
+            IntPtr namePtr = Marshal.StringToHGlobalUni(name);
+            m_Dx12CommandBuffer.NativeCommandList->BeginEvent(0, namePtr.ToPointer(), (uint)name.Length * 2);
+            Marshal.FreeHGlobal(namePtr);
+        }
+
+        public override void PopDebugGroup()
+        {
+            m_Dx12CommandBuffer.NativeCommandList->EndEvent();
+        }
+
         public override void EndPass()
         {
-            
+            PopDebugGroup();
         }
 
         protected override void Release()

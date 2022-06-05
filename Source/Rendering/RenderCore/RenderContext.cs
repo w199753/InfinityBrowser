@@ -241,67 +241,43 @@ namespace Infinity.Rendering
         public void ReleaseQuery(RHIQuery query)
         {
 
-        }
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public RHIComputePipelineState CreateComputePipelineState(in RHIComputePipelineDescriptor descriptor)
-        {
-            
-        }
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public RHIRayTracePipelineState CreateRayTracePipelineState(in RHIRayTracePipelineDescriptor descriptor)
-        {
-            
-        }
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public RHIGraphicsPipelineState CreateGraphicsPipelineState(in RHIGraphicsPipelineDescriptor descriptor)
-        {
-            
-        }
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public void CreateSampler()
-        {
-
-        }
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public RHIBuffer CreateBuffer(in BufferDescriptor descriptor)
-        {
-            return m_Instance.CreateBuffer(descriptor);
-        }
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public RHIBufferRef GetBuffer(in BufferDescriptor descriptor)
-        {
-            return m_Instance.GetBuffer(descriptor);
-        }
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public void ReleaseBuffer(in RHIBufferRef bufferRef)
-        {
-            m_Instance.ReleaseBuffer(bufferRef);
-        }
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public RHITexture CreateTexture(in TextureDescriptor descriptor)
-        {
-            return m_Instance.CreateTexture(descriptor);
-        }
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public RHITextureRef GetTexture(in TextureDescriptor descriptor)
-        {
-            return m_Instance.GetTexture(descriptor);
-        }
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public void ReleaseTexture(RHITextureRef textureRef)
-        {
-            m_Instance.ReleaseTexture(textureRef);
         }*/
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public RHIComputePipeline CreateComputePipeline(in RHIComputePipelineCreateInfo createInfo)
+        {
+            return m_Device.CreateComputePipeline(createInfo);
+        }
+
+        /*[MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public RHIRayTracePipeline CreateRayTracePipeline(in RHIRayTracePipelineCreateInfo createInfo)
+        {
+            
+        }*/
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public RHIGraphicsPipeline CreateGraphicsPipeline(in RHIGraphicsPipelineCreateInfo createInfo)
+        {
+            return m_Device.CreateGraphicsPipeline(createInfo);
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public RHISampler CreateSampler(in RHISamplerCreateInfo createInfo)
+        {
+            return m_Device.CreateSampler(createInfo);
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public RHIBuffer CreateBuffer(in RHIBufferCreateInfo createInfo)
+        {
+            return m_Device.CreateBuffer(createInfo);
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public RHITexture CreateTexture(in RHITextureCreateInfo createInfo)
+        {
+            return m_Device.CreateTexture(createInfo);
+        }
 
         protected override void Release()
         {

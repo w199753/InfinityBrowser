@@ -72,7 +72,7 @@ namespace Infinity.Graphics
             else if (Dx12Utility.IsShaderResourceTexture(usages))
             {
                 D3D12_SHADER_RESOURCE_VIEW_DESC desc = new D3D12_SHADER_RESOURCE_VIEW_DESC();
-                desc.Format = /*Dx12Utility.GetNativeFormat(createInfo.format)*/ DXGI_FORMAT.DXGI_FORMAT_R16_UINT;
+                desc.Format = /*Dx12Utility.GetNativeFormat(createInfo.format)*/ DXGI_FORMAT.DXGI_FORMAT_R8G8B8A8_UNORM;
                 desc.ViewDimension = /*Dx12Utility.GetNativeViewDimension(createInfo.dimension)*/ D3D12_SRV_DIMENSION.D3D12_SRV_DIMENSION_TEXTURE2D;
                 Dx12Utility.FillTexture2DSRV(ref desc.Texture2D, createInfo);
                 Dx12Utility.FillTexture2DArraySRV(ref desc.Texture2DArray, createInfo);
@@ -90,7 +90,7 @@ namespace Infinity.Graphics
             else if (Dx12Utility.IsUnorderedAccessTexture(usages))
             {
                 D3D12_UNORDERED_ACCESS_VIEW_DESC desc = new D3D12_UNORDERED_ACCESS_VIEW_DESC();
-                desc.Format = /*Dx12Utility.GetNativeFormat(createInfo.format)*/ DXGI_FORMAT.DXGI_FORMAT_R16_UINT;
+                desc.Format = /*Dx12Utility.GetNativeFormat(createInfo.format)*/ DXGI_FORMAT.DXGI_FORMAT_R8G8B8A8_UNORM;
                 desc.ViewDimension = /*Dx12Utility.GetNativeViewDimension(createInfo.dimension)*/ D3D12_UAV_DIMENSION.D3D12_UAV_DIMENSION_TEXTURE2D;
                 Dx12Utility.FillTexture2DUAV(ref desc.Texture2D, createInfo);
                 Dx12Utility.FillTexture3DUAV(ref desc.Texture3D, createInfo);

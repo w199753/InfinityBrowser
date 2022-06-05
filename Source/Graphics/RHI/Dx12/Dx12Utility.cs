@@ -1,12 +1,21 @@
 ﻿using System;
+using NUnit.Framework;
 using TerraFX.Interop.DirectX;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
+using static TerraFX.Interop.Windows.Windows;
 
 namespace Infinity.Graphics
 {
 #pragma warning disable CS8600, CS8602
     internal static class Dx12Utility
     {
+        public static void CHECK_BOOL(bool cond, [CallerFilePath] string __FILE__ = "", [CallerLineNumber] int __LINE__ = 0, [CallerArgumentExpression("cond")] string expr = "")
+            => Assert.False(!cond, $"{__FILE__}({__LINE__}): !({(string.IsNullOrEmpty(expr) ? cond : expr)})");
+
+        public static void CHECK_HR(int hr, [CallerFilePath] string __FILE__ = "", [CallerLineNumber] int __LINE__ = 0, [CallerArgumentExpression("hr")] string expr = "")
+            => Assert.False(FAILED(hr), $"{__FILE__}({__LINE__}): FAILED({(string.IsNullOrEmpty(expr) ? hr.ToString("X8") : expr)})");
+
         internal static D3D12_COMMAND_LIST_TYPE ConvertToNativeQueueType(in EQueueType queueType)
         {
             switch (queueType)
@@ -124,6 +133,51 @@ namespace Infinity.Graphics
             return result;
         }
 
+        internal static D3D12_RESOURCE_FLAGS GetDX12ResourceFlagByUsage(in EBufferUsageFlags bufferUsages)
+        {
+            Dictionary<EBufferUsageFlags, D3D12_RESOURCE_FLAGS> stateRules = new Dictionary<EBufferUsageFlags, D3D12_RESOURCE_FLAGS>();
+            stateRules.Add(EBufferUsageFlags.CopySrc, D3D12_RESOURCE_FLAGS.D3D12_RESOURCE_FLAG_NONE);
+            stateRules.Add(EBufferUsageFlags.CopyDst, D3D12_RESOURCE_FLAGS.D3D12_RESOURCE_FLAG_NONE);
+            stateRules.Add(EBufferUsageFlags.Index, D3D12_RESOURCE_FLAGS.D3D12_RESOURCE_FLAG_NONE);
+            stateRules.Add(EBufferUsageFlags.Vertex, D3D12_RESOURCE_FLAGS.D3D12_RESOURCE_FLAG_NONE);
+            stateRules.Add(EBufferUsageFlags.Uniform, D3D12_RESOURCE_FLAGS.D3D12_RESOURCE_FLAG_NONE);
+            stateRules.Add(EBufferUsageFlags.Storage, D3D12_RESOURCE_FLAGS.D3D12_RESOURCE_FLAG_ALLOW_UNORDERED_ACCESS);
+            stateRules.Add(EBufferUsageFlags.Indirect, D3D12_RESOURCE_FLAGS.D3D12_RESOURCE_FLAG_NONE);
+
+            D3D12_RESOURCE_FLAGS result = D3D12_RESOURCE_FLAGS.D3D12_RESOURCE_FLAG_NONE;
+            foreach (KeyValuePair<EBufferUsageFlags, D3D12_RESOURCE_FLAGS> rule in stateRules)
+            {
+                if ((bufferUsages & rule.Key) == rule.Key)
+                {
+                    result |= rule.Value;
+                }
+            }
+
+            return result;
+        }
+
+        internal static D3D12_RESOURCE_FLAGS GetDX12ResourceFlagByUsage(in ETextureUsageFlags textureUsages)
+        {
+            Dictionary<ETextureUsageFlags, D3D12_RESOURCE_FLAGS> stateRules = new Dictionary<ETextureUsageFlags, D3D12_RESOURCE_FLAGS>();
+            stateRules.Add(ETextureUsageFlags.CopySrc, D3D12_RESOURCE_FLAGS.D3D12_RESOURCE_FLAG_NONE);
+            stateRules.Add(ETextureUsageFlags.CopyDst, D3D12_RESOURCE_FLAGS.D3D12_RESOURCE_FLAG_NONE);
+            stateRules.Add(ETextureUsageFlags.DepthAttachment, D3D12_RESOURCE_FLAGS.D3D12_RESOURCE_FLAG_ALLOW_DEPTH_STENCIL);
+            stateRules.Add(ETextureUsageFlags.ColorAttachment, D3D12_RESOURCE_FLAGS.D3D12_RESOURCE_FLAG_ALLOW_RENDER_TARGET);
+            stateRules.Add(ETextureUsageFlags.TextureBinding, D3D12_RESOURCE_FLAGS.D3D12_RESOURCE_FLAG_NONE);
+            stateRules.Add(ETextureUsageFlags.StorageBinding, D3D12_RESOURCE_FLAGS.D3D12_RESOURCE_FLAG_ALLOW_UNORDERED_ACCESS);
+
+            D3D12_RESOURCE_FLAGS result = D3D12_RESOURCE_FLAGS.D3D12_RESOURCE_FLAG_NONE;
+            foreach (KeyValuePair<ETextureUsageFlags, D3D12_RESOURCE_FLAGS> rule in stateRules)
+            {
+                if ((textureUsages & rule.Key) == rule.Key)
+                {
+                    result |= rule.Value;
+                }
+            }
+
+            return result;
+        }
+
         internal static D3D12_RESOURCE_DIMENSION ConvertToDX12ResourceDimension(in ETextureDimension dimension)
         {
             switch (dimension)
@@ -157,17 +211,33 @@ namespace Infinity.Graphics
 
         internal static D3D12_RESOURCE_STATES ConvertToNativeTextureState(in ETextureState state)
         {
-            switch (state)
-            {
-                case ETextureState.Present:
-                    return D3D12_RESOURCE_STATES.D3D12_RESOURCE_STATE_PRESENT;
+            if (state == ETextureState.Common)
+                return D3D12_RESOURCE_STATES.D3D12_RESOURCE_STATE_COMMON;
 
-                case ETextureState.RenderTarget:
-                    return D3D12_RESOURCE_STATES.D3D12_RESOURCE_STATE_RENDER_TARGET;
+            D3D12_RESOURCE_STATES result = D3D12_RESOURCE_STATES.D3D12_RESOURCE_STATE_COMMON; // also 0
 
-                default:
-                    return D3D12_RESOURCE_STATES.D3D12_RESOURCE_STATE_COMMON;
-            }
+            if ((state & ETextureState.ConstantBuffer) != 0) result |= D3D12_RESOURCE_STATES.D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER;
+            if ((state & ETextureState.VertexBuffer) != 0) result |= D3D12_RESOURCE_STATES.D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER;
+            if ((state & ETextureState.IndexBuffer) != 0) result |= D3D12_RESOURCE_STATES.D3D12_RESOURCE_STATE_INDEX_BUFFER;
+            if ((state & ETextureState.IndirectArgument) != 0) result |= D3D12_RESOURCE_STATES.D3D12_RESOURCE_STATE_INDIRECT_ARGUMENT;
+            if ((state & ETextureState.ShaderResource) != 0) result |= D3D12_RESOURCE_STATES.D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE | D3D12_RESOURCE_STATES.D3D12_RESOURCE_STATE_NON_PIXEL_SHADER_RESOURCE;
+            if ((state & ETextureState.UnorderedAccess) != 0) result |= D3D12_RESOURCE_STATES.D3D12_RESOURCE_STATE_UNORDERED_ACCESS;
+            if ((state & ETextureState.RenderTarget) != 0) result |= D3D12_RESOURCE_STATES.D3D12_RESOURCE_STATE_RENDER_TARGET;
+            if ((state & ETextureState.DepthWrite) != 0) result |= D3D12_RESOURCE_STATES.D3D12_RESOURCE_STATE_DEPTH_WRITE;
+            if ((state & ETextureState.DepthRead) != 0) result |= D3D12_RESOURCE_STATES.D3D12_RESOURCE_STATE_DEPTH_READ;
+            if ((state & ETextureState.StreamOut) != 0) result |= D3D12_RESOURCE_STATES.D3D12_RESOURCE_STATE_STREAM_OUT;
+            if ((state & ETextureState.CopyDest) != 0) result |= D3D12_RESOURCE_STATES.D3D12_RESOURCE_STATE_COPY_DEST;
+            if ((state & ETextureState.CopySource) != 0) result |= D3D12_RESOURCE_STATES.D3D12_RESOURCE_STATE_COPY_SOURCE;
+            if ((state & ETextureState.ResolveDest) != 0) result |= D3D12_RESOURCE_STATES.D3D12_RESOURCE_STATE_RESOLVE_DEST;
+            if ((state & ETextureState.ResolveSource) != 0) result |= D3D12_RESOURCE_STATES.D3D12_RESOURCE_STATE_RESOLVE_SOURCE;
+            if ((state & ETextureState.Present) != 0) result |= D3D12_RESOURCE_STATES.D3D12_RESOURCE_STATE_PRESENT;
+            if ((state & ETextureState.AccelStructRead) != 0) result |= D3D12_RESOURCE_STATES.D3D12_RESOURCE_STATE_RAYTRACING_ACCELERATION_STRUCTURE;
+            if ((state & ETextureState.AccelStructWrite) != 0) result |= D3D12_RESOURCE_STATES.D3D12_RESOURCE_STATE_RAYTRACING_ACCELERATION_STRUCTURE;
+            if ((state & ETextureState.AccelStructBuildInput) != 0) result |= D3D12_RESOURCE_STATES.D3D12_RESOURCE_STATE_NON_PIXEL_SHADER_RESOURCE;
+            if ((state & ETextureState.AccelStructBuildBlas) != 0) result |= D3D12_RESOURCE_STATES.D3D12_RESOURCE_STATE_RAYTRACING_ACCELERATION_STRUCTURE;
+            if ((state & ETextureState.ShadingRateSurface) != 0) result |= D3D12_RESOURCE_STATES.D3D12_RESOURCE_STATE_SHADING_RATE_SOURCE;
+
+            return result;
         }
 
         internal static D3D_PRIMITIVE_TOPOLOGY ConvertToNativePrimitiveTopology(in EPrimitiveTopology primitiveTopology)

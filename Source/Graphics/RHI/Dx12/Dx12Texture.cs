@@ -41,17 +41,17 @@ namespace Infinity.Graphics
             D3D12_HEAP_PROPERTIES heapProperties = new D3D12_HEAP_PROPERTIES(/*Dx12Utility.GetDX12HeapType(createInfo.usages)*/D3D12_HEAP_TYPE.D3D12_HEAP_TYPE_DEFAULT);
             D3D12_RESOURCE_DESC textureDesc = new D3D12_RESOURCE_DESC();
             textureDesc.MipLevels = (ushort)createInfo.mipLevels;
-            textureDesc.Format = /*Dx12Utility.GetNativeFormat(createInfo->format)*/DXGI_FORMAT.DXGI_FORMAT_B8G8R8A8_TYPELESS;
+            textureDesc.Format = /*Dx12Utility.GetNativeFormat(createInfo->format)*/DXGI_FORMAT.DXGI_FORMAT_R8G8B8A8_UNORM;
             textureDesc.Width = (ulong)createInfo.extent.x;
             textureDesc.Height = (uint)createInfo.extent.y;
-            textureDesc.Flags = D3D12_RESOURCE_FLAGS.D3D12_RESOURCE_FLAG_NONE;
             textureDesc.DepthOrArraySize = (ushort)createInfo.extent.z;
+            textureDesc.Flags = Dx12Utility.GetDX12ResourceFlagByUsage(createInfo.usages);
             textureDesc.SampleDesc.Count = (uint)createInfo.samples;
             textureDesc.SampleDesc.Quality = 0;
             textureDesc.Dimension = Dx12Utility.ConvertToDX12ResourceDimension(createInfo.dimension);
 
             ID3D12Resource* dx12Resource;
-            bool success = SUCCEEDED(m_Dx12Device.NativeDevice->CreateCommittedResource(&heapProperties, D3D12_HEAP_FLAGS.D3D12_HEAP_FLAG_NONE, &textureDesc, Dx12Utility.GetDX12ResourceStateByUsage(createInfo.usages), null, Windows.__uuidof<ID3D12Resource>(), (void**)&dx12Resource));
+            bool success = SUCCEEDED(m_Dx12Device.NativeDevice->CreateCommittedResource(&heapProperties, D3D12_HEAP_FLAGS.D3D12_HEAP_FLAG_NONE, &textureDesc, D3D12_RESOURCE_STATES.D3D12_RESOURCE_STATE_COMMON/*Dx12Utility.GetDX12ResourceStateByUsage(createInfo.usages)*/, null, __uuidof<ID3D12Resource>(), (void**)&dx12Resource));
             Debug.Assert(success);
             m_NativeResource = dx12Resource;
         }

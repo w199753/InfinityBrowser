@@ -284,7 +284,7 @@ namespace Infinity.Container
     public unsafe struct TValueArray<T> : IDisposable where T : unmanaged
     {
         public int length;
-        public T* ArrayPtr
+        public T* NativePtr
         {
             get
             {

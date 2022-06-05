@@ -53,6 +53,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+		<PackageReference Include="NUnit" Version="3.13.3" />
 		<PackageReference Include="TerraFX.Interop.D3D12MemoryAllocator" Version="2.0.0-beta3" />
 	</ItemGroup>
 

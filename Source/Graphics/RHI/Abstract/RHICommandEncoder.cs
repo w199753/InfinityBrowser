@@ -35,6 +35,7 @@ namespace Infinity.Graphics
 
     public struct RHIGraphicsPassBeginInfo
     {
+        public string name;
         public int colorAttachmentCount => colorAttachments.Length;
         public RHIGraphicsPassDepthStencilAttachment? depthStencilAttachment;
         public Memory<RHIGraphicsPassColorAttachment> colorAttachments;
@@ -89,19 +90,21 @@ namespace Infinity.Graphics
 
     public abstract class RHIBlitEncoder : Disposal
     {
-        public RHIScopedBlitPassRef BeginScopedPass()
+        public RHIScopedBlitPassRef BeginScopedPass(string name)
         {
-            BeginPass();
+            BeginPass(name);
             return new RHIScopedBlitPassRef(this);
         }
 
-        public abstract void BeginPass();
+        public abstract void BeginPass(string name);
         public abstract void CopyBufferToBuffer(RHIBuffer src, in int srcOffset, RHIBuffer dst, in int dstOffset, in int size);
         public abstract void CopyBufferToTexture(RHIBuffer src, RHITexture dst, in RHITextureSubResourceInfo subResourceInfo, in int3 size);
         public abstract void CopyTextureToBuffer(RHITexture src, RHIBuffer dst, in RHITextureSubResourceInfo subResourceInfo, in int3 size);
         public abstract void CopyTextureToTexture(RHITexture src, in RHITextureSubResourceInfo srcSubResourceInfo, RHITexture dst, in RHITextureSubResourceInfo dstSubResourceInfo, in int3 size);
         public abstract void ResourceBarrier(in RHIBarrier barrier);
         public abstract void ResourceBarrier(in Memory<RHIBarrier> barriers);
+        public abstract void PushDebugGroup(string name);
+        public abstract void PopDebugGroup();
         public abstract void EndPass();
         // TODO PushDebugMark(...)
         // TODO PullDebugMark(...)
@@ -111,19 +114,19 @@ namespace Infinity.Graphics
 
     public abstract class RHIComputeEncoder : Disposal
     {
-        public RHIScopedComputePassRef BeginScopedPass()
+        public RHIScopedComputePassRef BeginScopedPass(string name)
         {
-            BeginPass();
+            BeginPass(name);
             return new RHIScopedComputePassRef(this);
         }
 
-        public abstract void BeginPass();
+        public abstract void BeginPass(string name);
         public abstract void SetPipeline(RHIComputePipeline pipeline);
-        public abstract void SetBindGroup(in int layoutIndex, RHIBindGroup bindGroup);
+        public abstract void SetBindGroup(RHIBindGroup bindGroup, in int layoutIndex);
         public abstract void Dispatch(in uint groupCountX, in uint groupCountY, in uint groupCountZ);
+        public abstract void PushDebugGroup(string name);
+        public abstract void PopDebugGroup();
         public abstract void EndPass();
-        // TODO PushDebugMark(...)
-        // TODO PullDebugMark(...)
         // TODO DispatchIndirect(...)
     }
 
@@ -141,14 +144,14 @@ namespace Infinity.Graphics
         public abstract void SetViewport(in float x, in float y, in float width, in float height, in float minDepth, in float maxDepth);
         public abstract void SetBlendConstant(in float constants);
         public abstract void SetStencilReference(in uint reference);
-        public abstract void SetBindGroup(in int layoutIndex, RHIBindGroup bindGroup);
+        public abstract void SetBindGroup(RHIBindGroup bindGroup, in int layoutIndex);
         public abstract void SetIndexBuffer(RHIBufferView bufferView);
         public abstract void SetVertexBuffer(in uint slot, RHIBufferView bufferView);
         public abstract void SetPrimitiveTopology(in EPrimitiveTopology primitiveTopology);
         public abstract void Draw(in uint vertexCount, in uint instanceCount, in uint firstVertex, in uint firstInstance);
         public abstract void DrawIndexed(in uint indexCount, in uint instanceCount, in uint firstIndex, in uint baseVertex, in uint firstInstance);
-        // TODO PushDebugMark(...)
-        // TODO PullDebugMark(...)
+        public abstract void PushDebugGroup(string name);
+        public abstract void PopDebugGroup();
         // TODO DrawIndirect(...)
         // TODO DrawIndexedIndirect(...)
         // TODO DrawMultiIndexedIndirect(...)
