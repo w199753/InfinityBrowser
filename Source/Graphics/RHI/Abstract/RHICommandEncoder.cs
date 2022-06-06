@@ -122,7 +122,7 @@ namespace Infinity.Graphics
 
         public abstract void BeginPass(string name);
         public abstract void SetPipeline(RHIComputePipeline pipeline);
-        public abstract void SetBindGroup(RHIBindGroup bindGroup, in int layoutIndex);
+        public abstract void SetBindGroup(RHIBindGroup bindGroup);
         public abstract void Dispatch(in uint groupCountX, in uint groupCountY, in uint groupCountZ);
         public abstract void PushDebugGroup(string name);
         public abstract void PopDebugGroup();
@@ -144,7 +144,7 @@ namespace Infinity.Graphics
         public abstract void SetViewport(in float x, in float y, in float width, in float height, in float minDepth, in float maxDepth);
         public abstract void SetBlendConstant(in float constants);
         public abstract void SetStencilReference(in uint reference);
-        public abstract void SetBindGroup(RHIBindGroup bindGroup, in int layoutIndex);
+        public abstract void SetBindGroup(RHIBindGroup bindGroup);
         public abstract void SetIndexBuffer(RHIBufferView bufferView);
         public abstract void SetVertexBuffer(in uint slot, RHIBufferView bufferView);
         public abstract void SetPrimitiveTopology(in EPrimitiveTopology primitiveTopology);

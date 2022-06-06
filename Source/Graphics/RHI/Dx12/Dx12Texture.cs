@@ -45,13 +45,13 @@ namespace Infinity.Graphics
             textureDesc.Width = (ulong)createInfo.extent.x;
             textureDesc.Height = (uint)createInfo.extent.y;
             textureDesc.DepthOrArraySize = (ushort)createInfo.extent.z;
-            textureDesc.Flags = Dx12Utility.GetDX12ResourceFlagByUsage(createInfo.usages);
-            textureDesc.SampleDesc.Count = (uint)createInfo.samples;
-            textureDesc.SampleDesc.Quality = 0;
-            textureDesc.Dimension = Dx12Utility.ConvertToDX12ResourceDimension(createInfo.dimension);
+            textureDesc.Flags = Dx12Utility.ConvertToDX12ResourceFlagByUsage(createInfo.usages);
+            textureDesc.SampleDesc.Count = (uint)createInfo.samples.x;
+            textureDesc.SampleDesc.Quality = (uint)createInfo.samples.y;
+            textureDesc.Dimension = Dx12Utility.ConvertToDX12TextureDimension(createInfo.dimension);
 
             ID3D12Resource* dx12Resource;
-            bool success = SUCCEEDED(m_Dx12Device.NativeDevice->CreateCommittedResource(&heapProperties, D3D12_HEAP_FLAGS.D3D12_HEAP_FLAG_NONE, &textureDesc, D3D12_RESOURCE_STATES.D3D12_RESOURCE_STATE_COMMON/*Dx12Utility.GetDX12ResourceStateByUsage(createInfo.usages)*/, null, __uuidof<ID3D12Resource>(), (void**)&dx12Resource));
+            bool success = SUCCEEDED(m_Dx12Device.NativeDevice->CreateCommittedResource(&heapProperties, D3D12_HEAP_FLAGS.D3D12_HEAP_FLAG_NONE, &textureDesc, Dx12Utility.ConvertToDX12TextureState(createInfo.state)/*Dx12Utility.GetDX12ResourceStateByUsage(createInfo.usages)*/, null, __uuidof<ID3D12Resource>(), (void**)&dx12Resource)); ;
             Debug.Assert(success);
             m_NativeResource = dx12Resource;
         }

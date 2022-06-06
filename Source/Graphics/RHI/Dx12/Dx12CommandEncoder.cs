@@ -59,8 +59,8 @@ namespace Infinity.Graphics
                 Debug.Assert(buffer != null);
 
                 resource = buffer.NativeResource;
-                beforeState = Dx12Utility.ConvertToNativeBufferState(barrier.Buffer.before);
-                afterState = Dx12Utility.ConvertToNativeBufferState(barrier.Buffer.after);
+                beforeState = Dx12Utility.ConvertToDX12BufferState(barrier.Buffer.before);
+                afterState = Dx12Utility.ConvertToDX12BufferState(barrier.Buffer.after);
             }
             else
             {
@@ -68,8 +68,8 @@ namespace Infinity.Graphics
                 Debug.Assert(texture != null);
 
                 resource = texture.NativeResource;
-                beforeState = Dx12Utility.ConvertToNativeTextureState(barrier.Texture.before);
-                afterState = Dx12Utility.ConvertToNativeTextureState(barrier.Texture.after);
+                beforeState = Dx12Utility.ConvertToDX12TextureState(barrier.Texture.before);
+                afterState = Dx12Utility.ConvertToDX12TextureState(barrier.Texture.after);
             }
 
             D3D12_RESOURCE_BARRIER resourceBarrier = D3D12_RESOURCE_BARRIER.InitTransition(resource, beforeState, afterState);
@@ -93,8 +93,8 @@ namespace Infinity.Graphics
                     Debug.Assert(buffer != null);
 
                     resource = buffer.NativeResource;
-                    beforeState = Dx12Utility.ConvertToNativeBufferState(barrier.Buffer.before);
-                    afterState = Dx12Utility.ConvertToNativeBufferState(barrier.Buffer.after);
+                    beforeState = Dx12Utility.ConvertToDX12BufferState(barrier.Buffer.before);
+                    afterState = Dx12Utility.ConvertToDX12BufferState(barrier.Buffer.after);
                 }
                 else
                 {
@@ -102,8 +102,8 @@ namespace Infinity.Graphics
                     Debug.Assert(texture != null);
 
                     resource = texture.NativeResource;
-                    beforeState = Dx12Utility.ConvertToNativeTextureState(barrier.Texture.before);
-                    afterState = Dx12Utility.ConvertToNativeTextureState(barrier.Texture.after);
+                    beforeState = Dx12Utility.ConvertToDX12TextureState(barrier.Texture.before);
+                    afterState = Dx12Utility.ConvertToDX12TextureState(barrier.Texture.after);
                 }
 
                 resourceBarriers[i] = D3D12_RESOURCE_BARRIER.InitTransition(resource, beforeState, afterState);
@@ -159,20 +159,19 @@ namespace Infinity.Graphics
             m_Dx12CommandBuffer.NativeCommandList->SetComputeRootSignature(m_Dx12ComputePipeline.PipelineLayout.NativeRootSignature);
         }
 
-        public override void SetBindGroup(RHIBindGroup bindGroup, in int layoutIndex)
+        public override void SetBindGroup(RHIBindGroup bindGroup)
         {
             Dx12BindGroup dx12BindGroup = bindGroup as Dx12BindGroup;
             Dx12BindGroupLayout bindGroupLayout = dx12BindGroup.BindGroupLayout;
-            Dx12PipelineLayout pipelineLayout = m_Dx12ComputePipeline.PipelineLayout;
 
             Debug.Assert(m_Dx12ComputePipeline != null);
-            Debug.Assert(layoutIndex == bindGroupLayout.LayoutIndex);
 
             for (int i = 0; i < dx12BindGroup.BindParameters.Length; ++i) 
             {
+                Dx12PipelineLayout pipelineLayout = m_Dx12ComputePipeline.PipelineLayout;
                 ref Dx12BindGroupParameter bindParameter = ref dx12BindGroup.BindParameters[i];
 
-                Dx12BindingTypeAndRootParameterIndex? parameter = pipelineLayout.QueryRootDescriptorParameterIndex(EShaderStageFlags.Compute, layoutIndex, bindParameter.slot);
+                Dx12BindingTypeAndRootParameterIndex? parameter = pipelineLayout.QueryRootDescriptorParameterIndex(EShaderStageFlags.Compute, bindGroupLayout.LayoutIndex, bindParameter.slot);
                 if (parameter.HasValue)
                 {
                     Debug.Assert(parameter.Value.bindType == bindParameter.bindType);
@@ -300,28 +299,26 @@ namespace Infinity.Graphics
             m_Dx12CommandBuffer.NativeCommandList->OMSetStencilRef(reference);
         }
 
-        public override void SetBindGroup(RHIBindGroup bindGroup, in int layoutIndex)
+        public override void SetBindGroup(RHIBindGroup bindGroup)
         {
             Dx12BindGroup dx12BindGroup = bindGroup as Dx12BindGroup;
             Dx12BindGroupLayout bindGroupLayout = dx12BindGroup.BindGroupLayout;
-            Dx12PipelineLayout pipelineLayout = m_Dx12GraphicsPipeline.PipelineLayout;
-
             Debug.Assert(m_Dx12GraphicsPipeline != null);
-            Debug.Assert(layoutIndex == bindGroupLayout.LayoutIndex);
 
             for (int i = 0; i < dx12BindGroup.BindParameters.Length; ++i)
             {
                 Dx12BindingTypeAndRootParameterIndex? parameter = null;
+                Dx12PipelineLayout pipelineLayout = m_Dx12GraphicsPipeline.PipelineLayout;
                 ref Dx12BindGroupParameter bindParameter = ref dx12BindGroup.BindParameters[i];
 
-                parameter = pipelineLayout.QueryRootDescriptorParameterIndex(EShaderStageFlags.Vertex, layoutIndex, bindParameter.slot);
+                parameter = pipelineLayout.QueryRootDescriptorParameterIndex(EShaderStageFlags.Vertex, bindGroupLayout.LayoutIndex, bindParameter.slot);
                 if (parameter.HasValue)
                 {
                     Debug.Assert(parameter.Value.bindType == bindParameter.bindType);
                     m_Dx12CommandBuffer.NativeCommandList->SetGraphicsRootDescriptorTable((uint)parameter.Value.index, bindParameter.dx12GpuDescriptorHandle);
                 }
 
-                parameter = pipelineLayout.QueryRootDescriptorParameterIndex(EShaderStageFlags.Fragment, layoutIndex, bindParameter.slot);
+                parameter = pipelineLayout.QueryRootDescriptorParameterIndex(EShaderStageFlags.Fragment, bindGroupLayout.LayoutIndex, bindParameter.slot);
                 if (parameter.HasValue)
                 {
                     Debug.Assert(parameter.Value.bindType == bindParameter.bindType);
@@ -346,7 +343,7 @@ namespace Infinity.Graphics
 
         public override void SetPrimitiveTopology(in EPrimitiveTopology primitiveTopology)
         {
-            m_Dx12CommandBuffer.NativeCommandList->IASetPrimitiveTopology(Dx12Utility.ConvertToNativePrimitiveTopology(primitiveTopology));
+            m_Dx12CommandBuffer.NativeCommandList->IASetPrimitiveTopology(Dx12Utility.ConvertToDX12PrimitiveTopology(primitiveTopology));
         }
 
         public override void Draw(in uint vertexCount, in uint instanceCount, in uint firstVertex, in uint firstInstance)

@@ -5,9 +5,10 @@ namespace Infinity.Graphics
     public struct RHITextureCreateInfo
     {
         public int3 extent;
-        public int samples;
+        public int2 samples;
         public int mipLevels;
         public EPixelFormat format;
+        public ETextureState state;
         public ETextureDimension dimension;
         public ETextureUsageFlags usages;
     }
