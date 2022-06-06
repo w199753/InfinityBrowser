@@ -35,7 +35,7 @@ namespace Infinity.Graphics
 
     public struct RHIGraphicsPassBeginInfo
     {
-        public string name;
+        public string? name;
         public int colorAttachmentCount => colorAttachments.Length;
         public RHIGraphicsPassDepthStencilAttachment? depthStencilAttachment;
         public Memory<RHIGraphicsPassColorAttachment> colorAttachments;
@@ -90,13 +90,13 @@ namespace Infinity.Graphics
 
     public abstract class RHIBlitEncoder : Disposal
     {
-        public RHIScopedBlitPassRef BeginScopedPass(string name)
+        public RHIScopedBlitPassRef BeginScopedPass(string? name = null)
         {
             BeginPass(name);
             return new RHIScopedBlitPassRef(this);
         }
 
-        public abstract void BeginPass(string name);
+        public abstract void BeginPass(string? name);
         public abstract void CopyBufferToBuffer(RHIBuffer src, in int srcOffset, RHIBuffer dst, in int dstOffset, in int size);
         public abstract void CopyBufferToTexture(RHIBuffer src, RHITexture dst, in RHITextureSubResourceInfo subResourceInfo, in int3 size);
         public abstract void CopyTextureToBuffer(RHITexture src, RHIBuffer dst, in RHITextureSubResourceInfo subResourceInfo, in int3 size);
@@ -120,7 +120,7 @@ namespace Infinity.Graphics
             return new RHIScopedComputePassRef(this);
         }
 
-        public abstract void BeginPass(string name);
+        public abstract void BeginPass(string? name);
         public abstract void SetPipeline(RHIComputePipeline pipeline);
         public abstract void SetBindGroup(RHIBindGroup bindGroup);
         public abstract void Dispatch(in uint groupCountX, in uint groupCountY, in uint groupCountZ);
