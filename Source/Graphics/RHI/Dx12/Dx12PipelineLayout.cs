@@ -35,31 +35,32 @@ namespace Infinity.Graphics
             m_FragmentRootParameterIndexMap = new Dictionary<int, Dx12BindingTypeAndRootParameterIndex>(8);
             m_ComputeRootParameterIndexMap = new Dictionary<int, Dx12BindingTypeAndRootParameterIndex>(8);
 
-            /*int allocSize = 0;
+            int parameterCount = 0;
             for (int i = 0; i < createInfo.bindGroupCount; ++i)
             {
                 Dx12BindGroupLayout bindGroupLayout = createInfo.bindGroupLayouts[i] as Dx12BindGroupLayout;
-                allocSize += bindGroupLayout.NativeRootParameters.Length;
-            }*/
+                parameterCount += bindGroupLayout.RootParameterKeyInfos.Length;
+            }
 
-            //D3D12_ROOT_PARAMETER1* rootParameters = stackalloc D3D12_ROOT_PARAMETER1[allocSize];
-            TValueArray<D3D12_ROOT_PARAMETER1> rootParameters = new TValueArray<D3D12_ROOT_PARAMETER1>(128);
-
-            //int baseSlot = -1;
+            int baseSlot = 0;
+            D3D12_ROOT_PARAMETER1* rootParameters = stackalloc D3D12_ROOT_PARAMETER1[parameterCount];
+            //TValueArray<D3D12_ROOT_PARAMETER1> rootParameters = new TValueArray<D3D12_ROOT_PARAMETER1>(128);
 
             for (int i = 0; i < createInfo.bindGroupCount; ++i)
             {
-                //baseSlot += 1;
-                int baseSlot = rootParameters.length;
+                baseSlot += i;
+                //int baseSlot = rootParameters.length;
                 Dx12BindGroupLayout bindGroupLayout = createInfo.bindGroupLayouts[i] as Dx12BindGroupLayout;
 
-                for (int j = 0; j < bindGroupLayout.NativeRootParameters.Length; ++j)
+                for (int j = 0; j < bindGroupLayout.RootParameterKeyInfos.Length; ++j)
                 {
                     int slot = baseSlot + j;
-                    //rootParameters[i + j] = bindGroupLayout.NativeRootParameters[slot];
-                    rootParameters.Add(bindGroupLayout.NativeRootParameters[slot]);
-
                     ref Dx12RootParameterKeyInfo keyInfo = ref bindGroupLayout.RootParameterKeyInfos[slot];
+
+                    D3D12_DESCRIPTOR_RANGE1 dx12DescriptorRange = new D3D12_DESCRIPTOR_RANGE1();
+                    dx12DescriptorRange.Init(Dx12Utility.ConvertToDX12BindType(keyInfo.bindType), 1, (uint)keyInfo.slot, (uint)keyInfo.layoutIndex, D3D12_DESCRIPTOR_RANGE_FLAGS.D3D12_DESCRIPTOR_RANGE_FLAG_DATA_STATIC);
+                    rootParameters[i + j].InitAsDescriptorTable(1, &dx12DescriptorRange, Dx12Utility.ConvertToDX12ShaderStage(keyInfo.shaderStage));
+                    //rootParameters.Add(bindGroupLayout.NativeRootParameters[slot]);
 
                     Dx12BindingTypeAndRootParameterIndex parameter;
                     parameter.index = slot;
@@ -82,12 +83,8 @@ namespace Infinity.Graphics
                 }
             }
 
-            D3D12_DESCRIPTOR_RANGE1 descriptorRange = new D3D12_DESCRIPTOR_RANGE1();
-            descriptorRange.Init(D3D12_DESCRIPTOR_RANGE_TYPE.D3D12_DESCRIPTOR_RANGE_TYPE_UAV, 1, 0, 0, D3D12_DESCRIPTOR_RANGE_FLAGS.D3D12_DESCRIPTOR_RANGE_FLAG_DATA_STATIC);
-            rootParameters[0].InitAsDescriptorTable(1, &descriptorRange, D3D12_SHADER_VISIBILITY.D3D12_SHADER_VISIBILITY_ALL);
-
             D3D12_VERSIONED_ROOT_SIGNATURE_DESC rootSignatureDesc = new D3D12_VERSIONED_ROOT_SIGNATURE_DESC();
-            rootSignatureDesc.Init_1_1((uint)rootParameters.length, rootParameters.NativePtr, 0, null, D3D12_ROOT_SIGNATURE_FLAGS.D3D12_ROOT_SIGNATURE_FLAG_ALLOW_INPUT_ASSEMBLER_INPUT_LAYOUT);
+            rootSignatureDesc.Init_1_1((uint)parameterCount, rootParameters, 0, null, D3D12_ROOT_SIGNATURE_FLAGS.D3D12_ROOT_SIGNATURE_FLAG_ALLOW_INPUT_ASSEMBLER_INPUT_LAYOUT);
 
             ID3DBlob* signature;
             Dx12Utility.CHECK_HR(DirectX.D3D12SerializeVersionedRootSignature(&rootSignatureDesc, D3D_ROOT_SIGNATURE_VERSION.D3D_ROOT_SIGNATURE_VERSION_1_1, &signature, null));
@@ -96,7 +93,7 @@ namespace Infinity.Graphics
             Dx12Utility.CHECK_HR(device.NativeDevice->CreateRootSignature(0, signature->GetBufferPointer(), signature->GetBufferSize(), __uuidof<ID3D12RootSignature>(), (void**)&rootSignature));
             m_NativeRootSignature = rootSignature;
 
-            rootParameters.Dispose();
+            //rootParameters.Dispose();
         }
 
         public Dx12BindingTypeAndRootParameterIndex? QueryRootDescriptorParameterIndex(in EShaderStageFlags shaderStage, in int layoutIndex, in int slot)
