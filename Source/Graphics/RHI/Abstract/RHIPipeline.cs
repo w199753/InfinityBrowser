@@ -1,4 +1,5 @@
 ﻿using System;
+using Infinity.Mathmatics;
 
 namespace Infinity.Graphics
 {
@@ -95,6 +96,7 @@ namespace Infinity.Graphics
 
     public struct RHIComputePipelineCreateInfo
     {
+        public uint3 threadSize;
         public RHIShader shader;
         public RHIPipelineLayout layout;
     }
