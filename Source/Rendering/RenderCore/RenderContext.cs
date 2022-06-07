@@ -1,5 +1,6 @@
 ﻿using System;
 using Infinity.Graphics;
+using Infinity.Container;
 using Infinity.Mathmatics;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
@@ -74,6 +75,7 @@ namespace Infinity.Rendering
         private RHITextureView[] m_SwapChainViews;
         private RHICommandPool[] m_CommandPools;
         private CommandBufferPool[] m_CommandBufferPools;
+        private TArray<RHICommandBuffer> m_CommandBufferAutoRelease;
 
         public RenderContext(in int width, in int height, in IntPtr window)
         {
@@ -139,6 +141,8 @@ namespace Infinity.Rendering
             m_CommandBufferPools[0] = new CommandBufferPool(m_CommandPools[0]);
             m_CommandBufferPools[1] = new CommandBufferPool(m_CommandPools[1]);
             m_CommandBufferPools[2] = new CommandBufferPool(m_CommandPools[2]);
+
+            m_CommandBufferAutoRelease = new TArray<RHICommandBuffer>(16);
         }
 
         public void Cull()
@@ -186,8 +190,12 @@ namespace Infinity.Rendering
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void EndInit()
         {
-            m_Queues[(int)EQueueType.Graphics].Submit(null, m_FrameFence);
+            RHICommandBuffer cmdBuffer = GetCommandBuffer(EContextType.Graphics);
+            cmdBuffer.Begin();
+            cmdBuffer.End();
+            cmdBuffer.Commit(m_FrameFence);
             m_FrameFence.Wait();
+            ReleaseCommandBuffer();
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -201,28 +209,39 @@ namespace Infinity.Rendering
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void EndFrame()
         {
-            m_Queues[(int)EQueueType.Graphics].Submit(null, m_FrameFence);
+            RHICommandBuffer cmdBuffer = GetCommandBuffer(EContextType.Graphics);
+            cmdBuffer.Begin();
+            cmdBuffer.End();
+            cmdBuffer.Commit(m_FrameFence);
             m_SwapChain.Present();
             m_FrameFence.Wait();
+            ReleaseCommandBuffer();
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public RHICommandBuffer GetCommandBuffer(in EContextType contextType)
         {
-            return m_CommandBufferPools[(int)contextType].Pull();
+            RHICommandBuffer cmdBuffer = m_CommandBufferPools[(int)contextType].Pull();
+            m_CommandBufferAutoRelease.Add(cmdBuffer);
+            return cmdBuffer;
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public void ReleaseCommandBuffer(RHICommandBuffer cmdBuffer)
+        private void ReleaseCommandBuffer()
         {
-            m_CommandBufferPools[(int)cmdBuffer.QueueType].Push(cmdBuffer);
+            for(int i = 0; i < m_CommandBufferAutoRelease.length; ++i)
+            {
+                RHICommandBuffer cmdBuffer = m_CommandBufferAutoRelease[i];
+                m_CommandBufferPools[(int)cmdBuffer.CommandPool.Queue.Type].Push(cmdBuffer);
+            }
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        /*[MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void ExecuteCommandBuffer(RHICommandBuffer cmdBuffer, RHIFence fence = null)
         {
-            m_Queues[(int)cmdBuffer.QueueType].Submit(cmdBuffer, fence);
-        }
+            cmdBuffer.Commit(fence);
+            m_CommandBufferPools[(int)cmdBuffer.CommandPool.Queue.Type].Push(cmdBuffer);
+        }*/
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public RHIFence CreateFence()

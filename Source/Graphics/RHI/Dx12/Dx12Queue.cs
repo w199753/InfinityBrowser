@@ -6,12 +6,19 @@ namespace Infinity.Graphics
 #pragma warning disable CS8600, CS8602
     internal unsafe struct Dx12CommandQueueCreateInfo
     {
-        public EQueueType queueType;
-        public ID3D12CommandQueue* cmdQueue;
+        public EQueueType type;
+        public ID3D12CommandQueue* queue;
     }
 
     internal unsafe class Dx12Queue : RHIQueue
     {
+        public Dx12Device Dx12Device
+        {
+            get
+            {
+                return m_Dx12Device;
+            }
+        }
         public ID3D12CommandQueue* NativeCommandQueue
         {
             get
@@ -21,36 +28,18 @@ namespace Infinity.Graphics
         }
 
         private Dx12Device m_Dx12Device;
-        private EQueueType m_QueueType;
         private ID3D12CommandQueue* m_NativeCommandQueue;
 
         public Dx12Queue(Dx12Device device, in Dx12CommandQueueCreateInfo createInfo)
         {
+            m_Type = createInfo.type;
             m_Dx12Device = device;
-            m_QueueType = createInfo.queueType;
-            m_NativeCommandQueue = createInfo.cmdQueue;
+            m_NativeCommandQueue = createInfo.queue;
         }
 
         public override RHICommandPool CreateCommandPool()
         {
-            return new Dx12CommandPool(m_Dx12Device, m_QueueType);
-        }
-
-        public override void Submit(RHICommandBuffer cmdBuffer, RHIFence fence)
-        {
-            if (cmdBuffer != null)
-            {
-                Dx12CommandBuffer dx12CommandBuffer = cmdBuffer as Dx12CommandBuffer;
-                ID3D12CommandList** ppCommandLists = stackalloc ID3D12CommandList*[1] { (ID3D12CommandList*)dx12CommandBuffer.NativeCommandList };
-                m_NativeCommandQueue->ExecuteCommandLists(1, ppCommandLists);
-            }
-
-            if (fence != null)
-            {
-                Dx12Fence dx12Fence = fence as Dx12Fence;
-                dx12Fence.Reset();
-                m_NativeCommandQueue->Signal(dx12Fence.NativeFence, 1);
-            }
+            return new Dx12CommandPool(this);
         }
 
         protected override void Release()

@@ -320,8 +320,8 @@ namespace Infinity.Graphics
                     Debug.Assert(success);
 
                     Dx12CommandQueueCreateInfo queueCreateInfo;
-                    queueCreateInfo.cmdQueue = commandQueue;
-                    queueCreateInfo.queueType = iter.Key;
+                    queueCreateInfo.type = iter.Key;
+                    queueCreateInfo.queue = commandQueue;
                     tempQueues.Add(new Dx12Queue(this, queueCreateInfo));
                 }
 

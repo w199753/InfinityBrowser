@@ -61,8 +61,7 @@ namespace Infinity.Rendering
                 }
             }
 
-            renderContext.ExecuteCommandBuffer(m_CommandBuffer);
-            renderContext.ReleaseCommandBuffer(m_CommandBuffer);
+            m_CommandBuffer.Commit();
         }
 
         protected override void Release()

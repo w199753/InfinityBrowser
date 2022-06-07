@@ -2,6 +2,7 @@
 
 namespace Infinity.Graphics
 {
+#pragma warning disable CS8618 
     public struct RHIScopedCommandBufferRef : IDisposable
     {
         RHICommandBuffer m_CommandBuffer;
@@ -19,9 +20,15 @@ namespace Infinity.Graphics
 
     public abstract class RHICommandBuffer : Disposal
     {
-        public EQueueType QueueType => m_QueueType;
+        public RHICommandPool CommandPool
+        {
+            get
+            {
+                return m_CommandPool;
+            }
+        }
 
-        protected EQueueType m_QueueType;
+        protected RHICommandPool m_CommandPool;
 
         public RHIScopedCommandBufferRef BeginScoped()
         {
@@ -34,7 +41,8 @@ namespace Infinity.Graphics
         public abstract RHIComputeEncoder GetComputeEncoder();
         public abstract RHIGraphicsEncoder GetGraphicsEncoder();
         public abstract void End();
-        //public abstract void Commit();
+        public abstract void Commit(RHIFence? fence = null);
         //public abstract void WaitUntilCompleted();
     }
+#pragma warning restore CS8618
 }

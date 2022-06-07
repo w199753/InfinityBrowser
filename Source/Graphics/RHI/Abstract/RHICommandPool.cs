@@ -1,18 +1,20 @@
 ﻿namespace Infinity.Graphics
 {
+#pragma warning disable CS8618
     public abstract class RHICommandPool : Disposal
     {
-        public EQueueType Type
+        public RHIQueue Queue
         {
             get
             {
-                return m_Type;
+                return m_Queue;
             }
         }
 
-        protected EQueueType m_Type;
+        protected RHIQueue m_Queue;
 
         public abstract void Reset();
         public abstract RHICommandBuffer CreateCommandBuffer();
     }
+#pragma warning restore CS8618 
 }

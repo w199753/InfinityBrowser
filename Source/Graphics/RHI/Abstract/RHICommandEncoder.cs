@@ -106,10 +106,8 @@ namespace Infinity.Graphics
         public abstract void PushDebugGroup(string name);
         public abstract void PopDebugGroup();
         public abstract void EndPass();
-        // TODO PushDebugMark(...)
-        // TODO PullDebugMark(...)
         // TODO WriteTimeStamp(...)
-        // TODO ResolveQuerySet(...)
+        // TODO ResolveQuery(...)
     }
 
     public abstract class RHIComputeEncoder : Disposal
