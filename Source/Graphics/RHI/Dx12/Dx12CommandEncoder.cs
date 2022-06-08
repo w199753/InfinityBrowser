@@ -198,6 +198,12 @@ namespace Infinity.Graphics
             m_Dx12CommandBuffer.NativeCommandList->Dispatch(groupCountX, groupCountY, groupCountZ);
         }
 
+        public override void DispatchIndirect(RHIBuffer argsBuffer, in uint argsOffset)
+        {
+            Dx12Buffer dx12Buffer = argsBuffer as Dx12Buffer;
+            m_Dx12CommandBuffer.NativeCommandList->ExecuteIndirect(null, 1, dx12Buffer.NativeResource, argsOffset, null, 0);
+        }
+
         public override void PushDebugGroup(string name)
         {
             IntPtr namePtr = Marshal.StringToHGlobalUni(name);
@@ -377,6 +383,18 @@ namespace Infinity.Graphics
         public override void DrawIndexed(in uint indexCount, in uint instanceCount, in uint firstIndex, in uint baseVertex, in uint firstInstance)
         {
             m_Dx12CommandBuffer.NativeCommandList->DrawIndexedInstanced(indexCount, instanceCount, firstIndex, (int)baseVertex, firstInstance);
+        }
+
+        public override void DrawIndirect(RHIBuffer argsBuffer, uint offset, uint drawCount, uint stride)
+        {
+            Dx12Buffer dx12Buffer = argsBuffer as Dx12Buffer;
+            m_Dx12CommandBuffer.NativeCommandList->ExecuteIndirect(null, drawCount, dx12Buffer.NativeResource, offset, null, 0);
+        }
+
+        public override void DrawIndexedIndirect(RHIBuffer argsBuffer, uint offset, uint drawCount, uint stride)
+        {
+            Dx12Buffer dx12Buffer = argsBuffer as Dx12Buffer;
+            m_Dx12CommandBuffer.NativeCommandList->ExecuteIndirect(null, drawCount, dx12Buffer.NativeResource, offset, null, 0);
         }
 
         public override void PushDebugGroup(string name)
