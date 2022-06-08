@@ -8,9 +8,9 @@ using static TerraFX.Interop.Windows.Windows;
 namespace Infinity.Graphics
 {
 #pragma warning disable CS0169, CS0649, CS8600, CS8602, CS8604, CS8618, CA1416
-    internal struct Dx12BindingTypeAndRootParameterIndex
+    internal struct Dx12BindTypeAndParameterSlot
     {
-        public int index;
+        public int slot;
         public EBindingType bindType;
     }
 
@@ -25,15 +25,15 @@ namespace Infinity.Graphics
         }
 
         private ID3D12RootSignature* m_NativeRootSignature;
-        private Dictionary<int, Dx12BindingTypeAndRootParameterIndex> m_VertexRootParameterIndexMap;
-        private Dictionary<int, Dx12BindingTypeAndRootParameterIndex> m_FragmentRootParameterIndexMap;
-        private Dictionary<int, Dx12BindingTypeAndRootParameterIndex> m_ComputeRootParameterIndexMap;
+        private Dictionary<int, Dx12BindTypeAndParameterSlot> m_VertexParameterMap;
+        private Dictionary<int, Dx12BindTypeAndParameterSlot> m_FragmentParameterMap;
+        private Dictionary<int, Dx12BindTypeAndParameterSlot> m_ComputeParameterMap;
 
         public Dx12PipelineLayout(Dx12Device device, in RHIPipelineLayoutCreateInfo createInfo)
         {
-            m_VertexRootParameterIndexMap = new Dictionary<int, Dx12BindingTypeAndRootParameterIndex>(8);
-            m_FragmentRootParameterIndexMap = new Dictionary<int, Dx12BindingTypeAndRootParameterIndex>(8);
-            m_ComputeRootParameterIndexMap = new Dictionary<int, Dx12BindingTypeAndRootParameterIndex>(8);
+            m_VertexParameterMap = new Dictionary<int, Dx12BindTypeAndParameterSlot>(8);
+            m_FragmentParameterMap = new Dictionary<int, Dx12BindTypeAndParameterSlot>(8);
+            m_ComputeParameterMap = new Dictionary<int, Dx12BindTypeAndParameterSlot>(8);
 
             int parameterCount = 0;
             for (int i = 0; i < createInfo.bindGroupCount; ++i)
@@ -62,23 +62,23 @@ namespace Infinity.Graphics
                     rootParameters[i + j].InitAsDescriptorTable(1, &dx12DescriptorRange, Dx12Utility.ConvertToDX12ShaderStage(keyInfo.shaderStage));
                     //rootParameters.Add(bindGroupLayout.NativeRootParameters[slot]);
 
-                    Dx12BindingTypeAndRootParameterIndex parameter;
-                    parameter.index = slot;
+                    Dx12BindTypeAndParameterSlot parameter;
+                    parameter.slot = slot;
                     parameter.bindType = keyInfo.bindType;
 
                     if ((keyInfo.shaderStage & EShaderStageFlags.Vertex) == EShaderStageFlags.Vertex)
                     {
-                        m_VertexRootParameterIndexMap.TryAdd((keyInfo.layoutIndex << 8) + keyInfo.slot, parameter);
+                        m_VertexParameterMap.TryAdd((keyInfo.layoutIndex << 8) + keyInfo.slot, parameter);
                     }
 
                     if ((keyInfo.shaderStage & EShaderStageFlags.Fragment) == EShaderStageFlags.Fragment)
                     {
-                        m_FragmentRootParameterIndexMap.TryAdd((keyInfo.layoutIndex << 8) + keyInfo.slot, parameter);
+                        m_FragmentParameterMap.TryAdd((keyInfo.layoutIndex << 8) + keyInfo.slot, parameter);
                     }
 
                     if ((keyInfo.shaderStage & EShaderStageFlags.Compute) == EShaderStageFlags.Compute)
                     {
-                        m_ComputeRootParameterIndexMap.TryAdd((keyInfo.layoutIndex << 8) + keyInfo.slot, parameter);
+                        m_ComputeParameterMap.TryAdd((keyInfo.layoutIndex << 8) + keyInfo.slot, parameter);
                     }
                 }
             }
@@ -96,26 +96,26 @@ namespace Infinity.Graphics
             //rootParameters.Dispose();
         }
 
-        public Dx12BindingTypeAndRootParameterIndex? QueryRootDescriptorParameterIndex(in EShaderStageFlags shaderStage, in int layoutIndex, in int slot)
+        public Dx12BindTypeAndParameterSlot? QueryRootDescriptorParameterIndex(in EShaderStageFlags shaderStage, in int layoutIndex, in int slot)
         {
             bool hasValue = false;
-            Dx12BindingTypeAndRootParameterIndex? outParameter = null;
+            Dx12BindTypeAndParameterSlot? outParameter = null;
 
             if ((shaderStage & EShaderStageFlags.Vertex) == EShaderStageFlags.Vertex)
             {
-                hasValue = m_VertexRootParameterIndexMap.TryGetValue((layoutIndex << 8) + slot, out Dx12BindingTypeAndRootParameterIndex parameter);
+                hasValue = m_VertexParameterMap.TryGetValue((layoutIndex << 8) + slot, out Dx12BindTypeAndParameterSlot parameter);
                 outParameter = parameter;
             }
 
             if ((shaderStage & EShaderStageFlags.Fragment) == EShaderStageFlags.Fragment)
             {
-                hasValue = m_FragmentRootParameterIndexMap.TryGetValue((layoutIndex << 8) + slot, out Dx12BindingTypeAndRootParameterIndex parameter);
+                hasValue = m_FragmentParameterMap.TryGetValue((layoutIndex << 8) + slot, out Dx12BindTypeAndParameterSlot parameter);
                 outParameter = parameter;
             }
 
             if ((shaderStage & EShaderStageFlags.Compute) == EShaderStageFlags.Compute)
             {
-                hasValue = m_ComputeRootParameterIndexMap.TryGetValue((layoutIndex << 8) + slot, out Dx12BindingTypeAndRootParameterIndex parameter);
+                hasValue = m_ComputeParameterMap.TryGetValue((layoutIndex << 8) + slot, out Dx12BindTypeAndParameterSlot parameter);
                 outParameter = parameter;
             }
 
