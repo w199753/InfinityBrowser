@@ -1,5 +1,5 @@
-﻿using Infinity.Mathmatics;
 using System;
+using Infinity.Mathmatics;
 
 namespace Infinity.Graphics
 {
@@ -127,7 +127,6 @@ namespace Infinity.Graphics
         public abstract void PushDebugGroup(string name);
         public abstract void PopDebugGroup();
         public abstract void EndPass();
-        // TODO DispatchIndirect(...)
     }
 
     public abstract class RHIGraphicsEncoder : Disposal
