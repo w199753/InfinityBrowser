@@ -156,13 +156,20 @@ namespace Infinity.Graphics
             }
         }
 
-        public override void SetPipeline(RHIComputePipeline pipeline)
+        public override void SetPipelineState(RHIComputePipeline pipeline)
         {
             m_Dx12ComputePipeline = pipeline as Dx12ComputePipeline;
             Debug.Assert(m_Dx12ComputePipeline != null);
 
             m_Dx12CommandBuffer.NativeCommandList->SetPipelineState(m_Dx12ComputePipeline.NativePipelineState);
-            m_Dx12CommandBuffer.NativeCommandList->SetComputeRootSignature(m_Dx12ComputePipeline.PipelineLayout.NativeRootSignature);
+        }
+
+        public override void SetPipelineLayout(RHIPipelineLayout pipelineLayout)
+        {
+            Dx12PipelineLayout dx12PipelineLayout = pipelineLayout as Dx12PipelineLayout;
+            Debug.Assert(dx12PipelineLayout != null);
+
+            m_Dx12CommandBuffer.NativeCommandList->SetComputeRootSignature(dx12PipelineLayout.NativeRootSignature);
         }
 
         public override void SetBindGroup(RHIBindGroup bindGroup)
@@ -276,12 +283,19 @@ namespace Infinity.Graphics
             }
         }
 
-        public override void SetPipeline(RHIGraphicsPipeline pipeline)
+        public override void SetPipelineState(RHIGraphicsPipeline pipeline)
         {
             m_Dx12GraphicsPipeline = pipeline as Dx12GraphicsPipeline;
             Debug.Assert(m_Dx12GraphicsPipeline != null);
 
             m_Dx12CommandBuffer.NativeCommandList->SetPipelineState(m_Dx12GraphicsPipeline.NativePipelineState);
+        }
+
+        public override void SetPipelineLayout(RHIPipelineLayout pipelineLayout)
+        {
+            Dx12PipelineLayout dx12PipelineLayout = pipelineLayout as Dx12PipelineLayout;
+            Debug.Assert(dx12PipelineLayout != null);
+
             m_Dx12CommandBuffer.NativeCommandList->SetGraphicsRootSignature(m_Dx12GraphicsPipeline.PipelineLayout.NativeRootSignature);
         }
 
