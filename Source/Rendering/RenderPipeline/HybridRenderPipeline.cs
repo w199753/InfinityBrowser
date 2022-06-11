@@ -28,14 +28,14 @@ namespace Infinity.Rendering
 
         public override void Render(RenderContext renderContext)
         {
-            RHICommandBuffer m_CommandBuffer = renderContext.GetCommandBuffer(EContextType.Graphics);
+            RHICommandBuffer cmdBuffer = renderContext.GetCommandBuffer(EContextType.Graphics);
 
-            using (m_CommandBuffer.BeginScoped())
+            using (cmdBuffer.BeginScoped())
             {
                 m_ColorAttachments[0].view = renderContext.BackBufferView;
 
-                RHIBlitEncoder blitEncoder = m_CommandBuffer.GetBlitEncoder();
-                RHIGraphicsEncoder graphicsEncoder = m_CommandBuffer.GetGraphicsEncoder();
+                RHIBlitEncoder blitEncoder = cmdBuffer.GetBlitEncoder();
+                RHIGraphicsEncoder graphicsEncoder = cmdBuffer.GetGraphicsEncoder();
 
                 using (blitEncoder.BeginScopedPass())
                 {
@@ -61,7 +61,7 @@ namespace Infinity.Rendering
                 }
             }
 
-            m_CommandBuffer.Commit();
+            cmdBuffer.Commit();
         }
 
         protected override void Release()
