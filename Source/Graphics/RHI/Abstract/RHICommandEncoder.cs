@@ -43,6 +43,51 @@ namespace Infinity.Graphics
         // TODO occlusionQuerySet #see https://gpuweb.github.io/gpuweb/#render-pass-encoder-creation
     }
 
+    public struct IndirectDispatchArgs
+    {
+        public uint GroupCountX;
+        public uint GroupCountY;
+        public uint GroupCountZ;
+        public IndirectDispatchArgs(in uint groupCountX, in uint groupCountY, in uint groupCountZ)
+        {
+            GroupCountX = groupCountX;
+            GroupCountY = groupCountY;
+            GroupCountZ = groupCountZ;
+        }
+    }
+
+    public struct IndirectDrawArgs
+    {
+        public uint VertexCount;
+        public uint InstanceCount;
+        public uint StartVertexLocation;
+        public uint StartInstanceLocation;
+        public IndirectDrawArgs(in uint vertexCount, in uint instanceCount, in uint startVertexLocation, in uint startInstanceLocation)
+        {
+            VertexCount = vertexCount;
+            InstanceCount = instanceCount;
+            StartVertexLocation = startVertexLocation;
+            StartInstanceLocation = startInstanceLocation;
+        }
+    }
+
+    public struct IndirectDrawIndexedArgs
+    {
+        public uint IndexCount;
+        public uint InstanceCount;
+        public uint StartIndexLocation;
+        public int BaseVertexLocation;
+        public uint StartInstanceLocation;
+        public IndirectDrawIndexedArgs(in uint indexCount, in uint instanceCount, in uint startIndexLocation, in int baseVertexLocation, in uint startInstanceLocation)
+        {
+            IndexCount = indexCount;
+            InstanceCount = instanceCount;
+            StartIndexLocation = startIndexLocation;
+            BaseVertexLocation = baseVertexLocation;
+            StartInstanceLocation = startInstanceLocation;
+        }
+    }
+
     public struct RHIScopedBlitPassRef : IDisposable
     {
         RHIBlitEncoder m_BlitEncoder;
