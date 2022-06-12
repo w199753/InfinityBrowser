@@ -124,6 +124,27 @@ namespace Infinity.Graphics
                 return m_NativeDevice;
             }
         }
+        public ID3D12CommandSignature* DrawIndirectSignature
+        {
+            get
+            {
+                return m_DrawIndirectSignature;
+            }
+        }
+        public ID3D12CommandSignature* DispatchIndirectSignature
+        {
+            get
+            {
+                return m_DispatchIndirectSignature;
+            }
+        }
+        public ID3D12CommandSignature* DrawIndexedIndirectSignature
+        {
+            get
+            {
+                return m_DrawIndexedIndirectSignature;
+            }
+        }
 
         private Dx12GPU m_Dx12Gpu;
         private ID3D12Device6* m_NativeDevice;
@@ -131,14 +152,18 @@ namespace Infinity.Graphics
         private Dx12DescriptorHeap m_RtvHeap;
         private Dx12DescriptorHeap m_SamplerHeap;
         private Dx12DescriptorHeap m_CbvSrvUavHeap;
+        private ID3D12CommandSignature* m_DrawIndirectSignature;
+        private ID3D12CommandSignature* m_DispatchIndirectSignature;
+        private ID3D12CommandSignature* m_DrawIndexedIndirectSignature;
         private Dictionary<EQueueType, List<Dx12Queue>> m_Queues;
 
         public Dx12Device(Dx12GPU gpu, in RHIDeviceCreateInfo createInfo) 
         {
             m_Dx12Gpu = gpu;
-            CreateDevice(gpu.DXGIAdapter);
-            CreateDescriptorHeaps();
+            CreateDevice();
             CreateQueues(createInfo);
+            CreateDescriptorHeaps();
+            CreateCommandSignatures();
         }
 
         public override int GetQueueCount(in EQueueType type)
@@ -275,20 +300,12 @@ namespace Infinity.Graphics
             m_CbvSrvUavHeap.Free(index);
         }
 
-        private void CreateDevice(in IDXGIAdapter1* adapter)
+        private void CreateDevice()
         {
             ID3D12Device6* device;
-            bool success = SUCCEEDED(DirectX.D3D12CreateDevice((IUnknown*)adapter, D3D_FEATURE_LEVEL.D3D_FEATURE_LEVEL_12_1, __uuidof<ID3D12Device6>(), (void**)&device));
+            bool success = SUCCEEDED(DirectX.D3D12CreateDevice((IUnknown*)m_Dx12Gpu.DXGIAdapter, D3D_FEATURE_LEVEL.D3D_FEATURE_LEVEL_12_1, __uuidof<ID3D12Device6>(), (void**)&device));
             Debug.Assert(success);
             m_NativeDevice = device;
-        }
-
-        private void CreateDescriptorHeaps()
-        {
-            m_DsvHeap = new Dx12DescriptorHeap(m_NativeDevice, D3D12_DESCRIPTOR_HEAP_TYPE.D3D12_DESCRIPTOR_HEAP_TYPE_DSV, D3D12_DESCRIPTOR_HEAP_FLAGS.D3D12_DESCRIPTOR_HEAP_FLAG_NONE, 1024);
-            m_RtvHeap = new Dx12DescriptorHeap(m_NativeDevice, D3D12_DESCRIPTOR_HEAP_TYPE.D3D12_DESCRIPTOR_HEAP_TYPE_RTV, D3D12_DESCRIPTOR_HEAP_FLAGS.D3D12_DESCRIPTOR_HEAP_FLAG_NONE, 1024);
-            m_SamplerHeap = new Dx12DescriptorHeap(m_NativeDevice, D3D12_DESCRIPTOR_HEAP_TYPE.D3D12_DESCRIPTOR_HEAP_TYPE_SAMPLER, D3D12_DESCRIPTOR_HEAP_FLAGS.D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE, 2048);
-            m_CbvSrvUavHeap = new Dx12DescriptorHeap(m_NativeDevice, D3D12_DESCRIPTOR_HEAP_TYPE.D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV, D3D12_DESCRIPTOR_HEAP_FLAGS.D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE, 32768);
         }
 
         private void CreateQueues(in RHIDeviceCreateInfo createInfo)
@@ -329,6 +346,49 @@ namespace Infinity.Graphics
             }
         }
 
+        private void CreateDescriptorHeaps()
+        {
+            m_DsvHeap = new Dx12DescriptorHeap(m_NativeDevice, D3D12_DESCRIPTOR_HEAP_TYPE.D3D12_DESCRIPTOR_HEAP_TYPE_DSV, D3D12_DESCRIPTOR_HEAP_FLAGS.D3D12_DESCRIPTOR_HEAP_FLAG_NONE, 1024);
+            m_RtvHeap = new Dx12DescriptorHeap(m_NativeDevice, D3D12_DESCRIPTOR_HEAP_TYPE.D3D12_DESCRIPTOR_HEAP_TYPE_RTV, D3D12_DESCRIPTOR_HEAP_FLAGS.D3D12_DESCRIPTOR_HEAP_FLAG_NONE, 1024);
+            m_SamplerHeap = new Dx12DescriptorHeap(m_NativeDevice, D3D12_DESCRIPTOR_HEAP_TYPE.D3D12_DESCRIPTOR_HEAP_TYPE_SAMPLER, D3D12_DESCRIPTOR_HEAP_FLAGS.D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE, 2048);
+            m_CbvSrvUavHeap = new Dx12DescriptorHeap(m_NativeDevice, D3D12_DESCRIPTOR_HEAP_TYPE.D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV, D3D12_DESCRIPTOR_HEAP_FLAGS.D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE, 32768);
+        }
+
+        private void CreateCommandSignatures()
+        {
+            bool success = false;
+            ID3D12CommandSignature* commandSignature;
+            D3D12_INDIRECT_ARGUMENT_DESC indirectArgDesc;
+            D3D12_COMMAND_SIGNATURE_DESC commandSignatureDesc;
+
+            indirectArgDesc.Type = D3D12_INDIRECT_ARGUMENT_TYPE.D3D12_INDIRECT_ARGUMENT_TYPE_DRAW;
+            //commandSignatureDesc.NodeMask = nodeMask;
+            commandSignatureDesc.pArgumentDescs = &indirectArgDesc;
+            commandSignatureDesc.ByteStride = (uint)sizeof(D3D12_DRAW_ARGUMENTS);
+            commandSignatureDesc.NumArgumentDescs = 1;
+            success = SUCCEEDED(m_NativeDevice->CreateCommandSignature(&commandSignatureDesc, null, __uuidof<ID3D12CommandSignature>(), (void**)&commandSignature));
+            Debug.Assert(success);
+            m_DrawIndirectSignature = commandSignature;
+
+            indirectArgDesc.Type = D3D12_INDIRECT_ARGUMENT_TYPE.D3D12_INDIRECT_ARGUMENT_TYPE_DISPATCH;
+            //commandSignatureDesc.NodeMask = nodeMask;
+            commandSignatureDesc.pArgumentDescs = &indirectArgDesc;
+            commandSignatureDesc.ByteStride = (uint)sizeof(D3D12_DISPATCH_ARGUMENTS);
+            commandSignatureDesc.NumArgumentDescs = 1;
+            success = SUCCEEDED(m_NativeDevice->CreateCommandSignature(&commandSignatureDesc, null, __uuidof<ID3D12CommandSignature>(), (void**)&commandSignature));
+            Debug.Assert(success);
+            m_DispatchIndirectSignature = commandSignature;
+
+            indirectArgDesc.Type = D3D12_INDIRECT_ARGUMENT_TYPE.D3D12_INDIRECT_ARGUMENT_TYPE_DRAW_INDEXED;
+            //commandSignatureDesc.NodeMask = nodeMask;
+            commandSignatureDesc.pArgumentDescs = &indirectArgDesc;
+            commandSignatureDesc.ByteStride = (uint)sizeof(D3D12_DRAW_INDEXED_ARGUMENTS);
+            commandSignatureDesc.NumArgumentDescs = 1;
+            success = SUCCEEDED(m_NativeDevice->CreateCommandSignature(&commandSignatureDesc, null, __uuidof<ID3D12CommandSignature>(), (void**)&commandSignature));
+            Debug.Assert(success);
+            m_DrawIndexedIndirectSignature = commandSignature;
+        }
+
         protected override void Release()
         {
             m_DsvHeap.Dispose();
@@ -342,6 +402,9 @@ namespace Infinity.Graphics
                     iter.Value[i].Dispose();
                 }
             }
+            m_DrawIndirectSignature->Release();
+            m_DispatchIndirectSignature->Release();
+            m_DrawIndexedIndirectSignature->Release();
             m_NativeDevice->Release();
         }
     }

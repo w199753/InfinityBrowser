@@ -150,12 +150,12 @@ namespace Infinity.Graphics
         public abstract void SetPrimitiveTopology(in EPrimitiveTopology primitiveTopology);
         public abstract void Draw(in uint vertexCount, in uint instanceCount, in uint firstVertex, in uint firstInstance);
         public abstract void DrawIndexed(in uint indexCount, in uint instanceCount, in uint firstIndex, in uint baseVertex, in uint firstInstance);
-        public abstract void DrawIndirect(RHIBuffer argsBuffer, uint offset, uint drawCount, uint stride);
-        public abstract void DrawIndexedIndirect(RHIBuffer argsBuffer, uint offset, uint drawCount, uint stride);
+        public abstract void DrawIndirect(RHIBuffer argsBuffer, uint offset);
+        public abstract void DrawIndexedIndirect(RHIBuffer argsBuffer, uint offset);
+        public abstract void DrawMultiIndexedIndirect(RHIIndirectCommandBuffer indirectCommandBuffer);
         public abstract void PushDebugGroup(string name);
         public abstract void PopDebugGroup();
         // TODO ExecuteBundles(...)
-        // TODO DrawMultiIndexedIndirect(...)
         public abstract void EndPass();
     }
 }
