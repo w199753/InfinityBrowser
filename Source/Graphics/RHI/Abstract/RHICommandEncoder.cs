@@ -13,24 +13,24 @@ namespace Infinity.Graphics
 
     public struct RHIGraphicsPassColorAttachment
     {
-        public RHITextureView? view;
-        public RHITextureView? resolveTarget;
         public ELoadOp loadOp;
         public EStoreOp storeOp;
         public float4 clearValue;
+        public RHITextureView renderTarget;
+        public RHITextureView resolveTarget;
     }
 
     public struct RHIGraphicsPassDepthStencilAttachment
     {
-        public RHITextureView view;
+        public bool depthReadOnly;
         public float depthClearValue;
         public ELoadOp depthLoadOp;
         public EStoreOp depthStoreOp;
-        public bool depthReadOnly;
+        public bool stencilReadOnly;
         public int stencilClearValue;
         public ELoadOp stencilLoadOp;
         public EStoreOp stencilStoreOp;
-        public bool stencilReadOnly;
+        public RHITextureView depthStencilTarget;
     }
 
     public struct RHIGraphicsPassBeginInfo

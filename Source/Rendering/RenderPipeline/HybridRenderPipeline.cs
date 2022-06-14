@@ -32,7 +32,7 @@ namespace Infinity.Rendering
 
             using (cmdBuffer.BeginScoped())
             {
-                m_ColorAttachments[0].view = renderContext.BackBufferView;
+                m_ColorAttachments[0].renderTarget = renderContext.BackBufferView;
 
                 RHIBlitEncoder blitEncoder = cmdBuffer.GetBlitEncoder();
                 RHIGraphicsEncoder graphicsEncoder = cmdBuffer.GetGraphicsEncoder();

@@ -249,7 +249,7 @@ namespace Infinity.Graphics
             D3D12_CPU_DESCRIPTOR_HANDLE* rtvHandles = stackalloc D3D12_CPU_DESCRIPTOR_HANDLE[beginInfo.colorAttachmentCount];
             for (int i = 0; i < beginInfo.colorAttachmentCount; ++i)
             {
-                Dx12TextureView textureView = beginInfo.colorAttachments.Span[i].view as Dx12TextureView;
+                Dx12TextureView textureView = beginInfo.colorAttachments.Span[i].renderTarget as Dx12TextureView;
                 Debug.Assert(textureView != null);
 
                 rtvHandles[i] = textureView.NativeCpuDescriptorHandle;
@@ -258,7 +258,7 @@ namespace Infinity.Graphics
             D3D12_CPU_DESCRIPTOR_HANDLE? dsvHandle = null;
             if (beginInfo.depthStencilAttachment != null)
             {
-                Dx12TextureView textureView = beginInfo.depthStencilAttachment?.view as Dx12TextureView;
+                Dx12TextureView textureView = beginInfo.depthStencilAttachment?.depthStencilTarget as Dx12TextureView;
                 Debug.Assert(textureView != null);
 
                 dsvHandle = textureView.NativeCpuDescriptorHandle;
