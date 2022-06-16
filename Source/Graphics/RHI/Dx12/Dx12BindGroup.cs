@@ -56,12 +56,12 @@ namespace Infinity.Graphics
                 D3D12_GPU_DESCRIPTOR_HANDLE handle = default;
                 GetDescriptorHandleAndHeap(ref handle, ref m_NativeDescriptorHeap, keyInfo.bindType, element);
 
-                ref Dx12BindGroupParameter bidning = ref m_BindParameters[i];
-                //bidning.slot = element.slot;
-                bidning.slot = keyInfo.slot;
-                //bidning.bindType = element.bindType;
-                bidning.bindType = keyInfo.bindType;
-                bidning.dx12GpuDescriptorHandle = handle;
+                ref Dx12BindGroupParameter bindParameter = ref m_BindParameters[i];
+                //bindParameter.slot = element.slot;
+                bindParameter.slot = keyInfo.slot;
+                //bindParameter.bindType = element.bindType;
+                bindParameter.bindType = keyInfo.bindType;
+                bindParameter.dx12GpuDescriptorHandle = handle;
             }
         }
 
