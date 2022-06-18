@@ -11,7 +11,7 @@ namespace Infinity.Graphics
     internal struct Dx12BindTypeAndParameterSlot
     {
         public int slot;
-        public EBindingType bindType;
+        public EBindType bindType;
     }
 
     internal unsafe class Dx12PipelineLayout : RHIPipelineLayout

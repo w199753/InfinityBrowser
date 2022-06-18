@@ -8,7 +8,7 @@ namespace Infinity.Graphics
     internal struct Dx12BindGroupParameter
     {
         public int slot;
-        public EBindingType bindType;
+        public EBindType bindType;
         public D3D12_GPU_DESCRIPTOR_HANDLE dx12GpuDescriptorHandle;
     }
 
@@ -65,21 +65,21 @@ namespace Infinity.Graphics
             }
         }
 
-        internal unsafe static void GetDescriptorHandleAndHeap(ref D3D12_GPU_DESCRIPTOR_HANDLE handle, ref ID3D12DescriptorHeap* heap, in EBindingType bindType, in RHIBindGroupElement element)
+        internal unsafe static void GetDescriptorHandleAndHeap(ref D3D12_GPU_DESCRIPTOR_HANDLE handle, ref ID3D12DescriptorHeap* heap, in EBindType bindType, in RHIBindGroupElement element)
         {
-            if (bindType == EBindingType.Sampler)
+            if (bindType == EBindType.Sampler)
             {
                 Dx12Sampler sampler = element.sampler as Dx12Sampler;
                 heap = sampler.NativeDescriptorHeap;
                 handle = sampler.NativeGpuDescriptorHandle;
             }
-            else if (bindType == EBindingType.Texture || bindType == EBindingType.StorageTexture)
+            else if (bindType == EBindType.Texture || bindType == EBindType.StorageTexture)
             {
                 Dx12TextureView textureView = element.textureView as Dx12TextureView;
                 heap = textureView.NativeDescriptorHeap;
                 handle = textureView.NativeGpuDescriptorHandle;
             }
-            else if (bindType == EBindingType.Buffer || bindType == EBindingType.UniformBuffer || bindType == EBindingType.StorageBuffer)
+            else if (bindType == EBindType.Buffer || bindType == EBindType.UniformBuffer || bindType == EBindType.StorageBuffer)
             {
                 Dx12BufferView bufferView = element.bufferView as Dx12BufferView;
                 heap = bufferView.NativeDescriptorHeap;

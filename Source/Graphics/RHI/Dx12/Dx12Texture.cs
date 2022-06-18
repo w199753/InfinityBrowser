@@ -14,7 +14,7 @@ namespace Infinity.Graphics
                 return m_Dx12Device;
             }
         }
-        public ETextureUsageFlags Usages
+        public ETextureUsage Usages
         {
             get
             {
@@ -30,7 +30,7 @@ namespace Infinity.Graphics
         }
 
         private Dx12Device m_Dx12Device;
-        private ETextureUsageFlags m_Usages;
+        private ETextureUsage m_Usages;
         private ID3D12Resource* m_NativeResource;
 
         public Dx12Texture(Dx12Device device, in RHITextureCreateInfo createInfo)
@@ -60,7 +60,7 @@ namespace Infinity.Graphics
         {
             m_Dx12Device = device;
             m_NativeResource = resource;
-            m_Usages = ETextureUsageFlags.ColorAttachment;
+            m_Usages = ETextureUsage.ColorAttachment;
         }
 
         public override RHITextureView CreateTextureView(in RHITextureViewCreateInfo createInfo)

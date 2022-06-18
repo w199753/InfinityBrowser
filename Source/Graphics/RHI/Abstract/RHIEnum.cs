@@ -173,7 +173,7 @@
         MAX
     }
 
-    public enum EBindingType
+    public enum EBindType
     {
         Buffer,
         Texture,
@@ -184,7 +184,7 @@
         MAX
     }
 
-    public enum ESamplerBindingType
+    public enum ESamplerBindType
     {
         Filtering,
         NonFiltering,
@@ -373,7 +373,7 @@
         MAX
     }
 
-    public enum EBufferUsageFlags
+    public enum EBufferUsage
     {
         MapRead       = 0x1,
         MapWrite      = 0x2,
@@ -382,20 +382,40 @@
         Index         = 0x10,
         Vertex        = 0x20,
         Uniform       = 0x40,
-        Storage       = 0x80,
-        Indirect      = 0x100,
-        QueryResolve  = 0x200,
+        ShaderResource = 0x80,
+        StorageResource = 0x100,
+        Indirect      = 0x200,
+        QueryResolve  = 0x400,
         MAX
     }
 
-    public enum ETextureUsageFlags
+    public enum EBufferViewType
+    {
+        IndexBuffer,
+        VertexBuffer,
+        UniformBuffer,
+        ShaderResource,
+        UnorderedAccess,
+        MAX
+    }
+
+    public enum ETextureUsage
     {
         CopySrc          = 0x1,
         CopyDst          = 0x2,
         DepthAttachment  = 0x4,
         ColorAttachment  = 0x8,
-        TextureBinding   = 0x10,
-        StorageBinding   = 0x20,
+        ShaderResource = 0x10,
+        StorageResource = 0x20,
+        MAX
+    }
+
+    public enum ETextureViewType
+    {
+        DepthStencil,
+        RenderTarget,
+        ShaderResource,
+        UnorderedAccess,
         MAX
     }
 

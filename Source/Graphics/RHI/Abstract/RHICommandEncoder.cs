@@ -8,7 +8,6 @@ namespace Infinity.Graphics
         public uint slice;
         public uint mipLevel;
         public uint3 origin;
-        public ETextureAspect aspect;
     }
 
     public struct RHIGraphicsPassColorAttachment

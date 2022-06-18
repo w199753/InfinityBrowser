@@ -7,7 +7,7 @@
         public int arrayLayerNum;
         public int baseArrayLayer;
         public EPixelFormat format;
-        public ETextureAspect aspect;
+        public ETextureViewType type;
         public ETextureViewDimension dimension;
     }
 

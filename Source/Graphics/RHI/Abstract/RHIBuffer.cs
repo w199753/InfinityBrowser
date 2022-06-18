@@ -6,7 +6,7 @@ namespace Infinity.Graphics
     {
         public int size;
         public EBufferState state;
-        public EBufferUsageFlags usages;
+        public EBufferUsage usages;
     }
 
     public abstract class RHIBuffer : Disposal

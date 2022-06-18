@@ -9,7 +9,7 @@ namespace Infinity.Graphics
     {
         public int slot;
         public int layoutIndex;
-        public EBindingType bindType;
+        public EBindType bindType;
         public EShaderStageFlags shaderStage;
     }
 

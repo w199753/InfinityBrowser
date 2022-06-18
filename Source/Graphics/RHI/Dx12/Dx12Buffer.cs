@@ -15,7 +15,7 @@ namespace Infinity.Graphics
                 return m_Dx12Device;
             }
         }
-        public EBufferUsageFlags Usages
+        public EBufferUsage Usages
         {
             get
             {
@@ -32,7 +32,7 @@ namespace Infinity.Graphics
 
         private EMapMode m_MapMode;
         private Dx12Device m_Dx12Device;
-        private EBufferUsageFlags m_Usages;
+        private EBufferUsage m_Usages;
         private ID3D12Resource* m_NativeResource;
 
         public Dx12Buffer(Dx12Device device, in RHIBufferCreateInfo createInfo)

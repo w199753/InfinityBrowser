@@ -10,7 +10,7 @@ namespace Infinity.Graphics
         public EPixelFormat format;
         public ETextureState state;
         public ETextureDimension dimension;
-        public ETextureUsageFlags usages;
+        public ETextureUsage usages;
     }
 
     public abstract class RHITexture : Disposal

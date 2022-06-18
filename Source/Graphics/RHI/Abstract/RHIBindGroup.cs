@@ -5,7 +5,7 @@ namespace Infinity.Graphics
     public struct RHIBindGroupElement
     {
         //public int slot;
-        //public EBindingType bindType;
+        //public EBindType bindType;
         public RHISampler sampler;
         public RHIBufferView bufferView;
         public RHITextureView textureView;
