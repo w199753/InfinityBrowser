@@ -123,8 +123,8 @@ namespace Infinity.Rendering
             viewCreateInfo.baseMipLevel = 0;
             viewCreateInfo.arrayLayerNum = 1;
             viewCreateInfo.baseArrayLayer = 0;
-            viewCreateInfo.aspect = ETextureAspect.Color;
             viewCreateInfo.format = EPixelFormat.RGBA8_UNORM;
+            viewCreateInfo.type = ETextureViewType.RenderTarget;
             viewCreateInfo.dimension = ETextureViewDimension.Tex2D;
             m_SwapChainViews = new RHITextureView[3];
             m_SwapChainViews[0] = m_SwapChain.GetTexture(0).CreateTextureView(viewCreateInfo);
