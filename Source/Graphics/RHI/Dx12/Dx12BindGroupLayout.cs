@@ -8,9 +8,12 @@ namespace Infinity.Graphics
     internal struct Dx12RootParameterKeyInfo
     {
         public int slot;
+        public int count;
         public int layoutIndex;
         public EBindType bindType;
         public EShaderStageFlags shaderStage;
+
+        internal bool Bindless => count > 1;
     }
 
     internal unsafe class Dx12BindGroupLayout : RHIBindGroupLayout
@@ -58,6 +61,7 @@ namespace Infinity.Graphics
                 ref RHIBindGroupLayoutElement element = ref elements[i];
                 ref Dx12RootParameterKeyInfo keyInfo = ref m_RootParameterKeyInfos[i];
                 keyInfo.slot = element.slot;
+                keyInfo.count = element.count;
                 keyInfo.layoutIndex = createInfo.layoutIndex;
                 keyInfo.bindType = element.bindType;
                 keyInfo.shaderStage = element.shaderStage;

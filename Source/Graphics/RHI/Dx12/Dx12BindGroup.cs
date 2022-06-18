@@ -8,6 +8,7 @@ namespace Infinity.Graphics
     internal struct Dx12BindGroupParameter
     {
         public int slot;
+        public int count;
         public EBindType bindType;
         public D3D12_GPU_DESCRIPTOR_HANDLE dx12GpuDescriptorHandle;
     }
@@ -54,36 +55,58 @@ namespace Infinity.Graphics
                 Dx12RootParameterKeyInfo keyInfo = bindGroupLayout.RootParameterKeyInfos[i];
 
                 D3D12_GPU_DESCRIPTOR_HANDLE handle = default;
-                GetDescriptorHandleAndHeap(ref handle, ref m_NativeDescriptorHeap, keyInfo.bindType, element);
+                GetDescriptorHandleAndHeap(ref handle, ref m_NativeDescriptorHeap, keyInfo, element);
 
                 ref Dx12BindGroupParameter bindParameter = ref m_BindParameters[i];
                 //bindParameter.slot = element.slot;
                 bindParameter.slot = keyInfo.slot;
+                bindParameter.count = keyInfo.count;
                 //bindParameter.bindType = element.bindType;
                 bindParameter.bindType = keyInfo.bindType;
                 bindParameter.dx12GpuDescriptorHandle = handle;
             }
         }
 
-        internal unsafe static void GetDescriptorHandleAndHeap(ref D3D12_GPU_DESCRIPTOR_HANDLE handle, ref ID3D12DescriptorHeap* heap, in EBindType bindType, in RHIBindGroupElement element)
+        internal unsafe static void GetDescriptorHandleAndHeap(ref D3D12_GPU_DESCRIPTOR_HANDLE handle, ref ID3D12DescriptorHeap* heap, in Dx12RootParameterKeyInfo keyInfo, in RHIBindGroupElement element)
         {
-            if (bindType == EBindType.Sampler)
+            if (keyInfo.bindType == EBindType.Sampler)
             {
-                Dx12Sampler sampler = element.sampler as Dx12Sampler;
-                heap = sampler.NativeDescriptorHeap;
-                handle = sampler.NativeGpuDescriptorHandle;
+                if (keyInfo.Bindless)
+                {
+
+                }
+                else
+                {
+                    Dx12Sampler sampler = element.sampler as Dx12Sampler;
+                    heap = sampler.NativeDescriptorHeap;
+                    handle = sampler.NativeGpuDescriptorHandle;
+                }
             }
-            else if (bindType == EBindType.Texture || bindType == EBindType.StorageTexture)
+            else if (keyInfo.bindType == EBindType.Texture || keyInfo.bindType == EBindType.StorageTexture)
             {
-                Dx12TextureView textureView = element.textureView as Dx12TextureView;
-                heap = textureView.NativeDescriptorHeap;
-                handle = textureView.NativeGpuDescriptorHandle;
+                if (keyInfo.Bindless)
+                {
+
+                }
+                else
+                {
+                    Dx12TextureView textureView = element.textureView as Dx12TextureView;
+                    heap = textureView.NativeDescriptorHeap;
+                    handle = textureView.NativeGpuDescriptorHandle;
+                }
             }
-            else if (bindType == EBindType.Buffer || bindType == EBindType.UniformBuffer || bindType == EBindType.StorageBuffer)
+            else if (keyInfo.bindType == EBindType.Uniform || keyInfo.bindType == EBindType.Buffer || keyInfo.bindType == EBindType.StorageBuffer)
             {
-                Dx12BufferView bufferView = element.bufferView as Dx12BufferView;
-                heap = bufferView.NativeDescriptorHeap;
-                handle = bufferView.NativeGpuDescriptorHandle;
+                if (keyInfo.Bindless)
+                {
+
+                }
+                else
+                {
+                    Dx12BufferView bufferView = element.bufferView as Dx12BufferView;
+                    heap = bufferView.NativeDescriptorHeap;
+                    handle = bufferView.NativeGpuDescriptorHandle;
+                }
             }
         }
 

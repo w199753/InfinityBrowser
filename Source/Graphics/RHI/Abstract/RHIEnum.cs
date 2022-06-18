@@ -178,7 +178,7 @@
         Buffer,
         Texture,
         Sampler,
-        UniformBuffer,
+        Uniform,
         StorageBuffer,
         StorageTexture,
         MAX

@@ -286,7 +286,7 @@ namespace Infinity.Graphics
                 case EBindType.Sampler:
                     return D3D12_DESCRIPTOR_RANGE_TYPE.D3D12_DESCRIPTOR_RANGE_TYPE_SAMPLER;
 
-                case EBindType.UniformBuffer:
+                case EBindType.Uniform:
                     return D3D12_DESCRIPTOR_RANGE_TYPE.D3D12_DESCRIPTOR_RANGE_TYPE_CBV;
 
                 case EBindType.StorageBuffer:
