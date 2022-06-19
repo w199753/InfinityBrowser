@@ -122,7 +122,7 @@ namespace Infinity.Graphics
         public RHIShader fragmentShader;
         public RHIOutputState outputState;
         public RHIVertexState vertexState;
-        public RHIRenderState fragmentState;
+        public RHIRenderState renderState;
         public RHIPipelineLayout pipelineLayout;
     }
 
