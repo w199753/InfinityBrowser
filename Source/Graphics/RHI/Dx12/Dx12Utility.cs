@@ -300,12 +300,12 @@ namespace Infinity.Graphics
             }
         }
 
-        internal static unsafe D3D12_BLEND_DESC CreateDx12BlendState(in RHIBlendStateDescription blendState)
+        internal static unsafe D3D12_BLEND_DESC CreateDx12BlendState(in RHIBlendStateDescriptor blendState)
         {
             D3D12_BLEND_DESC blendDescription = new D3D12_BLEND_DESC();
             blendDescription.AlphaToCoverageEnable = blendState.alphaToCoverage;
             blendDescription.IndependentBlendEnable = blendState.independentBlend;
-            fixed (RHIAttachmentBlendDescription* attachmentPtr = &blendState.attachment0)
+            fixed (RHIAttachmentBlendDescriptor* attachmentPtr = &blendState.attachment0)
             {
                 for (int i = 0; i < 8; i++)
                 {
@@ -322,7 +322,7 @@ namespace Infinity.Graphics
             return blendDescription;
         }
 
-        internal static D3D12_RASTERIZER_DESC CreateDx12RasterizerState(in RHIRasterizerStateDescription description, bool bMultisample)
+        internal static D3D12_RASTERIZER_DESC CreateDx12RasterizerState(in RHIRasterizerStateDescriptor description, bool bMultisample)
         {
             D3D12_RASTERIZER_DESC rasterDescription;
             rasterDescription.FillMode = (D3D12_FILL_MODE)description.FillMode;

@@ -113,8 +113,8 @@ namespace Infinity.Graphics
                 }
             }
 
-            m_StencilRef = createInfo.fragmentState.stencilRef;
-            m_ScissorEnabled = createInfo.fragmentState.rasterizerState.scissorEnable;
+            m_StencilRef = createInfo.renderState.stencilRef;
+            m_ScissorEnabled = createInfo.renderState.rasterizerState.scissorEnable;
             m_PrimitiveTopology = Dx12Utility.ConvertToDx12PrimitiveTopology(createInfo.vertexState.primitiveTopology);
             m_PrimitiveTopologyType = Dx12Utility.ConvertToDx12PrimitiveTopologyType(createInfo.vertexState.primitiveTopology);
 
@@ -124,10 +124,10 @@ namespace Infinity.Graphics
                 pRootSignature = m_PipelineLayout.NativeRootSignature,
                 PrimitiveTopologyType = m_PrimitiveTopologyType,
 
-                SampleMask = createInfo.fragmentState.sampleMask.HasValue ? ((uint)createInfo.fragmentState.sampleMask.Value) : uint.MaxValue,
-                BlendState = Dx12Utility.CreateDx12BlendState(createInfo.fragmentState.blendState),
-                RasterizerState = Dx12Utility.CreateDx12RasterizerState(createInfo.fragmentState.rasterizerState, createInfo.outputState.sampleCount != ESampleCount.None),
-                DepthStencilState = Dx12Utility.CreateDx12DepthStencilState(createInfo.fragmentState.depthStencilState)
+                SampleMask = createInfo.renderState.sampleMask.HasValue ? ((uint)createInfo.renderState.sampleMask.Value) : uint.MaxValue,
+                BlendState = Dx12Utility.CreateDx12BlendState(createInfo.renderState.blendState),
+                RasterizerState = Dx12Utility.CreateDx12RasterizerState(createInfo.renderState.rasterizerState, createInfo.outputState.sampleCount != ESampleCount.None),
+                DepthStencilState = Dx12Utility.CreateDx12DepthStencilState(createInfo.renderState.depthStencilState)
             };
 
             if (createInfo.outputState.depthAttachment.HasValue)

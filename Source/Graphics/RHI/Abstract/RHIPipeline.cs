@@ -39,7 +39,7 @@ namespace Infinity.Graphics
         public Memory<RHIVertexLayout> vertexLayouts;
     }
 
-    public struct RHIAttachmentBlendDescription
+    public struct RHIAttachmentBlendDescriptor
     {
         public bool blendEnable;
         public EBlend sourceBlendColor;
@@ -51,21 +51,21 @@ namespace Infinity.Graphics
         public EColorWriteChannel colorWriteChannel;
     }
 
-    public struct RHIBlendStateDescription
+    public struct RHIBlendStateDescriptor
     {
         public bool alphaToCoverage;
         public bool independentBlend;
-        public RHIAttachmentBlendDescription attachment0;
-        public RHIAttachmentBlendDescription attachment1;
-        public RHIAttachmentBlendDescription attachment2;
-        public RHIAttachmentBlendDescription attachment3;
-        public RHIAttachmentBlendDescription attachment4;
-        public RHIAttachmentBlendDescription attachment5;
-        public RHIAttachmentBlendDescription attachment6;
-        public RHIAttachmentBlendDescription attachment7;
+        public RHIAttachmentBlendDescriptor attachment0;
+        public RHIAttachmentBlendDescriptor attachment1;
+        public RHIAttachmentBlendDescriptor attachment2;
+        public RHIAttachmentBlendDescriptor attachment3;
+        public RHIAttachmentBlendDescriptor attachment4;
+        public RHIAttachmentBlendDescriptor attachment5;
+        public RHIAttachmentBlendDescriptor attachment6;
+        public RHIAttachmentBlendDescriptor attachment7;
     }
 
-    public struct RHIRasterizerStateDescription
+    public struct RHIRasterizerStateDescriptor
     {
         public EFillMode FillMode;
         public ECullMode CullMode;
@@ -104,8 +104,8 @@ namespace Infinity.Graphics
         public int stencilRef;
         public int? sampleMask;
         public float4? blendFactor;
-        public RHIBlendStateDescription blendState;
-        public RHIRasterizerStateDescription rasterizerState;
+        public RHIBlendStateDescriptor blendState;
+        public RHIRasterizerStateDescriptor rasterizerState;
         public RHIDepthStencilStateDescription depthStencilState;
     }
 
