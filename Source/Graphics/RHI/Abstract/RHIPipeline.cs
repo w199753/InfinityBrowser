@@ -3,114 +3,126 @@ using Infinity.Mathmatics;
 
 namespace Infinity.Graphics
 {
+    public struct RHIOutputAttachmentDescription
+    {
+        public bool resolveMSAA;
+        public EPixelFormat format;
+    }
+
+    public struct RHIOutputState
+    {
+        public uint arraySliceCount;
+        public ESampleCount sampleCount;
+        public RHIOutputAttachmentDescription? depthAttachment;
+        public Memory<RHIOutputAttachmentDescription> colorAttachments;
+    }
+
     public struct RHIVertexAttribute
     {
-        public EVertexFormat format;
         public int offset;
-        // for Vulkan
-        public uint location;
-        // for DirectX 12
-        public uint semanticIndex;
-        public string semanticName;
+        public uint index;
+        public ESemanticType type;
+        public ESemanticFormat format;
     }
 
     public struct RHIVertexBufferLayout
     {
-        public int stride;
+        public uint stride;
+        public int stepRate;
         public EVertexStepMode stepMode;
-        public int attributeCount => attributes.Length;
         public Memory<RHIVertexAttribute> attributes;
     }
 
     public struct RHIVertexState
     {
-        public int bufferLayoutCount => bufferLayouts.Length;
+        public EPrimitiveTopologyType topologyType;
         public Memory<RHIVertexBufferLayout> bufferLayouts;
     }
 
-    public struct RHIPrimitiveState
+    public struct RHIAttachmentBlendDescription
     {
-        public bool depthClip;
-        // TODO fill mode ?
-        public ECullMode cullMode;
-        public EFrontFace frontFace;
-        public EIndexFormat indexFormat;
-        public EPrimitiveTopologyType topologyType;
+        public bool blendEnable;
+        public EBlend sourceBlendColor;
+        public EBlend destinationBlendColor;
+        public EBlendOperation blendOperationColor;
+        public EBlend sourceBlendAlpha;
+        public EBlend destinationBlendAlpha;
+        public EBlendOperation blendOperationAlpha;
+        public EColorWriteChannel colorWriteChannel;
     }
 
-    public struct RHIStencilFaceState
+    public struct RHIBlendStateDescription
     {
-        public EStencilOp failOp;
-        public EStencilOp passOp;
-        public EStencilOp depthFailOp;
-        public EComparisonFunc comparisonFunc;
+        public bool alphaToCoverage;
+        public bool independentBlend;
+        public RHIAttachmentBlendDescription attachment0;
+        public RHIAttachmentBlendDescription attachment1;
+        public RHIAttachmentBlendDescription attachment2;
+        public RHIAttachmentBlendDescription attachment3;
+        public RHIAttachmentBlendDescription attachment4;
+        public RHIAttachmentBlendDescription attachment5;
+        public RHIAttachmentBlendDescription attachment6;
+        public RHIAttachmentBlendDescription attachment7;
     }
 
-    public struct RHIDepthStencilState
+    public struct RHIRasterizerStateDescription
     {
-        public bool depthEnable;
-        public bool stencilEnable;
-        public EPixelFormat format;
-        public EComparisonFunc depthComparisonFunc;
-        public RHIStencilFaceState stencilBack;
-        public RHIStencilFaceState stencilFront;
-        public uint stencilReadMask;
-        public uint stencilWriteMask;
+        public EFillMode FillMode;
+        public ECullMode CullMode;
         public int depthBias;
         public float depthBiasClamp;
-        public float depthBiasSlopeScale;
+        public float slopeScaledDepthBias;
+        public bool scissorEnable;
+        public bool depthClipEnable;
+        public bool antialiasedLineEnable;
+        public bool frontCounterClockwise;
     }
 
-    public struct RHIMultiSampleState
+    public struct RHIDepthStencilOperation
     {
-        public uint mask;
-        public uint count;
-        public bool alphaToCoverage;
+        public EComparison stencilComparison;
+        public EStencilOperation stencilPassOperation;
+        public EStencilOperation stencilFailOperation;
+        public EStencilOperation stencilDepthFailOperation;
     }
 
-    public struct RHIBlendComponent
+    public struct RHIDepthStencilStateDescription
     {
-        public EBlendOp op;
-        public EBlendFactor srcFactor;
-        public EBlendFactor dstFactor;
+        public bool depthEnable;
+        public bool depthWriteMask;
+        public EComparison depthComparison;
+        public bool stencilEnable;
+        public byte stencilReadMask;
+        public byte stencilWriteMask;
+        public RHIDepthStencilOperation backFace;
+        public RHIDepthStencilOperation frontFace;
     }
 
-    public struct RHIBlendState
+    public struct RHIRenderState
     {
-        public RHIBlendComponent color;
-        public RHIBlendComponent alpha;
-    }
-
-    public struct RHIColorTargetState
-    {
-        public RHIBlendState blend;
-        public EPixelFormat format;
-        public EColorWriteFlags writeFlag;
-    }
-
-    public struct RHIFragmentState
-    {
-        public int colorTargetCount => colorTargets.Length;
-        public Memory<RHIColorTargetState> colorTargets;
+        public int stencilRef;
+        public int? sampleMask;
+        public float4? blendFactor;
+        public RHIBlendStateDescription blendState;
+        public RHIRasterizerStateDescription rasterizerState;
+        public RHIDepthStencilStateDescription depthStencilState;
     }
 
     public struct RHIComputePipelineCreateInfo
     {
         public uint3 threadSize;
-        public RHIShader shader;
-        public RHIPipelineLayout layout;
+        public RHIShader computeShader;
+        public RHIPipelineLayout pipelineLayout;
     }
 
     public struct RHIGraphicsPipelineCreateInfo
     {
         public RHIShader vertexShader;
         public RHIShader fragmentShader;
-        public RHIPipelineLayout layout;
-        public RHIVertexState vertex;
-        public RHIFragmentState fragment;
-        public RHIPrimitiveState primitive;
-        public RHIMultiSampleState multiSample;
-        public RHIDepthStencilState depthStencil;
+        public RHIOutputState outputState;
+        public RHIVertexState vertexState;
+        public RHIRenderState fragmentState;
+        public RHIPipelineLayout pipelineLayout;
     }
 
     public abstract class RHIComputePipeline : Disposal

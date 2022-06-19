@@ -1,6 +1,6 @@
 ﻿namespace Infinity.Graphics
 {
-    public enum ERHIBackend
+    public enum ERHIBackend : byte
     {
         Metal,
         Vulkan,
@@ -8,14 +8,14 @@
         MAX
     }
 
-    public enum EGpuType
+    public enum EGpuType : byte
     {
         Hardware,
         Software,
         MAX
     }
 
-    public enum EQueueType
+    public enum EQueueType : byte
     {
         Blit,
         Compute,
@@ -23,14 +23,14 @@
         MAX
     }
 
-    public enum EMapMode
+    public enum EMapMode : byte
     {
         Read,
         Write,
         MAX
     }
 
-    public enum EPixelFormat
+    public enum EPixelFormat : byte
     {
         // 8-Bits
         R8_UNORM,
@@ -81,52 +81,80 @@
         MAX
     }
 
-    public enum EVertexFormat
+    public enum ESemanticFormat : byte
     {
-        // 8-Bits Channel
-        UINT8_X2,
-        UINT8_X4,
-        SINT8_X2,
-        SINT8_X4,
-        UNORM8_X2,
-        UNORM8_X4,
-        SNORM8_X2,
-        SNORM8_X4,
-        // 16-Bits Channel
-        UINT16_X2,
-        UINT16_X4,
-        SINT16_X2,
-        SINT16_X4,
-        UNORM16_X2,
-        UNORM16_X4,
-        SNORM16_X2,
-        SNORM16_X4,
-        FLOAT16_X2,
-        FLOAT16_X4,
-        // 32-Bits Channel
-        FLOAT32_X1,
-        FLOAT32_X2,
-        FLOAT32_X3,
-        FLOAT32_X4,
-        UINT32_X1,
-        UINT32_X2,
-        UINT32_X3,
-        UINT32_X4,
-        SINT32_X1,
-        SINT32_X2,
-        SINT32_X3,
-        SINT32_X4,
+        UByte,
+        UByte2,
+        UByte3,
+        UByte4,
+        Byte,
+        Byte2,
+        Byte3,
+        Byte4,
+        UByteNormalized,
+        UByte2Normalized,
+        UByte3Normalized,
+        UByte4Normalized,
+        ByteNormalized,
+        Byte2Normalized,
+        Byte3Normalized,
+        Byte4Normalized,
+        UShort,
+        UShort2,
+        UShort3,
+        UShort4,
+        Short,
+        Short2,
+        Short3,
+        Short4,
+        UShortNormalized,
+        UShort2Normalized,
+        UShort3Normalized,
+        UShort4Normalized,
+        ShortNormalized,
+        Short2Normalized,
+        Short3Normalized,
+        Short4Normalized,
+        Half,
+        Half2,
+        Half3,
+        Half4,
+        Float,
+        Float2,
+        Float3,
+        Float4,
+        UInt,
+        UInt2,
+        UInt3,
+        UInt4,
+        Int,
+        Int2,
+        Int3,
+        Int4,
         MAX
     }
 
-    public enum ETextureDimension
+    public enum ESemanticType : byte
+    {
+        Position = 0,
+        TexCoord = 1,
+        Normal = 2,
+        Tangent = 3,
+        Binormal = 4,
+        Color = 5,
+        BlendIndices = 6,
+        BlendWeight = 7,
+        MAX
+    }
+
+    public enum ETextureDimension : byte
     {
         Tex2D,
         Tex3D,
         MAX
     }
 
-    public enum ETextureViewDimension
+    public enum ETextureViewDimension : byte
     {
         Tex2D,
         Tex2DArray,
@@ -136,16 +164,7 @@
         MAX
     }
 
-    public enum ETextureAspect
-    {
-        Color,
-        Depth,
-        Stencil,
-        DepthStencil,
-        MAX
-    }
-
-    public enum EAddressMode
+    public enum EAddressMode : byte
     {
         ClampToEdge,
         Repeat,
@@ -153,14 +172,14 @@
         MAX
     }
 
-    public enum EFilterMode
+    public enum EFilterMode : byte
     {
         Nearset,
         Linear,
         MAX
     }
 
-    public enum EComparisonFunc
+    public enum EComparisonFunc : byte
     {
         Never,
         Less,
@@ -173,7 +192,7 @@
         MAX
     }
 
-    public enum EBindType
+    public enum EBindType : byte
     {
         Buffer,
         Texture,
@@ -184,7 +203,7 @@
         MAX
     }
 
-    public enum ESamplerBindType
+    public enum ESamplerBindType : byte
     {
         Filtering,
         NonFiltering,
@@ -192,7 +211,7 @@
         MAX
     }
 
-    public enum ETextureSampleType
+    public enum ETextureSampleType : byte
     {
         Float,
         NonFilterableFloat,
@@ -202,28 +221,20 @@
         MAX
     }
 
-    public enum EStorageTextureAccess
+    public enum EStorageTextureAccess : byte
     {
         WriteOnly,
         MAX
     }
 
-    public enum EVertexStepMode
+    public enum EVertexStepMode : byte
     {
         PerVertex,
         PerInstance,
         MAX
     }
 
-    public enum EPrimitiveTopologyType
-    {
-        Point,
-        Line,
-        Triangle,
-        MAX
-    }
-
-    public enum EPrimitiveTopology
+    public enum EPrimitiveTopology : byte
     {
         PointList,
         LineList,
@@ -237,71 +248,108 @@
         MAX
     }
 
-    public enum EIndexFormat
+    public enum EPrimitiveTopologyType : byte
+    {
+        Point,
+        Line,
+        Triangle,
+        MAX
+    }
+
+    public enum EIndexFormat : byte
     {
         UInt16,
         UInt32,
         MAX
     }
 
-    public enum EFrontFace
+    public enum ESampleCount : byte
     {
-        CW,
-        CCW,
+        None = 0,
+        Count2 = 2,
+        Count4 = 4,
+        Count8 = 8,
         MAX
     }
 
-    public enum ECullMode
+    public enum EBlend : byte
+    {
+        Zero = 1,
+        One = 2,
+        SourceColor = 3,
+        InverseSourceColor = 4,
+        SourceAlpha = 5,
+        InverseSourceAlpha = 6,
+        DestinationAlpha = 7,
+        InverseDestinationAlpha = 8,
+        DestinationColor = 9,
+        InverseDestinationColor = 10,
+        SourceAlphaSaturate = 11,
+        BlendFactor = 14,
+        InverseBlendFactor = 15,
+        SecondarySourceColor = 0x10,
+        InverseSecondarySourceColor = 0x11,
+        SecondarySourceAlpha = 0x12,
+        InverseSecondarySourceAlpha = 0x13
+    }
+
+    public enum EBlendOperation : byte
+    {
+        Add = 1,
+        Substract = 2,
+        ReverseSubstract = 3,
+        Min = 4,
+        Max = 5
+    }
+
+    public enum EColorWriteChannel : byte
+    {
+        None = 0,
+        Red = 1,
+        Green = 2,
+        Blue = 4,
+        Alpha = 8,
+        All = 15
+    }
+
+    public enum EComparison : byte
+    {
+        Never = 0,
+        Less = 1,
+        Equal = 2,
+        LessEqual = 3,
+        Greater = 4,
+        NotEqual = 5,
+        GreaterEqual = 6,
+        Always = 7
+    }
+
+    public enum EStencilOperation : byte
+    {
+        Keep = 1,
+        Zero = 2,
+        Replace = 3,
+        IncrementSaturation = 4,
+        DecrementSaturation = 5,
+        Invert = 6,
+        Increment = 7,
+        Decrement = 8
+    }
+
+    public enum EFillMode : byte
+    {
+        Solid,
+        Wireframe,
+    }
+
+    public enum ECullMode : byte
     {
         None,
         Back,
         Front,
-        MAX
     }
 
-    public enum EStencilOp
-    {
-        Keep,
-        Zero,
-        Invert,
-        Replace,
-        IncrementClamp,
-        DecrementClamp,
-        IncrementWarp,
-        DecrementWarp,
-        MAX
-    }
-
-    public enum EBlendFactor
-    {
-        Zero,
-        One,
-        Src,
-        OneMinusSrc,
-        SrcAlpha,
-        OneMinusSrcAlpha,
-        Dst,
-        OneMinusDst,
-        DstAlpha,
-        OneMinusDstAlpha,
-        // TODO check spec
-        // SrcAlphaSaturated,
-        // CONSTANT,
-        // OneMinusConstan,
-        MAX
-    }
-
-    public enum EBlendOp
-    {
-        Min,
-        Max,
-        Add,
-        Subtract,
-        ReverseSubtract,
-        MAX
-    }
-
-    public enum ELoadOp
+    public enum ELoadOp : byte
     {
         Load,
         Clear,
@@ -309,7 +357,7 @@
         MAX
     }
 
-    public enum EStoreOp
+    public enum EStoreOp : byte
     {
         Store,
         Resolve,
@@ -318,7 +366,7 @@
         MAX
     }
 
-    public enum EPresentMode
+    public enum EPresentMode : byte
     {
         // TODO check this
         // 1. DirectX SwapEffect #see https://docs.microsoft.com/en-us/windows/win32/api/dxgi/ne-dxgi-dxgi_swap_effect
@@ -328,7 +376,7 @@
         MAX
     }
 
-    public enum EResourceType
+    public enum EResourceType : byte
     {
         Buffer,
         Texture,
@@ -389,7 +437,7 @@
         MAX
     }
 
-    public enum EBufferViewType
+    public enum EBufferViewType : byte
     {
         IndexBuffer,
         VertexBuffer,
@@ -410,7 +458,7 @@
         MAX
     }
 
-    public enum ETextureViewType
+    public enum ETextureViewType : byte
     {
         DepthStencil,
         RenderTarget,
@@ -424,15 +472,6 @@
         Vertex   = 0x1,
         Fragment = 0x2,
         Compute  = 0x4,
-        MAX
-    }
-
-    public enum EColorWriteFlags
-    {
-        Red   = 0x1,
-        Green = 0x2,
-        Blur  = 0x4,
-        Alpha = 0x8,
         MAX
     }
 }

@@ -27,9 +27,9 @@ namespace Infinity.Graphics
 
         public Dx12ComputePipeline(Dx12Device device, in RHIComputePipelineCreateInfo createInfo)
         {
-            m_PipelineLayout = createInfo.layout as Dx12PipelineLayout;
+            m_PipelineLayout = createInfo.pipelineLayout as Dx12PipelineLayout;
 
-            Dx12Shader computeShader = createInfo.shader as Dx12Shader;
+            Dx12Shader computeShader = createInfo.computeShader as Dx12Shader;
 
             D3D12_COMPUTE_PIPELINE_STATE_DESC desc = new D3D12_COMPUTE_PIPELINE_STATE_DESC();
             desc.CS.BytecodeLength = computeShader.NativeShaderBytecode.BytecodeLength;
