@@ -58,8 +58,8 @@ namespace Infinity.Graphics
                     ref Dx12RootParameterKeyInfo keyInfo = ref bindGroupLayout.RootParameterKeyInfos[slot];
 
                     D3D12_DESCRIPTOR_RANGE1 dx12DescriptorRange = new D3D12_DESCRIPTOR_RANGE1();
-                    dx12DescriptorRange.Init(Dx12Utility.ConvertToDX12BindType(keyInfo.bindType), (uint)keyInfo.count, (uint)keyInfo.slot, (uint)keyInfo.layoutIndex, D3D12_DESCRIPTOR_RANGE_FLAGS.D3D12_DESCRIPTOR_RANGE_FLAG_DATA_STATIC);
-                    rootParameters[i + j].InitAsDescriptorTable(1, &dx12DescriptorRange, Dx12Utility.ConvertToDX12ShaderStage(keyInfo.shaderStage));
+                    dx12DescriptorRange.Init(Dx12Utility.ConvertToDx12BindType(keyInfo.bindType), (uint)keyInfo.count, (uint)keyInfo.slot, (uint)keyInfo.layoutIndex, D3D12_DESCRIPTOR_RANGE_FLAGS.D3D12_DESCRIPTOR_RANGE_FLAG_DATA_STATIC);
+                    rootParameters[i + j].InitAsDescriptorTable(1, &dx12DescriptorRange, Dx12Utility.ConvertToDx12ShaderStage(keyInfo.shaderStage));
                     //rootParameters.Add(bindGroupLayout.NativeRootParameters[slot]);
 
                     Dx12BindTypeAndParameterSlot parameter;

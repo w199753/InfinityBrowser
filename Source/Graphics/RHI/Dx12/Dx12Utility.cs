@@ -32,12 +32,12 @@ namespace Infinity.Graphics
             }
         }
 
-        internal static uint ConvertToNativeSyncInterval(in EPresentMode presentMode)
+        internal static uint ConvertToDx12SyncInterval(in EPresentMode presentMode)
         {
             return (uint)(presentMode == EPresentMode.VSync ? 1 : 0);
         }
 
-        internal static D3D12_FILTER ConvertToNativeFilter(in RHISamplerCreateInfo createInfo)
+        internal static D3D12_FILTER ConvertToDx12Filter(in RHISamplerCreateInfo createInfo)
         {
             EFilterMode minFilter = createInfo.minFilter;
             EFilterMode magFilter = createInfo.magFilter;
@@ -71,7 +71,7 @@ namespace Infinity.Graphics
             return EMapMode.Read;
         }
 
-        internal static D3D12_HEAP_TYPE GetDX12HeapTypeByUsage(in EBufferUsage bufferUsages)
+        internal static D3D12_HEAP_TYPE GetDx12HeapTypeByUsage(in EBufferUsage bufferUsages)
         {
             D3D12_HEAP_TYPE fallback = D3D12_HEAP_TYPE.D3D12_HEAP_TYPE_DEFAULT;
             Dictionary<EBufferUsage, D3D12_HEAP_TYPE> heapRules = new Dictionary<EBufferUsage, D3D12_HEAP_TYPE>();
@@ -89,7 +89,7 @@ namespace Infinity.Graphics
             return fallback;
         }
 
-        internal static D3D12_RESOURCE_STATES ConvertToDX12BufferStateByUsage(in EBufferUsage bufferUsages)
+        internal static D3D12_RESOURCE_STATES ConvertToDx12BufferStateByUsage(in EBufferUsage bufferUsages)
         {
             Dictionary<EBufferUsage, D3D12_RESOURCE_STATES> stateRules = new Dictionary<EBufferUsage, D3D12_RESOURCE_STATES>();
             stateRules.Add(EBufferUsage.CopySrc, D3D12_RESOURCE_STATES.D3D12_RESOURCE_STATE_COPY_SOURCE);
@@ -112,7 +112,7 @@ namespace Infinity.Graphics
             return result;
         }
 
-        internal static D3D12_RESOURCE_STATES ConvertToDX12TextureStateByUsage(in ETextureUsage textureUsages)
+        internal static D3D12_RESOURCE_STATES ConvertToDx12TextureStateByUsage(in ETextureUsage textureUsages)
         {
             Dictionary<ETextureUsage, D3D12_RESOURCE_STATES> stateRules = new Dictionary<ETextureUsage, D3D12_RESOURCE_STATES>();
             stateRules.Add(ETextureUsage.CopySrc, D3D12_RESOURCE_STATES.D3D12_RESOURCE_STATE_COPY_SOURCE);
@@ -134,7 +134,7 @@ namespace Infinity.Graphics
             return result;
         }
 
-        internal static D3D12_RESOURCE_FLAGS ConvertToDX12ResourceFlagByUsage(in EBufferUsage bufferUsages)
+        internal static D3D12_RESOURCE_FLAGS ConvertToDx12ResourceFlagByUsage(in EBufferUsage bufferUsages)
         {
             Dictionary<EBufferUsage, D3D12_RESOURCE_FLAGS> stateRules = new Dictionary<EBufferUsage, D3D12_RESOURCE_FLAGS>();
             stateRules.Add(EBufferUsage.CopySrc, D3D12_RESOURCE_FLAGS.D3D12_RESOURCE_FLAG_NONE);
@@ -157,7 +157,7 @@ namespace Infinity.Graphics
             return result;
         }
 
-        internal static D3D12_RESOURCE_FLAGS ConvertToDX12ResourceFlagByUsage(in ETextureUsage textureUsages)
+        internal static D3D12_RESOURCE_FLAGS ConvertToDx12ResourceFlagByUsage(in ETextureUsage textureUsages)
         {
             Dictionary<ETextureUsage, D3D12_RESOURCE_FLAGS> stateRules = new Dictionary<ETextureUsage, D3D12_RESOURCE_FLAGS>();
             stateRules.Add(ETextureUsage.CopySrc, D3D12_RESOURCE_FLAGS.D3D12_RESOURCE_FLAG_NONE);
@@ -179,7 +179,7 @@ namespace Infinity.Graphics
             return result;
         }
 
-        internal static D3D12_RESOURCE_DIMENSION ConvertToDX12TextureDimension(in ETextureDimension dimension)
+        internal static D3D12_RESOURCE_DIMENSION ConvertToDx12TextureDimension(in ETextureDimension dimension)
         {
             switch (dimension)
             {
@@ -194,7 +194,7 @@ namespace Infinity.Graphics
             }
         }
 
-        internal static D3D12_RESOURCE_STATES ConvertToDX12BufferState(in EBufferState state)
+        internal static D3D12_RESOURCE_STATES ConvertToDx12BufferState(in EBufferState state)
         {
             if (state == EBufferState.Common)
                 return D3D12_RESOURCE_STATES.D3D12_RESOURCE_STATE_COMMON;
@@ -218,7 +218,7 @@ namespace Infinity.Graphics
             return result;
         }
 
-        internal static D3D12_RESOURCE_STATES ConvertToDX12TextureState(in ETextureState state)
+        internal static D3D12_RESOURCE_STATES ConvertToDx12TextureState(in ETextureState state)
         {
             if (state == ETextureState.Common)
                 return D3D12_RESOURCE_STATES.D3D12_RESOURCE_STATE_COMMON;
@@ -240,7 +240,7 @@ namespace Infinity.Graphics
             return result;
         }
 
-        internal static D3D_PRIMITIVE_TOPOLOGY ConvertToDX12PrimitiveTopology(in EPrimitiveTopology primitiveTopology)
+        internal static D3D_PRIMITIVE_TOPOLOGY ConvertToDx12PrimitiveTopology(in EPrimitiveTopology primitiveTopology)
         {
             switch (primitiveTopology)
             {
@@ -276,7 +276,7 @@ namespace Infinity.Graphics
             }
         }
 
-        internal static D3D12_PRIMITIVE_TOPOLOGY_TYPE ConvertToDX12PrimitiveTopologyType(in EPrimitiveTopology primitiveTopology)
+        internal static D3D12_PRIMITIVE_TOPOLOGY_TYPE ConvertToDx12PrimitiveTopologyType(in EPrimitiveTopology primitiveTopology)
         {
             switch (primitiveTopology)
             {
@@ -401,7 +401,7 @@ namespace Infinity.Graphics
             return depthStencilDescription;
         }
 
-        internal static DXGI_FORMAT ConvertToDX12SemanticFormat(in ESemanticFormat format)
+        internal static DXGI_FORMAT ConvertToDx12SemanticFormat(in ESemanticFormat format)
         {
             switch (format)
             {
@@ -559,7 +559,7 @@ namespace Infinity.Graphics
             return new DXGI_SAMPLE_DESC(0, 0);
         }
 
-        internal static sbyte* ConvertToDX12SemanticName(this ESemanticType type)
+        internal static sbyte* ConvertToDx12SemanticName(this ESemanticType type)
         {
             string semanticName = string.Empty;
 
@@ -602,12 +602,12 @@ namespace Infinity.Graphics
             return (sbyte*)Convert.ToSByte(bytes);
         }
 
-        internal static D3D12_INPUT_CLASSIFICATION ConvertToDX12InputSlotClass(this EVertexStepMode stepMode)
+        internal static D3D12_INPUT_CLASSIFICATION ConvertToDx12InputSlotClass(this EVertexStepMode stepMode)
         {
             return ((stepMode == EVertexStepMode.PerVertex) || (stepMode != EVertexStepMode.PerInstance)) ? D3D12_INPUT_CLASSIFICATION.D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA : D3D12_INPUT_CLASSIFICATION.D3D12_INPUT_CLASSIFICATION_PER_INSTANCE_DATA;
         }
 
-        internal static D3D12_INPUT_LAYOUT_DESC ConvertToDX12VertexLayout(in Span<RHIVertexLayout> vertexLayouts)
+        internal static D3D12_INPUT_LAYOUT_DESC ConvertToDx12VertexLayout(in Span<RHIVertexLayout> vertexLayouts)
         {
             int num = 0;
             for (int i = 0; i < vertexLayouts.Length; ++i)
@@ -639,11 +639,11 @@ namespace Infinity.Graphics
                     RHIVertexAttribute attribute = vertexAttributes[num6];
 
                     ref D3D12_INPUT_ELEMENT_DESC element = ref elements[index];
-                    element.Format = ConvertToDX12SemanticFormat(attribute.format);
+                    element.Format = ConvertToDx12SemanticFormat(attribute.format);
                     element.InputSlot = (uint)slot;
-                    element.SemanticName = ConvertToDX12SemanticName(attribute.type);
+                    element.SemanticName = ConvertToDx12SemanticName(attribute.type);
                     element.SemanticIndex = attribute.index;
-                    element.InputSlotClass = ConvertToDX12InputSlotClass(stepMode);
+                    element.InputSlotClass = ConvertToDx12InputSlotClass(stepMode);
                     element.AlignedByteOffset = (uint)attribute.offset;
                     element.InstanceDataStepRate = (uint)stepRate;
 
@@ -661,7 +661,7 @@ namespace Infinity.Graphics
             return outputLayout;
         }
 
-        internal static D3D12_DESCRIPTOR_RANGE_TYPE ConvertToDX12BindType(in EBindType bindType)
+        internal static D3D12_DESCRIPTOR_RANGE_TYPE ConvertToDx12BindType(in EBindType bindType)
         {
             switch (bindType)
             {
@@ -684,7 +684,7 @@ namespace Infinity.Graphics
             }
         }
 
-        internal static D3D12_SHADER_VISIBILITY ConvertToDX12ShaderStage(in EShaderStageFlags shaderStage)
+        internal static D3D12_SHADER_VISIBILITY ConvertToDx12ShaderStage(in EShaderStageFlags shaderStage)
         {
             switch (shaderStage)
             {
@@ -699,7 +699,7 @@ namespace Infinity.Graphics
             }
         }
 
-        internal static D3D12_CLEAR_FLAGS GetDX12ClearFlagByDSA(in RHIGraphicsPassDepthStencilAttachment depthStencilAttachment)
+        internal static D3D12_CLEAR_FLAGS GetDx12ClearFlagByDSA(in RHIGraphicsPassDepthStencilAttachment depthStencilAttachment)
         {
             D3D12_CLEAR_FLAGS result = new D3D12_CLEAR_FLAGS();
 

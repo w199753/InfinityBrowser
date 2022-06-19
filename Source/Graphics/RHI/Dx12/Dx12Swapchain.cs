@@ -1,4 +1,6 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
+using Infinity.Mathmatics;
 using TerraFX.Interop.Windows;
 using TerraFX.Interop.DirectX;
 using static TerraFX.Interop.Windows.Windows;
@@ -38,9 +40,14 @@ namespace Infinity.Graphics
             return m_Textures[index];
         }
 
+        public override void Resize(in int2 extent)
+        {
+            throw new NotImplementedException();
+        }
+
         public override void Present()
         {
-            m_NativeSwapChain->Present(Dx12Utility.ConvertToNativeSyncInterval(m_PresentMode), 0);
+            m_NativeSwapChain->Present(Dx12Utility.ConvertToDx12SyncInterval(m_PresentMode), 0);
         }
 
         private void FetchTextures()
@@ -63,9 +70,9 @@ namespace Infinity.Graphics
             desc.BufferCount = (uint)createInfo.count;
             desc.Width = (uint)createInfo.extent.x;
             desc.Height = (uint)createInfo.extent.y;
-            desc.Format = /*Dx12Utility.GetNativeFormat(createInfo.format)*/DXGI_FORMAT.DXGI_FORMAT_R8G8B8A8_UNORM;
+            desc.Format = /*Dx12Utility.ConvertToDx12Format(createInfo.format)*/DXGI_FORMAT.DXGI_FORMAT_R8G8B8A8_UNORM;
             desc.BufferUsage = createInfo.frameBufferOnly ? DXGI.DXGI_USAGE_RENDER_TARGET_OUTPUT : (DXGI.DXGI_USAGE_SHADER_INPUT | DXGI.DXGI_USAGE_RENDER_TARGET_OUTPUT);
-            desc.SwapEffect = /*Dx12Utility.GetNativeSwapEffect(createInfo.presentMode)*/ DXGI_SWAP_EFFECT.DXGI_SWAP_EFFECT_FLIP_DISCARD;
+            desc.SwapEffect = /*Dx12Utility.GetDx12SwapEffect(createInfo.presentMode)*/ DXGI_SWAP_EFFECT.DXGI_SWAP_EFFECT_FLIP_DISCARD;
             desc.SampleDesc.Count = 1;
 
             IDXGISwapChain1* dx12SwapChain1;

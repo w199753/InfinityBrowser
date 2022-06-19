@@ -22,6 +22,7 @@ namespace Infinity.Graphics
         }
 
         public abstract RHITexture GetTexture(in int index);
+        public abstract void Resize(in int2 extent);
         public abstract void Present();
     }
 }

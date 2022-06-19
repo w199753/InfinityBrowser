@@ -115,12 +115,12 @@ namespace Infinity.Graphics
 
             m_StencilRef = createInfo.fragmentState.stencilRef;
             m_ScissorEnabled = createInfo.fragmentState.rasterizerState.scissorEnable;
-            m_PrimitiveTopology = Dx12Utility.ConvertToDX12PrimitiveTopology(createInfo.vertexState.primitiveTopology);
-            m_PrimitiveTopologyType = Dx12Utility.ConvertToDX12PrimitiveTopologyType(createInfo.vertexState.primitiveTopology);
+            m_PrimitiveTopology = Dx12Utility.ConvertToDx12PrimitiveTopology(createInfo.vertexState.primitiveTopology);
+            m_PrimitiveTopologyType = Dx12Utility.ConvertToDx12PrimitiveTopologyType(createInfo.vertexState.primitiveTopology);
 
             D3D12_GRAPHICS_PIPELINE_STATE_DESC description = new D3D12_GRAPHICS_PIPELINE_STATE_DESC
             {
-                InputLayout = Dx12Utility.ConvertToDX12VertexLayout(vertexLayouts),
+                InputLayout = Dx12Utility.ConvertToDx12VertexLayout(vertexLayouts),
                 pRootSignature = m_PipelineLayout.NativeRootSignature,
                 PrimitiveTopologyType = m_PrimitiveTopologyType,
 

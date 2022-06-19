@@ -62,8 +62,8 @@ namespace Infinity.Graphics
                 Debug.Assert(buffer != null);
 
                 resource = buffer.NativeResource;
-                beforeState = Dx12Utility.ConvertToDX12BufferState(barrier.Buffer.before);
-                afterState = Dx12Utility.ConvertToDX12BufferState(barrier.Buffer.after);
+                beforeState = Dx12Utility.ConvertToDx12BufferState(barrier.Buffer.before);
+                afterState = Dx12Utility.ConvertToDx12BufferState(barrier.Buffer.after);
             }
             else
             {
@@ -71,8 +71,8 @@ namespace Infinity.Graphics
                 Debug.Assert(texture != null);
 
                 resource = texture.NativeResource;
-                beforeState = Dx12Utility.ConvertToDX12TextureState(barrier.Texture.before);
-                afterState = Dx12Utility.ConvertToDX12TextureState(barrier.Texture.after);
+                beforeState = Dx12Utility.ConvertToDx12TextureState(barrier.Texture.before);
+                afterState = Dx12Utility.ConvertToDx12TextureState(barrier.Texture.after);
             }
 
             D3D12_RESOURCE_BARRIER resourceBarrier = D3D12_RESOURCE_BARRIER.InitTransition(resource, beforeState, afterState);
@@ -96,8 +96,8 @@ namespace Infinity.Graphics
                     Debug.Assert(buffer != null);
 
                     resource = buffer.NativeResource;
-                    beforeState = Dx12Utility.ConvertToDX12BufferState(barrier.Buffer.before);
-                    afterState = Dx12Utility.ConvertToDX12BufferState(barrier.Buffer.after);
+                    beforeState = Dx12Utility.ConvertToDx12BufferState(barrier.Buffer.before);
+                    afterState = Dx12Utility.ConvertToDx12BufferState(barrier.Buffer.after);
                 }
                 else
                 {
@@ -105,8 +105,8 @@ namespace Infinity.Graphics
                     Debug.Assert(texture != null);
 
                     resource = texture.NativeResource;
-                    beforeState = Dx12Utility.ConvertToDX12TextureState(barrier.Texture.before);
-                    afterState = Dx12Utility.ConvertToDX12TextureState(barrier.Texture.after);
+                    beforeState = Dx12Utility.ConvertToDx12TextureState(barrier.Texture.before);
+                    afterState = Dx12Utility.ConvertToDx12TextureState(barrier.Texture.after);
                 }
 
                 resourceBarriers[i] = D3D12_RESOURCE_BARRIER.InitTransition(resource, beforeState, afterState);
@@ -286,7 +286,7 @@ namespace Infinity.Graphics
                     return;
                 }
 
-                m_Dx12CommandBuffer.NativeCommandList->ClearDepthStencilView(dsvHandle.Value, Dx12Utility.GetDX12ClearFlagByDSA(depthStencilAttachment.Value), depthStencilAttachment.Value.depthClearValue, Convert.ToByte(depthStencilAttachment.Value.stencilClearValue), 0, null);
+                m_Dx12CommandBuffer.NativeCommandList->ClearDepthStencilView(dsvHandle.Value, Dx12Utility.GetDx12ClearFlagByDSA(depthStencilAttachment.Value), depthStencilAttachment.Value.depthClearValue, Convert.ToByte(depthStencilAttachment.Value.stencilClearValue), 0, null);
             }
         }
 
@@ -385,7 +385,7 @@ namespace Infinity.Graphics
 
         public override void SetPrimitiveTopology(in EPrimitiveTopology primitiveTopology)
         {
-            m_Dx12CommandBuffer.NativeCommandList->IASetPrimitiveTopology(Dx12Utility.ConvertToDX12PrimitiveTopology(primitiveTopology));
+            m_Dx12CommandBuffer.NativeCommandList->IASetPrimitiveTopology(Dx12Utility.ConvertToDx12PrimitiveTopology(primitiveTopology));
         }
 
         public override void Draw(in uint vertexCount, in uint instanceCount, in uint firstVertex, in uint firstInstance)

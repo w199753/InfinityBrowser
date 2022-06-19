@@ -55,8 +55,8 @@ namespace Infinity.Graphics
             {
                 //ref RHIBindGroupLayoutElement element = ref elements[i];
                 //D3D12_DESCRIPTOR_RANGE1 dx12DescriptorRange = new D3D12_DESCRIPTOR_RANGE1();
-                //dx12DescriptorRange.Init(Dx12Utility.ConvertToDX12BindType(element.bindType), 1, (uint)element.slot, (uint)createInfo.layoutIndex, D3D12_DESCRIPTOR_RANGE_FLAGS.D3D12_DESCRIPTOR_RANGE_FLAG_DATA_STATIC);
-                //m_NativeRootParameters[i].InitAsDescriptorTable(1, &dx12DescriptorRange, Dx12Utility.ConvertToDX12ShaderStage(element.shaderStage));
+                //dx12DescriptorRange.Init(Dx12Utility.ConvertToDx12BindType(element.bindType), 1, (uint)element.slot, (uint)createInfo.layoutIndex, D3D12_DESCRIPTOR_RANGE_FLAGS.D3D12_DESCRIPTOR_RANGE_FLAG_DATA_STATIC);
+                //m_NativeRootParameters[i].InitAsDescriptorTable(1, &dx12DescriptorRange, Dx12Utility.ConvertToDx12ShaderStage(element.shaderStage));
 
                 ref RHIBindGroupLayoutElement element = ref elements[i];
                 ref Dx12RootParameterKeyInfo keyInfo = ref m_RootParameterKeyInfos[i];

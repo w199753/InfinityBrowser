@@ -40,7 +40,7 @@ namespace Infinity.Graphics
             desc.AddressU = /*Dx12Utility.GetNativeAddressMode(createInfo->addressModeU)*/D3D12_TEXTURE_ADDRESS_MODE.D3D12_TEXTURE_ADDRESS_MODE_WRAP;
             desc.AddressV = /*Dx12Utility.GetNativeAddressMode(createInfo->addressModeV)*/D3D12_TEXTURE_ADDRESS_MODE.D3D12_TEXTURE_ADDRESS_MODE_WRAP;
             desc.AddressW = /*Dx12Utility.GetNativeAddressMode(createInfo->addressModeW)*/D3D12_TEXTURE_ADDRESS_MODE.D3D12_TEXTURE_ADDRESS_MODE_WRAP;
-            desc.Filter = Dx12Utility.ConvertToNativeFilter(createInfo);
+            desc.Filter = Dx12Utility.ConvertToDx12Filter(createInfo);
             desc.MinLOD = createInfo.lodMinClamp;
             desc.MaxLOD = createInfo.lodMaxClamp;
             desc.ComparisonFunc = /*Dx12Utility.GetNativeComparisonFunc(createInfo->comparisonFunc)*/D3D12_COMPARISON_FUNC.D3D12_COMPARISON_FUNC_ALWAYS;
