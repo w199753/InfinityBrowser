@@ -130,8 +130,6 @@ namespace Infinity.Graphics
 
         protected override void Release()
         {
-            ETextureUsage usages = m_Dx12Texture.Usages;
-
             if (m_LifeState.x)
             {
                 m_Dx12Texture.Dx12Device.FreeDsvDescriptor(m_HeapIndex);

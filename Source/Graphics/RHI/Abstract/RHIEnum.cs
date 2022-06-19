@@ -33,50 +33,50 @@
     public enum EPixelFormat : byte
     {
         // 8-Bits
-        R8_UNORM,
-        R8_SNORM,
-        R8_UINT,
-        R8_SINT,
+        R8_UNorm,
+        R8_SNorm,
+        R8_UInt,
+        R8_SInt,
         // 16-Bits
-        R16_UINT,
-        R16_SINT,
-        R16_FLOAT,
-        RG8_UNORM,
-        RG8_SNORM,
-        RG8_UINT,
-        RG8_SINT,
+        R16_UInt,
+        R16_SInt,
+        R16_Float,
+        RG8_UNorm,
+        RG8_SNorm,
+        RG8_UInt,
+        RG8_SInt,
         // 32-Bits
-        R32_UINT,
-        R32_SINT,
-        R32_FLOAT,
-        RG16_UINT,
-        RG16_SINT,
-        RG16_FLOAT,
-        RGBA8_UNORM,
-        RGBA8_UNORM_SRGB,
-        RGBA8_SNORM,
-        RGBA8_UINT,
-        RGBA8_SINT,
-        BGRA8_UNORM,
-        BGRA8_UNORM_SRGB,
-        RGB9_E5_FLOAT,
-        RGB10A2_UNORM,
-        RG11B10_FLOAT,
+        R32_UInt,
+        R32_SInt,
+        R32_Float,
+        RG16_UInt,
+        RG16_SInt,
+        RG16_Float,
+        RGBA8_UNorm,
+        RGBA8_UNorm_Srgb,
+        RGBA8_SNorm,
+        RGBA8_UInt,
+        RGBA8_SInt,
+        BGRA8_UNorm,
+        BGRA8_UNorm_Srgb,
+        RGB9_E5_Float,
+        RGB10A2_UNorm,
+        RG11B10_Float,
         // 64-Bits
-        RG32_UINT,
-        RG32_SINT,
-        RG32_FLOAT,
-        RGBA16_UINT,
-        RGBA16_SINT,
-        RGBA16_FLOAT,
+        RG32_UInt,
+        RG32_SInt,
+        RG32_Float,
+        RGBA16_UInt,
+        RGBA16_SInt,
+        RGBA16_Float,
         // 128-Bits
-        RGBA32_UINT,
-        RGBA32_SINT,
-        RGBA32_FLOAT,
+        RGBA32_UInt,
+        RGBA32_SInt,
+        RGBA32_Float,
         // Depth-Stencil
-        D16_UNORM,
-        D24_UNORM_S8_UINT,
-        D32_FLOAT,
+        D16_UNorm,
+        D24_UNorm_S8_UInt,
+        D32_Float,
         // TODO features / bc / etc / astc
         MAX
     }
@@ -338,15 +338,21 @@
 
     public enum EFillMode : byte
     {
-        Solid,
-        Wireframe,
+        Solid = 3,
+        Wireframe = 2
     }
 
     public enum ECullMode : byte
     {
-        None,
-        Back,
-        Front,
+        None = 1,
+        Back = 3,
+        Front = 2
+    }
+
+    public enum EConservativeState : byte
+    {
+        On = 1,
+        Off = 0
     }
 
     public enum ELoadOp : byte
@@ -423,24 +429,22 @@
 
     public enum EBufferUsage
     {
-        MapRead       = 0x1,
-        MapWrite      = 0x2,
-        CopySrc       = 0x4,
-        CopyDst       = 0x8,
-        Index         = 0x10,
-        Vertex        = 0x20,
-        Uniform       = 0x40,
+        MapRead = 0x1,
+        MapWrite = 0x2,
+        CopySrc = 0x4,
+        CopyDst = 0x8,
+        Index = 0x10,
+        Vertex = 0x20,
+        Uniform = 0x40,
         ShaderResource = 0x80,
         StorageResource = 0x100,
-        Indirect      = 0x200,
-        QueryResolve  = 0x400,
+        Indirect = 0x200,
+        QueryResolve = 0x400,
         MAX
     }
 
     public enum EBufferViewType : byte
     {
-        IndexBuffer,
-        VertexBuffer,
         UniformBuffer,
         ShaderResource,
         UnorderedAccess,
@@ -449,10 +453,10 @@
 
     public enum ETextureUsage
     {
-        CopySrc          = 0x1,
-        CopyDst          = 0x2,
-        DepthAttachment  = 0x4,
-        ColorAttachment  = 0x8,
+        CopySrc = 0x1,
+        CopyDst = 0x2,
+        DepthAttachment = 0x4,
+        ColorAttachment = 0x8,
         ShaderResource = 0x10,
         StorageResource = 0x20,
         MAX
@@ -469,9 +473,9 @@
 
     public enum EShaderStageFlags
     {
-        Vertex   = 0x1,
+        Vertex = 0x1,
         Fragment = 0x2,
-        Compute  = 0x4,
+        Compute = 0x4,
         MAX
     }
 }

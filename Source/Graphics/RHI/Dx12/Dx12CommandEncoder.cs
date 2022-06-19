@@ -295,6 +295,8 @@ namespace Infinity.Graphics
             m_Dx12GraphicsPipeline = pipeline as Dx12GraphicsPipeline;
             Debug.Assert(m_Dx12GraphicsPipeline != null);
 
+            m_Dx12CommandBuffer.NativeCommandList->OMSetStencilRef((uint)m_Dx12GraphicsPipeline.StencilRef);
+            m_Dx12CommandBuffer.NativeCommandList->IASetPrimitiveTopology(m_Dx12GraphicsPipeline.PrimitiveTopology);
             m_Dx12CommandBuffer.NativeCommandList->SetPipelineState(m_Dx12GraphicsPipeline.NativePipelineState);
         }
 
@@ -318,15 +320,15 @@ namespace Infinity.Graphics
             m_Dx12CommandBuffer.NativeCommandList->RSSetViewports(1, &viewport);
         }
 
-        public override void SetBlendConstant(in float constants)
+        public override void SetStencilRef(in uint value)
         {
-            float tempConstants = constants;
-            m_Dx12CommandBuffer.NativeCommandList->OMSetBlendFactor(&tempConstants);
+            m_Dx12CommandBuffer.NativeCommandList->OMSetStencilRef(value);
         }
 
-        public override void SetStencilReference(in uint reference)
+        public override void SetBlendFactor(in float values)
         {
-            m_Dx12CommandBuffer.NativeCommandList->OMSetStencilRef(reference);
+            float tempValues = values;
+            m_Dx12CommandBuffer.NativeCommandList->OMSetBlendFactor(&tempValues);
         }
 
         public override void SetBindGroup(RHIBindGroup bindGroup)
@@ -357,17 +359,27 @@ namespace Infinity.Graphics
             }
         }
 
-        public override void SetIndexBuffer(RHIBufferView bufferView)
+        public override void SetIndexBuffer(RHIBuffer buffer, EIndexFormat format, uint offset = 0)
         {
-            Dx12BufferView dx12BufferView = bufferView as Dx12BufferView;
-            D3D12_INDEX_BUFFER_VIEW indexBufferView = dx12BufferView.NativeIndexBufferView;
+            Dx12Buffer dx12Buffer = buffer as Dx12Buffer;
+            D3D12_INDEX_BUFFER_VIEW indexBufferView = new D3D12_INDEX_BUFFER_VIEW
+            {
+                Format = Dx12Utility.ConvertToDx12IndexFormat(format),
+                SizeInBytes = buffer.SizeInBytes - offset,
+                BufferLocation = dx12Buffer.NativeResource->GetGPUVirtualAddress() + offset
+            };
             m_Dx12CommandBuffer.NativeCommandList->IASetIndexBuffer(&indexBufferView);
         }
 
-        public override void SetVertexBuffer(in uint slot, RHIBufferView bufferView)
+        public override void SetVertexBuffer(RHIBuffer buffer, in uint slot, uint offset = 0)
         {
-            Dx12BufferView dx12BufferView = bufferView as Dx12BufferView;
-            D3D12_VERTEX_BUFFER_VIEW vertexBufferView = dx12BufferView.NativeVertexBufferView;
+            Dx12Buffer dx12Buffer = buffer as Dx12Buffer;
+            D3D12_VERTEX_BUFFER_VIEW vertexBufferView = new D3D12_VERTEX_BUFFER_VIEW
+            {
+                SizeInBytes = buffer.SizeInBytes - offset,
+                StrideInBytes = (uint)m_Dx12GraphicsPipeline.VertexStrides[slot],
+                BufferLocation = dx12Buffer.NativeResource->GetGPUVirtualAddress() + offset
+            };
             m_Dx12CommandBuffer.NativeCommandList->IASetVertexBuffers(slot, 1, &vertexBufferView);
         }
 

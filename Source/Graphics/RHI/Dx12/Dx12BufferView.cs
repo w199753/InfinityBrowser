@@ -12,20 +12,6 @@ namespace Infinity.Graphics
                 return m_NativeDescriptorHeap;
             }
         }
-        public D3D12_INDEX_BUFFER_VIEW NativeIndexBufferView
-        {
-            get
-            {
-                return m_NativeIndexBufferView;
-            }
-        }
-        public D3D12_VERTEX_BUFFER_VIEW NativeVertexBufferView
-        {
-            get
-            {
-                return m_NativeVertexBufferView;
-            }
-        }
         public D3D12_CPU_DESCRIPTOR_HANDLE NativeCpuDescriptorHandle
         {
             get
@@ -42,49 +28,23 @@ namespace Infinity.Graphics
         }
 
         private int m_HeapIndex;
-        private bool m_LifeState0;
-        private bool4 m_LifeState;
+        private bool3 m_LifeState;
         private Dx12Buffer m_Dx12Buffer;
         private ID3D12DescriptorHeap* m_NativeDescriptorHeap;
-        private D3D12_INDEX_BUFFER_VIEW m_NativeIndexBufferView;
-        private D3D12_VERTEX_BUFFER_VIEW m_NativeVertexBufferView;
         private D3D12_CPU_DESCRIPTOR_HANDLE m_NativeCpuDescriptorHandle;
         private D3D12_GPU_DESCRIPTOR_HANDLE m_NativeGpuDescriptorHandle;
 
         public Dx12BufferView(Dx12Buffer buffer, in RHIBufferViewCreateInfo createInfo)
         {
             m_LifeState = false;
-            m_LifeState0 = false;
             m_Dx12Buffer = buffer;
             EBufferUsage usages = buffer.Usages;
 
-            if (createInfo.type == EBufferViewType.IndexBuffer)
-            {
-                if (Dx12Utility.IsIndexBuffer(m_Dx12Buffer.Usages))
-                {
-                    m_LifeState.x = true;
-
-                    m_NativeIndexBufferView.SizeInBytes = (uint)createInfo.size;
-                    m_NativeIndexBufferView.Format = /*Dx12Utility.GetNativeFormat(createInfo.index.format)*/ DXGI_FORMAT.DXGI_FORMAT_R16_UINT;
-                    m_NativeIndexBufferView.BufferLocation = m_Dx12Buffer.NativeResource->GetGPUVirtualAddress() + (ulong)createInfo.offset;
-                }
-            }
-            else if (createInfo.type == EBufferViewType.VertexBuffer)
-            {
-                if (Dx12Utility.IsVertexBuffer(m_Dx12Buffer.Usages))
-                {
-                    m_LifeState.y = true;
-
-                    m_NativeVertexBufferView.SizeInBytes = (uint)createInfo.size;
-                    m_NativeVertexBufferView.StrideInBytes = (uint)createInfo.stride;
-                    m_NativeVertexBufferView.BufferLocation = m_Dx12Buffer.NativeResource->GetGPUVirtualAddress() + (ulong)createInfo.offset;
-                }
-            }
-            else if (createInfo.type == EBufferViewType.UniformBuffer)
+            if (createInfo.type == EBufferViewType.UniformBuffer)
             {
                 if (Dx12Utility.IsConstantBuffer(m_Dx12Buffer.Usages))
                 {
-                    m_LifeState.z = true;
+                    m_LifeState.x = true;
 
                     D3D12_CONSTANT_BUFFER_VIEW_DESC desc = new D3D12_CONSTANT_BUFFER_VIEW_DESC();
                     desc.SizeInBytes = (uint)createInfo.size;
@@ -102,7 +62,7 @@ namespace Infinity.Graphics
             {
                 if (Dx12Utility.IsShaderResourceBuffer(m_Dx12Buffer.Usages))
                 {
-                    m_LifeState.w = true;
+                    m_LifeState.y = true;
 
                     D3D12_UNORDERED_ACCESS_VIEW_DESC desc = new D3D12_UNORDERED_ACCESS_VIEW_DESC();
                     desc.Format = DXGI_FORMAT.DXGI_FORMAT_UNKNOWN;
@@ -122,7 +82,7 @@ namespace Infinity.Graphics
             {
                 if (Dx12Utility.IsUnorderedAccessBuffer(m_Dx12Buffer.Usages))
                 {
-                    m_LifeState0 = true;
+                    m_LifeState.z = true;
 
                     D3D12_UNORDERED_ACCESS_VIEW_DESC desc = new D3D12_UNORDERED_ACCESS_VIEW_DESC();
                     desc.Format = DXGI_FORMAT.DXGI_FORMAT_UNKNOWN;
@@ -142,15 +102,7 @@ namespace Infinity.Graphics
 
         protected override void Release()
         {
-            if (m_LifeState.x)
-            {
-                m_Dx12Buffer.Dx12Device.FreeDsvDescriptor(m_HeapIndex);
-            }
-            if (m_LifeState.y)
-            {
-                m_Dx12Buffer.Dx12Device.FreeRtvDescriptor(m_HeapIndex);
-            }
-            if (m_LifeState.z || m_LifeState.w || m_LifeState0)
+            if (m_LifeState.x || m_LifeState.y || m_LifeState.z)
             {
                 m_Dx12Buffer.Dx12Device.FreeCbvSrvUavDescriptor(m_HeapIndex);
             }

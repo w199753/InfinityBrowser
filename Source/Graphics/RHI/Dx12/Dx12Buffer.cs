@@ -39,6 +39,7 @@ namespace Infinity.Graphics
         {
             m_Dx12Device = device;
             m_Usages = createInfo.usages;
+            m_SizeInBytes = (uint)createInfo.size;
             m_MapMode = Dx12Utility.GetMapModeByUsage(createInfo.usages);
 
             ID3D12Resource* dx12Resource;

@@ -25,7 +25,7 @@ namespace Infinity.Graphics
         public ESemanticFormat format;
     }
 
-    public struct RHIVertexBufferLayout
+    public struct RHIVertexLayout
     {
         public uint stride;
         public int stepRate;
@@ -35,8 +35,8 @@ namespace Infinity.Graphics
 
     public struct RHIVertexState
     {
-        public EPrimitiveTopologyType topologyType;
-        public Memory<RHIVertexBufferLayout> bufferLayouts;
+        public EPrimitiveTopology primitiveTopology;
+        public Memory<RHIVertexLayout> vertexLayouts;
     }
 
     public struct RHIAttachmentBlendDescription
@@ -69,13 +69,14 @@ namespace Infinity.Graphics
     {
         public EFillMode FillMode;
         public ECullMode CullMode;
-        public int depthBias;
-        public float depthBiasClamp;
-        public float slopeScaledDepthBias;
+        public EConservativeState conservativeState;
         public bool scissorEnable;
         public bool depthClipEnable;
         public bool antialiasedLineEnable;
         public bool frontCounterClockwise;
+        public int depthBias;
+        public float depthBiasClamp;
+        public float slopeScaledDepthBias;
     }
 
     public struct RHIDepthStencilOperation

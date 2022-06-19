@@ -112,7 +112,7 @@ namespace Infinity.Rendering
             swapChainCreateInfo.count = 3;
             swapChainCreateInfo.frameBufferOnly = true;
             swapChainCreateInfo.extent = new int2(width, height);
-            swapChainCreateInfo.format = EPixelFormat.RGBA8_UNORM;
+            swapChainCreateInfo.format = EPixelFormat.RGBA8_UNorm;
             swapChainCreateInfo.presentMode = EPresentMode.VSync;
             swapChainCreateInfo.window = window;
             swapChainCreateInfo.presentQueue = m_Queues[(int)EQueueType.Graphics];
@@ -123,7 +123,7 @@ namespace Infinity.Rendering
             viewCreateInfo.baseMipLevel = 0;
             viewCreateInfo.arrayLayerNum = 1;
             viewCreateInfo.baseArrayLayer = 0;
-            viewCreateInfo.format = EPixelFormat.RGBA8_UNORM;
+            viewCreateInfo.format = EPixelFormat.RGBA8_UNorm;
             viewCreateInfo.type = ETextureViewType.RenderTarget;
             viewCreateInfo.dimension = ETextureViewDimension.Tex2D;
             m_SwapChainViews = new RHITextureView[3];
