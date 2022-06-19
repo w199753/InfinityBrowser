@@ -84,11 +84,6 @@ namespace Infinity.Graphics
         protected override void Release()
         {
             m_NativeSwapChain->Release();
-
-            for (int i = 0; i < m_Textures.Length; ++i)
-            {
-                m_Textures[i].Dispose();
-            }
         }
     }
 #pragma warning restore CS8600, CS8602, CA1416, CS8602, CS8604
