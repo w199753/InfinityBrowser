@@ -68,7 +68,7 @@ namespace Infinity.Graphics
                 }
             }
 
-            return EMapMode.Read;
+            return EMapMode.None;
         }
 
         internal static D3D12_HEAP_TYPE GetDx12HeapTypeByUsage(in EBufferUsage bufferUsages)
@@ -137,12 +137,6 @@ namespace Infinity.Graphics
         internal static D3D12_RESOURCE_FLAGS ConvertToDx12ResourceFlagByUsage(in EBufferUsage bufferUsages)
         {
             Dictionary<EBufferUsage, D3D12_RESOURCE_FLAGS> stateRules = new Dictionary<EBufferUsage, D3D12_RESOURCE_FLAGS>();
-            stateRules.Add(EBufferUsage.CopySrc, D3D12_RESOURCE_FLAGS.D3D12_RESOURCE_FLAG_NONE);
-            stateRules.Add(EBufferUsage.CopyDst, D3D12_RESOURCE_FLAGS.D3D12_RESOURCE_FLAG_NONE);
-            stateRules.Add(EBufferUsage.Index, D3D12_RESOURCE_FLAGS.D3D12_RESOURCE_FLAG_NONE);
-            stateRules.Add(EBufferUsage.Vertex, D3D12_RESOURCE_FLAGS.D3D12_RESOURCE_FLAG_NONE);
-            stateRules.Add(EBufferUsage.Uniform, D3D12_RESOURCE_FLAGS.D3D12_RESOURCE_FLAG_NONE);
-            stateRules.Add(EBufferUsage.Indirect, D3D12_RESOURCE_FLAGS.D3D12_RESOURCE_FLAG_NONE);
             stateRules.Add(EBufferUsage.StorageResource, D3D12_RESOURCE_FLAGS.D3D12_RESOURCE_FLAG_ALLOW_UNORDERED_ACCESS);
 
             D3D12_RESOURCE_FLAGS result = D3D12_RESOURCE_FLAGS.D3D12_RESOURCE_FLAG_NONE;
@@ -160,11 +154,8 @@ namespace Infinity.Graphics
         internal static D3D12_RESOURCE_FLAGS ConvertToDx12ResourceFlagByUsage(in ETextureUsage textureUsages)
         {
             Dictionary<ETextureUsage, D3D12_RESOURCE_FLAGS> stateRules = new Dictionary<ETextureUsage, D3D12_RESOURCE_FLAGS>();
-            stateRules.Add(ETextureUsage.CopySrc, D3D12_RESOURCE_FLAGS.D3D12_RESOURCE_FLAG_NONE);
-            stateRules.Add(ETextureUsage.CopyDst, D3D12_RESOURCE_FLAGS.D3D12_RESOURCE_FLAG_NONE);
             stateRules.Add(ETextureUsage.DepthAttachment, D3D12_RESOURCE_FLAGS.D3D12_RESOURCE_FLAG_ALLOW_DEPTH_STENCIL);
             stateRules.Add(ETextureUsage.ColorAttachment, D3D12_RESOURCE_FLAGS.D3D12_RESOURCE_FLAG_ALLOW_RENDER_TARGET);
-            stateRules.Add(ETextureUsage.ShaderResource, D3D12_RESOURCE_FLAGS.D3D12_RESOURCE_FLAG_NONE);
             stateRules.Add(ETextureUsage.StorageResource, D3D12_RESOURCE_FLAGS.D3D12_RESOURCE_FLAG_ALLOW_UNORDERED_ACCESS);
 
             D3D12_RESOURCE_FLAGS result = D3D12_RESOURCE_FLAGS.D3D12_RESOURCE_FLAG_NONE;

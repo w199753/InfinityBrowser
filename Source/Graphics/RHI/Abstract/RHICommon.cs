@@ -25,6 +25,7 @@
 
     public enum EMapMode : byte
     {
+        None,
         Read,
         Write,
         MAX

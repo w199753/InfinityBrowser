@@ -2,10 +2,9 @@
 {
     public struct RHIBufferViewCreateInfo
     {
-        public int size;
+        public int count;
         public int offset;
         public int stride;
-        public EIndexFormat format;
         public EBufferViewType type;
     }
 

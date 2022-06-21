@@ -37,7 +37,7 @@ namespace Infinity.Graphics
 
         public Dx12Fence(Dx12Device device)
         {
-            ID3D12Fence* fence = null;
+            ID3D12Fence* fence;
             bool success = SUCCEEDED(device.NativeDevice->CreateFence(0, D3D12_FENCE_FLAGS.D3D12_FENCE_FLAG_NONE, __uuidof<ID3D12Fence>(), (void**)&fence));
             Debug.Assert(success);
             m_NativeFence = fence;
