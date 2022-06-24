@@ -87,11 +87,11 @@ namespace Infinity.Graphics
         }
     }
 
-    public struct RHIScopedBlitPassRef : IDisposable
+    public struct RHIBlitPassScoper : IDisposable
     {
         RHIBlitEncoder m_BlitEncoder;
 
-        internal RHIScopedBlitPassRef(RHIBlitEncoder blitEncoder)
+        internal RHIBlitPassScoper(RHIBlitEncoder blitEncoder)
         {
             m_BlitEncoder = blitEncoder;
         }
@@ -102,11 +102,11 @@ namespace Infinity.Graphics
         }
     }
 
-    public struct RHIScopedComputePassRef : IDisposable
+    public struct RHIComputePassScoper : IDisposable
     {
         RHIComputeEncoder m_ComputeEncoder;
 
-        internal RHIScopedComputePassRef(RHIComputeEncoder computeEncoder)
+        internal RHIComputePassScoper(RHIComputeEncoder computeEncoder)
         {
             m_ComputeEncoder = computeEncoder;
         }
@@ -117,11 +117,11 @@ namespace Infinity.Graphics
         }
     }
 
-    public struct RHIScopedGraphicsPassRef : IDisposable
+    public struct RHIGraphicsPassScoper : IDisposable
     {
         RHIGraphicsEncoder m_GraphicsEncoder;
 
-        internal RHIScopedGraphicsPassRef(RHIGraphicsEncoder graphicsEncoder)
+        internal RHIGraphicsPassScoper(RHIGraphicsEncoder graphicsEncoder)
         {
             m_GraphicsEncoder = graphicsEncoder;
         }
@@ -134,10 +134,10 @@ namespace Infinity.Graphics
 
     public abstract class RHIBlitEncoder : Disposal
     {
-        public RHIScopedBlitPassRef BeginScopedPass(string? name = null)
+        public RHIBlitPassScoper BeginScopedPass(string? name = null)
         {
             BeginPass(name);
-            return new RHIScopedBlitPassRef(this);
+            return new RHIBlitPassScoper(this);
         }
 
         public abstract void BeginPass(string? name);
@@ -156,10 +156,10 @@ namespace Infinity.Graphics
 
     public abstract class RHIComputeEncoder : Disposal
     {
-        public RHIScopedComputePassRef BeginScopedPass(string name)
+        public RHIComputePassScoper BeginScopedPass(string name)
         {
             BeginPass(name);
-            return new RHIScopedComputePassRef(this);
+            return new RHIComputePassScoper(this);
         }
 
         public abstract void BeginPass(string? name);
@@ -175,10 +175,10 @@ namespace Infinity.Graphics
 
     public abstract class RHIGraphicsEncoder : Disposal
     {
-        public RHIScopedGraphicsPassRef BeginScopedPass(in RHIGraphicsPassBeginInfo beginInfo)
+        public RHIGraphicsPassScoper BeginScopedPass(in RHIGraphicsPassBeginInfo beginInfo)
         {
             BeginPass(beginInfo);
-            return new RHIScopedGraphicsPassRef(this);
+            return new RHIGraphicsPassScoper(this);
         }
 
         public abstract void BeginPass(in RHIGraphicsPassBeginInfo beginInfo);

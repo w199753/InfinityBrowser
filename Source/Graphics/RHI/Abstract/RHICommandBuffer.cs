@@ -3,11 +3,11 @@
 namespace Infinity.Graphics
 {
 #pragma warning disable CS8618
-    public struct RHIScopedCommandBufferRef : IDisposable
+    public struct RHICommandBufferScoper : IDisposable
     {
         RHICommandBuffer m_CommandBuffer;
 
-        internal RHIScopedCommandBufferRef(RHICommandBuffer commandBuffer)
+        internal RHICommandBufferScoper(RHICommandBuffer commandBuffer)
         {
             m_CommandBuffer = commandBuffer;
         }
@@ -30,10 +30,10 @@ namespace Infinity.Graphics
 
         protected RHICommandPool m_CommandPool;
 
-        public RHIScopedCommandBufferRef BeginScoped()
+        public RHICommandBufferScoper BeginScoped()
         {
             Begin();
-            return new RHIScopedCommandBufferRef(this);
+            return new RHICommandBufferScoper(this);
         }
 
         public abstract void Begin();
