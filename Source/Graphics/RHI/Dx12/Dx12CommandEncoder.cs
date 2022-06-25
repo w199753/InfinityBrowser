@@ -371,16 +371,16 @@ namespace Infinity.Graphics
             m_Dx12CommandBuffer.NativeCommandList->IASetIndexBuffer(&indexBufferView);
         }
 
-        public override void SetVertexBuffer(RHIBuffer buffer, in uint index, uint offset = 0)
+        public override void SetVertexBuffer(RHIBuffer buffer, in uint slot = 0, uint offset = 0)
         {
             Dx12Buffer dx12Buffer = buffer as Dx12Buffer;
             D3D12_VERTEX_BUFFER_VIEW vertexBufferView = new D3D12_VERTEX_BUFFER_VIEW
             {
                 SizeInBytes = buffer.SizeInBytes - offset,
-                StrideInBytes = (uint)m_Dx12GraphicsPipeline.VertexStrides[index],
+                StrideInBytes = (uint)m_Dx12GraphicsPipeline.VertexStrides[slot],
                 BufferLocation = dx12Buffer.NativeResource->GetGPUVirtualAddress() + offset
             };
-            m_Dx12CommandBuffer.NativeCommandList->IASetVertexBuffers(index, 1, &vertexBufferView);
+            m_Dx12CommandBuffer.NativeCommandList->IASetVertexBuffers(slot, 1, &vertexBufferView);
         }
 
         public override void SetPrimitiveTopology(in EPrimitiveTopology primitiveTopology)
