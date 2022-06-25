@@ -16,6 +16,9 @@ namespace Infinity.Graphics
             }
         }
 
+        private Dx12BlitEncoder m_BlitEncoder;
+        private Dx12ComputeEncoder m_ComputeEncoder;
+        private Dx12GraphicsEncoder m_GraphicsEncoder;
         private ID3D12GraphicsCommandList5* m_NativeCommandList;
 
         public Dx12CommandBuffer(Dx12CommandPool cmdPool)
@@ -28,6 +31,10 @@ namespace Infinity.Graphics
             bool success = SUCCEEDED(queue.Dx12Device.NativeDevice->CreateCommandList(0, Dx12Utility.ConvertToNativeQueueType(queue.Type), dx12CommandPool.NativeCommandAllocator, null, __uuidof<ID3D12GraphicsCommandList5>(), (void**)&commandList));
             Debug.Assert(success);
             m_NativeCommandList = commandList;
+
+            m_BlitEncoder = new Dx12BlitEncoder(this);
+            m_ComputeEncoder = new Dx12ComputeEncoder(this);
+            m_GraphicsEncoder = new Dx12GraphicsEncoder(this);
         }
 
         public override void Begin()
@@ -46,17 +53,17 @@ namespace Infinity.Graphics
 
         public override RHIBlitEncoder GetBlitEncoder()
         {
-            return new Dx12BlitEncoder(this);
+            return m_BlitEncoder;
         }
 
         public override RHIComputeEncoder GetComputeEncoder()
         {
-            return new Dx12ComputeEncoder(this);
+            return m_ComputeEncoder;
         }
 
         public override RHIGraphicsEncoder GetGraphicsEncoder()
         {
-            return new Dx12GraphicsEncoder(this);
+            return m_GraphicsEncoder;
         }
 
         public override void End()

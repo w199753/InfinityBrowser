@@ -109,7 +109,7 @@ namespace Infinity.Graphics
                 m_VertexStrides = new int[vertexLayouts.Length];
                 for (int j = 0; j < vertexLayouts.Length; ++j)
                 {
-                    m_VertexStrides[j] = (int)vertexLayouts[j].stride;
+                    m_VertexStrides[j] = vertexLayouts[j].stride;
                 }
             }
 
@@ -118,9 +118,19 @@ namespace Infinity.Graphics
             m_PrimitiveTopology = Dx12Utility.ConvertToDx12PrimitiveTopology(createInfo.vertexState.primitiveTopology);
             m_PrimitiveTopologyType = Dx12Utility.ConvertToDx12PrimitiveTopologyType(createInfo.vertexState.primitiveTopology);
 
+            int inputElementCount = Dx12Utility.GetDx12VertexLayoutCount(vertexLayouts);
+            D3D12_INPUT_ELEMENT_DESC* inputElementsPtr = stackalloc D3D12_INPUT_ELEMENT_DESC[inputElementCount];
+            Span<D3D12_INPUT_ELEMENT_DESC> inputElementsView = new Span<D3D12_INPUT_ELEMENT_DESC>(inputElementsPtr, inputElementCount);
+
+            Dx12Utility.ConvertToDx12VertexLayout(vertexLayouts, inputElementsView);
+
+            D3D12_INPUT_LAYOUT_DESC outputLayout;
+            outputLayout.NumElements = (uint)inputElementCount;
+            outputLayout.pInputElementDescs = inputElementsPtr;
+
             D3D12_GRAPHICS_PIPELINE_STATE_DESC description = new D3D12_GRAPHICS_PIPELINE_STATE_DESC
             {
-                InputLayout = Dx12Utility.ConvertToDx12VertexLayout(vertexLayouts),
+                InputLayout = outputLayout,
                 pRootSignature = m_PipelineLayout.NativeRootSignature,
                 PrimitiveTopologyType = m_PrimitiveTopologyType,
 
@@ -132,15 +142,18 @@ namespace Infinity.Graphics
 
             if (createInfo.outputState.depthAttachment.HasValue)
             {
-                description.DSVFormat = Dx12Utility.ConvertToDx12Format(createInfo.outputState.depthAttachment.Value.format);
+                description.DSVFormat = DXGI_FORMAT.DXGI_FORMAT_D32_FLOAT_S8X24_UINT;
+                //description.DSVFormat = Dx12Utility.ConvertToDx12Format(createInfo.outputState.depthAttachment.Value.format);
             }
 
             for (int i = 0; i < createInfo.outputState.colorAttachments.Length; ++i)
             {
-                description.RTVFormats[i] = Dx12Utility.ConvertToDx12Format(createInfo.outputState.colorAttachments.Span[i].format);
+                description.RTVFormats[i] = DXGI_FORMAT.DXGI_FORMAT_R8G8B8A8_UNORM;
+                //description.RTVFormats[i] = Dx12Utility.ConvertToDx12Format(createInfo.outputState.colorAttachments.Span[i].format);
             }
 
             description.Flags = D3D12_PIPELINE_STATE_FLAGS.D3D12_PIPELINE_STATE_FLAG_NONE;
+            description.NumRenderTargets = (uint)createInfo.outputState.colorAttachments.Length;
             description.SampleDesc = Dx12Utility.ConvertToDx12SampleCount(createInfo.outputState.sampleCount);
             //description.StreamOutput = new StreamOutputDescription();
 

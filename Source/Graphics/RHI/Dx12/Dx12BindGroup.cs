@@ -77,9 +77,9 @@ namespace Infinity.Graphics
                 }
                 else
                 {
-                    Dx12Sampler sampler = element.sampler as Dx12Sampler;
-                    heap = sampler.NativeDescriptorHeap;
-                    handle = sampler.NativeGpuDescriptorHandle;
+                    Dx12Sampler textureSampler = element.textureSampler as Dx12Sampler;
+                    heap = textureSampler.NativeDescriptorHeap;
+                    handle = textureSampler.NativeGpuDescriptorHandle;
                 }
             }
             else if (keyInfo.bindType == EBindType.Texture || keyInfo.bindType == EBindType.StorageTexture)

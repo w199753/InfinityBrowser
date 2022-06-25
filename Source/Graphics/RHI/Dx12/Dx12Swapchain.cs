@@ -73,7 +73,7 @@ namespace Infinity.Graphics
             desc.Format = /*Dx12Utility.ConvertToDx12Format(createInfo.format)*/DXGI_FORMAT.DXGI_FORMAT_R8G8B8A8_UNORM;
             desc.BufferUsage = createInfo.frameBufferOnly ? DXGI.DXGI_USAGE_RENDER_TARGET_OUTPUT : (DXGI.DXGI_USAGE_SHADER_INPUT | DXGI.DXGI_USAGE_RENDER_TARGET_OUTPUT);
             desc.SwapEffect = /*Dx12Utility.GetDx12SwapEffect(createInfo.presentMode)*/ DXGI_SWAP_EFFECT.DXGI_SWAP_EFFECT_FLIP_DISCARD;
-            desc.SampleDesc.Count = 1;
+            desc.SampleDesc = new DXGI_SAMPLE_DESC(1, 0);
 
             IDXGISwapChain1* dx12SwapChain1;
             bool success = SUCCEEDED(dx12Instance.DXGIFactory->CreateSwapChainForHwnd((IUnknown*)dx12Queue.NativeCommandQueue, new HWND(createInfo.window.ToPointer()), &desc, null, null, &dx12SwapChain1));

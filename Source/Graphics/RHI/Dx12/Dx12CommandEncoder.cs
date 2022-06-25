@@ -184,11 +184,11 @@ namespace Infinity.Graphics
                 Dx12PipelineLayout pipelineLayout = m_Dx12ComputePipeline.PipelineLayout;
                 ref Dx12BindGroupParameter bindParameter = ref dx12BindGroup.BindParameters[i];
 
-                Dx12BindTypeAndParameterSlot? parameter = pipelineLayout.QueryRootDescriptorParameterIndex(EShaderStageFlags.Compute, bindGroupLayout.LayoutIndex, bindParameter.slot);
+                Dx12BindTypeAndParameterSlot? parameter = pipelineLayout.QueryRootDescriptorParameterIndex(EShaderStageFlags.Compute, bindGroupLayout.LayoutIndex, bindParameter.slot, bindParameter.bindType);
                 if (parameter.HasValue)
                 {
                     Debug.Assert(parameter.Value.bindType == bindParameter.bindType);
-                    m_Dx12CommandBuffer.NativeCommandList->SetComputeRootDescriptorTable((uint)parameter.Value.slot, bindParameter.dx12GpuDescriptorHandle);
+                    m_Dx12CommandBuffer.NativeCommandList->SetComputeRootDescriptorTable((uint)parameter.Value.index, bindParameter.dx12GpuDescriptorHandle);
                 }
             }
         }
@@ -305,19 +305,19 @@ namespace Infinity.Graphics
             Dx12PipelineLayout dx12PipelineLayout = pipelineLayout as Dx12PipelineLayout;
             Debug.Assert(dx12PipelineLayout != null);
 
-            m_Dx12CommandBuffer.NativeCommandList->SetGraphicsRootSignature(m_Dx12GraphicsPipeline.PipelineLayout.NativeRootSignature);
-        }
-
-        public override void SetScissor(in uint left, in uint top, in uint right, in uint bottom)
-        {
-            RECT scissor = new RECT((int)left, (int)top, (int)right, (int)bottom);
-            m_Dx12CommandBuffer.NativeCommandList->RSSetScissorRects(1, &scissor);
+            m_Dx12CommandBuffer.NativeCommandList->SetGraphicsRootSignature(dx12PipelineLayout.NativeRootSignature);
         }
 
         public override void SetViewport(in float x, in float y, in float width, in float height, in float minDepth, in float maxDepth)
         {
             D3D12_VIEWPORT viewport = new D3D12_VIEWPORT(x, y, width, height, minDepth, maxDepth);
             m_Dx12CommandBuffer.NativeCommandList->RSSetViewports(1, &viewport);
+        }
+
+        public override void SetScissorRect(in uint left, in uint top, in uint right, in uint bottom)
+        {
+            RECT scissor = new RECT((int)left, (int)top, (int)right, (int)bottom);
+            m_Dx12CommandBuffer.NativeCommandList->RSSetScissorRects(1, &scissor);
         }
 
         public override void SetStencilRef(in uint value)
@@ -343,18 +343,18 @@ namespace Infinity.Graphics
                 Dx12PipelineLayout pipelineLayout = m_Dx12GraphicsPipeline.PipelineLayout;
                 ref Dx12BindGroupParameter bindParameter = ref dx12BindGroup.BindParameters[i];
 
-                parameter = pipelineLayout.QueryRootDescriptorParameterIndex(EShaderStageFlags.Vertex, bindGroupLayout.LayoutIndex, bindParameter.slot);
+                parameter = pipelineLayout.QueryRootDescriptorParameterIndex(EShaderStageFlags.Vertex, bindGroupLayout.LayoutIndex, bindParameter.slot, bindParameter.bindType);
                 if (parameter.HasValue)
                 {
                     Debug.Assert(parameter.Value.bindType == bindParameter.bindType);
-                    m_Dx12CommandBuffer.NativeCommandList->SetGraphicsRootDescriptorTable((uint)parameter.Value.slot, bindParameter.dx12GpuDescriptorHandle);
+                    m_Dx12CommandBuffer.NativeCommandList->SetGraphicsRootDescriptorTable((uint)parameter.Value.index, bindParameter.dx12GpuDescriptorHandle);
                 }
 
-                parameter = pipelineLayout.QueryRootDescriptorParameterIndex(EShaderStageFlags.Fragment, bindGroupLayout.LayoutIndex, bindParameter.slot);
+                parameter = pipelineLayout.QueryRootDescriptorParameterIndex(EShaderStageFlags.Fragment, bindGroupLayout.LayoutIndex, bindParameter.slot, bindParameter.bindType);
                 if (parameter.HasValue)
                 {
                     Debug.Assert(parameter.Value.bindType == bindParameter.bindType);
-                    m_Dx12CommandBuffer.NativeCommandList->SetGraphicsRootDescriptorTable((uint)parameter.Value.slot, bindParameter.dx12GpuDescriptorHandle);
+                    m_Dx12CommandBuffer.NativeCommandList->SetGraphicsRootDescriptorTable((uint)parameter.Value.index, bindParameter.dx12GpuDescriptorHandle);
                 }
             }
         }
@@ -371,16 +371,16 @@ namespace Infinity.Graphics
             m_Dx12CommandBuffer.NativeCommandList->IASetIndexBuffer(&indexBufferView);
         }
 
-        public override void SetVertexBuffer(RHIBuffer buffer, in uint slot, uint offset = 0)
+        public override void SetVertexBuffer(RHIBuffer buffer, in uint index, uint offset = 0)
         {
             Dx12Buffer dx12Buffer = buffer as Dx12Buffer;
             D3D12_VERTEX_BUFFER_VIEW vertexBufferView = new D3D12_VERTEX_BUFFER_VIEW
             {
                 SizeInBytes = buffer.SizeInBytes - offset,
-                StrideInBytes = (uint)m_Dx12GraphicsPipeline.VertexStrides[slot],
+                StrideInBytes = (uint)m_Dx12GraphicsPipeline.VertexStrides[index],
                 BufferLocation = dx12Buffer.NativeResource->GetGPUVirtualAddress() + offset
             };
-            m_Dx12CommandBuffer.NativeCommandList->IASetVertexBuffers(slot, 1, &vertexBufferView);
+            m_Dx12CommandBuffer.NativeCommandList->IASetVertexBuffers(index, 1, &vertexBufferView);
         }
 
         public override void SetPrimitiveTopology(in EPrimitiveTopology primitiveTopology)

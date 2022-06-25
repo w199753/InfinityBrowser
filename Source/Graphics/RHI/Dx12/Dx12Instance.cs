@@ -32,14 +32,18 @@ namespace Infinity.Graphics
         {
             uint factoryFlags = 0;
 
-#if BUILD_CONFIG_DEBUG
+//#if BUILD_CONFIG_DEBUG
             ID3D12Debug* debugController;
             if (SUCCEEDED(DirectX.D3D12GetDebugInterface(__uuidof<ID3D12Debug>(), (void**)&debugController))) 
             {
                 debugController->EnableDebugLayer();
                 factoryFlags |= DXGI.DXGI_CREATE_FACTORY_DEBUG;
             }
-#endif
+
+            ID3D12Debug1* debugController2;
+            SUCCEEDED(debugController->QueryInterface(__uuidof<ID3D12Debug1>(), (void**)&debugController2));
+            debugController2->SetEnableGPUBasedValidation(true);
+            //#endif
 
             IDXGIFactory7* factory;
             bool success =  SUCCEEDED(DirectX.CreateDXGIFactory2(factoryFlags, __uuidof<IDXGIFactory7>(), (void**)&factory));

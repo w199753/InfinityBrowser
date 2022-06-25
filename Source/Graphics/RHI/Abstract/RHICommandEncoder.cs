@@ -184,13 +184,13 @@ namespace Infinity.Graphics
         public abstract void BeginPass(in RHIGraphicsPassBeginInfo beginInfo);
         public abstract void SetPipelineState(RHIGraphicsPipeline pipeline);
         public abstract void SetPipelineLayout(RHIPipelineLayout pipelineLayout);
-        public abstract void SetScissor(in uint left, in uint top, in uint right, in uint bottom);
         public abstract void SetViewport(in float x, in float y, in float width, in float height, in float minDepth, in float maxDepth);
+        public abstract void SetScissorRect(in uint left, in uint top, in uint right, in uint bottom);
         public abstract void SetStencilRef(in uint value);
         public abstract void SetBlendFactor(in float values);
         public abstract void SetBindGroup(RHIBindGroup bindGroup);
         public abstract void SetIndexBuffer(RHIBuffer buffer, EIndexFormat format, uint offset = 0);
-        public abstract void SetVertexBuffer(RHIBuffer buffer, in uint slot, uint offset = 0);
+        public abstract void SetVertexBuffer(RHIBuffer buffer, in uint index, uint offset = 0);
         public abstract void SetPrimitiveTopology(in EPrimitiveTopology primitiveTopology);
         public abstract void Draw(in uint vertexCount, in uint instanceCount, in uint firstVertex, in uint firstInstance);
         public abstract void DrawIndexed(in uint indexCount, in uint instanceCount, in uint firstIndex, in uint baseVertex, in uint firstInstance);

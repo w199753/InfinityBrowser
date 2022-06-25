@@ -47,9 +47,9 @@ namespace Infinity.Rendering
                 graphicsPassBeginInfo.depthStencilAttachment = null;
                 using (graphicsEncoder.BeginScopedPass(graphicsPassBeginInfo))
                 {
-                    //graphicsEncoder.SetPipeline(pipeline);
-                    graphicsEncoder.SetScissor(0, 0, 1280, 720);
                     graphicsEncoder.SetViewport(0, 0, 1280, 720, 0, 1);
+                    graphicsEncoder.SetScissorRect(0, 0, 1280, 720);
+                    //graphicsEncoder.SetPipeline(pipeline);
                     //graphicsEncoder.SetPrimitiveTopology(EPrimitiveTopology.TriangleList);
                     //graphicsEncoder.SetVertexBuffer(0, vertexBufferView);
                     //graphicsEncoder.Draw(3, 1, 0, 0);

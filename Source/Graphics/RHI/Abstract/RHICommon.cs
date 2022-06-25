@@ -167,8 +167,8 @@
 
     public enum EAddressMode : byte
     {
-        ClampToEdge,
         Repeat,
+        ClampToEdge,
         Mirror_Repeat,
         MAX
     }
@@ -266,7 +266,7 @@
 
     public enum ESampleCount : byte
     {
-        None = 0,
+        None = 1,
         Count2 = 2,
         Count4 = 4,
         Count8 = 8,

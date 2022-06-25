@@ -6,9 +6,9 @@ namespace Infinity.Graphics
     {
         //public int slot;
         //public EBindType bindType;
-        public RHISampler sampler;
         public RHIBufferView bufferView;
         public RHITextureView textureView;
+        public RHISampler textureSampler;
     }
 
     public struct RHIBindGroupCreateInfo

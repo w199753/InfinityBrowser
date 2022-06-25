@@ -27,7 +27,7 @@ namespace Infinity.Graphics
 
     public struct RHIVertexLayout
     {
-        public uint stride;
+        public int stride;
         public int stepRate;
         public EVertexStepMode stepMode;
         public Memory<RHIVertexAttribute> attributes;
@@ -121,8 +121,8 @@ namespace Infinity.Graphics
         public RHIShader vertexShader;
         public RHIShader fragmentShader;
         public RHIOutputState outputState;
-        public RHIVertexState vertexState;
         public RHIRenderState renderState;
+        public RHIVertexState vertexState;
         public RHIPipelineLayout pipelineLayout;
     }
 

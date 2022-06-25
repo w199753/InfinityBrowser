@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using static TerraFX.Interop.Windows.Windows;
 using System.Text;
+using System.Runtime.InteropServices;
 
 namespace Infinity.Graphics
 {
@@ -550,7 +551,7 @@ namespace Infinity.Graphics
             return new DXGI_SAMPLE_DESC(0, 0);
         }
 
-        internal static sbyte* ConvertToDx12SemanticName(this ESemanticType type)
+        internal static byte[] ConvertToDx12SemanticNameByte(this ESemanticType type)
         {
             string semanticName = string.Empty;
 
@@ -589,8 +590,7 @@ namespace Infinity.Graphics
                     break;
             }
 
-            byte[] bytes = Encoding.ASCII.GetBytes(semanticName);
-            return (sbyte*)Convert.ToSByte(bytes);
+            return Encoding.ASCII.GetBytes(semanticName);
         }
 
         internal static D3D12_INPUT_CLASSIFICATION ConvertToDx12InputSlotClass(this EVertexStepMode stepMode)
@@ -598,7 +598,7 @@ namespace Infinity.Graphics
             return ((stepMode == EVertexStepMode.PerVertex) || (stepMode != EVertexStepMode.PerInstance)) ? D3D12_INPUT_CLASSIFICATION.D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA : D3D12_INPUT_CLASSIFICATION.D3D12_INPUT_CLASSIFICATION_PER_INSTANCE_DATA;
         }
 
-        internal static D3D12_INPUT_LAYOUT_DESC ConvertToDx12VertexLayout(in Span<RHIVertexLayout> vertexLayouts)
+        internal static int GetDx12VertexLayoutCount(in Span<RHIVertexLayout> vertexLayouts)
         {
             int num = 0;
             for (int i = 0; i < vertexLayouts.Length; ++i)
@@ -606,10 +606,13 @@ namespace Infinity.Graphics
                 num += vertexLayouts[i].attributes.Length;
             }
 
+            return num;
+        }
+
+        internal static void ConvertToDx12VertexLayout(in Span<RHIVertexLayout> vertexLayouts, in Span<D3D12_INPUT_ELEMENT_DESC> inputElementsView)
+        {
             int slot = 0;
             int index = 0;
-
-            D3D12_INPUT_ELEMENT_DESC[] elements = new D3D12_INPUT_ELEMENT_DESC[num];
 
             while (slot < vertexLayouts.Length)
             {
@@ -617,8 +620,6 @@ namespace Infinity.Graphics
                 Span<RHIVertexAttribute> vertexAttributes = vertexLayout.attributes.Span;
 
                 int num6 = 0;
-                int stepRate = vertexLayout.stepRate;
-                EVertexStepMode stepMode = vertexLayout.stepMode;
 
                 while (true)
                 {
@@ -628,28 +629,20 @@ namespace Infinity.Graphics
                         break;
                     }
                     RHIVertexAttribute attribute = vertexAttributes[num6];
-
-                    ref D3D12_INPUT_ELEMENT_DESC element = ref elements[index];
+                    byte[] semanticByte = ConvertToDx12SemanticNameByte(attribute.type);
+                    ref D3D12_INPUT_ELEMENT_DESC element = ref inputElementsView[index];
                     element.Format = ConvertToDx12SemanticFormat(attribute.format);
                     element.InputSlot = (uint)slot;
-                    element.SemanticName = ConvertToDx12SemanticName(attribute.type);
+                    element.SemanticName = (sbyte*)Unsafe.AsPointer(ref MemoryMarshal.GetReference(new ReadOnlySpan<byte>(semanticByte)));
                     element.SemanticIndex = attribute.index;
-                    element.InputSlotClass = ConvertToDx12InputSlotClass(stepMode);
+                    element.InputSlotClass = ConvertToDx12InputSlotClass(vertexLayout.stepMode);
                     element.AlignedByteOffset = (uint)attribute.offset;
-                    element.InstanceDataStepRate = (uint)stepRate;
+                    element.InstanceDataStepRate = (uint)vertexLayout.stepRate;
 
-                    index++;
-                    num6++;
+                    ++num6;
+                    ++index;
                 }
             }
-
-            D3D12_INPUT_LAYOUT_DESC outputLayout = new D3D12_INPUT_LAYOUT_DESC();
-            fixed (D3D12_INPUT_ELEMENT_DESC* elementPtr = elements)
-            {
-                outputLayout.NumElements = (uint)num;
-                outputLayout.pInputElementDescs = elementPtr;
-            }
-            return outputLayout;
         }
 
         internal static D3D12_DESCRIPTOR_RANGE_TYPE ConvertToDx12BindType(in EBindType bindType)
@@ -672,6 +665,52 @@ namespace Infinity.Graphics
 
                 default:
                     return D3D12_DESCRIPTOR_RANGE_TYPE.D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
+            }
+        }
+
+        internal static int GetDx12BindKey(in EBindType bindType)
+        {
+            switch (bindType)
+            {
+                case EBindType.Buffer:
+                case EBindType.Texture:
+                    return 64;
+
+                case EBindType.Sampler:
+                    return 128;
+
+                case EBindType.Uniform:
+                    return 256;
+
+                case EBindType.StorageBuffer:
+                case EBindType.StorageTexture:
+                    return 512;
+
+                default:
+                    return 64;
+            }
+        }
+
+        internal static D3D12_DESCRIPTOR_RANGE_FLAGS GetDx12DescriptorRangeFalag(in EBindType bindType)
+        {
+            switch (bindType)
+            {
+                case EBindType.Buffer:
+                case EBindType.Texture:
+                    return D3D12_DESCRIPTOR_RANGE_FLAGS.D3D12_DESCRIPTOR_RANGE_FLAG_DESCRIPTORS_VOLATILE | D3D12_DESCRIPTOR_RANGE_FLAGS.D3D12_DESCRIPTOR_RANGE_FLAG_DATA_STATIC_WHILE_SET_AT_EXECUTE;
+
+                case EBindType.Sampler:
+                    return D3D12_DESCRIPTOR_RANGE_FLAGS.D3D12_DESCRIPTOR_RANGE_FLAG_DESCRIPTORS_VOLATILE;
+
+                case EBindType.Uniform:
+                    return D3D12_DESCRIPTOR_RANGE_FLAGS.D3D12_DESCRIPTOR_RANGE_FLAG_DESCRIPTORS_VOLATILE | D3D12_DESCRIPTOR_RANGE_FLAGS.D3D12_DESCRIPTOR_RANGE_FLAG_DATA_VOLATILE;
+
+                case EBindType.StorageBuffer:
+                case EBindType.StorageTexture:
+                    return D3D12_DESCRIPTOR_RANGE_FLAGS.D3D12_DESCRIPTOR_RANGE_FLAG_DESCRIPTORS_VOLATILE | D3D12_DESCRIPTOR_RANGE_FLAGS.D3D12_DESCRIPTOR_RANGE_FLAG_DATA_VOLATILE;
+
+                default:
+                    return D3D12_DESCRIPTOR_RANGE_FLAGS.D3D12_DESCRIPTOR_RANGE_FLAG_DESCRIPTORS_VOLATILE;
             }
         }
 
