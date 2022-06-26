@@ -410,7 +410,7 @@ namespace Infinity.Rendering
 
                 m_ColorAttachments[0].renderTarget = renderContext.BackBufferView;
                 RHIGraphicsPassBeginInfo graphicsPassBeginInfo = new RHIGraphicsPassBeginInfo();
-                graphicsPassBeginInfo.name = "TianglePass";
+                graphicsPassBeginInfo.name = "GraphicsPass";
                 graphicsPassBeginInfo.colorAttachments = new Memory<RHIGraphicsPassColorAttachment>(m_ColorAttachments);
                 graphicsPassBeginInfo.depthStencilAttachment = null;
                 using (graphicsEncoder.BeginScopedPass(graphicsPassBeginInfo))
@@ -418,7 +418,7 @@ namespace Infinity.Rendering
                     graphicsEncoder.SetViewport(0, 0, 1600, 900, 0, 1);
                     graphicsEncoder.SetScissorRect(0, 0, 1600, 900);
                     graphicsEncoder.SetPipelineLayout(m_GraphicsPipelineLayout);
-                    graphicsEncoder.PushDebugGroup("RenderLoop.DrawMeshBatcher");
+                    graphicsEncoder.PushDebugGroup("DrawTriange");
                     graphicsEncoder.SetPipelineState(m_GraphicsPipeline);
                     graphicsEncoder.SetVertexBuffer(m_VertexBuffer);
                     graphicsEncoder.Draw(3, 1, 0, 0);
