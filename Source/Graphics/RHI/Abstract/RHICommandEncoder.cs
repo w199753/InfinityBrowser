@@ -3,45 +3,6 @@ using Infinity.Mathmatics;
 
 namespace Infinity.Graphics
 {
-    public struct RHITextureSubResourceInfo
-    {
-        public uint slice;
-        public uint mipLevel;
-        public uint3 origin;
-    }
-
-    public struct RHIGraphicsPassColorAttachment
-    {
-        public ELoadOp loadOp;
-        public EStoreOp storeOp;
-        public float4 clearValue;
-        public RHITextureView renderTarget;
-        public RHITextureView resolveTarget;
-    }
-
-    public struct RHIGraphicsPassDepthStencilAttachment
-    {
-        public bool depthReadOnly;
-        public float depthClearValue;
-        public ELoadOp depthLoadOp;
-        public EStoreOp depthStoreOp;
-        public bool stencilReadOnly;
-        public int stencilClearValue;
-        public ELoadOp stencilLoadOp;
-        public EStoreOp stencilStoreOp;
-        public RHITextureView depthStencilTarget;
-    }
-
-    public struct RHIGraphicsPassBeginInfo
-    {
-        public string? name;
-        public int colorAttachmentCount => colorAttachments.Length;
-        public RHIGraphicsPassDepthStencilAttachment? depthStencilAttachment;
-        public Memory<RHIGraphicsPassColorAttachment> colorAttachments;
-        // TODO timestampWrites #see https://gpuweb.github.io/gpuweb/#render-pass-encoder-creation
-        // TODO occlusionQuerySet #see https://gpuweb.github.io/gpuweb/#render-pass-encoder-creation
-    }
-
     public struct RHIIndirectDispatchArgs
     {
         public uint GroupCountX;
@@ -85,6 +46,67 @@ namespace Infinity.Graphics
             BaseVertexLocation = baseVertexLocation;
             StartInstanceLocation = startInstanceLocation;
         }
+    }
+
+    public struct RHITextureSubResourceInfo
+    {
+        public uint slice;
+        public uint mipLevel;
+        public uint3 origin;
+    }
+
+    public struct RHIShadingRateInfo
+    {
+        public EShadingRate shadingRate;
+        public RHITexture? shadingRateTexture;
+        public EShadingRateCombiner shadingRateCombiner;
+
+        public RHIShadingRateInfo(in EShadingRate shadingRate, in EShadingRateCombiner shadingRateCombiner = EShadingRateCombiner.Max)
+        {
+            this.shadingRate = shadingRate;
+            this.shadingRateTexture = null;
+            this.shadingRateCombiner = shadingRateCombiner;
+        }
+
+        public RHIShadingRateInfo(RHITexture shadingRateTexture, in EShadingRateCombiner shadingRateCombiner = EShadingRateCombiner.Max)
+        {
+            this.shadingRate = EShadingRate.Rate1x1;
+            this.shadingRateTexture = shadingRateTexture;
+            this.shadingRateCombiner = shadingRateCombiner;
+        }
+    }
+
+    public struct RHIGraphicsPassColorAttachment
+    {
+        public ELoadOp loadOp;
+        public EStoreOp storeOp;
+        public float4 clearValue;
+        public RHITextureView renderTarget;
+        public RHITextureView resolveTarget;
+    }
+
+    public struct RHIGraphicsPassDepthStencilAttachment
+    {
+        public bool depthReadOnly;
+        public float depthClearValue;
+        public ELoadOp depthLoadOp;
+        public EStoreOp depthStoreOp;
+        public bool stencilReadOnly;
+        public int stencilClearValue;
+        public ELoadOp stencilLoadOp;
+        public EStoreOp stencilStoreOp;
+        public RHITextureView depthStencilTarget;
+    }
+
+    public struct RHIGraphicsPassBeginInfo
+    {
+        public string? name;
+        public int colorAttachmentCount => colorAttachments.Length;
+        public RHIShadingRateInfo? shadingRateInfo;
+        public RHIGraphicsPassDepthStencilAttachment? depthStencilAttachment;
+        public Memory<RHIGraphicsPassColorAttachment> colorAttachments;
+        // TODO timestampWrites https://gpuweb.github.io/gpuweb/#render-pass-encoder-creation
+        // TODO occlusionQuerySet https://gpuweb.github.io/gpuweb/#render-pass-encoder-creation
     }
 
     public struct RHIBlitPassScoper : IDisposable

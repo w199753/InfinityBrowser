@@ -10,7 +10,6 @@ namespace Infinity.Graphics
         public int2 extent;
         public IntPtr window;
         public EPixelFormat format;
-        public EPresentMode presentMode;
         public RHIQueue presentQueue;
     }
 
@@ -23,6 +22,6 @@ namespace Infinity.Graphics
 
         public abstract RHITexture GetTexture(in int index);
         public abstract void Resize(in int2 extent);
-        public abstract void Present();
+        public abstract void Present(EPresentMode presentMode);
     }
 }

@@ -74,6 +74,26 @@
         MAX
     }
 
+    public enum EShadingRate : byte
+    {
+        Rate1x1 = 0,
+        Rate1x2 = 1,
+        Rate2x1 = 4,
+        Rate2x2 = 5,
+        Rate2x4 = 6,
+        Rate4x2 = 9,
+        Rate4x4 = 10
+    }
+
+    public enum EShadingRateCombiner : byte
+    {
+        Min = 0,
+        Max = 1,
+        Sum = 2,
+        Override = 3,
+        Passthrough = 4
+    }
+
     public enum ESemanticFormat : byte
     {
         UByte,
@@ -303,12 +323,6 @@
         None = 1,
         Back = 3,
         Front = 2
-    }
-
-    public enum EConservativeState : byte
-    {
-        On = 1,
-        Off = 0
     }
 
     public enum ELoadOp : byte

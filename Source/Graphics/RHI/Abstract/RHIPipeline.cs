@@ -69,9 +69,9 @@ namespace Infinity.Graphics
     {
         public EFillMode FillMode;
         public ECullMode CullMode;
-        public EConservativeState conservativeState;
         public bool scissorEnable;
         public bool depthClipEnable;
+        public bool conservativeRaster;
         public bool antialiasedLineEnable;
         public bool frontCounterClockwise;
         public int depthBias;

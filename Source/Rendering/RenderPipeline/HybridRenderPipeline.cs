@@ -324,16 +324,16 @@ namespace Infinity.Rendering
 
             RHIRasterizerStateDescriptor rasterizerState;
             {
-                rasterizerState.conservativeState = EConservativeState.On;
-                rasterizerState.antialiasedLineEnable = false;
                 rasterizerState.CullMode = ECullMode.Back;
+                rasterizerState.FillMode = EFillMode.Solid;
                 rasterizerState.depthBias = 0;
                 rasterizerState.depthBiasClamp = 0;
-                rasterizerState.depthClipEnable = true;
-                rasterizerState.FillMode = EFillMode.Solid;
-                rasterizerState.frontCounterClockwise = false;
-                rasterizerState.scissorEnable = true;
                 rasterizerState.slopeScaledDepthBias = 0;
+                rasterizerState.scissorEnable = true;
+                rasterizerState.depthClipEnable = true;
+                rasterizerState.conservativeRaster = false;
+                rasterizerState.antialiasedLineEnable = false;
+                rasterizerState.frontCounterClockwise = false;
             }
 
             RHIDepthStencilStateDescription depthStencilState;
@@ -413,6 +413,7 @@ namespace Infinity.Rendering
                 m_ColorAttachments[0].renderTarget = renderContext.BackBufferView;
                 RHIGraphicsPassBeginInfo graphicsPassBeginInfo = new RHIGraphicsPassBeginInfo();
                 graphicsPassBeginInfo.name = "GraphicsPass";
+                graphicsPassBeginInfo.shadingRateInfo = new RHIShadingRateInfo(EShadingRate.Rate4x4);
                 graphicsPassBeginInfo.colorAttachments = new Memory<RHIGraphicsPassColorAttachment>(m_ColorAttachments);
                 graphicsPassBeginInfo.depthStencilAttachment = null;
                 using (graphicsEncoder.BeginScopedPass(graphicsPassBeginInfo))

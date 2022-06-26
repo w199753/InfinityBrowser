@@ -288,6 +288,23 @@ namespace Infinity.Graphics
 
                 m_Dx12CommandBuffer.NativeCommandList->ClearDepthStencilView(dsvHandle.Value, Dx12Utility.GetDx12ClearFlagByDSA(depthStencilAttachment.Value), depthStencilAttachment.Value.depthClearValue, Convert.ToByte(depthStencilAttachment.Value.stencilClearValue), 0, null);
             }
+            
+            if(beginInfo.shadingRateInfo.HasValue)
+            {
+                if(beginInfo.shadingRateInfo.Value.shadingRateTexture != null)
+                {
+                    D3D12_SHADING_RATE_COMBINER shadingRateCombiner = Dx12Utility.ConvertToDx12ShadingRateCombiner(beginInfo.shadingRateInfo.Value.shadingRateCombiner);
+                    Dx12Texture dx12Texture = beginInfo.shadingRateInfo.Value.shadingRateTexture as Dx12Texture;
+                    m_Dx12CommandBuffer.NativeCommandList->RSSetShadingRate(Dx12Utility.ConvertToDx12ShadingRate(beginInfo.shadingRateInfo.Value.shadingRate), &shadingRateCombiner);
+                    m_Dx12CommandBuffer.NativeCommandList->RSSetShadingRateImage(dx12Texture.NativeResource);
+                }
+                else
+                {
+                    //D3D12_SHADING_RATE_COMBINER* shadingRateCombiners = stackalloc D3D12_SHADING_RATE_COMBINER[2] { D3D12_SHADING_RATE_COMBINER.D3D12_SHADING_RATE_COMBINER_MAX, D3D12_SHADING_RATE_COMBINER.D3D12_SHADING_RATE_COMBINER_MAX };
+                    //m_Dx12CommandBuffer.NativeCommandList->RSSetShadingRate(Dx12Utility.ConvertToDx12ShadingRate(beginInfo.shadingRateInfo.Value.shadingRate), shadingRateCombiners);
+                    m_Dx12CommandBuffer.NativeCommandList->RSSetShadingRate(Dx12Utility.ConvertToDx12ShadingRate(beginInfo.shadingRateInfo.Value.shadingRate), null);
+                }
+            }
         }
 
         public override void SetPipelineState(RHIGraphicsPipeline pipeline)

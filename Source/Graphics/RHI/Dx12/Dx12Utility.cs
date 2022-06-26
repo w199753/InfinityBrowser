@@ -73,6 +73,54 @@ namespace Infinity.Graphics
             return fallback;
         }
 
+        internal static D3D12_SHADING_RATE ConvertToDx12ShadingRate(in EShadingRate shadingRate)
+        {
+            switch (shadingRate)
+            {
+                case EShadingRate.Rate1x1:
+                    return D3D12_SHADING_RATE.D3D12_SHADING_RATE_1X1;
+
+                case EShadingRate.Rate1x2:
+                    return D3D12_SHADING_RATE.D3D12_SHADING_RATE_1X2;
+
+                case EShadingRate.Rate2x1:
+                    return D3D12_SHADING_RATE.D3D12_SHADING_RATE_2X1;
+
+                case EShadingRate.Rate2x2:
+                    return D3D12_SHADING_RATE.D3D12_SHADING_RATE_2X2;
+
+                case EShadingRate.Rate2x4:
+                    return D3D12_SHADING_RATE.D3D12_SHADING_RATE_2X4;
+
+                case EShadingRate.Rate4x2:
+                    return D3D12_SHADING_RATE.D3D12_SHADING_RATE_4X2;
+
+                default:
+                    return D3D12_SHADING_RATE.D3D12_SHADING_RATE_4X4;
+            }
+        }
+
+        internal static D3D12_SHADING_RATE_COMBINER ConvertToDx12ShadingRateCombiner(in EShadingRateCombiner shadingRateCombiner)
+        {
+            switch (shadingRateCombiner)
+            {
+                case EShadingRateCombiner.Min:
+                    return D3D12_SHADING_RATE_COMBINER.D3D12_SHADING_RATE_COMBINER_MIN;
+
+                case EShadingRateCombiner.Max:
+                    return D3D12_SHADING_RATE_COMBINER.D3D12_SHADING_RATE_COMBINER_MAX;
+
+                case EShadingRateCombiner.Sum:
+                    return D3D12_SHADING_RATE_COMBINER.D3D12_SHADING_RATE_COMBINER_SUM;
+
+                case EShadingRateCombiner.Override:
+                    return D3D12_SHADING_RATE_COMBINER.D3D12_SHADING_RATE_COMBINER_OVERRIDE;
+
+                default:
+                    return D3D12_SHADING_RATE_COMBINER.D3D12_SHADING_RATE_COMBINER_PASSTHROUGH;
+            }
+        }
+
         internal static D3D12_RESOURCE_STATES ConvertToDx12BufferStateByFlag(in EBufferUsage bufferFlag)
         {
             /*Dictionary<EBufferUsage, D3D12_RESOURCE_STATES> stateRules = new Dictionary<EBufferUsage, D3D12_RESOURCE_STATES>();
@@ -307,10 +355,10 @@ namespace Infinity.Graphics
             rasterDescription.DepthBias = description.depthBias;
             rasterDescription.DepthBiasClamp = description.depthBiasClamp;
             rasterDescription.DepthClipEnable = description.depthClipEnable;
+            rasterDescription.SlopeScaledDepthBias = description.slopeScaledDepthBias;
             rasterDescription.AntialiasedLineEnable = description.antialiasedLineEnable;
             rasterDescription.FrontCounterClockwise = description.frontCounterClockwise;
-            rasterDescription.SlopeScaledDepthBias = description.slopeScaledDepthBias;
-            rasterDescription.ConservativeRaster = (D3D12_CONSERVATIVE_RASTERIZATION_MODE)description.conservativeState;
+            rasterDescription.ConservativeRaster = description.conservativeRaster ? D3D12_CONSERVATIVE_RASTERIZATION_MODE.D3D12_CONSERVATIVE_RASTERIZATION_MODE_ON : D3D12_CONSERVATIVE_RASTERIZATION_MODE.D3D12_CONSERVATIVE_RASTERIZATION_MODE_OFF;
             return rasterDescription;
         }
 

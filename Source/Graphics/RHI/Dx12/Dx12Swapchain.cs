@@ -20,7 +20,6 @@ namespace Infinity.Graphics
 
         private int m_Count;
         private Dx12Device m_Dx12Device;
-        private EPresentMode m_PresentMode;
         private Dx12Texture[] m_Textures;
         private IDXGISwapChain4* m_NativeSwapChain;
 
@@ -28,7 +27,6 @@ namespace Infinity.Graphics
         {
             m_Dx12Device = device;
             m_Count = createInfo.count;
-            m_PresentMode = createInfo.presentMode;
 
             m_Textures = new Dx12Texture[m_Count];
             CreateDX12SwapChain(createInfo);
@@ -45,9 +43,9 @@ namespace Infinity.Graphics
             throw new NotImplementedException();
         }
 
-        public override void Present()
+        public override void Present(EPresentMode presentMode)
         {
-            m_NativeSwapChain->Present(Dx12Utility.ConvertToDx12SyncInterval(m_PresentMode), 0);
+            m_NativeSwapChain->Present(Dx12Utility.ConvertToDx12SyncInterval(presentMode), 0);
         }
 
         private void CreateDX12SwapChain(in RHISwapChainCreateInfo createInfo) 
@@ -61,7 +59,7 @@ namespace Infinity.Graphics
             desc.Height = (uint)createInfo.extent.y;
             desc.Format = /*Dx12Utility.ConvertToDx12Format(createInfo.format)*/DXGI_FORMAT.DXGI_FORMAT_R8G8B8A8_UNORM;
             desc.BufferUsage = createInfo.frameBufferOnly ? DXGI.DXGI_USAGE_RENDER_TARGET_OUTPUT : (DXGI.DXGI_USAGE_SHADER_INPUT | DXGI.DXGI_USAGE_RENDER_TARGET_OUTPUT);
-            desc.SwapEffect = /*Dx12Utility.GetDx12SwapEffect(createInfo.presentMode)*/ DXGI_SWAP_EFFECT.DXGI_SWAP_EFFECT_FLIP_DISCARD;
+            desc.SwapEffect = /*Dx12Utility.ConvertToDx12SwapEffect(createInfo.presentMode)*/ DXGI_SWAP_EFFECT.DXGI_SWAP_EFFECT_FLIP_DISCARD;
             desc.SampleDesc = new DXGI_SAMPLE_DESC(1, 0);
 
             IDXGISwapChain1* dx12SwapChain1;

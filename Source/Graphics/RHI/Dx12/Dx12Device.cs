@@ -155,12 +155,13 @@ namespace Infinity.Graphics
         private ID3D12CommandSignature* m_DrawIndirectSignature;
         private ID3D12CommandSignature* m_DispatchIndirectSignature;
         private ID3D12CommandSignature* m_DrawIndexedIndirectSignature;
-        private Dictionary<EQueueType, List<Dx12Queue>> m_Queues;
+        private Dictionary<EQueueType, List<Dx12Queue>> m_GpuQueues;
 
         public Dx12Device(Dx12GPU gpu, in RHIDeviceCreateInfo createInfo) 
         {
             m_Dx12Gpu = gpu;
             CreateDevice();
+            CreateFeatureSet();
             CreateQueues(createInfo);
             CreateDescriptorHeaps();
             CreateCommandSignatures();
@@ -168,14 +169,14 @@ namespace Infinity.Graphics
 
         public override int GetQueueCount(in EQueueType type)
         {
-            bool hashValue = m_Queues.TryGetValue(type, out List<Dx12Queue> queueArray);
+            bool hashValue = m_GpuQueues.TryGetValue(type, out List<Dx12Queue> queueArray);
             Debug.Assert(hashValue);
             return queueArray.Count;
         }
 
         public override RHIQueue GetQueue(in EQueueType type, in int index)
         {
-            bool hashValue = m_Queues.TryGetValue(type, out List<Dx12Queue> queueArray);
+            bool hashValue = m_GpuQueues.TryGetValue(type, out List<Dx12Queue> queueArray);
             Debug.Assert(hashValue);
             Debug.Assert(index >= 0 && index < queueArray?.Count);
             return queueArray[index];
@@ -308,6 +309,12 @@ namespace Infinity.Graphics
             m_NativeDevice = device;
         }
 
+        private void CreateFeatureSet()
+        {
+            D3D12_FEATURE_DATA_D3D12_OPTIONS6 options;
+            m_NativeDevice->CheckFeatureSupport(D3D12_FEATURE.D3D12_FEATURE_D3D12_OPTIONS6, &options, (uint)sizeof(D3D12_FEATURE_DATA_D3D12_OPTIONS6));
+        }
+
         private void CreateQueues(in RHIDeviceCreateInfo createInfo)
         {
             Dictionary<EQueueType, int> queueCountMap = new Dictionary<EQueueType, int>(3);
@@ -322,7 +329,7 @@ namespace Infinity.Graphics
                 queueCountMap.TryAdd(queueInfo.type, (int)queueInfo.count);
             }
 
-            m_Queues = new Dictionary<EQueueType, List<Dx12Queue>>(3);
+            m_GpuQueues = new Dictionary<EQueueType, List<Dx12Queue>>(3);
             foreach (KeyValuePair<EQueueType, int> iter in queueCountMap)
             {
                 List<Dx12Queue> tempQueues = new List<Dx12Queue>(iter.Value);
@@ -342,7 +349,7 @@ namespace Infinity.Graphics
                     tempQueues.Add(new Dx12Queue(this, queueCreateInfo));
                 }
 
-                m_Queues.TryAdd(iter.Key, tempQueues);
+                m_GpuQueues.TryAdd(iter.Key, tempQueues);
             }
         }
 
@@ -395,11 +402,11 @@ namespace Infinity.Graphics
             m_RtvHeap.Dispose();
             m_SamplerHeap.Dispose();
             m_CbvSrvUavHeap.Dispose();
-            foreach (KeyValuePair<EQueueType, List<Dx12Queue>> iter in m_Queues)
+            foreach (KeyValuePair<EQueueType, List<Dx12Queue>> gpuQueue in m_GpuQueues)
             {
-                for (int i = 0; i < iter.Value.Count; ++i)
+                for (int i = 0; i < gpuQueue.Value.Count; ++i)
                 {
-                    iter.Value[i].Dispose();
+                    gpuQueue.Value[i].Dispose();
                 }
             }
             m_DrawIndirectSignature->Release();

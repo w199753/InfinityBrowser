@@ -79,8 +79,10 @@ namespace Infinity.Rendering
 
         public RenderContext(in int width, in int height, in IntPtr window)
         {
-            // Create Instance And SelectGPU
+            // Create Instance
             m_Instance = RHIInstance.CreateByPlatform();
+
+            // Select Gpu
             m_Gpu = m_Instance.GetGpu(0);
 
             // Create Device
@@ -98,7 +100,7 @@ namespace Infinity.Rendering
             deviceCreateInfo.queueInfos = queueInfosView;
             m_Device = m_Gpu.CreateDevice(deviceCreateInfo);
 
-            // Get GPUQueue
+            // Get GpuQueue
             m_Queues = new RHIQueue[3];
             m_Queues[0] = m_Device.GetQueue(EQueueType.Blit, 0);
             m_Queues[1] = m_Device.GetQueue(EQueueType.Compute, 0);
@@ -110,11 +112,10 @@ namespace Infinity.Rendering
             // Create SwapChain
             RHISwapChainCreateInfo swapChainCreateInfo = new RHISwapChainCreateInfo();
             swapChainCreateInfo.count = 3;
+            swapChainCreateInfo.window = window;
             swapChainCreateInfo.frameBufferOnly = true;
             swapChainCreateInfo.extent = new int2(width, height);
             swapChainCreateInfo.format = EPixelFormat.RGBA8_UNorm;
-            swapChainCreateInfo.presentMode = EPresentMode.VSync;
-            swapChainCreateInfo.window = window;
             swapChainCreateInfo.presentQueue = m_Queues[(int)EQueueType.Graphics];
             m_SwapChain = m_Device.CreateSwapChain(swapChainCreateInfo);
 
@@ -213,7 +214,7 @@ namespace Infinity.Rendering
             cmdBuffer.Begin();
             cmdBuffer.End();
             cmdBuffer.Commit(m_FrameFence);
-            m_SwapChain.Present();
+            m_SwapChain.Present(EPresentMode.VSync);
             m_FrameFence.Wait();
             ReleaseCommandBuffer();
         }
