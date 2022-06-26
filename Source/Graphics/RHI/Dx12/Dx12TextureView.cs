@@ -38,11 +38,10 @@ namespace Infinity.Graphics
         {
             m_LifeState = false;
             m_Dx12Texture = texture;
-            ETextureUsage usages = texture.Usages;
 
             if (createInfo.type == ETextureViewType.DepthStencil)
             {
-                if(Dx12Utility.IsDepthStencilTexture(usages))
+                if(Dx12Utility.IsDepthStencilTexture(texture.CreateInfo.flag))
                 {
                     m_LifeState.x = true;
 
@@ -63,7 +62,7 @@ namespace Infinity.Graphics
             }
             else if (createInfo.type == ETextureViewType.RenderTarget)
             {
-                if (Dx12Utility.IsRenderTargetTexture(usages))
+                if (Dx12Utility.IsRenderTargetTexture(texture.CreateInfo.flag))
                 {
                     m_LifeState.y = true;
 
@@ -84,7 +83,7 @@ namespace Infinity.Graphics
             } 
             else if (createInfo.type == ETextureViewType.ShaderResource)
             {
-                if(Dx12Utility.IsShaderResourceTexture(usages))
+                if(Dx12Utility.IsShaderResourceTexture(texture.CreateInfo.flag))
                 {
                     m_LifeState.z = true;
 
@@ -107,7 +106,7 @@ namespace Infinity.Graphics
             }
             else if (createInfo.type == ETextureViewType.UnorderedAccess)
             {
-                if(Dx12Utility.IsUnorderedAccessTexture(usages))
+                if(Dx12Utility.IsUnorderedAccessTexture(texture.CreateInfo.flag))
                 {
                     m_LifeState.w = true;
 

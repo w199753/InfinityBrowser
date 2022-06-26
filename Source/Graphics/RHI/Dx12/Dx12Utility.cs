@@ -55,33 +55,16 @@ namespace Infinity.Graphics
             return D3D12_FILTER.D3D12_FILTER_MIN_MAG_MIP_POINT;
         }
 
-        internal static EMapMode GetMapModeByUsage(in EBufferUsage bufferUsages)
-        {
-            Dictionary<EBufferUsage, EMapMode> mapRules = new Dictionary<EBufferUsage, EMapMode>();
-            mapRules.Add(EBufferUsage.MapRead, EMapMode.Read);
-            mapRules.Add(EBufferUsage.MapWrite, EMapMode.Write);
-
-            foreach (KeyValuePair<EBufferUsage, EMapMode> rule in mapRules)
-            {
-                if ((bufferUsages & rule.Key) == rule.Key)
-                {
-                    return rule.Value;
-                }
-            }
-
-            return EMapMode.None;
-        }
-
-        internal static D3D12_HEAP_TYPE GetDx12HeapTypeByUsage(in EBufferUsage bufferUsages)
+        internal static D3D12_HEAP_TYPE ConvertToDx12ResourceFlagByUsage(in EResourceUsage resourceUsage)
         {
             D3D12_HEAP_TYPE fallback = D3D12_HEAP_TYPE.D3D12_HEAP_TYPE_DEFAULT;
-            Dictionary<EBufferUsage, D3D12_HEAP_TYPE> heapRules = new Dictionary<EBufferUsage, D3D12_HEAP_TYPE>();
-            heapRules.Add(EBufferUsage.MapWrite | EBufferUsage.CopySrc, D3D12_HEAP_TYPE.D3D12_HEAP_TYPE_UPLOAD);
-            heapRules.Add(EBufferUsage.MapRead | EBufferUsage.CopyDst, D3D12_HEAP_TYPE.D3D12_HEAP_TYPE_READBACK);
+            Dictionary<EResourceUsage, D3D12_HEAP_TYPE> heapRules = new Dictionary<EResourceUsage, D3D12_HEAP_TYPE>();
+            heapRules.Add(EResourceUsage.Dynamic, D3D12_HEAP_TYPE.D3D12_HEAP_TYPE_UPLOAD);
+            heapRules.Add(EResourceUsage.Staging, D3D12_HEAP_TYPE.D3D12_HEAP_TYPE_READBACK);
 
-            foreach (KeyValuePair<EBufferUsage, D3D12_HEAP_TYPE> rule in heapRules)
+            foreach (KeyValuePair<EResourceUsage, D3D12_HEAP_TYPE> rule in heapRules)
             {
-                if ((bufferUsages & rule.Key) == rule.Key)
+                if (resourceUsage == rule.Key)
                 {
                     return rule.Value;
                 }
@@ -90,43 +73,60 @@ namespace Infinity.Graphics
             return fallback;
         }
 
-        internal static D3D12_RESOURCE_STATES ConvertToDx12BufferStateByUsage(in EBufferUsage bufferUsages)
+        internal static D3D12_RESOURCE_STATES ConvertToDx12BufferStateByFlag(in EBufferFlag bufferFlag)
         {
-            Dictionary<EBufferUsage, D3D12_RESOURCE_STATES> stateRules = new Dictionary<EBufferUsage, D3D12_RESOURCE_STATES>();
-            stateRules.Add(EBufferUsage.CopySrc, D3D12_RESOURCE_STATES.D3D12_RESOURCE_STATE_COPY_SOURCE);
-            stateRules.Add(EBufferUsage.CopyDst, D3D12_RESOURCE_STATES.D3D12_RESOURCE_STATE_COPY_DEST);
-            stateRules.Add(EBufferUsage.Index, D3D12_RESOURCE_STATES.D3D12_RESOURCE_STATE_GENERIC_READ);
-            stateRules.Add(EBufferUsage.Vertex, D3D12_RESOURCE_STATES.D3D12_RESOURCE_STATE_GENERIC_READ);
-            stateRules.Add(EBufferUsage.Uniform, D3D12_RESOURCE_STATES.D3D12_RESOURCE_STATE_GENERIC_READ);
-            stateRules.Add(EBufferUsage.Indirect, D3D12_RESOURCE_STATES.D3D12_RESOURCE_STATE_GENERIC_READ);
-            stateRules.Add(EBufferUsage.StorageResource, D3D12_RESOURCE_STATES.D3D12_RESOURCE_STATE_UNORDERED_ACCESS);
+            /*Dictionary<EBufferFlag, D3D12_RESOURCE_STATES> stateRules = new Dictionary<EBufferFlag, D3D12_RESOURCE_STATES>();
+            stateRules.Add(EBufferFlag.CopySrc, D3D12_RESOURCE_STATES.D3D12_RESOURCE_STATE_COPY_SOURCE);
+            stateRules.Add(EBufferFlag.CopyDst, D3D12_RESOURCE_STATES.D3D12_RESOURCE_STATE_COPY_DEST);
+            stateRules.Add(EBufferFlag.Index, D3D12_RESOURCE_STATES.D3D12_RESOURCE_STATE_GENERIC_READ);
+            stateRules.Add(EBufferFlag.Vertex, D3D12_RESOURCE_STATES.D3D12_RESOURCE_STATE_GENERIC_READ);
+            stateRules.Add(EBufferFlag.Uniform, D3D12_RESOURCE_STATES.D3D12_RESOURCE_STATE_GENERIC_READ);
+            stateRules.Add(EBufferFlag.Indirect, D3D12_RESOURCE_STATES.D3D12_RESOURCE_STATE_GENERIC_READ);
+            stateRules.Add(EBufferFlag.StorageResource, D3D12_RESOURCE_STATES.D3D12_RESOURCE_STATE_UNORDERED_ACCESS);*/
 
             D3D12_RESOURCE_STATES result = D3D12_RESOURCE_STATES.D3D12_RESOURCE_STATE_COMMON;
-            foreach (KeyValuePair<EBufferUsage, D3D12_RESOURCE_STATES> rule in stateRules)
+            /*foreach (KeyValuePair<EBufferFlag, D3D12_RESOURCE_STATES> rule in stateRules)
             {
-                if ((bufferUsages & rule.Key) == rule.Key)
+                if ((bufferflag & rule.Key) == rule.Key)
                 {
                     result |= rule.Value;
                 }
-            }
+            }*/
 
             return result;
         }
 
-        internal static D3D12_RESOURCE_STATES ConvertToDx12TextureStateByUsage(in ETextureUsage textureUsages)
+        internal static D3D12_RESOURCE_STATES ConvertToDx12TextureStateByFlag(in ETextureFlag textureflag)
         {
-            Dictionary<ETextureUsage, D3D12_RESOURCE_STATES> stateRules = new Dictionary<ETextureUsage, D3D12_RESOURCE_STATES>();
+            /*Dictionary<ETextureUsage, D3D12_RESOURCE_STATES> stateRules = new Dictionary<ETextureUsage, D3D12_RESOURCE_STATES>();
             stateRules.Add(ETextureUsage.CopySrc, D3D12_RESOURCE_STATES.D3D12_RESOURCE_STATE_COPY_SOURCE);
             stateRules.Add(ETextureUsage.CopyDst, D3D12_RESOURCE_STATES.D3D12_RESOURCE_STATE_COPY_DEST);
             stateRules.Add(ETextureUsage.DepthAttachment, D3D12_RESOURCE_STATES.D3D12_RESOURCE_STATE_DEPTH_WRITE);
             stateRules.Add(ETextureUsage.ColorAttachment, D3D12_RESOURCE_STATES.D3D12_RESOURCE_STATE_RENDER_TARGET);
             stateRules.Add(ETextureUsage.ShaderResource, D3D12_RESOURCE_STATES.D3D12_RESOURCE_STATE_COMMON);
-            stateRules.Add(ETextureUsage.StorageResource, D3D12_RESOURCE_STATES.D3D12_RESOURCE_STATE_UNORDERED_ACCESS);
+            stateRules.Add(ETextureUsage.StorageResource, D3D12_RESOURCE_STATES.D3D12_RESOURCE_STATE_UNORDERED_ACCESS);*/
 
             D3D12_RESOURCE_STATES result = D3D12_RESOURCE_STATES.D3D12_RESOURCE_STATE_COMMON;
-            foreach (KeyValuePair<ETextureUsage, D3D12_RESOURCE_STATES> rule in stateRules)
+            /*foreach (KeyValuePair<ETextureUsage, D3D12_RESOURCE_STATES> rule in stateRules)
             {
                 if ((textureUsages & rule.Key) == rule.Key)
+                {
+                    result |= rule.Value;
+                }
+            }*/
+
+            return result;
+        }
+
+        internal static D3D12_RESOURCE_FLAGS ConvertToDx12BufferFlag(in EBufferFlag bufferflag)
+        {
+            Dictionary<EBufferFlag, D3D12_RESOURCE_FLAGS> stateRules = new Dictionary<EBufferFlag, D3D12_RESOURCE_FLAGS>();
+            stateRules.Add(EBufferFlag.UnorderedAccess, D3D12_RESOURCE_FLAGS.D3D12_RESOURCE_FLAG_ALLOW_UNORDERED_ACCESS);
+
+            D3D12_RESOURCE_FLAGS result = D3D12_RESOURCE_FLAGS.D3D12_RESOURCE_FLAG_NONE;
+            foreach (KeyValuePair<EBufferFlag, D3D12_RESOURCE_FLAGS> rule in stateRules)
+            {
+                if ((bufferflag & rule.Key) == rule.Key)
                 {
                     result |= rule.Value;
                 }
@@ -135,34 +135,17 @@ namespace Infinity.Graphics
             return result;
         }
 
-        internal static D3D12_RESOURCE_FLAGS ConvertToDx12ResourceFlagByUsage(in EBufferUsage bufferUsages)
+        internal static D3D12_RESOURCE_FLAGS ConvertToDx12TextureFlag(in ETextureFlag textureflag)
         {
-            Dictionary<EBufferUsage, D3D12_RESOURCE_FLAGS> stateRules = new Dictionary<EBufferUsage, D3D12_RESOURCE_FLAGS>();
-            stateRules.Add(EBufferUsage.StorageResource, D3D12_RESOURCE_FLAGS.D3D12_RESOURCE_FLAG_ALLOW_UNORDERED_ACCESS);
+            Dictionary<ETextureFlag, D3D12_RESOURCE_FLAGS> stateRules = new Dictionary<ETextureFlag, D3D12_RESOURCE_FLAGS>();
+            stateRules.Add(ETextureFlag.DepthStencil, D3D12_RESOURCE_FLAGS.D3D12_RESOURCE_FLAG_ALLOW_DEPTH_STENCIL);
+            stateRules.Add(ETextureFlag.RenderTarget, D3D12_RESOURCE_FLAGS.D3D12_RESOURCE_FLAG_ALLOW_RENDER_TARGET);
+            stateRules.Add(ETextureFlag.UnorderedAccess, D3D12_RESOURCE_FLAGS.D3D12_RESOURCE_FLAG_ALLOW_UNORDERED_ACCESS);
 
             D3D12_RESOURCE_FLAGS result = D3D12_RESOURCE_FLAGS.D3D12_RESOURCE_FLAG_NONE;
-            foreach (KeyValuePair<EBufferUsage, D3D12_RESOURCE_FLAGS> rule in stateRules)
+            foreach (KeyValuePair<ETextureFlag, D3D12_RESOURCE_FLAGS> rule in stateRules)
             {
-                if ((bufferUsages & rule.Key) == rule.Key)
-                {
-                    result |= rule.Value;
-                }
-            }
-
-            return result;
-        }
-
-        internal static D3D12_RESOURCE_FLAGS ConvertToDx12ResourceFlagByUsage(in ETextureUsage textureUsages)
-        {
-            Dictionary<ETextureUsage, D3D12_RESOURCE_FLAGS> stateRules = new Dictionary<ETextureUsage, D3D12_RESOURCE_FLAGS>();
-            stateRules.Add(ETextureUsage.DepthAttachment, D3D12_RESOURCE_FLAGS.D3D12_RESOURCE_FLAG_ALLOW_DEPTH_STENCIL);
-            stateRules.Add(ETextureUsage.ColorAttachment, D3D12_RESOURCE_FLAGS.D3D12_RESOURCE_FLAG_ALLOW_RENDER_TARGET);
-            stateRules.Add(ETextureUsage.StorageResource, D3D12_RESOURCE_FLAGS.D3D12_RESOURCE_FLAG_ALLOW_UNORDERED_ACCESS);
-
-            D3D12_RESOURCE_FLAGS result = D3D12_RESOURCE_FLAGS.D3D12_RESOURCE_FLAG_NONE;
-            foreach (KeyValuePair<ETextureUsage, D3D12_RESOURCE_FLAGS> rule in stateRules)
-            {
-                if ((textureUsages & rule.Key) == rule.Key)
+                if ((textureflag & rule.Key) == rule.Key)
                 {
                     result |= rule.Value;
                 }
@@ -745,49 +728,49 @@ namespace Infinity.Graphics
             return result;
         }
 
-        internal static bool IsIndexBuffer(in EBufferUsage bufferUsages)
+        internal static bool IsIndexBuffer(in EBufferFlag bufferflag)
         {
-            return (bufferUsages & EBufferUsage.Index) == EBufferUsage.Index;
+            return (bufferflag & EBufferFlag.IndexBuffer) == EBufferFlag.IndexBuffer;
         }
 
-        internal static bool IsVertexBuffer(in EBufferUsage bufferUsages)
+        internal static bool IsVertexBuffer(in EBufferFlag bufferflag)
         {
-            return (bufferUsages & EBufferUsage.Vertex) == EBufferUsage.Vertex;
+            return (bufferflag & EBufferFlag.VertexBuffer) == EBufferFlag.VertexBuffer;
         }
 
-        internal static bool IsConstantBuffer(in EBufferUsage bufferUsages)
+        internal static bool IsConstantBuffer(in EBufferFlag bufferflag)
         {
-            return (bufferUsages & EBufferUsage.Uniform) == EBufferUsage.Uniform;
+            return (bufferflag & EBufferFlag.UniformBuffer) == EBufferFlag.UniformBuffer;
         }
 
-        internal static bool IsShaderResourceBuffer(in EBufferUsage bufferUsages)
+        internal static bool IsShaderResourceBuffer(in EBufferFlag bufferflag)
         {
-            return (bufferUsages & EBufferUsage.ShaderResource) == EBufferUsage.ShaderResource;
+            return (bufferflag & EBufferFlag.ShaderResource) == EBufferFlag.ShaderResource;
         }
 
-        internal static bool IsUnorderedAccessBuffer(in EBufferUsage bufferUsages)
+        internal static bool IsUnorderedAccessBuffer(in EBufferFlag bufferflag)
         {
-            return (bufferUsages & EBufferUsage.StorageResource) == EBufferUsage.StorageResource;
+            return (bufferflag & EBufferFlag.UnorderedAccess) == EBufferFlag.UnorderedAccess;
         }
 
-        internal static bool IsDepthStencilTexture(in ETextureUsage textureUsages)
+        internal static bool IsDepthStencilTexture(in ETextureFlag textureFlag)
         {
-            return (textureUsages & ETextureUsage.DepthAttachment) == ETextureUsage.DepthAttachment;
+            return (textureFlag & ETextureFlag.DepthStencil) == ETextureFlag.DepthStencil;
         }
 
-        internal static bool IsRenderTargetTexture(in ETextureUsage textureUsages)
+        internal static bool IsRenderTargetTexture(in ETextureFlag textureFlag)
         {
-            return (textureUsages & ETextureUsage.ColorAttachment) == ETextureUsage.ColorAttachment;
+            return (textureFlag & ETextureFlag.RenderTarget) == ETextureFlag.RenderTarget;
         }
 
-        internal static bool IsShaderResourceTexture(in ETextureUsage textureUsages)
+        internal static bool IsShaderResourceTexture(in ETextureFlag textureFlag)
         {
-            return (textureUsages & ETextureUsage.ShaderResource) == ETextureUsage.ShaderResource;
+            return (textureFlag & ETextureFlag.ShaderResource) == ETextureFlag.ShaderResource;
         }
 
-        internal static bool IsUnorderedAccessTexture(in ETextureUsage textureUsages)
+        internal static bool IsUnorderedAccessTexture(in ETextureFlag textureFlag)
         {
-            return (textureUsages & ETextureUsage.StorageResource) == ETextureUsage.StorageResource;
+            return (textureFlag & ETextureFlag.UnorderedAccess) == ETextureFlag.UnorderedAccess;
         }
 
         internal static void FillTexture2DSRV(ref D3D12_TEX2D_SRV srv, in RHITextureViewCreateInfo createInfo)

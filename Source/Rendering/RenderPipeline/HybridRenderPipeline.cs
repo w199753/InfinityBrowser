@@ -99,16 +99,17 @@ namespace Infinity.Rendering
                 textureCreateInfo.extent = new int3(1600, 900, 1);
                 textureCreateInfo.samples = 1;
                 textureCreateInfo.mipLevels = 1;
+                textureCreateInfo.flag = ETextureFlag.RenderTarget | ETextureFlag.UnorderedAccess;
                 textureCreateInfo.state = ETextureState.Common;
+                textureCreateInfo.usage = EResourceUsage.Default;
                 textureCreateInfo.format = EPixelFormat.RGBA8_UNorm;
                 textureCreateInfo.dimension = ETextureDimension.Tex2D;
-                textureCreateInfo.usages = ETextureUsage.ColorAttachment | ETextureUsage.StorageResource;
             }
             m_ComputeTexture = renderContext.CreateTexture(textureCreateInfo);
 
             RHITextureViewCreateInfo outputViewCreateInfo;
             {
-                outputViewCreateInfo.mipLevelNum = 1;
+                outputViewCreateInfo.mipLevelNum = textureCreateInfo.mipLevels;
                 outputViewCreateInfo.baseMipLevel = 0;
                 outputViewCreateInfo.arrayLayerNum = 1;
                 outputViewCreateInfo.baseArrayLayer = 0;
@@ -191,11 +192,12 @@ namespace Infinity.Rendering
             }
             RHIBufferCreateInfo bufferCreateInfo;
             bufferCreateInfo.size = vertices.Length * MemoryUtility.SizeOf<Vertex>();
+            bufferCreateInfo.flag = EBufferFlag.VertexBuffer;
             bufferCreateInfo.state = EBufferState.Common;
-            bufferCreateInfo.usages = EBufferUsage.Uniform | EBufferUsage.MapWrite | EBufferUsage.CopySrc;
+            bufferCreateInfo.usage = EResourceUsage.Dynamic;
             m_VertexBuffer = renderContext.CreateBuffer(bufferCreateInfo);
 
-            IntPtr data = m_VertexBuffer.Map(EMapMode.Write, 0, bufferCreateInfo.size);
+            IntPtr data = m_VertexBuffer.Map(bufferCreateInfo.size, 0);
             GCHandle verticesHandle = GCHandle.Alloc(vertices, GCHandleType.Pinned);
             IntPtr verticesPtr = verticesHandle.AddrOfPinnedObject();
             MemoryUtility.MemCpy(verticesPtr.ToPointer(), data.ToPointer(), bufferCreateInfo.size);

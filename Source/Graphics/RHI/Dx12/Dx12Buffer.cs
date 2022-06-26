@@ -15,13 +15,6 @@ namespace Infinity.Graphics
                 return m_Dx12Device;
             }
         }
-        public EBufferUsage Usages
-        {
-            get
-            {
-                return m_Usages;
-            }
-        }
         public ID3D12Resource* NativeResource
         {
             get
@@ -30,41 +23,37 @@ namespace Infinity.Graphics
             }
         }
 
-        private EMapMode m_MapMode;
         private Dx12Device m_Dx12Device;
-        private EBufferUsage m_Usages;
         private ID3D12Resource* m_NativeResource;
 
         public Dx12Buffer(Dx12Device device, in RHIBufferCreateInfo createInfo)
         {
             m_Dx12Device = device;
-            m_Usages = createInfo.usages;
+            m_CreateInfo = createInfo;
             m_SizeInBytes = (uint)createInfo.size;
-            m_MapMode = Dx12Utility.GetMapModeByUsage(createInfo.usages);
 
-            ID3D12Resource* dx12Resource;
-            D3D12_RESOURCE_DESC resourceDesc = D3D12_RESOURCE_DESC.Buffer((ulong)createInfo.size, Dx12Utility.ConvertToDx12ResourceFlagByUsage(createInfo.usages));
-            D3D12_HEAP_PROPERTIES heapProperties = new D3D12_HEAP_PROPERTIES(Dx12Utility.GetDx12HeapTypeByUsage(createInfo.usages));
+            D3D12_RESOURCE_DESC resourceDesc = D3D12_RESOURCE_DESC.Buffer((ulong)createInfo.size, Dx12Utility.ConvertToDx12BufferFlag(createInfo.flag));
+            D3D12_HEAP_PROPERTIES heapProperties = new D3D12_HEAP_PROPERTIES(Dx12Utility.ConvertToDx12ResourceFlagByUsage(createInfo.usage));
 
             D3D12_RESOURCE_STATES initialState = Dx12Utility.ConvertToDx12BufferState(createInfo.state);
-            switch (m_MapMode)
+            if (createInfo.usage == EResourceUsage.Static || createInfo.usage == EResourceUsage.Dynamic)
             {
-                case EMapMode.Read:
-                    initialState = D3D12_RESOURCE_STATES.D3D12_RESOURCE_STATE_COPY_DEST;
-                    break;
-
-                case EMapMode.Write:
-                    initialState = D3D12_RESOURCE_STATES.D3D12_RESOURCE_STATE_GENERIC_READ;
-                    break;
+                initialState = D3D12_RESOURCE_STATES.D3D12_RESOURCE_STATE_GENERIC_READ;
             }
+            if (createInfo.usage == EResourceUsage.Staging)
+            {
+                initialState = D3D12_RESOURCE_STATES.D3D12_RESOURCE_STATE_COPY_DEST;
+            }
+
+            ID3D12Resource* dx12Resource;
             bool success = SUCCEEDED(m_Dx12Device.NativeDevice->CreateCommittedResource(&heapProperties, D3D12_HEAP_FLAGS.D3D12_HEAP_FLAG_NONE, &resourceDesc, initialState, null, __uuidof<ID3D12Resource>(), (void**)&dx12Resource));
             Debug.Assert(success);
             m_NativeResource = dx12Resource;
         }
 
-        public override IntPtr Map(in EMapMode mapMode, in int offset, in int length)
+        public override IntPtr Map(in int length, in int offset)
         {
-            Debug.Assert(m_MapMode == mapMode);
+            Debug.Assert(!(m_CreateInfo.usage == EResourceUsage.Default));
 
             void* data;
             D3D12_RANGE range = new D3D12_RANGE((uint)offset, (uint)(offset + length));
@@ -75,6 +64,8 @@ namespace Infinity.Graphics
 
         public override void UnMap()
         {
+            Debug.Assert(!(m_CreateInfo.usage == EResourceUsage.Default));
+
             m_NativeResource->Unmap(0, null);
         }
 

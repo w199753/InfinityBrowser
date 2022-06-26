@@ -32,7 +32,7 @@ namespace Infinity.Graphics
 
             m_Textures = new Dx12Texture[m_Count];
             CreateDX12SwapChain(createInfo);
-            FetchTextures();
+            FetchTextures(createInfo);
         }
 
         public override RHITexture GetTexture(in int index)
@@ -48,17 +48,6 @@ namespace Infinity.Graphics
         public override void Present()
         {
             m_NativeSwapChain->Present(Dx12Utility.ConvertToDx12SyncInterval(m_PresentMode), 0);
-        }
-
-        private void FetchTextures()
-        {
-            for (int i = 0; i < m_Count; ++i)
-            {
-                ID3D12Resource* dx12Resource = null;
-                bool success = SUCCEEDED(m_NativeSwapChain->GetBuffer((uint)i, __uuidof<ID3D12Resource>(), (void**)&dx12Resource));
-                Debug.Assert(success);
-                m_Textures[i] = new Dx12Texture(m_Dx12Device, dx12Resource);
-            }
         }
 
         private void CreateDX12SwapChain(in RHISwapChainCreateInfo createInfo) 
@@ -79,6 +68,29 @@ namespace Infinity.Graphics
             bool success = SUCCEEDED(dx12Instance.DXGIFactory->CreateSwapChainForHwnd((IUnknown*)dx12Queue.NativeCommandQueue, new HWND(createInfo.window.ToPointer()), &desc, null, null, &dx12SwapChain1));
             Debug.Assert(success);
             m_NativeSwapChain = (IDXGISwapChain4*)dx12SwapChain1;
+        }
+
+        private void FetchTextures(in RHISwapChainCreateInfo createInfo)
+        {
+            RHITextureCreateInfo textureCreateInfo;
+            {
+                textureCreateInfo.extent = new int3(createInfo.extent.xy, 1);
+                textureCreateInfo.samples = 1;
+                textureCreateInfo.mipLevels = 1;
+                textureCreateInfo.format = createInfo.format;
+                textureCreateInfo.flag = ETextureFlag.RenderTarget;
+                textureCreateInfo.state = ETextureState.Present;
+                textureCreateInfo.usage = EResourceUsage.Default;
+                textureCreateInfo.dimension = ETextureDimension.Tex2D;
+            }
+
+            for (int i = 0; i < m_Count; ++i)
+            {
+                ID3D12Resource* dx12Resource = null;
+                bool success = SUCCEEDED(m_NativeSwapChain->GetBuffer((uint)i, __uuidof<ID3D12Resource>(), (void**)&dx12Resource));
+                Debug.Assert(success);
+                m_Textures[i] = new Dx12Texture(m_Dx12Device, textureCreateInfo, dx12Resource);
+            }
         }
 
         protected override void Release()

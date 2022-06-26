@@ -23,14 +23,6 @@
         MAX
     }
 
-    public enum EMapMode : byte
-    {
-        None,
-        Read,
-        Write,
-        MAX
-    }
-
     public enum EPixelFormat : byte
     {
         // 8-Bits
@@ -390,9 +382,16 @@
         MAX
     }
 
+    public enum EResourceUsage : byte
+    {
+        Default = 0,
+        Static = 1,
+        Dynamic = 2,
+        Staging = 3
+    }
+
     public enum EBufferState
     {
-        Unknown = 0,
         Common = 0x00000001,
         StreamOut = 0x00000002,
         CopyDest = 0x00000004,
@@ -428,19 +427,15 @@
         MAX
     }
 
-    public enum EBufferUsage
+    public enum EBufferFlag
     {
-        MapRead = 0x1,
-        MapWrite = 0x2,
-        CopySrc = 0x4,
-        CopyDst = 0x8,
-        Index = 0x10,
-        Vertex = 0x20,
-        Uniform = 0x40,
-        ShaderResource = 0x80,
-        StorageResource = 0x100,
-        Indirect = 0x200,
-        QueryResolve = 0x400,
+        IndexBuffer = 0x1,
+        VertexBuffer = 0x2,
+        UniformBuffer = 0x4,
+        IndirectBuffer = 0x8,
+        ShaderResource = 0x10,
+        UnorderedAccess = 0x20,
+        AccelerationStructure = 0x400,
         MAX
     }
 
@@ -452,14 +447,12 @@
         MAX
     }
 
-    public enum ETextureUsage
+    public enum ETextureFlag
     {
-        CopySrc = 0x1,
-        CopyDst = 0x2,
-        DepthAttachment = 0x4,
-        ColorAttachment = 0x8,
-        ShaderResource = 0x10,
-        StorageResource = 0x20,
+        DepthStencil = 0x1,
+        RenderTarget = 0x2,
+        ShaderResource = 0x4,
+        UnorderedAccess = 0x8,
         MAX
     }
 

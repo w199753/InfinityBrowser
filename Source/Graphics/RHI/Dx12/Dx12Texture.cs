@@ -14,13 +14,6 @@ namespace Infinity.Graphics
                 return m_Dx12Device;
             }
         }
-        public ETextureUsage Usages
-        {
-            get
-            {
-                return m_Usages;
-            }
-        }
         public ID3D12Resource* NativeResource
         {
             get
@@ -30,37 +23,46 @@ namespace Infinity.Graphics
         }
 
         private Dx12Device m_Dx12Device;
-        private ETextureUsage m_Usages;
         private ID3D12Resource* m_NativeResource;
 
         public Dx12Texture(Dx12Device device, in RHITextureCreateInfo createInfo)
         {
             m_Dx12Device = device;
-            m_Usages = createInfo.usages;
+            m_CreateInfo = createInfo;
 
-            D3D12_HEAP_PROPERTIES heapProperties = new D3D12_HEAP_PROPERTIES(/*Dx12Utility.GetDx12HeapType(createInfo.usages)*/D3D12_HEAP_TYPE.D3D12_HEAP_TYPE_DEFAULT);
+            D3D12_HEAP_PROPERTIES heapProperties = new D3D12_HEAP_PROPERTIES(Dx12Utility.ConvertToDx12ResourceFlagByUsage(createInfo.usage));
             D3D12_RESOURCE_DESC textureDesc = new D3D12_RESOURCE_DESC();
             textureDesc.MipLevels = (ushort)createInfo.mipLevels;
             textureDesc.Format = /*Dx12Utility.GetNativeFormat(createInfo->format)*/DXGI_FORMAT.DXGI_FORMAT_R8G8B8A8_TYPELESS;
             textureDesc.Width = (ulong)createInfo.extent.x;
             textureDesc.Height = (uint)createInfo.extent.y;
             textureDesc.DepthOrArraySize = (ushort)createInfo.extent.z;
-            textureDesc.Flags = Dx12Utility.ConvertToDx12ResourceFlagByUsage(createInfo.usages);
+            textureDesc.Flags = Dx12Utility.ConvertToDx12TextureFlag(createInfo.flag);
             textureDesc.SampleDesc.Count = (uint)createInfo.samples.x;
             textureDesc.SampleDesc.Quality = (uint)createInfo.samples.y;
             textureDesc.Dimension = Dx12Utility.ConvertToDx12TextureDimension(createInfo.dimension);
 
+            D3D12_RESOURCE_STATES initialState = Dx12Utility.ConvertToDx12TextureState(createInfo.state);
+            if (createInfo.usage == EResourceUsage.Static || createInfo.usage == EResourceUsage.Dynamic)
+            {
+                initialState = D3D12_RESOURCE_STATES.D3D12_RESOURCE_STATE_GENERIC_READ;
+            }
+            if (createInfo.usage == EResourceUsage.Staging)
+            {
+                initialState = D3D12_RESOURCE_STATES.D3D12_RESOURCE_STATE_COPY_DEST;
+            }
+
             ID3D12Resource* dx12Resource;
-            bool success = SUCCEEDED(m_Dx12Device.NativeDevice->CreateCommittedResource(&heapProperties, D3D12_HEAP_FLAGS.D3D12_HEAP_FLAG_NONE, &textureDesc, Dx12Utility.ConvertToDx12TextureState(createInfo.state)/*Dx12Utility.GetDx12ResourceStateByUsage(createInfo.usages)*/, null, __uuidof<ID3D12Resource>(), (void**)&dx12Resource)); ;
+            bool success = SUCCEEDED(m_Dx12Device.NativeDevice->CreateCommittedResource(&heapProperties, D3D12_HEAP_FLAGS.D3D12_HEAP_FLAG_NONE, &textureDesc, initialState, null, __uuidof<ID3D12Resource>(), (void**)&dx12Resource)); ;
             Debug.Assert(success);
             m_NativeResource = dx12Resource;
         }
 
-        public Dx12Texture(Dx12Device device, in ID3D12Resource* resource)
+        public Dx12Texture(Dx12Device device, in RHITextureCreateInfo createInfo, in ID3D12Resource* resource)
         {
             m_Dx12Device = device;
+            m_CreateInfo = createInfo;
             m_NativeResource = resource;
-            m_Usages = ETextureUsage.ColorAttachment;
         }
 
         public override RHITextureView CreateTextureView(in RHITextureViewCreateInfo createInfo)
