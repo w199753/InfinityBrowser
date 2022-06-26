@@ -12,7 +12,7 @@
         public EAddressMode addressModeU;
         public EAddressMode addressModeV;
         public EAddressMode addressModeW;
-        public EComparisonFunc comparisonFunc;
+        public EComparisonMode comparisonMode;
     }
 
     public abstract class RHISampler : Disposal

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Diagnostics;
-using TerraFX.Interop.Windows;
 using TerraFX.Interop.DirectX;
 using static TerraFX.Interop.Windows.Windows;
 
@@ -32,15 +31,15 @@ namespace Infinity.Graphics
             m_CreateInfo = createInfo;
             m_SizeInBytes = (uint)createInfo.size;
 
-            D3D12_RESOURCE_DESC resourceDesc = D3D12_RESOURCE_DESC.Buffer((ulong)createInfo.size, Dx12Utility.ConvertToDx12BufferFlag(createInfo.flag));
-            D3D12_HEAP_PROPERTIES heapProperties = new D3D12_HEAP_PROPERTIES(Dx12Utility.ConvertToDx12ResourceFlagByUsage(createInfo.usage));
+            D3D12_RESOURCE_DESC resourceDesc = D3D12_RESOURCE_DESC.Buffer((ulong)createInfo.size, Dx12Utility.ConvertToDx12BufferFlag(createInfo.usage));
+            D3D12_HEAP_PROPERTIES heapProperties = new D3D12_HEAP_PROPERTIES(Dx12Utility.ConvertToDx12ResourceFlagByUsage(createInfo.storageMode));
 
             D3D12_RESOURCE_STATES initialState = Dx12Utility.ConvertToDx12BufferState(createInfo.state);
-            if (createInfo.usage == EResourceUsage.Static || createInfo.usage == EResourceUsage.Dynamic)
+            if (createInfo.storageMode == EStorageMode.Static || createInfo.storageMode == EStorageMode.Dynamic)
             {
                 initialState = D3D12_RESOURCE_STATES.D3D12_RESOURCE_STATE_GENERIC_READ;
             }
-            if (createInfo.usage == EResourceUsage.Staging)
+            if (createInfo.storageMode == EStorageMode.Staging)
             {
                 initialState = D3D12_RESOURCE_STATES.D3D12_RESOURCE_STATE_COPY_DEST;
             }
@@ -53,7 +52,7 @@ namespace Infinity.Graphics
 
         public override IntPtr Map(in int length, in int offset)
         {
-            Debug.Assert(!(m_CreateInfo.usage == EResourceUsage.Default));
+            Debug.Assert(!(m_CreateInfo.storageMode == EStorageMode.Default));
 
             void* data;
             D3D12_RANGE range = new D3D12_RANGE((uint)offset, (uint)(offset + length));
@@ -64,7 +63,7 @@ namespace Infinity.Graphics
 
         public override void UnMap()
         {
-            Debug.Assert(!(m_CreateInfo.usage == EResourceUsage.Default));
+            Debug.Assert(!(m_CreateInfo.storageMode == EStorageMode.Default));
 
             m_NativeResource->Unmap(0, null);
         }

@@ -8,10 +8,10 @@ namespace Infinity.Graphics
         public int2 samples;
         public int mipLevels;
         public EPixelFormat format;
-        public ETextureFlag flag;
-        public ETextureState state;
-        public EResourceUsage usage;
         public ETextureDimension dimension;
+        public ETextureState state;
+        public ETextureUsage usage;
+        public EStorageMode storageMode;
     }
 
     public abstract class RHITexture : Disposal

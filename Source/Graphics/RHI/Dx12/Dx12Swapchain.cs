@@ -78,10 +78,10 @@ namespace Infinity.Graphics
                 textureCreateInfo.samples = 1;
                 textureCreateInfo.mipLevels = 1;
                 textureCreateInfo.format = createInfo.format;
-                textureCreateInfo.flag = ETextureFlag.RenderTarget;
-                textureCreateInfo.state = ETextureState.Present;
-                textureCreateInfo.usage = EResourceUsage.Default;
                 textureCreateInfo.dimension = ETextureDimension.Tex2D;
+                textureCreateInfo.state = ETextureState.Present;
+                textureCreateInfo.usage = ETextureUsage.RenderTarget;
+                textureCreateInfo.storageMode = EStorageMode.Default;
             }
 
             for (int i = 0; i < m_Count; ++i)

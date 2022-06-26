@@ -42,12 +42,12 @@ namespace Infinity.Graphics
     public struct RHIAttachmentBlendDescriptor
     {
         public bool blendEnable;
-        public EBlend sourceBlendColor;
-        public EBlend destinationBlendColor;
-        public EBlendOperation blendOperationColor;
-        public EBlend sourceBlendAlpha;
-        public EBlend destinationBlendAlpha;
-        public EBlendOperation blendOperationAlpha;
+        public EBlendOp blendOpColor;
+        public EBlendMode srcBlendColor;
+        public EBlendMode dstBlendColor;
+        public EBlendOp blendOpAlpha;
+        public EBlendMode srcBlendAlpha;
+        public EBlendMode dstBlendAlpha;
         public EColorWriteChannel colorWriteChannel;
     }
 
@@ -79,24 +79,24 @@ namespace Infinity.Graphics
         public float slopeScaledDepthBias;
     }
 
-    public struct RHIDepthStencilOperation
+    public struct RHIStencilState
     {
-        public EComparison stencilComparison;
-        public EStencilOperation stencilPassOperation;
-        public EStencilOperation stencilFailOperation;
-        public EStencilOperation stencilDepthFailOperation;
+        public EStencilOp stencilPassOp;
+        public EStencilOp stencilFailOp;
+        public EStencilOp stencilDepthFailOp;
+        public EComparisonMode comparisonMode;
     }
 
     public struct RHIDepthStencilStateDescription
     {
         public bool depthEnable;
         public bool depthWriteMask;
-        public EComparison depthComparison;
         public bool stencilEnable;
         public byte stencilReadMask;
         public byte stencilWriteMask;
-        public RHIDepthStencilOperation backFace;
-        public RHIDepthStencilOperation frontFace;
+        public RHIStencilState backFace;
+        public RHIStencilState frontFace;
+        public EComparisonMode comparisonMode;
     }
 
     public struct RHIRenderState

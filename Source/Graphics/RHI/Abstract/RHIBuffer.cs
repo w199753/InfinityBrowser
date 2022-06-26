@@ -5,9 +5,9 @@ namespace Infinity.Graphics
     public struct RHIBufferCreateInfo
     {
         public int size;
-        public EBufferFlag flag;
         public EBufferState state;
-        public EResourceUsage usage;
+        public EBufferUsage usage;
+        public EStorageMode storageMode;
     }
 
     public abstract class RHIBuffer : Disposal

@@ -30,24 +30,24 @@ namespace Infinity.Graphics
             m_Dx12Device = device;
             m_CreateInfo = createInfo;
 
-            D3D12_HEAP_PROPERTIES heapProperties = new D3D12_HEAP_PROPERTIES(Dx12Utility.ConvertToDx12ResourceFlagByUsage(createInfo.usage));
+            D3D12_HEAP_PROPERTIES heapProperties = new D3D12_HEAP_PROPERTIES(Dx12Utility.ConvertToDx12ResourceFlagByUsage(createInfo.storageMode));
             D3D12_RESOURCE_DESC textureDesc = new D3D12_RESOURCE_DESC();
             textureDesc.MipLevels = (ushort)createInfo.mipLevels;
             textureDesc.Format = /*Dx12Utility.GetNativeFormat(createInfo->format)*/DXGI_FORMAT.DXGI_FORMAT_R8G8B8A8_TYPELESS;
             textureDesc.Width = (ulong)createInfo.extent.x;
             textureDesc.Height = (uint)createInfo.extent.y;
             textureDesc.DepthOrArraySize = (ushort)createInfo.extent.z;
-            textureDesc.Flags = Dx12Utility.ConvertToDx12TextureFlag(createInfo.flag);
+            textureDesc.Flags = Dx12Utility.ConvertToDx12TextureFlag(createInfo.usage);
             textureDesc.SampleDesc.Count = (uint)createInfo.samples.x;
             textureDesc.SampleDesc.Quality = (uint)createInfo.samples.y;
             textureDesc.Dimension = Dx12Utility.ConvertToDx12TextureDimension(createInfo.dimension);
 
             D3D12_RESOURCE_STATES initialState = Dx12Utility.ConvertToDx12TextureState(createInfo.state);
-            if (createInfo.usage == EResourceUsage.Static || createInfo.usage == EResourceUsage.Dynamic)
+            if (createInfo.storageMode == EStorageMode.Static || createInfo.storageMode == EStorageMode.Dynamic)
             {
                 initialState = D3D12_RESOURCE_STATES.D3D12_RESOURCE_STATE_GENERIC_READ;
             }
-            if (createInfo.usage == EResourceUsage.Staging)
+            if (createInfo.storageMode == EStorageMode.Staging)
             {
                 initialState = D3D12_RESOURCE_STATES.D3D12_RESOURCE_STATE_COPY_DEST;
             }

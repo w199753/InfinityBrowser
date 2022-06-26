@@ -172,19 +172,6 @@
         MAX
     }
 
-    public enum EComparisonFunc : byte
-    {
-        Never,
-        Less,
-        Equal,
-        LessEqual,
-        Greater,
-        NotEqual,
-        GreaterEqual,
-        Always,
-        MAX
-    }
-
     public enum EBindType : byte
     {
         Buffer,
@@ -193,30 +180,6 @@
         Uniform,
         StorageBuffer,
         StorageTexture,
-        MAX
-    }
-
-    public enum ESamplerBindType : byte
-    {
-        Filtering,
-        NonFiltering,
-        Comparison,
-        MAX
-    }
-
-    public enum ETextureSampleType : byte
-    {
-        Float,
-        NonFilterableFloat,
-        Depth,
-        SInt,
-        UInt,
-        MAX
-    }
-
-    public enum EStorageTextureAccess : byte
-    {
-        WriteOnly,
         MAX
     }
 
@@ -265,7 +228,7 @@
         MAX
     }
 
-    public enum EBlend : byte
+    public enum EBlendMode : byte
     {
         Zero = 1,
         One = 2,
@@ -286,7 +249,7 @@
         InverseSecondarySourceAlpha = 0x13
     }
 
-    public enum EBlendOperation : byte
+    public enum EBlendOp : byte
     {
         Add = 1,
         Substract = 2,
@@ -305,7 +268,7 @@
         All = 15
     }
 
-    public enum EComparison : byte
+    public enum EComparisonMode : byte
     {
         Never = 0,
         Less = 1,
@@ -317,7 +280,7 @@
         Always = 7
     }
 
-    public enum EStencilOperation : byte
+    public enum EStencilOp : byte
     {
         Keep = 1,
         Zero = 2,
@@ -382,7 +345,7 @@
         MAX
     }
 
-    public enum EResourceUsage : byte
+    public enum EStorageMode : byte
     {
         Default = 0,
         Static = 1,
@@ -427,7 +390,7 @@
         MAX
     }
 
-    public enum EBufferFlag
+    public enum EBufferUsage
     {
         IndexBuffer = 0x1,
         VertexBuffer = 0x2,
@@ -447,7 +410,7 @@
         MAX
     }
 
-    public enum ETextureFlag
+    public enum ETextureUsage
     {
         DepthStencil = 0x1,
         RenderTarget = 0x2,

@@ -99,11 +99,11 @@ namespace Infinity.Rendering
                 textureCreateInfo.extent = new int3(1600, 900, 1);
                 textureCreateInfo.samples = 1;
                 textureCreateInfo.mipLevels = 1;
-                textureCreateInfo.flag = ETextureFlag.RenderTarget | ETextureFlag.UnorderedAccess;
-                textureCreateInfo.state = ETextureState.Common;
-                textureCreateInfo.usage = EResourceUsage.Default;
                 textureCreateInfo.format = EPixelFormat.RGBA8_UNorm;
                 textureCreateInfo.dimension = ETextureDimension.Tex2D;
+                textureCreateInfo.state = ETextureState.Common;
+                textureCreateInfo.usage = ETextureUsage.RenderTarget | ETextureUsage.UnorderedAccess;
+                textureCreateInfo.storageMode = EStorageMode.Default;
             }
             m_ComputeTexture = renderContext.CreateTexture(textureCreateInfo);
 
@@ -192,9 +192,9 @@ namespace Infinity.Rendering
             }
             RHIBufferCreateInfo bufferCreateInfo;
             bufferCreateInfo.size = vertices.Length * MemoryUtility.SizeOf<Vertex>();
-            bufferCreateInfo.flag = EBufferFlag.VertexBuffer;
             bufferCreateInfo.state = EBufferState.Common;
-            bufferCreateInfo.usage = EResourceUsage.Dynamic;
+            bufferCreateInfo.usage = EBufferUsage.VertexBuffer;
+            bufferCreateInfo.storageMode = EStorageMode.Dynamic;
             m_VertexBuffer = renderContext.CreateBuffer(bufferCreateInfo);
 
             IntPtr data = m_VertexBuffer.Map(bufferCreateInfo.size, 0);
@@ -306,13 +306,13 @@ namespace Infinity.Rendering
                 blendState.alphaToCoverage = false;
                 blendState.independentBlend = false;
                 blendState.attachment0.blendEnable = false;
-                blendState.attachment0.blendOperationColor = EBlendOperation.Add;
-                blendState.attachment0.blendOperationAlpha = EBlendOperation.Add;
+                blendState.attachment0.blendOpColor = EBlendOp.Add;
+                blendState.attachment0.blendOpAlpha = EBlendOp.Add;
                 blendState.attachment0.colorWriteChannel = EColorWriteChannel.All;
-                blendState.attachment0.destinationBlendColor = EBlend.Zero;
-                blendState.attachment0.destinationBlendAlpha = EBlend.Zero;
-                blendState.attachment0.sourceBlendColor = EBlend.One;
-                blendState.attachment0.sourceBlendAlpha = EBlend.One;
+                blendState.attachment0.srcBlendColor = EBlendMode.One;
+                blendState.attachment0.srcBlendAlpha = EBlendMode.One;
+                blendState.attachment0.dstBlendColor = EBlendMode.Zero;
+                blendState.attachment0.dstBlendAlpha = EBlendMode.Zero;
                 blendState.attachment1 = blendState.attachment0;
                 blendState.attachment2 = blendState.attachment0;
                 blendState.attachment3 = blendState.attachment0;
@@ -340,18 +340,18 @@ namespace Infinity.Rendering
             {
                 depthStencilState.depthEnable = true;
                 depthStencilState.depthWriteMask = true;
-                depthStencilState.depthComparison = EComparison.LessEqual;
+                depthStencilState.comparisonMode = EComparisonMode.LessEqual;
                 depthStencilState.stencilEnable = true;
                 depthStencilState.stencilReadMask = 255;
                 depthStencilState.stencilWriteMask = 255;
-                depthStencilState.backFace.stencilComparison = EComparison.Always;
-                depthStencilState.backFace.stencilPassOperation = EStencilOperation.Keep;
-                depthStencilState.backFace.stencilFailOperation = EStencilOperation.Keep;
-                depthStencilState.backFace.stencilDepthFailOperation = EStencilOperation.Keep;
-                depthStencilState.frontFace.stencilComparison = EComparison.Always;
-                depthStencilState.frontFace.stencilPassOperation = EStencilOperation.Keep;
-                depthStencilState.frontFace.stencilFailOperation = EStencilOperation.Keep;
-                depthStencilState.frontFace.stencilDepthFailOperation = EStencilOperation.Keep;
+                depthStencilState.backFace.comparisonMode = EComparisonMode.Always;
+                depthStencilState.backFace.stencilPassOp = EStencilOp.Keep;
+                depthStencilState.backFace.stencilFailOp = EStencilOp.Keep;
+                depthStencilState.backFace.stencilDepthFailOp = EStencilOp.Keep;
+                depthStencilState.frontFace.comparisonMode = EComparisonMode.Always;
+                depthStencilState.frontFace.stencilPassOp = EStencilOp.Keep;
+                depthStencilState.frontFace.stencilFailOp = EStencilOp.Keep;
+                depthStencilState.frontFace.stencilDepthFailOp = EStencilOp.Keep;
             }
 
             RHIRenderState renderState;
