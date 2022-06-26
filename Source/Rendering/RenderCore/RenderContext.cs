@@ -249,6 +249,48 @@ namespace Infinity.Rendering
             return m_Device.CreateFence();
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public RHIBuffer CreateBuffer(in RHIBufferCreateInfo createInfo)
+        {
+            return m_Device.CreateBuffer(createInfo);
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public RHITexture CreateTexture(in RHITextureCreateInfo createInfo)
+        {
+            return m_Device.CreateTexture(createInfo);
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public RHISampler CreateSampler(in RHISamplerCreateInfo createInfo)
+        {
+            return m_Device.CreateSampler(createInfo);
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public RHIShader CreateShader(in RHIShaderCreateInfo createInfo)
+        {
+            return m_Device.CreateShader(createInfo);
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public RHIBindGroupLayout CreateBindGroupLayout(in RHIBindGroupLayoutCreateInfo createInfo)
+        {
+            return m_Device.CreateBindGroupLayout(createInfo);
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public RHIBindGroup CreateBindGroup(in RHIBindGroupCreateInfo createInfo)
+        {
+            return m_Device.CreateBindGroup(createInfo);
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public RHIPipelineLayout CreatePipelineLayout(in RHIPipelineLayoutCreateInfo createInfo)
+        {
+            return m_Device.CreatePipelineLayout(createInfo);
+        }
+
         /*[MethodImpl(MethodImplOptions.AggressiveInlining)]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public RHIQuery GetQuery(in EQueryType queryType, string name)
@@ -278,24 +320,6 @@ namespace Infinity.Rendering
         public RHIGraphicsPipeline CreateGraphicsPipeline(in RHIGraphicsPipelineCreateInfo createInfo)
         {
             return m_Device.CreateGraphicsPipeline(createInfo);
-        }
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public RHISampler CreateSampler(in RHISamplerCreateInfo createInfo)
-        {
-            return m_Device.CreateSampler(createInfo);
-        }
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public RHIBuffer CreateBuffer(in RHIBufferCreateInfo createInfo)
-        {
-            return m_Device.CreateBuffer(createInfo);
-        }
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public RHITexture CreateTexture(in RHITextureCreateInfo createInfo)
-        {
-            return m_Device.CreateTexture(createInfo);
         }
 
         protected override void Release()
