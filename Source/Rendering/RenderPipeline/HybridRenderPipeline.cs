@@ -17,6 +17,7 @@ namespace Infinity.Rendering
         RHIShader m_VertexShader;
         RHIShader m_FragmentShader;
         RHIShader m_ComputeShader;
+        RHIBuffer m_IndexBuffer;
         RHIBuffer m_VertexBuffer;
         RHITexture m_ComputeTexture;
         RHITextureView m_ComputeTextureView;
@@ -180,6 +181,28 @@ namespace Infinity.Rendering
             bufferViewCreateInfo.stride = (bufferCreateInfo.size + 255) & ~255;
             RHIBufferView uniformBufferView = vertexBuffer.CreateBufferView(bufferViewCreateInfo);*/
 
+            // CreateIndexBuffer
+            ushort[] indexs = new ushort[3];
+            {
+                indexs[0] = 0;
+                indexs[1] = 1;
+                indexs[2] = 2;
+            }
+            RHIBufferCreateInfo indexBufferCreateInfo;
+            {
+                indexBufferCreateInfo.size = indexs.Length * MemoryUtility.SizeOf<ushort>();
+                indexBufferCreateInfo.state = EBufferState.Common;
+                indexBufferCreateInfo.usage = EBufferUsage.IndexBuffer;
+                indexBufferCreateInfo.storageMode = EStorageMode.Dynamic;
+            }
+            m_IndexBuffer = renderContext.CreateBuffer(indexBufferCreateInfo);
+
+            IntPtr indexData = m_IndexBuffer.Map(indexBufferCreateInfo.size, 0);
+            GCHandle indexsHandle = GCHandle.Alloc(indexs, GCHandleType.Pinned);
+            IntPtr indexsPtr = indexsHandle.AddrOfPinnedObject();
+            MemoryUtility.MemCpy(indexsPtr.ToPointer(), indexData.ToPointer(), indexBufferCreateInfo.size);
+            indexsHandle.Free();
+
             // CreateVertexBuffer
             Vertex[] vertices = new Vertex[3];
             {
@@ -190,17 +213,19 @@ namespace Infinity.Rendering
                 vertices[2].color = new float4(0, 0, 1, 1);
                 vertices[2].position = new float4(0.5f, -0.5f, 0, 1);
             }
-            RHIBufferCreateInfo bufferCreateInfo;
-            bufferCreateInfo.size = vertices.Length * MemoryUtility.SizeOf<Vertex>();
-            bufferCreateInfo.state = EBufferState.Common;
-            bufferCreateInfo.usage = EBufferUsage.VertexBuffer;
-            bufferCreateInfo.storageMode = EStorageMode.Dynamic;
-            m_VertexBuffer = renderContext.CreateBuffer(bufferCreateInfo);
+            RHIBufferCreateInfo vertexBufferCreateInfo;
+            {
+                vertexBufferCreateInfo.size = vertices.Length * MemoryUtility.SizeOf<Vertex>();
+                vertexBufferCreateInfo.state = EBufferState.Common;
+                vertexBufferCreateInfo.usage = EBufferUsage.VertexBuffer;
+                vertexBufferCreateInfo.storageMode = EStorageMode.Dynamic;
+            }
+            m_VertexBuffer = renderContext.CreateBuffer(vertexBufferCreateInfo);
 
-            IntPtr data = m_VertexBuffer.Map(bufferCreateInfo.size, 0);
+            IntPtr vertexData = m_VertexBuffer.Map(vertexBufferCreateInfo.size, 0);
             GCHandle verticesHandle = GCHandle.Alloc(vertices, GCHandleType.Pinned);
             IntPtr verticesPtr = verticesHandle.AddrOfPinnedObject();
-            MemoryUtility.MemCpy(verticesPtr.ToPointer(), data.ToPointer(), bufferCreateInfo.size);
+            MemoryUtility.MemCpy(verticesPtr.ToPointer(), vertexData.ToPointer(), vertexBufferCreateInfo.size);
             verticesHandle.Free();
 
             // CreateGraphicsBindGroupLayout
@@ -424,7 +449,9 @@ namespace Infinity.Rendering
                     graphicsEncoder.PushDebugGroup("DrawTriange");
                     graphicsEncoder.SetPipelineState(m_GraphicsPipeline);
                     graphicsEncoder.SetVertexBuffer(m_VertexBuffer);
-                    graphicsEncoder.Draw(3, 1, 0, 0);
+                    graphicsEncoder.SetIndexBuffer(m_IndexBuffer, EIndexFormat.UInt16);
+                    //graphicsEncoder.Draw(3, 1, 0, 0);
+                    graphicsEncoder.DrawIndexed(3, 1, 0, 0, 0);
                     graphicsEncoder.PopDebugGroup();
                 }
 
@@ -446,6 +473,7 @@ namespace Infinity.Rendering
             m_VertexResult.Dispose();
             m_FragmentResult.Dispose();
             m_ComputeResult.Dispose();
+            m_IndexBuffer.Dispose();
             m_VertexBuffer.Dispose();
             m_ComputeTextureView.Dispose();
             m_ComputeTexture.Dispose();
