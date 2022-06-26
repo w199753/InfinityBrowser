@@ -1,8 +1,8 @@
 ﻿using System;
-using System.Runtime.InteropServices;
+using Infinity.Memory;
 using Infinity.Graphics;
 using Infinity.Mathmatics;
-using Infinity.Memory;
+using System.Runtime.InteropServices;
 
 namespace Infinity.Rendering
 {
@@ -14,26 +14,26 @@ namespace Infinity.Rendering
 
     public unsafe class HybridRenderPipeline : RenderPipeline
     {
-        RHITexture m_ComputeTexture;
-        RHITextureView m_ComputeTextureView;
-        RHIBindGroupLayout m_ComputeBindGroupLayout;
-        RHIBindGroup m_ComputeBindGroup;
-        RHIShader m_ComputeShader;
-        RHIPipelineLayout m_ComputePipelineLayout;
-        RHIComputePipeline m_ComputePipeline;
-        RHIBuffer m_VertexBuffer;
         RHIShader m_VertexShader;
         RHIShader m_FragmentShader;
-        RHIBindGroupLayout m_GraphicsBindGroupLayout;
-        RHIPipelineLayout m_GraphicsPipelineLayout;
+        RHIShader m_ComputeShader;
+        RHIBuffer m_VertexBuffer;
+        RHITexture m_ComputeTexture;
+        RHITextureView m_ComputeTextureView;
+        RHIBindGroup m_ComputeBindGroup;
+        RHIComputePipeline m_ComputePipeline;
         RHIGraphicsPipeline m_GraphicsPipeline;
-        RHIGraphicsPassColorAttachment[] m_ColorAttachments;
-        Vortice.Dxc.IDxcBlob m_ComputeBlob;
-        Vortice.Dxc.IDxcResult m_ComputeResult;
+        RHIPipelineLayout m_ComputePipelineLayout;
+        RHIPipelineLayout m_GraphicsPipelineLayout;
+        RHIBindGroupLayout m_ComputeBindGroupLayout;
+        RHIBindGroupLayout m_GraphicsBindGroupLayout;
         Vortice.Dxc.IDxcBlob m_VertexBlob;
-        Vortice.Dxc.IDxcResult m_VertexResult;
         Vortice.Dxc.IDxcBlob m_FragmentBlob;
+        Vortice.Dxc.IDxcBlob m_ComputeBlob;
+        Vortice.Dxc.IDxcResult m_VertexResult;
         Vortice.Dxc.IDxcResult m_FragmentResult;
+        Vortice.Dxc.IDxcResult m_ComputeResult;
+        RHIGraphicsPassColorAttachment[] m_ColorAttachments;
 
         public HybridRenderPipeline(string pipelineName) : base(pipelineName) 
         {
@@ -437,86 +437,29 @@ namespace Infinity.Rendering
 
         protected override void Release()
         {
-            m_ComputeBlob.Dispose();
-            m_ComputeResult.Dispose();
             m_VertexBlob.Dispose();
-            m_VertexResult.Dispose();
             m_FragmentBlob.Dispose();
+            m_ComputeBlob.Dispose();
+            m_VertexResult.Dispose();
             m_FragmentResult.Dispose();
+            m_ComputeResult.Dispose();
+            m_VertexBuffer.Dispose();
             m_ComputeTextureView.Dispose();
             m_ComputeTexture.Dispose();
-            m_VertexBuffer.Dispose();
             //textureSampler.Dispose();
             //uniformBufferView.Dispose();
-            m_ComputeBindGroupLayout.Dispose();
-            m_ComputeBindGroup.Dispose();
-            m_ComputeShader.Dispose();
-            m_ComputePipelineLayout.Dispose();
-            m_ComputePipeline.Dispose();
-            m_GraphicsBindGroupLayout.Dispose();
-            //m_GraphicsBindGroup.Dispose();
             m_VertexShader.Dispose();
             m_FragmentShader.Dispose();
-            m_GraphicsPipelineLayout.Dispose();
+            m_ComputeShader.Dispose();
+            m_ComputePipeline.Dispose();
+            m_ComputeBindGroup.Dispose();
+            m_ComputeBindGroupLayout.Dispose();
+            m_ComputePipelineLayout.Dispose();
             m_GraphicsPipeline.Dispose();
+            //m_GraphicsBindGroup.Dispose();
+            m_GraphicsPipelineLayout.Dispose();
+            m_GraphicsBindGroupLayout.Dispose();
             Console.WriteLine("Release RenderPipeline");
         }
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-//ResourceBind Example
-/*RHIBuffer Buffer = context.CreateBuffer(16, 4, EUseFlag.CPUWrite, EBufferType.Structured);
-
-RHIShaderResourceView SRV = context.CreateShaderResourceView(Buffer);
-RHIUnorderedAccessView UAV = context.CreateUnorderedAccessView(Buffer);
-
-RHIResourceViewRange ResourceViewRange = context.CreateResourceViewRange(2);
-ResourceViewRange.SetShaderResourceView(0, SRV);
-ResourceViewRange.SetUnorderedAccessView(1, UAV);*/
-
-//ASyncCompute Example
-/*RHIFence computeFence = context.CreateFence();
-RHIFence graphicsFence = context.CreateFence();
-
-//Pass-A in GraphicsQueue
-cmdList.DrawPrimitiveInstance(null, null, PrimitiveTopology.TriangleList, 0, 0);
-context.ExecuteCmdList(EContextType.Graphics, cmdList);
-context.WritFence(EContextType.Graphics, graphicsFence);
-
-//Pass-B in GraphicsQueue
-cmdList.DrawPrimitiveInstance(null, null, PrimitiveTopology.TriangleList, 0, 0);
-context.ExecuteCmdList(EContextType.Graphics, cmdList);
-
-//Pass-C in ComputeQueue and Wait Pass-A
-context.WaitFence(EContextType.Compute, graphicsFence);
-cmdList.DispatchCompute(null, 16, 16, 1);
-context.ExecuteCmdList(EContextType.Compute, cmdList);
-context.WritFence(EContextType.Compute, computeFence);
-
-//Pass-D in ComputeQueue
-cmdList.DispatchCompute(null, 16, 16, 1);
-context.ExecuteCmdList(EContextType.Compute, cmdList);
-
-//Pass-E in GraphicsQueue and Wait Pass-C
-context.WaitFence(EContextType.Graphics, computeFence);
-cmdList.DrawPrimitiveInstance(null, null, PrimitiveTopology.TriangleList, 128, 16);
-context.ExecuteCmdList(EContextType.Graphics, cmdList);*/
