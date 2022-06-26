@@ -61,11 +61,13 @@ namespace Infinity.Rendering
 
     public sealed class RenderContext : Disposal
     {
-        public ulong computeFrequency => 0;
-        public ulong graphicsFrequency => 0;
+        public int2 ScreenSize => m_ScreenSize;
+        public ulong ComputeFrequency => 0;
+        public ulong GraphicsFrequency => 0;
         public RHITexture BackBuffer => m_SwapChain.GetTexture(m_SwapChain.BackBufferIndex);
         public RHITextureView BackBufferView => m_SwapChainViews[m_SwapChain.BackBufferIndex];
 
+        private int2 m_ScreenSize;
         private RHIInstance m_Instance;
         private RHIGPU m_Gpu;
         private RHIDevice m_Device;
@@ -77,8 +79,10 @@ namespace Infinity.Rendering
         private CommandBufferPool[] m_CommandBufferPools;
         private TArray<RHICommandBuffer> m_CommandBufferAutoRelease;
 
-        public RenderContext(in int width, in int height, in IntPtr window)
+        public RenderContext(in int width, in int height, in IntPtr surface)
         {
+            m_ScreenSize = new int2(width, height);
+
             // Create Instance
             m_Instance = RHIInstance.CreateByPlatform();
 
@@ -112,9 +116,9 @@ namespace Infinity.Rendering
             // Create SwapChain
             RHISwapChainCreateInfo swapChainCreateInfo = new RHISwapChainCreateInfo();
             swapChainCreateInfo.count = 3;
-            swapChainCreateInfo.window = window;
+            swapChainCreateInfo.window = surface;
             swapChainCreateInfo.frameBufferOnly = true;
-            swapChainCreateInfo.extent = new int2(width, height);
+            swapChainCreateInfo.extent = m_ScreenSize;
             swapChainCreateInfo.format = EPixelFormat.RGBA8_UNorm;
             swapChainCreateInfo.presentQueue = m_Queues[(int)EQueueType.Graphics];
             m_SwapChain = m_Device.CreateSwapChain(swapChainCreateInfo);

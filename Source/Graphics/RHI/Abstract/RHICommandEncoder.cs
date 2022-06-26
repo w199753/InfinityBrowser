@@ -178,7 +178,7 @@ namespace Infinity.Graphics
 
     public abstract class RHIComputeEncoder : Disposal
     {
-        public RHIComputePassScoper BeginScopedPass(string name)
+        public RHIComputePassScoper BeginScopedPass(string? name)
         {
             BeginPass(name);
             return new RHIComputePassScoper(this);

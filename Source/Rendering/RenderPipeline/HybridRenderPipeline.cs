@@ -96,7 +96,7 @@ namespace Infinity.Rendering
             // CreateOutputTexture
             RHITextureCreateInfo textureCreateInfo;
             {
-                textureCreateInfo.extent = new int3(1600, 900, 1);
+                textureCreateInfo.extent = new int3(renderContext.ScreenSize.xy, 1);
                 textureCreateInfo.samples = 1;
                 textureCreateInfo.mipLevels = 1;
                 textureCreateInfo.format = EPixelFormat.RGBA8_UNorm;
@@ -341,7 +341,7 @@ namespace Infinity.Rendering
                 depthStencilState.depthEnable = true;
                 depthStencilState.depthWriteMask = true;
                 depthStencilState.comparisonMode = EComparisonMode.LessEqual;
-                depthStencilState.stencilEnable = true;
+                depthStencilState.stencilEnable = false;
                 depthStencilState.stencilReadMask = 255;
                 depthStencilState.stencilWriteMask = 255;
                 depthStencilState.backFace.comparisonMode = EComparisonMode.Always;
@@ -406,7 +406,7 @@ namespace Infinity.Rendering
                     computeEncoder.PushDebugGroup("GenereteUV");
                     computeEncoder.SetPipelineState(m_ComputePipeline);
                     computeEncoder.SetBindGroup(m_ComputeBindGroup);
-                    computeEncoder.Dispatch((uint)math.ceil(1600 / 8), (uint)math.ceil(900 / 8), 1);
+                    computeEncoder.Dispatch((uint)math.ceil(renderContext.ScreenSize.x / 8), (uint)math.ceil(renderContext.ScreenSize.y / 8), 1);
                     computeEncoder.PopDebugGroup();
                 }
 
@@ -418,8 +418,8 @@ namespace Infinity.Rendering
                 graphicsPassBeginInfo.depthStencilAttachment = null;
                 using (graphicsEncoder.BeginScopedPass(graphicsPassBeginInfo))
                 {
-                    graphicsEncoder.SetViewport(0, 0, 1600, 900, 0, 1);
-                    graphicsEncoder.SetScissorRect(0, 0, 1600, 900);
+                    graphicsEncoder.SetViewport(0, 0, renderContext.ScreenSize.x, renderContext.ScreenSize.y, 0, 1);
+                    graphicsEncoder.SetScissorRect(0, 0, (uint)renderContext.ScreenSize.x, (uint)renderContext.ScreenSize.y);
                     graphicsEncoder.SetPipelineLayout(m_GraphicsPipelineLayout);
                     graphicsEncoder.PushDebugGroup("DrawTriange");
                     graphicsEncoder.SetPipelineState(m_GraphicsPipeline);
