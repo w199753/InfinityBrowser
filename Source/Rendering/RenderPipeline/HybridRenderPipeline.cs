@@ -356,7 +356,7 @@ namespace Infinity.Rendering
                 rasterizerState.slopeScaledDepthBias = 0;
                 rasterizerState.scissorEnable = true;
                 rasterizerState.depthClipEnable = true;
-                rasterizerState.conservativeRaster = false;
+                rasterizerState.conservativeRaster = true;
                 rasterizerState.antialiasedLineEnable = false;
                 rasterizerState.frontCounterClockwise = false;
             }
@@ -366,7 +366,7 @@ namespace Infinity.Rendering
                 depthStencilState.depthEnable = true;
                 depthStencilState.depthWriteMask = true;
                 depthStencilState.comparisonMode = EComparisonMode.LessEqual;
-                depthStencilState.stencilEnable = false;
+                depthStencilState.stencilEnable = true;
                 depthStencilState.stencilReadMask = 255;
                 depthStencilState.stencilWriteMask = 255;
                 depthStencilState.backFace.comparisonMode = EComparisonMode.Always;
