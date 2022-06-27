@@ -431,7 +431,7 @@ namespace Infinity.Rendering
                     computeEncoder.PushDebugGroup("GenereteUV");
                     computeEncoder.SetPipelineState(m_ComputePipeline);
                     computeEncoder.SetBindGroup(m_ComputeBindGroup);
-                    computeEncoder.Dispatch((uint)math.ceil(renderContext.ScreenSize.x / 8), (uint)math.ceil(renderContext.ScreenSize.y / 8), 1);
+                    computeEncoder.Dispatch((uint)math.ceil((float)renderContext.ScreenSize.x / 8), (uint)math.ceil((float)renderContext.ScreenSize.y / 8), 1);
                     computeEncoder.PopDebugGroup();
                 }
 
