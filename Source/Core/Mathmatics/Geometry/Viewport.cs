@@ -1,16 +1,16 @@
 ﻿using System;
 
-namespace Infinity.Mathmatics.Geometry
+namespace Infinity.Mathmatics
 {
     public struct Viewport : IEquatable<Viewport>
     {
-        public float TopLeftX;
+        public uint TopLeftX;
 
-        public float TopLeftY;
+        public uint TopLeftY;
 
-        public float Width;
+        public uint Width;
 
-        public float Height;
+        public uint Height;
 
         public float MinDepth;
 
@@ -31,7 +31,7 @@ namespace Infinity.Mathmatics.Geometry
             return !(l == r);
         }
 
-        public Viewport(float topLeftX, float topLeftY, float width, float height, float minDepth = 0f, float maxDepth = 1f)
+        public Viewport(in uint topLeftX, in uint topLeftY, in uint width, in uint height, in float minDepth = 0f, in float maxDepth = 1f)
         {
             TopLeftX = topLeftX;
             TopLeftY = topLeftY;

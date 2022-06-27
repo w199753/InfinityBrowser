@@ -49,6 +49,7 @@ namespace Infinity.Graphics
 
             //D3D12_TEXTURE_COPY_LOCATION srcLocation = new D3D12_TEXTURE_COPY_LOCATION(srcTexture.NativeResource, new D3D12_PLACED_SUBRESOURCE_FOOTPRINT());
             //m_Dx12CommandBuffer.NativeCommandList->CopyTextureRegion();
+            throw new NotImplementedException();
         }
 
         public override void ResourceBarrier(in RHIBarrier barrier)
@@ -325,16 +326,26 @@ namespace Infinity.Graphics
             m_Dx12CommandBuffer.NativeCommandList->SetGraphicsRootSignature(dx12PipelineLayout.NativeRootSignature);
         }
 
-        public override void SetViewport(in float x, in float y, in float width, in float height, in float minDepth, in float maxDepth)
+        public override void SetViewport(in Viewport viewport)
         {
-            D3D12_VIEWPORT viewport = new D3D12_VIEWPORT(x, y, width, height, minDepth, maxDepth);
-            m_Dx12CommandBuffer.NativeCommandList->RSSetViewports(1, &viewport);
+            D3D12_VIEWPORT tempViewport = new D3D12_VIEWPORT(viewport.TopLeftX, viewport.TopLeftY, viewport.Width, viewport.Height, viewport.MinDepth, viewport.MaxDepth);
+            m_Dx12CommandBuffer.NativeCommandList->RSSetViewports(1, &tempViewport);
         }
 
-        public override void SetScissorRect(in uint left, in uint top, in uint right, in uint bottom)
+        public override void SetViewport(in Memory<Viewport> viewports)
         {
-            RECT scissor = new RECT((int)left, (int)top, (int)right, (int)bottom);
-            m_Dx12CommandBuffer.NativeCommandList->RSSetScissorRects(1, &scissor);
+            throw new NotImplementedException();
+        }
+
+        public override void SetScissorRect(in Rect rect)
+        {
+            RECT tempScissor = new RECT((int)rect.left, (int)rect.top, (int)rect.right, (int)rect.bottom);
+            m_Dx12CommandBuffer.NativeCommandList->RSSetScissorRects(1, &tempScissor);
+        }
+
+        public override void SetScissorRect(in Memory<Rect> rects)
+        {
+            throw new NotImplementedException();
         }
 
         public override void SetStencilRef(in uint value)
@@ -342,10 +353,15 @@ namespace Infinity.Graphics
             m_Dx12CommandBuffer.NativeCommandList->OMSetStencilRef(value);
         }
 
-        public override void SetBlendFactor(in float values)
+        public override void SetBlendFactor(in float value)
         {
-            float tempValues = values;
-            m_Dx12CommandBuffer.NativeCommandList->OMSetBlendFactor(&tempValues);
+            float tempValue = value;
+            m_Dx12CommandBuffer.NativeCommandList->OMSetBlendFactor(&tempValue);
+        }
+
+        public override void SetBlendFactor(in Memory<float> values)
+        {
+            throw new NotImplementedException();
         }
 
         public override void SetBindGroup(RHIBindGroup bindGroup)

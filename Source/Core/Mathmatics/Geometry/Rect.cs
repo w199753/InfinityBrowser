@@ -1,18 +1,18 @@
 ﻿using System;
 
-namespace Infinity.Mathmatics.Geometry
+namespace Infinity.Mathmatics
 {
     public struct Rect : IEquatable<Rect>
     {
-        public int left;
+        public uint left;
 
-        public int top;
+        public uint top;
 
-        public int right;
+        public uint right;
 
-        public int bottom;
+        public uint bottom;
 
-        public Rect(int Left, int Top, int Right, int Bottom)
+        public Rect(in uint Left, in uint Top, in uint Right, in uint Bottom)
         {
             left = Left;
             top = Top;

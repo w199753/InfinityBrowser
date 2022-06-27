@@ -443,8 +443,8 @@ namespace Infinity.Rendering
                 graphicsPassBeginInfo.depthStencilAttachment = null;
                 using (graphicsEncoder.BeginScopedPass(graphicsPassBeginInfo))
                 {
-                    graphicsEncoder.SetViewport(0, 0, renderContext.ScreenSize.x, renderContext.ScreenSize.y, 0, 1);
-                    graphicsEncoder.SetScissorRect(0, 0, (uint)renderContext.ScreenSize.x, (uint)renderContext.ScreenSize.y);
+                    graphicsEncoder.SetViewport(new Viewport(0, 0, (uint)renderContext.ScreenSize.x, (uint)renderContext.ScreenSize.y, 0, 1));
+                    graphicsEncoder.SetScissorRect(new Rect(0, 0, (uint)renderContext.ScreenSize.x, (uint)renderContext.ScreenSize.y));
                     graphicsEncoder.SetPipelineLayout(m_GraphicsPipelineLayout);
                     graphicsEncoder.PushDebugGroup("DrawTriange");
                     graphicsEncoder.SetPipelineState(m_GraphicsPipeline);
