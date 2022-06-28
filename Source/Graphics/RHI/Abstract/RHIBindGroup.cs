@@ -11,7 +11,7 @@ namespace Infinity.Graphics
         public RHISampler textureSampler;
     }
 
-    public struct RHIBindGroupCreateInfo
+    public struct RHIBindGroupDescriptor
     {
         public int elementCount => elements.Length;
         public RHIBindGroupLayout layout;

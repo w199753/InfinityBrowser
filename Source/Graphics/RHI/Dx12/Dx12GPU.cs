@@ -41,9 +41,9 @@ namespace Infinity.Graphics
             return property;
         }
 
-        public override RHIDevice CreateDevice(in RHIDeviceCreateInfo createInfo)
+        public override RHIDevice CreateDevice(in RHIDeviceDescriptor descriptor)
         {
-            return new Dx12Device(this, createInfo);
+            return new Dx12Device(this, descriptor);
         }
 
         protected override void Release()

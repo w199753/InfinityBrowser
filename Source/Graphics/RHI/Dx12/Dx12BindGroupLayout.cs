@@ -11,7 +11,7 @@ namespace Infinity.Graphics
         public int count;
         public int layoutIndex;
         public EBindType bindType;
-        public EShaderStageFlags shaderStage;
+        public EShaderStageFlag shaderStage;
 
         internal bool Bindless => count > 1;
     }
@@ -44,25 +44,25 @@ namespace Infinity.Graphics
         //private D3D12_ROOT_PARAMETER1[] m_NativeRootParameters;
         private Dx12RootParameterKeyInfo[] m_RootParameterKeyInfos;
 
-        public Dx12BindGroupLayout(in RHIBindGroupLayoutCreateInfo createInfo)
+        public Dx12BindGroupLayout(in RHIBindGroupLayoutDescriptor descriptor)
         {
-            m_LayoutIndex = createInfo.layoutIndex;
-            //m_NativeRootParameters = new D3D12_ROOT_PARAMETER1[createInfo.elementCount];
-            m_RootParameterKeyInfos = new Dx12RootParameterKeyInfo[createInfo.elementCount];
+            m_LayoutIndex = descriptor.layoutIndex;
+            //m_NativeRootParameters = new D3D12_ROOT_PARAMETER1[descriptor.elementCount];
+            m_RootParameterKeyInfos = new Dx12RootParameterKeyInfo[descriptor.elementCount];
 
-            Span<RHIBindGroupLayoutElement> elements = createInfo.elements.Span;
-            for (int i = 0; i < createInfo.elementCount; ++i)
+            Span<RHIBindGroupLayoutElement> elements = descriptor.elements.Span;
+            for (int i = 0; i < descriptor.elementCount; ++i)
             {
                 //ref RHIBindGroupLayoutElement element = ref elements[i];
                 //D3D12_DESCRIPTOR_RANGE1 dx12DescriptorRange = new D3D12_DESCRIPTOR_RANGE1();
-                //dx12DescriptorRange.Init(Dx12Utility.ConvertToDx12BindType(element.bindType), 1, (uint)element.slot, (uint)createInfo.layoutIndex, D3D12_DESCRIPTOR_RANGE_FLAGS.D3D12_DESCRIPTOR_RANGE_FLAG_DATA_STATIC);
+                //dx12DescriptorRange.Init(Dx12Utility.ConvertToDx12BindType(element.bindType), 1, (uint)element.slot, (uint)descriptor.layoutIndex, D3D12_DESCRIPTOR_RANGE_FLAGS.D3D12_DESCRIPTOR_RANGE_FLAG_DATA_STATIC);
                 //m_NativeRootParameters[i].InitAsDescriptorTable(1, &dx12DescriptorRange, Dx12Utility.ConvertToDx12ShaderStage(element.shaderStage));
 
                 ref RHIBindGroupLayoutElement element = ref elements[i];
                 ref Dx12RootParameterKeyInfo keyInfo = ref m_RootParameterKeyInfos[i];
                 keyInfo.slot = element.slot;
                 keyInfo.count = element.count;
-                keyInfo.layoutIndex = createInfo.layoutIndex;
+                keyInfo.layoutIndex = descriptor.layoutIndex;
                 keyInfo.bindType = element.bindType;
                 keyInfo.shaderStage = element.shaderStage;
             }

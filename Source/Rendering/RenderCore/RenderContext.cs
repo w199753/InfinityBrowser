@@ -90,7 +90,7 @@ namespace Infinity.Rendering
             m_Gpu = m_Instance.GetGpu(0);
 
             // Create Device
-            RHIQueueInfo[] queueInfos = new RHIQueueInfo[3];
+            RHIQueueDescriptor[] queueInfos = new RHIQueueDescriptor[3];
             {
                 queueInfos[0].count = 1;
                 queueInfos[0].type = EQueueType.Blit;
@@ -99,10 +99,10 @@ namespace Infinity.Rendering
                 queueInfos[2].count = 1;
                 queueInfos[2].type = EQueueType.Graphics;
             }
-            Memory<RHIQueueInfo> queueInfosView = new Memory<RHIQueueInfo>(queueInfos);
-            RHIDeviceCreateInfo deviceCreateInfo = new RHIDeviceCreateInfo();
-            deviceCreateInfo.queueInfos = queueInfosView;
-            m_Device = m_Gpu.CreateDevice(deviceCreateInfo);
+            Memory<RHIQueueDescriptor> queueInfosView = new Memory<RHIQueueDescriptor>(queueInfos);
+            RHIDeviceDescriptor deviceDescriptor = new RHIDeviceDescriptor();
+            deviceDescriptor.queueInfos = queueInfosView;
+            m_Device = m_Gpu.CreateDevice(deviceDescriptor);
 
             // Get GpuQueue
             m_Queues = new RHIQueue[3];
@@ -114,27 +114,27 @@ namespace Infinity.Rendering
             m_FrameFence = m_Device.CreateFence();
 
             // Create SwapChain
-            RHISwapChainCreateInfo swapChainCreateInfo = new RHISwapChainCreateInfo();
-            swapChainCreateInfo.count = 3;
-            swapChainCreateInfo.window = surface;
-            swapChainCreateInfo.frameBufferOnly = true;
-            swapChainCreateInfo.extent = m_ScreenSize;
-            swapChainCreateInfo.format = EPixelFormat.RGBA8_UNorm;
-            swapChainCreateInfo.presentQueue = m_Queues[(int)EQueueType.Graphics];
-            m_SwapChain = m_Device.CreateSwapChain(swapChainCreateInfo);
+            RHISwapChainDescriptor swapChainDescriptor = new RHISwapChainDescriptor();
+            swapChainDescriptor.count = 3;
+            swapChainDescriptor.window = surface;
+            swapChainDescriptor.frameBufferOnly = true;
+            swapChainDescriptor.extent = m_ScreenSize;
+            swapChainDescriptor.format = EPixelFormat.RGBA8_UNorm;
+            swapChainDescriptor.presentQueue = m_Queues[(int)EQueueType.Graphics];
+            m_SwapChain = m_Device.CreateSwapChain(swapChainDescriptor);
 
-            RHITextureViewCreateInfo viewCreateInfo = new RHITextureViewCreateInfo();
-            viewCreateInfo.mipLevelNum = 1;
-            viewCreateInfo.baseMipLevel = 0;
-            viewCreateInfo.arrayLayerNum = 1;
-            viewCreateInfo.baseArrayLayer = 0;
-            viewCreateInfo.format = EPixelFormat.RGBA8_UNorm;
-            viewCreateInfo.type = ETextureViewType.RenderTarget;
-            viewCreateInfo.dimension = ETextureViewDimension.Tex2D;
+            RHITextureViewDescriptor viewDescriptor = new RHITextureViewDescriptor();
+            viewDescriptor.mipLevelNum = 1;
+            viewDescriptor.baseMipLevel = 0;
+            viewDescriptor.arrayLayerNum = 1;
+            viewDescriptor.baseArrayLayer = 0;
+            viewDescriptor.format = EPixelFormat.RGBA8_UNorm;
+            viewDescriptor.type = ETextureViewType.RenderTarget;
+            viewDescriptor.dimension = ETextureViewDimension.Tex2D;
             m_SwapChainViews = new RHITextureView[3];
-            m_SwapChainViews[0] = m_SwapChain.GetTexture(0).CreateTextureView(viewCreateInfo);
-            m_SwapChainViews[1] = m_SwapChain.GetTexture(1).CreateTextureView(viewCreateInfo);
-            m_SwapChainViews[2] = m_SwapChain.GetTexture(2).CreateTextureView(viewCreateInfo);
+            m_SwapChainViews[0] = m_SwapChain.GetTexture(0).CreateTextureView(viewDescriptor);
+            m_SwapChainViews[1] = m_SwapChain.GetTexture(1).CreateTextureView(viewDescriptor);
+            m_SwapChainViews[2] = m_SwapChain.GetTexture(2).CreateTextureView(viewDescriptor);
 
             //Create CommandPool
             m_CommandPools = new RHICommandPool[3];
@@ -255,45 +255,45 @@ namespace Infinity.Rendering
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public RHIBuffer CreateBuffer(in RHIBufferCreateInfo createInfo)
+        public RHIBuffer CreateBuffer(in RHIBufferDescriptor descriptor)
         {
-            return m_Device.CreateBuffer(createInfo);
+            return m_Device.CreateBuffer(descriptor);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public RHITexture CreateTexture(in RHITextureCreateInfo createInfo)
+        public RHITexture CreateTexture(in RHITextureDescriptor descriptor)
         {
-            return m_Device.CreateTexture(createInfo);
+            return m_Device.CreateTexture(descriptor);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public RHISampler CreateSampler(in RHISamplerCreateInfo createInfo)
+        public RHISampler CreateSampler(in RHISamplerDescriptor descriptor)
         {
-            return m_Device.CreateSampler(createInfo);
+            return m_Device.CreateSampler(descriptor);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public RHIShader CreateShader(in RHIShaderCreateInfo createInfo)
+        public RHIShader CreateShader(in RHIShaderDescriptor descriptor)
         {
-            return m_Device.CreateShader(createInfo);
+            return m_Device.CreateShader(descriptor);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public RHIBindGroupLayout CreateBindGroupLayout(in RHIBindGroupLayoutCreateInfo createInfo)
+        public RHIBindGroupLayout CreateBindGroupLayout(in RHIBindGroupLayoutDescriptor descriptor)
         {
-            return m_Device.CreateBindGroupLayout(createInfo);
+            return m_Device.CreateBindGroupLayout(descriptor);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public RHIBindGroup CreateBindGroup(in RHIBindGroupCreateInfo createInfo)
+        public RHIBindGroup CreateBindGroup(in RHIBindGroupDescriptor descriptor)
         {
-            return m_Device.CreateBindGroup(createInfo);
+            return m_Device.CreateBindGroup(descriptor);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public RHIPipelineLayout CreatePipelineLayout(in RHIPipelineLayoutCreateInfo createInfo)
+        public RHIPipelineLayout CreatePipelineLayout(in RHIPipelineLayoutDescriptor descriptor)
         {
-            return m_Device.CreatePipelineLayout(createInfo);
+            return m_Device.CreatePipelineLayout(descriptor);
         }
 
         /*[MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -310,21 +310,21 @@ namespace Infinity.Rendering
         }*/
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public RHIComputePipeline CreateComputePipeline(in RHIComputePipelineCreateInfo createInfo)
+        public RHIComputePipeline CreateComputePipeline(in RHIComputePipelineDescriptor descriptor)
         {
-            return m_Device.CreateComputePipeline(createInfo);
+            return m_Device.CreateComputePipeline(descriptor);
         }
 
         /*[MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public RHIRayTracePipeline CreateRayTracePipeline(in RHIRayTracePipelineCreateInfo createInfo)
+        public RHIRayTracePipeline CreateRayTracePipeline(in RHIRayTracePipelineDescriptor descriptor)
         {
             
         }*/
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public RHIGraphicsPipeline CreateGraphicsPipeline(in RHIGraphicsPipelineCreateInfo createInfo)
+        public RHIGraphicsPipeline CreateGraphicsPipeline(in RHIGraphicsPipelineDescriptor descriptor)
         {
-            return m_Device.CreateGraphicsPipeline(createInfo);
+            return m_Device.CreateGraphicsPipeline(descriptor);
         }
 
         protected override void Release()

@@ -10,6 +10,6 @@
     public abstract class RHIGPU : Disposal
     {
         public abstract RHIGpuProperty GetProperty();
-        public abstract RHIDevice CreateDevice(in RHIDeviceCreateInfo createInfo);
+        public abstract RHIDevice CreateDevice(in RHIDeviceDescriptor descriptor);
     }
 }

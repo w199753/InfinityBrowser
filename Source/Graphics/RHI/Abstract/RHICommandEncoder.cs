@@ -48,27 +48,27 @@ namespace Infinity.Graphics
         }
     }
 
-    public struct RHITextureSubResourceInfo
+    public struct RHITextureSubResourceDescriptor
     {
         public uint slice;
         public uint mipLevel;
         public uint3 origin;
     }
 
-    public struct RHIShadingRateInfo
+    public struct RHIShadingRateDescriptor
     {
         public EShadingRate shadingRate;
         public RHITexture? shadingRateTexture;
         public EShadingRateCombiner shadingRateCombiner;
 
-        public RHIShadingRateInfo(in EShadingRate shadingRate, in EShadingRateCombiner shadingRateCombiner = EShadingRateCombiner.Max)
+        public RHIShadingRateDescriptor(in EShadingRate shadingRate, in EShadingRateCombiner shadingRateCombiner = EShadingRateCombiner.Max)
         {
             this.shadingRate = shadingRate;
             this.shadingRateTexture = null;
             this.shadingRateCombiner = shadingRateCombiner;
         }
 
-        public RHIShadingRateInfo(RHITexture shadingRateTexture, in EShadingRateCombiner shadingRateCombiner = EShadingRateCombiner.Max)
+        public RHIShadingRateDescriptor(RHITexture shadingRateTexture, in EShadingRateCombiner shadingRateCombiner = EShadingRateCombiner.Max)
         {
             this.shadingRate = EShadingRate.Rate1x1;
             this.shadingRateTexture = shadingRateTexture;
@@ -76,7 +76,7 @@ namespace Infinity.Graphics
         }
     }
 
-    public struct RHIGraphicsPassColorAttachment
+    public struct RHIColorAttachmentDescriptor
     {
         public ELoadOp loadOp;
         public EStoreOp storeOp;
@@ -85,7 +85,7 @@ namespace Infinity.Graphics
         public RHITextureView resolveTarget;
     }
 
-    public struct RHIGraphicsPassDepthStencilAttachment
+    public struct RHIDepthStencilAttachmentDescriptor
     {
         public bool depthReadOnly;
         public float depthClearValue;
@@ -98,13 +98,12 @@ namespace Infinity.Graphics
         public RHITextureView depthStencilTarget;
     }
 
-    public struct RHIGraphicsPassBeginInfo
+    public struct RHIGraphicsPassDescriptor
     {
         public string? name;
-        public int colorAttachmentCount => colorAttachments.Length;
-        public RHIShadingRateInfo? shadingRateInfo;
-        public RHIGraphicsPassDepthStencilAttachment? depthStencilAttachment;
-        public Memory<RHIGraphicsPassColorAttachment> colorAttachments;
+        public RHIShadingRateDescriptor? shadingRateDescriptor;
+        public RHIDepthStencilAttachmentDescriptor? depthStencilAttachmentDescriptor;
+        public Memory<RHIColorAttachmentDescriptor> colorAttachmentDescriptors;
         // TODO timestampWrites https://gpuweb.github.io/gpuweb/#render-pass-encoder-creation
         // TODO occlusionQuerySet https://gpuweb.github.io/gpuweb/#render-pass-encoder-creation
     }
@@ -164,9 +163,9 @@ namespace Infinity.Graphics
 
         public abstract void BeginPass(string? name);
         public abstract void CopyBufferToBuffer(RHIBuffer src, in int srcOffset, RHIBuffer dst, in int dstOffset, in int size);
-        public abstract void CopyBufferToTexture(RHIBuffer src, RHITexture dst, in RHITextureSubResourceInfo subResourceInfo, in int3 size);
-        public abstract void CopyTextureToBuffer(RHITexture src, RHIBuffer dst, in RHITextureSubResourceInfo subResourceInfo, in int3 size);
-        public abstract void CopyTextureToTexture(RHITexture src, in RHITextureSubResourceInfo srcSubResourceInfo, RHITexture dst, in RHITextureSubResourceInfo dstSubResourceInfo, in int3 size);
+        public abstract void CopyBufferToTexture(RHIBuffer src, RHITexture dst, in RHITextureSubResourceDescriptor subResourceDescriptor, in int3 size);
+        public abstract void CopyTextureToBuffer(RHITexture src, RHIBuffer dst, in RHITextureSubResourceDescriptor subResourceDescriptor, in int3 size);
+        public abstract void CopyTextureToTexture(RHITexture src, in RHITextureSubResourceDescriptor srcSubResourceDescriptor, RHITexture dst, in RHITextureSubResourceDescriptor dstSubResourceDescriptor, in int3 size);
         public abstract void ResourceBarrier(in RHIBarrier barrier);
         public abstract void ResourceBarrier(in Memory<RHIBarrier> barriers);
         public abstract void PushDebugGroup(string name);
@@ -197,13 +196,13 @@ namespace Infinity.Graphics
 
     public abstract class RHIGraphicsEncoder : Disposal
     {
-        public RHIGraphicsPassScoper BeginScopedPass(in RHIGraphicsPassBeginInfo beginInfo)
+        public RHIGraphicsPassScoper BeginScopedPass(in RHIGraphicsPassDescriptor descriptor)
         {
-            BeginPass(beginInfo);
+            BeginPass(descriptor);
             return new RHIGraphicsPassScoper(this);
         }
 
-        public abstract void BeginPass(in RHIGraphicsPassBeginInfo beginInfo);
+        public abstract void BeginPass(in RHIGraphicsPassDescriptor descriptor);
         public abstract void SetPipelineState(RHIGraphicsPipeline pipeline);
         public abstract void SetPipelineLayout(RHIPipelineLayout pipelineLayout);
         public abstract void SetViewport(in Viewport viewport);

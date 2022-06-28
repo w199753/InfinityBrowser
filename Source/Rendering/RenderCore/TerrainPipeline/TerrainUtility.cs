@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Linq;
 using System.Text;
+using Infinity.Mathmatics;
 using System.Threading.Tasks;
 using System.Collections.Generic;
-using Infinity.Mathmatics;
-using Infinity.Mathmatics.Geometry;
 
 namespace Infinity.Rendering
 {

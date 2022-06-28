@@ -38,9 +38,9 @@ namespace Infinity.Graphics
             return gpuProperty;
         }
 
-        public override RHIDevice CreateDevice(in RHIDeviceCreateInfo createInfo)
+        public override RHIDevice CreateDevice(in RHIDeviceDescriptor descriptor)
         {
-            return new MtlDevice(this, createInfo);
+            return new MtlDevice(this, descriptor);
         }
 
         protected override void Release()

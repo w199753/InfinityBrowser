@@ -41,17 +41,17 @@ namespace Infinity.Graphics
         private ID3D12DescriptorHeap* m_NativeDescriptorHeap;
         private Dx12BindGroupParameter[] m_BindParameters;
 
-        public Dx12BindGroup(in RHIBindGroupCreateInfo createInfo)
+        public Dx12BindGroup(in RHIBindGroupDescriptor descriptor)
         {
-            Dx12BindGroupLayout bindGroupLayout = createInfo.layout as Dx12BindGroupLayout;
+            Dx12BindGroupLayout bindGroupLayout = descriptor.layout as Dx12BindGroupLayout;
             Debug.Assert(bindGroupLayout != null);
 
             m_BindGroupLayout = bindGroupLayout;
-            m_BindParameters = new Dx12BindGroupParameter[createInfo.elementCount];
+            m_BindParameters = new Dx12BindGroupParameter[descriptor.elementCount];
 
-            for (int i = 0; i < createInfo.elementCount; ++i)
+            for (int i = 0; i < descriptor.elementCount; ++i)
             {
-                ref RHIBindGroupElement element = ref createInfo.elements.Span[i];
+                ref RHIBindGroupElement element = ref descriptor.elements.Span[i];
                 Dx12RootParameterKeyInfo keyInfo = bindGroupLayout.RootParameterKeyInfos[i];
 
                 D3D12_GPU_DESCRIPTOR_HANDLE handle = default;

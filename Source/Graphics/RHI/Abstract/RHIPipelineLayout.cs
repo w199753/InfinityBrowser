@@ -1,7 +1,7 @@
 ﻿namespace Infinity.Graphics
 {
 #pragma warning disable CS8602 
-    public struct RHIPipelineLayoutCreateInfo
+    public struct RHIPipelineLayoutDescriptor
     {
         public int bindGroupCount => bindGroupLayouts.Length;
         public RHIBindGroupLayout[] bindGroupLayouts;

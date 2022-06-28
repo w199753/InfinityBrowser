@@ -1,6 +1,6 @@
 ﻿namespace Infinity.Graphics
 {
-    public struct RHISamplerCreateInfo
+    public struct RHISamplerDescriptor
     {
         public int maxAnisotropy;
         public float lodMinClamp;

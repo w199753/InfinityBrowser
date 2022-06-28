@@ -27,11 +27,11 @@ namespace Infinity.Graphics
         private MTLDevice m_NativeDevice;
         private Dictionary<EQueueType, List<MtlQueue>> m_Queues;
 
-        public MtlDevice(MtlGPU gpu, in RHIDeviceCreateInfo createInfo)
+        public MtlDevice(MtlGPU gpu, in RHIDeviceDescriptor descriptor)
         {
             m_MtlGpu = gpu;
             CreateDevice();
-            CreateQueues(createInfo);
+            CreateQueues(descriptor);
         }
 
         public override int GetQueueCount(in EQueueType type)
@@ -54,52 +54,52 @@ namespace Infinity.Graphics
             throw new NotImplementedException();
         }
 
-        public override RHISwapChain CreateSwapChain(in RHISwapChainCreateInfo createInfo)
+        public override RHISwapChain CreateSwapChain(in RHISwapChainDescriptor descriptor)
         {
             throw new NotImplementedException();
         }
 
-        public override RHIBuffer CreateBuffer(in RHIBufferCreateInfo createInfo)
+        public override RHIBuffer CreateBuffer(in RHIBufferDescriptor descriptor)
         {
             throw new NotImplementedException();
         }
 
-        public override RHITexture CreateTexture(in RHITextureCreateInfo createInfo)
+        public override RHITexture CreateTexture(in RHITextureDescriptor descriptor)
         {
             throw new NotImplementedException();
         }
 
-        public override RHISampler CreateSampler(in RHISamplerCreateInfo createInfo)
+        public override RHISampler CreateSampler(in RHISamplerDescriptor descriptor)
         {
             throw new NotImplementedException();
         }
 
-        public override RHIShader CreateShader(in RHIShaderCreateInfo createInfo)
+        public override RHIShader CreateShader(in RHIShaderDescriptor descriptor)
         {
             throw new NotImplementedException();
         }
 
-        public override RHIBindGroupLayout CreateBindGroupLayout(in RHIBindGroupLayoutCreateInfo createInfo)
+        public override RHIBindGroupLayout CreateBindGroupLayout(in RHIBindGroupLayoutDescriptor descriptor)
         {
             throw new NotImplementedException();
         }
 
-        public override RHIBindGroup CreateBindGroup(in RHIBindGroupCreateInfo createInfo)
+        public override RHIBindGroup CreateBindGroup(in RHIBindGroupDescriptor descriptor)
         {
             throw new NotImplementedException();
         }
 
-        public override RHIPipelineLayout CreatePipelineLayout(in RHIPipelineLayoutCreateInfo createInfo)
+        public override RHIPipelineLayout CreatePipelineLayout(in RHIPipelineLayoutDescriptor descriptor)
         {
             throw new NotImplementedException();
         }
 
-        public override RHIComputePipeline CreateComputePipeline(in RHIComputePipelineCreateInfo createInfo)
+        public override RHIComputePipeline CreateComputePipeline(in RHIComputePipelineDescriptor descriptor)
         {
             throw new NotImplementedException();
         }
 
-        public override RHIGraphicsPipeline CreateGraphicsPipeline(in RHIGraphicsPipelineCreateInfo createInfo)
+        public override RHIGraphicsPipeline CreateGraphicsPipeline(in RHIGraphicsPipelineDescriptor descriptor)
         {
             throw new NotImplementedException();
         }
@@ -110,12 +110,12 @@ namespace Infinity.Graphics
             m_NativeDevice = new MTLDevice(m_MtlGpu.GpuPtr);
         }
 
-        private void CreateQueues(in RHIDeviceCreateInfo createInfo)
+        private void CreateQueues(in RHIDeviceDescriptor descriptor)
         {
             Dictionary<EQueueType, int> queueCountMap = new Dictionary<EQueueType, int>(3);
-            for (int i = 0; i < createInfo.queueInfoCount; ++i)
+            for (int i = 0; i < descriptor.queueInfoCount; ++i)
             {
-                RHIQueueInfo queueInfo = createInfo.queueInfos.Span[i];
+                RHIQueueDescriptor queueInfo = descriptor.queueInfos.Span[i];
                 if (queueCountMap.TryGetValue(queueInfo.type, out int value))
                 {
                     queueCountMap[queueInfo.type] = 0;
@@ -134,10 +134,10 @@ namespace Infinity.Graphics
                     MTLCommandQueue commandQueue = m_NativeDevice.newCommandQueue();
                     Debug.Assert(commandQueue.NativePtr.ToPointer() != null);
 
-                    MtlCommandQueueCreateInfo queueCreateInfo;
-                    queueCreateInfo.cmdQueue = commandQueue;
-                    queueCreateInfo.queueType = iter.Key;
-                    tempQueues.Add(new MtlQueue(this, queueCreateInfo));
+                    MtlCommandQueueDescriptor queueDescriptor;
+                    queueDescriptor.cmdQueue = commandQueue;
+                    queueDescriptor.queueType = iter.Key;
+                    tempQueues.Add(new MtlQueue(this, queueDescriptor));
                 }
 
                 m_Queues.TryAdd(iter.Key, tempQueues);

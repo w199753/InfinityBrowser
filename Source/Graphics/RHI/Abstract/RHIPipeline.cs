@@ -3,21 +3,21 @@ using Infinity.Mathmatics;
 
 namespace Infinity.Graphics
 {
-    public struct RHIOutputAttachmentDescription
+    public struct RHIOutputAttachmentDescriptor
     {
         public bool resolveMSAA;
         public EPixelFormat format;
     }
 
-    public struct RHIOutputState
+    public struct RHIOutputStateDescriptor
     {
-        public uint arraySliceCount;
+        //public uint sliceCount;
         public ESampleCount sampleCount;
-        public RHIOutputAttachmentDescription? depthAttachment;
-        public Memory<RHIOutputAttachmentDescription> colorAttachments;
+        public RHIOutputAttachmentDescriptor? depthAttachmentDescriptor;
+        public Memory<RHIOutputAttachmentDescriptor> colorAttachmentDescriptors;
     }
 
-    public struct RHIVertexAttribute
+    public struct RHIVertexAttributeDescriptor
     {
         public int offset;
         public uint index;
@@ -25,18 +25,18 @@ namespace Infinity.Graphics
         public ESemanticFormat format;
     }
 
-    public struct RHIVertexLayout
+    public struct RHIVertexLayoutDescriptor
     {
         public int stride;
         public int stepRate;
         public EVertexStepMode stepMode;
-        public Memory<RHIVertexAttribute> attributes;
+        public Memory<RHIVertexAttributeDescriptor> attributeDescriptors;
     }
 
-    public struct RHIVertexState
+    public struct RHIVertexStateDescriptor
     {
         public EPrimitiveTopology primitiveTopology;
-        public Memory<RHIVertexLayout> vertexLayouts;
+        public Memory<RHIVertexLayoutDescriptor> vertexLayoutDescriptors;
     }
 
     public struct RHIAttachmentBlendDescriptor
@@ -55,14 +55,14 @@ namespace Infinity.Graphics
     {
         public bool alphaToCoverage;
         public bool independentBlend;
-        public RHIAttachmentBlendDescriptor attachment0;
-        public RHIAttachmentBlendDescriptor attachment1;
-        public RHIAttachmentBlendDescriptor attachment2;
-        public RHIAttachmentBlendDescriptor attachment3;
-        public RHIAttachmentBlendDescriptor attachment4;
-        public RHIAttachmentBlendDescriptor attachment5;
-        public RHIAttachmentBlendDescriptor attachment6;
-        public RHIAttachmentBlendDescriptor attachment7;
+        public RHIAttachmentBlendDescriptor attachmentDescriptor0;
+        public RHIAttachmentBlendDescriptor attachmentDescriptor1;
+        public RHIAttachmentBlendDescriptor attachmentDescriptor2;
+        public RHIAttachmentBlendDescriptor attachmentDescriptor3;
+        public RHIAttachmentBlendDescriptor attachmentDescriptor4;
+        public RHIAttachmentBlendDescriptor attachmentDescriptor5;
+        public RHIAttachmentBlendDescriptor attachmentDescriptor6;
+        public RHIAttachmentBlendDescriptor attachmentDescriptor7;
     }
 
     public struct RHIRasterizerStateDescriptor
@@ -79,7 +79,7 @@ namespace Infinity.Graphics
         public float slopeScaledDepthBias;
     }
 
-    public struct RHIStencilState
+    public struct RHIStencilStateDescriptor
     {
         public EStencilOp stencilPassOp;
         public EStencilOp stencilFailOp;
@@ -87,43 +87,43 @@ namespace Infinity.Graphics
         public EComparisonMode comparisonMode;
     }
 
-    public struct RHIDepthStencilStateDescription
+    public struct RHIDepthStencilStateDescriptor
     {
         public bool depthEnable;
         public bool depthWriteMask;
         public bool stencilEnable;
         public byte stencilReadMask;
         public byte stencilWriteMask;
-        public RHIStencilState backFace;
-        public RHIStencilState frontFace;
         public EComparisonMode comparisonMode;
+        public RHIStencilStateDescriptor backFaceDescriptor;
+        public RHIStencilStateDescriptor frontFaceDescriptor;
     }
 
-    public struct RHIRenderState
+    public struct RHIRenderStateDescriptor
     {
         public int stencilRef;
         public int? sampleMask;
         public float4? blendFactor;
-        public RHIBlendStateDescriptor blendState;
-        public RHIRasterizerStateDescriptor rasterizerState;
-        public RHIDepthStencilStateDescription depthStencilState;
+        public RHIBlendStateDescriptor blendStateDescriptor;
+        public RHIRasterizerStateDescriptor rasterizerStateDescriptor;
+        public RHIDepthStencilStateDescriptor depthStencilStateDescriptor;
     }
 
-    public struct RHIComputePipelineCreateInfo
+    public struct RHIComputePipelineDescriptor
     {
         public uint3 threadSize;
         public RHIShader computeShader;
         public RHIPipelineLayout pipelineLayout;
     }
 
-    public struct RHIGraphicsPipelineCreateInfo
+    public struct RHIGraphicsPipelineDescriptor
     {
         public RHIShader vertexShader;
         public RHIShader fragmentShader;
-        public RHIOutputState outputState;
-        public RHIRenderState renderState;
-        public RHIVertexState vertexState;
         public RHIPipelineLayout pipelineLayout;
+        public RHIOutputStateDescriptor outputStateDescriptor;
+        public RHIRenderStateDescriptor renderStateDescriptor;
+        public RHIVertexStateDescriptor vertexStateDescriptor;
     }
 
     public abstract class RHIComputePipeline : Disposal

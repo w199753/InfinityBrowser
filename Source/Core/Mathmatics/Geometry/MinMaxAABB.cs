@@ -2,7 +2,7 @@ using System;
 using System.Runtime.CompilerServices;
 using static Infinity.Mathmatics.math;
 
-namespace Infinity.Mathmatics.Geometry
+namespace Infinity.Mathmatics
 {
     /// <summary>
     /// Axis aligned bounding box (AABB) stored in min and max form.

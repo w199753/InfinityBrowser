@@ -19,6 +19,8 @@
 // Ambiguous reference in cref attribute
 #pragma warning disable 419
 
+#pragma warning disable CS3021, CS0108
+
 using System;
 using System.IO;
 using System.Text;

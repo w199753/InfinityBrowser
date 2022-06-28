@@ -4,7 +4,7 @@ using TerraFX.Interop.DirectX;
 namespace Infinity.Graphics
 {
 #pragma warning disable CS8600, CS8602
-    internal unsafe struct Dx12CommandQueueCreateInfo
+    internal unsafe struct Dx12CommandQueueDescriptor
     {
         public EQueueType type;
         public ID3D12CommandQueue* queue;
@@ -30,11 +30,11 @@ namespace Infinity.Graphics
         private Dx12Device m_Dx12Device;
         private ID3D12CommandQueue* m_NativeCommandQueue;
 
-        public Dx12Queue(Dx12Device device, in Dx12CommandQueueCreateInfo createInfo)
+        public Dx12Queue(Dx12Device device, in Dx12CommandQueueDescriptor descriptor)
         {
-            m_Type = createInfo.type;
+            m_Type = descriptor.type;
             m_Dx12Device = device;
-            m_NativeCommandQueue = createInfo.queue;
+            m_NativeCommandQueue = descriptor.queue;
         }
 
         public override RHICommandPool CreateCommandPool()

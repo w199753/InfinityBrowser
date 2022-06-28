@@ -2,7 +2,7 @@
 
 namespace Infinity.Graphics
 {
-    public struct RHIBufferCreateInfo
+    public struct RHIBufferDescriptor
     {
         public int size;
         public EBufferState state;
@@ -20,19 +20,19 @@ namespace Infinity.Graphics
             }
         }
 
-        public RHIBufferCreateInfo CreateInfo
+        public RHIBufferDescriptor Descriptor
         {
             get
             {
-                return m_CreateInfo;
+                return m_Descriptor;
             }
         }
 
         protected uint m_SizeInBytes;
-        protected RHIBufferCreateInfo m_CreateInfo;
+        protected RHIBufferDescriptor m_Descriptor;
 
         public abstract IntPtr Map(in int length, in int offset);
         public abstract void UnMap();
-        public abstract RHIBufferView CreateBufferView(in RHIBufferViewCreateInfo createInfo);
+        public abstract RHIBufferView CreateBufferView(in RHIBufferViewDescriptor descriptor);
     }
 }

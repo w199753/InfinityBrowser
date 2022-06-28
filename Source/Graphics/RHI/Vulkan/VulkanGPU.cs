@@ -18,7 +18,7 @@ namespace Infinity.Graphics
             throw new NotImplementedException();
         }
 
-        public override RHIDevice CreateDevice(in RHIDeviceCreateInfo createInfo)
+        public override RHIDevice CreateDevice(in RHIDeviceDescriptor descriptor)
         {
             throw new NotImplementedException();
         }

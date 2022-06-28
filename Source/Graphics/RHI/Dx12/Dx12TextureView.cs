@@ -34,23 +34,23 @@ namespace Infinity.Graphics
         private D3D12_CPU_DESCRIPTOR_HANDLE m_NativeCpuDescriptorHandle;
         private D3D12_GPU_DESCRIPTOR_HANDLE m_NativeGpuDescriptorHandle;
 
-        public Dx12TextureView(Dx12Texture texture, in RHITextureViewCreateInfo createInfo)
+        public Dx12TextureView(Dx12Texture texture, in RHITextureViewDescriptor descriptor)
         {
             m_LifeState = false;
             m_Dx12Texture = texture;
 
-            if (createInfo.type == ETextureViewType.DepthStencil)
+            if (descriptor.type == ETextureViewType.DepthStencil)
             {
-                if(Dx12Utility.IsDepthStencilTexture(texture.CreateInfo.usage))
+                if(Dx12Utility.IsDepthStencilTexture(texture.Descriptor.usage))
                 {
                     m_LifeState.x = true;
 
                     //D3D12_DEPTH_STENCIL_DESC desc = new D3D12_DEPTH_STENCIL_DESC();
-                    //desc.Format = /*Dx12Utility.GetNativeFormat(createInfo.format)*/ DXGI_FORMAT.DXGI_FORMAT_R8G8B8A8_UNORM;
-                    //desc.ViewDimension = /*Dx12Utility.GetNativeViewDimension(createInfo.dimension)*/ D3D12_RTV_DIMENSION.D3D12_RTV_DIMENSION_TEXTURE2D;
-                    /*Dx12Utility.FillTexture2DDSV(ref desc.Texture2D, createInfo);
-                    Dx12Utility.FillTexture3DDSV(ref desc.Texture3D, createInfo);
-                    Dx12Utility.FillTexture2DArrayDSV(ref desc.Texture2DArray, createInfo);
+                    //desc.Format = /*Dx12Utility.GetNativeFormat(descriptor.format)*/ DXGI_FORMAT.DXGI_FORMAT_R8G8B8A8_UNORM;
+                    //desc.ViewDimension = /*Dx12Utility.GetNativeViewDimension(descriptor.dimension)*/ D3D12_RTV_DIMENSION.D3D12_RTV_DIMENSION_TEXTURE2D;
+                    /*Dx12Utility.FillTexture2DDSV(ref desc.Texture2D, descriptor);
+                    Dx12Utility.FillTexture3DDSV(ref desc.Texture3D, descriptor);
+                    Dx12Utility.FillTexture2DArrayDSV(ref desc.Texture2DArray, descriptor);
 
                     Dx12DescriptorInfo allocation = m_Dx12Texture.Dx12Device.AllocateRtvDescriptor(1);
                     m_HeapIndex = allocation.index;
@@ -60,18 +60,18 @@ namespace Infinity.Graphics
                     m_Dx12Texture.Dx12Device.NativeDevice->CreateRenderTargetView(texture.NativeResource, &desc, m_NativeCpuDescriptorHandle);*/
                 }
             }
-            else if (createInfo.type == ETextureViewType.RenderTarget)
+            else if (descriptor.type == ETextureViewType.RenderTarget)
             {
-                if (Dx12Utility.IsRenderTargetTexture(texture.CreateInfo.usage))
+                if (Dx12Utility.IsRenderTargetTexture(texture.Descriptor.usage))
                 {
                     m_LifeState.y = true;
 
                     D3D12_RENDER_TARGET_VIEW_DESC desc = new D3D12_RENDER_TARGET_VIEW_DESC();
-                    desc.Format = /*Dx12Utility.GetNativeFormat(createInfo.format)*/ DXGI_FORMAT.DXGI_FORMAT_R8G8B8A8_UNORM;
-                    desc.ViewDimension = /*Dx12Utility.GetNativeViewDimension(createInfo.dimension)*/ D3D12_RTV_DIMENSION.D3D12_RTV_DIMENSION_TEXTURE2D;
-                    Dx12Utility.FillTexture2DRTV(ref desc.Texture2D, createInfo);
-                    Dx12Utility.FillTexture3DRTV(ref desc.Texture3D, createInfo);
-                    Dx12Utility.FillTexture2DArrayRTV(ref desc.Texture2DArray, createInfo);
+                    desc.Format = /*Dx12Utility.GetNativeFormat(descriptor.format)*/ DXGI_FORMAT.DXGI_FORMAT_R8G8B8A8_UNORM;
+                    desc.ViewDimension = /*Dx12Utility.GetNativeViewDimension(descriptor.dimension)*/ D3D12_RTV_DIMENSION.D3D12_RTV_DIMENSION_TEXTURE2D;
+                    Dx12Utility.FillTexture2DRTV(ref desc.Texture2D, descriptor);
+                    Dx12Utility.FillTexture3DRTV(ref desc.Texture3D, descriptor);
+                    Dx12Utility.FillTexture2DArrayRTV(ref desc.Texture2DArray, descriptor);
 
                     Dx12DescriptorInfo allocation = m_Dx12Texture.Dx12Device.AllocateRtvDescriptor(1);
                     m_HeapIndex = allocation.index;
@@ -81,20 +81,20 @@ namespace Infinity.Graphics
                     m_Dx12Texture.Dx12Device.NativeDevice->CreateRenderTargetView(m_Dx12Texture.NativeResource, &desc, m_NativeCpuDescriptorHandle);
                 }
             } 
-            else if (createInfo.type == ETextureViewType.ShaderResource)
+            else if (descriptor.type == ETextureViewType.ShaderResource)
             {
-                if(Dx12Utility.IsShaderResourceTexture(texture.CreateInfo.usage))
+                if(Dx12Utility.IsShaderResourceTexture(texture.Descriptor.usage))
                 {
                     m_LifeState.z = true;
 
                     D3D12_SHADER_RESOURCE_VIEW_DESC desc = new D3D12_SHADER_RESOURCE_VIEW_DESC();
-                    desc.Format = /*Dx12Utility.GetNativeFormat(createInfo.format)*/ DXGI_FORMAT.DXGI_FORMAT_R8G8B8A8_UNORM;
-                    desc.ViewDimension = /*Dx12Utility.GetNativeViewDimension(createInfo.dimension)*/ D3D12_SRV_DIMENSION.D3D12_SRV_DIMENSION_TEXTURE2D;
-                    Dx12Utility.FillTexture2DSRV(ref desc.Texture2D, createInfo);
-                    Dx12Utility.FillTexture2DArraySRV(ref desc.Texture2DArray, createInfo);
-                    Dx12Utility.FillTextureCubeSRV(ref desc.TextureCube, createInfo);
-                    Dx12Utility.FillTextureCubeArraySRV(ref desc.TextureCubeArray, createInfo);
-                    Dx12Utility.FillTexture3DSRV(ref desc.Texture3D, createInfo);
+                    desc.Format = /*Dx12Utility.GetNativeFormat(descriptor.format)*/ DXGI_FORMAT.DXGI_FORMAT_R8G8B8A8_UNORM;
+                    desc.ViewDimension = /*Dx12Utility.GetNativeViewDimension(descriptor.dimension)*/ D3D12_SRV_DIMENSION.D3D12_SRV_DIMENSION_TEXTURE2D;
+                    Dx12Utility.FillTexture2DSRV(ref desc.Texture2D, descriptor);
+                    Dx12Utility.FillTexture2DArraySRV(ref desc.Texture2DArray, descriptor);
+                    Dx12Utility.FillTextureCubeSRV(ref desc.TextureCube, descriptor);
+                    Dx12Utility.FillTextureCubeArraySRV(ref desc.TextureCubeArray, descriptor);
+                    Dx12Utility.FillTexture3DSRV(ref desc.Texture3D, descriptor);
 
                     Dx12DescriptorInfo allocation = m_Dx12Texture.Dx12Device.AllocateCbvSrvUavDescriptor(1);
                     m_HeapIndex = allocation.index;
@@ -104,18 +104,18 @@ namespace Infinity.Graphics
                     m_Dx12Texture.Dx12Device.NativeDevice->CreateShaderResourceView(m_Dx12Texture.NativeResource, &desc, m_NativeCpuDescriptorHandle);
                 }
             }
-            else if (createInfo.type == ETextureViewType.UnorderedAccess)
+            else if (descriptor.type == ETextureViewType.UnorderedAccess)
             {
-                if(Dx12Utility.IsUnorderedAccessTexture(texture.CreateInfo.usage))
+                if(Dx12Utility.IsUnorderedAccessTexture(texture.Descriptor.usage))
                 {
                     m_LifeState.w = true;
 
                     D3D12_UNORDERED_ACCESS_VIEW_DESC desc = new D3D12_UNORDERED_ACCESS_VIEW_DESC();
-                    desc.Format = /*Dx12Utility.GetNativeFormat(createInfo.format)*/ DXGI_FORMAT.DXGI_FORMAT_R8G8B8A8_UNORM;
-                    desc.ViewDimension = /*Dx12Utility.GetNativeViewDimension(createInfo.dimension)*/ D3D12_UAV_DIMENSION.D3D12_UAV_DIMENSION_TEXTURE2D;
-                    Dx12Utility.FillTexture2DUAV(ref desc.Texture2D, createInfo);
-                    Dx12Utility.FillTexture3DUAV(ref desc.Texture3D, createInfo);
-                    Dx12Utility.FillTexture2DArrayUAV(ref desc.Texture2DArray, createInfo);
+                    desc.Format = /*Dx12Utility.GetNativeFormat(descriptor.format)*/ DXGI_FORMAT.DXGI_FORMAT_R8G8B8A8_UNORM;
+                    desc.ViewDimension = /*Dx12Utility.GetNativeViewDimension(descriptor.dimension)*/ D3D12_UAV_DIMENSION.D3D12_UAV_DIMENSION_TEXTURE2D;
+                    Dx12Utility.FillTexture2DUAV(ref desc.Texture2D, descriptor);
+                    Dx12Utility.FillTexture3DUAV(ref desc.Texture3D, descriptor);
+                    Dx12Utility.FillTexture2DArrayUAV(ref desc.Texture2DArray, descriptor);
 
                     Dx12DescriptorInfo allocation = m_Dx12Texture.Dx12Device.AllocateCbvSrvUavDescriptor(1);
                     m_HeapIndex = allocation.index;

@@ -442,7 +442,7 @@
         MAX
     }
 
-    public enum EShaderStageFlags
+    public enum EShaderStageFlag
     {
         Vertex = 0x1,
         Fragment = 0x2,

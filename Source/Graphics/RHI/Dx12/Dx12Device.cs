@@ -157,12 +157,12 @@ namespace Infinity.Graphics
         private ID3D12CommandSignature* m_DrawIndexedIndirectSignature;
         private Dictionary<EQueueType, List<Dx12Queue>> m_GpuQueues;
 
-        public Dx12Device(Dx12GPU gpu, in RHIDeviceCreateInfo createInfo) 
+        public Dx12Device(Dx12GPU gpu, in RHIDeviceDescriptor descriptor) 
         {
             m_Dx12Gpu = gpu;
             CreateDevice();
             CreateFeatureSet();
-            CreateQueues(createInfo);
+            CreateQueues(descriptor);
             CreateDescriptorHeaps();
             CreateCommandSignatures();
         }
@@ -187,54 +187,54 @@ namespace Infinity.Graphics
             return new Dx12Fence(this);
         }
 
-        public override RHISwapChain CreateSwapChain(in RHISwapChainCreateInfo createInfo)
+        public override RHISwapChain CreateSwapChain(in RHISwapChainDescriptor descriptor)
         {
-            return new Dx12SwapChain(this, createInfo);
+            return new Dx12SwapChain(this, descriptor);
         }
 
-        public override RHIBuffer CreateBuffer(in RHIBufferCreateInfo createInfo)
+        public override RHIBuffer CreateBuffer(in RHIBufferDescriptor descriptor)
         {
-            return new Dx12Buffer(this, createInfo);
+            return new Dx12Buffer(this, descriptor);
         }
 
-        public override RHITexture CreateTexture(in RHITextureCreateInfo createInfo)
+        public override RHITexture CreateTexture(in RHITextureDescriptor descriptor)
         {
-            return new Dx12Texture(this, createInfo);
+            return new Dx12Texture(this, descriptor);
         }
 
-        public override RHISampler CreateSampler(in RHISamplerCreateInfo createInfo)
+        public override RHISampler CreateSampler(in RHISamplerDescriptor descriptor)
         {
-            return new Dx12Sampler(this, createInfo);
+            return new Dx12Sampler(this, descriptor);
         }
 
-        public override RHIShader CreateShader(in RHIShaderCreateInfo createInfo)
+        public override RHIShader CreateShader(in RHIShaderDescriptor descriptor)
         {
-            return new Dx12Shader(createInfo);
+            return new Dx12Shader(descriptor);
         }
 
-        public override RHIBindGroupLayout CreateBindGroupLayout(in RHIBindGroupLayoutCreateInfo createInfo)
+        public override RHIBindGroupLayout CreateBindGroupLayout(in RHIBindGroupLayoutDescriptor descriptor)
         {
-            return new Dx12BindGroupLayout(createInfo);
+            return new Dx12BindGroupLayout(descriptor);
         }
 
-        public override RHIBindGroup CreateBindGroup(in RHIBindGroupCreateInfo createInfo)
+        public override RHIBindGroup CreateBindGroup(in RHIBindGroupDescriptor descriptor)
         {
-            return new Dx12BindGroup(createInfo);
+            return new Dx12BindGroup(descriptor);
         }
 
-        public override RHIPipelineLayout CreatePipelineLayout(in RHIPipelineLayoutCreateInfo createInfo)
+        public override RHIPipelineLayout CreatePipelineLayout(in RHIPipelineLayoutDescriptor descriptor)
         {
-            return new Dx12PipelineLayout(this, createInfo);
+            return new Dx12PipelineLayout(this, descriptor);
         }
 
-        public override RHIComputePipeline CreateComputePipeline(in RHIComputePipelineCreateInfo createInfo)
+        public override RHIComputePipeline CreateComputePipeline(in RHIComputePipelineDescriptor descriptor)
         {
-            return new Dx12ComputePipeline(this, createInfo);
+            return new Dx12ComputePipeline(this, descriptor);
         }
 
-        public override RHIGraphicsPipeline CreateGraphicsPipeline(in RHIGraphicsPipelineCreateInfo createInfo)
+        public override RHIGraphicsPipeline CreateGraphicsPipeline(in RHIGraphicsPipelineDescriptor descriptor)
         {
-            return new Dx12GraphicsPipeline(this, createInfo);
+            return new Dx12GraphicsPipeline(this, descriptor);
         }
 
         public Dx12DescriptorInfo AllocateDsvDescriptor(in int count)
@@ -315,12 +315,12 @@ namespace Infinity.Graphics
             m_NativeDevice->CheckFeatureSupport(D3D12_FEATURE.D3D12_FEATURE_D3D12_OPTIONS6, &options, (uint)sizeof(D3D12_FEATURE_DATA_D3D12_OPTIONS6));
         }
 
-        private void CreateQueues(in RHIDeviceCreateInfo createInfo)
+        private void CreateQueues(in RHIDeviceDescriptor descriptor)
         {
             Dictionary<EQueueType, int> queueCountMap = new Dictionary<EQueueType, int>(3);
-            for (int i = 0; i < createInfo.queueInfoCount; ++i)
+            for (int i = 0; i < descriptor.queueInfoCount; ++i)
             {
-                RHIQueueInfo queueInfo = createInfo.queueInfos.Span[i];
+                RHIQueueDescriptor queueInfo = descriptor.queueInfos.Span[i];
                 if (queueCountMap.TryGetValue(queueInfo.type, out int value))
                 {
                     queueCountMap[queueInfo.type] = 0;
@@ -343,10 +343,10 @@ namespace Infinity.Graphics
                     bool success = SUCCEEDED(m_NativeDevice->CreateCommandQueue(&queueDesc, __uuidof<ID3D12CommandQueue>(), (void**)&commandQueue));
                     Debug.Assert(success);
 
-                    Dx12CommandQueueCreateInfo queueCreateInfo;
-                    queueCreateInfo.type = iter.Key;
-                    queueCreateInfo.queue = commandQueue;
-                    tempQueues.Add(new Dx12Queue(this, queueCreateInfo));
+                    Dx12CommandQueueDescriptor queueDescriptor;
+                    queueDescriptor.type = iter.Key;
+                    queueDescriptor.queue = commandQueue;
+                    tempQueues.Add(new Dx12Queue(this, queueDescriptor));
                 }
 
                 m_GpuQueues.TryAdd(iter.Key, tempQueues);

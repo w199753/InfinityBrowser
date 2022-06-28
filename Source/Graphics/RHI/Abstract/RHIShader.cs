@@ -2,7 +2,7 @@
 
 namespace Infinity.Graphics
 {
-    public struct RHIShaderCreateInfo
+    public struct RHIShaderDescriptor
     {
         public int size;
         public IntPtr byteCode;

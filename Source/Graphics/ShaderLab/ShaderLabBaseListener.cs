@@ -19,6 +19,7 @@
 // Ambiguous reference in cref attribute
 #pragma warning disable 419
 
+#pragma warning disable CS3021
 
 using Antlr4.Runtime.Misc;
 using IErrorNode = Antlr4.Runtime.Tree.IErrorNode;
@@ -34,12 +35,12 @@ using ParserRuleContext = Antlr4.Runtime.ParserRuleContext;
 [System.CodeDom.Compiler.GeneratedCode("ANTLR", "4.7")]
 [System.CLSCompliant(false)]
 public partial class ShaderLabBaseListener : IShaderLabListener {
-	/// <summary>
-	/// Enter a parse tree produced by <see cref="ShaderLabParser.shader"/>.
-	/// <para>The default implementation does nothing.</para>
-	/// </summary>
-	/// <param name="context">The parse tree.</param>
-	public virtual void EnterShader([NotNull] ShaderLabParser.ShaderContext context) { }
+    /// <summary>
+    /// Enter a parse tree produced by <see cref="ShaderLabParser.shader"/>.
+    /// <para>The default implementation does nothing.</para>
+    /// </summary>
+    /// <param name="context">The parse tree.</param>
+    public virtual void EnterShader([NotNull] ShaderLabParser.ShaderContext context) { }
 	/// <summary>
 	/// Exit a parse tree produced by <see cref="ShaderLabParser.shader"/>.
 	/// <para>The default implementation does nothing.</para>

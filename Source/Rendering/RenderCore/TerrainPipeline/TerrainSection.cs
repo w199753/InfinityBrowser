@@ -1,6 +1,5 @@
 ﻿using System;
 using Infinity.Mathmatics;
-using Infinity.Mathmatics.Geometry;
 
 namespace Infinity.Rendering
 {

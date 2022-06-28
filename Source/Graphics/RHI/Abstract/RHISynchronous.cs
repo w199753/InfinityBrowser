@@ -1,14 +1,14 @@
 ﻿namespace Infinity.Graphics
 {
 #pragma warning disable CS0414
-    public struct RHIBufferTransition
+    public struct RHIBufferTransitionDescriptor
     {
         public RHIBuffer handle;
         public EBufferState before;
         public EBufferState after;
     }
 
-    public struct RHITextureTransition
+    public struct RHITextureTransitionDescriptor
     {
         public RHITexture handle;
         public ETextureState before;
@@ -18,12 +18,12 @@
     public struct RHIBarrier
     {
         public EResourceType Type => m_Type;
-        public RHIBufferTransition Buffer => m_Buffer;
-        public RHITextureTransition Texture => m_Texture;
+        public RHIBufferTransitionDescriptor Buffer => m_Buffer;
+        public RHITextureTransitionDescriptor Texture => m_Texture;
 
         private EResourceType m_Type;
-        private RHIBufferTransition m_Buffer;
-        private RHITextureTransition m_Texture;
+        private RHIBufferTransitionDescriptor m_Buffer;
+        private RHITextureTransitionDescriptor m_Texture;
 
         public static RHIBarrier Transition(RHIBuffer buffer, in EBufferState before, in EBufferState after)
         {

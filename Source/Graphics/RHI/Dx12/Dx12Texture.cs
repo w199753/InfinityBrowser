@@ -25,29 +25,29 @@ namespace Infinity.Graphics
         private Dx12Device m_Dx12Device;
         private ID3D12Resource* m_NativeResource;
 
-        public Dx12Texture(Dx12Device device, in RHITextureCreateInfo createInfo)
+        public Dx12Texture(Dx12Device device, in RHITextureDescriptor descriptor)
         {
             m_Dx12Device = device;
-            m_CreateInfo = createInfo;
+            m_Descriptor = descriptor;
 
-            D3D12_HEAP_PROPERTIES heapProperties = new D3D12_HEAP_PROPERTIES(Dx12Utility.ConvertToDx12ResourceFlagByUsage(createInfo.storageMode));
+            D3D12_HEAP_PROPERTIES heapProperties = new D3D12_HEAP_PROPERTIES(Dx12Utility.ConvertToDx12ResourceFlagByUsage(descriptor.storageMode));
             D3D12_RESOURCE_DESC textureDesc = new D3D12_RESOURCE_DESC();
-            textureDesc.MipLevels = (ushort)createInfo.mipLevels;
-            textureDesc.Format = /*Dx12Utility.GetNativeFormat(createInfo->format)*/DXGI_FORMAT.DXGI_FORMAT_R8G8B8A8_TYPELESS;
-            textureDesc.Width = (ulong)createInfo.extent.x;
-            textureDesc.Height = (uint)createInfo.extent.y;
-            textureDesc.DepthOrArraySize = (ushort)createInfo.extent.z;
-            textureDesc.Flags = Dx12Utility.ConvertToDx12TextureFlag(createInfo.usage);
-            textureDesc.SampleDesc.Count = (uint)createInfo.samples.x;
-            textureDesc.SampleDesc.Quality = (uint)createInfo.samples.y;
-            textureDesc.Dimension = Dx12Utility.ConvertToDx12TextureDimension(createInfo.dimension);
+            textureDesc.MipLevels = (ushort)descriptor.mipLevels;
+            textureDesc.Format = /*Dx12Utility.GetNativeFormat(Descriptor->format)*/DXGI_FORMAT.DXGI_FORMAT_R8G8B8A8_TYPELESS;
+            textureDesc.Width = (ulong)descriptor.extent.x;
+            textureDesc.Height = (uint)descriptor.extent.y;
+            textureDesc.DepthOrArraySize = (ushort)descriptor.extent.z;
+            textureDesc.Flags = Dx12Utility.ConvertToDx12TextureFlag(descriptor.usage);
+            textureDesc.SampleDesc.Count = (uint)descriptor.samples.x;
+            textureDesc.SampleDesc.Quality = (uint)descriptor.samples.y;
+            textureDesc.Dimension = Dx12Utility.ConvertToDx12TextureDimension(descriptor.dimension);
 
-            D3D12_RESOURCE_STATES initialState = Dx12Utility.ConvertToDx12TextureState(createInfo.state);
-            if (createInfo.storageMode == EStorageMode.Static || createInfo.storageMode == EStorageMode.Dynamic)
+            D3D12_RESOURCE_STATES initialState = Dx12Utility.ConvertToDx12TextureState(descriptor.state);
+            if (descriptor.storageMode == EStorageMode.Static || descriptor.storageMode == EStorageMode.Dynamic)
             {
                 initialState = D3D12_RESOURCE_STATES.D3D12_RESOURCE_STATE_GENERIC_READ;
             }
-            if (createInfo.storageMode == EStorageMode.Staging)
+            if (descriptor.storageMode == EStorageMode.Staging)
             {
                 initialState = D3D12_RESOURCE_STATES.D3D12_RESOURCE_STATE_COPY_DEST;
             }
@@ -58,16 +58,16 @@ namespace Infinity.Graphics
             m_NativeResource = dx12Resource;
         }
 
-        public Dx12Texture(Dx12Device device, in RHITextureCreateInfo createInfo, in ID3D12Resource* resource)
+        public Dx12Texture(Dx12Device device, in RHITextureDescriptor Descriptor, in ID3D12Resource* resource)
         {
             m_Dx12Device = device;
-            m_CreateInfo = createInfo;
+            m_Descriptor = Descriptor;
             m_NativeResource = resource;
         }
 
-        public override RHITextureView CreateTextureView(in RHITextureViewCreateInfo createInfo)
+        public override RHITextureView CreateTextureView(in RHITextureViewDescriptor descriptor)
         {
-            return new Dx12TextureView(this, createInfo);
+            return new Dx12TextureView(this, descriptor);
         }
 
         protected override void Release()

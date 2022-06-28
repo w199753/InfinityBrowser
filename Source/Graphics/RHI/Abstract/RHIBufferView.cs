@@ -1,6 +1,6 @@
 ﻿namespace Infinity.Graphics
 {
-    public struct RHIBufferViewCreateInfo
+    public struct RHIBufferViewDescriptor
     {
         public int count;
         public int offset;

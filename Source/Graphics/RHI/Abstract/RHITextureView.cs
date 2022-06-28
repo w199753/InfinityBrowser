@@ -1,6 +1,6 @@
 ﻿namespace Infinity.Graphics
 {
-    public struct RHITextureViewCreateInfo
+    public struct RHITextureViewDescriptor
     {
         public int mipLevelNum;
         public int baseMipLevel;

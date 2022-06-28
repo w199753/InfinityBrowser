@@ -2,7 +2,7 @@
 
 namespace Infinity.Graphics
 {
-    public struct RHITextureCreateInfo
+    public struct RHITextureDescriptor
     {
         public int3 extent;
         public int2 samples;
@@ -16,16 +16,16 @@ namespace Infinity.Graphics
 
     public abstract class RHITexture : Disposal
     {
-        public RHITextureCreateInfo CreateInfo
+        public RHITextureDescriptor Descriptor
         {
             get
             {
-                return m_CreateInfo;
+                return m_Descriptor;
             }
         }
 
-        protected RHITextureCreateInfo m_CreateInfo;
+        protected RHITextureDescriptor m_Descriptor;
 
-        public abstract RHITextureView CreateTextureView(in RHITextureViewCreateInfo createInfo);
+        public abstract RHITextureView CreateTextureView(in RHITextureViewDescriptor descriptor);
     }
 }

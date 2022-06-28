@@ -34,20 +34,20 @@ namespace Infinity.Graphics
         private D3D12_CPU_DESCRIPTOR_HANDLE m_NativeCpuDescriptorHandle;
         private D3D12_GPU_DESCRIPTOR_HANDLE m_NativeGpuDescriptorHandle;
 
-        public Dx12BufferView(Dx12Buffer buffer, in RHIBufferViewCreateInfo createInfo)
+        public Dx12BufferView(Dx12Buffer buffer, in RHIBufferViewDescriptor descriptor)
         {
             m_LifeState = false;
             m_Dx12Buffer = buffer;
 
-            if (createInfo.type == EBufferViewType.UniformBuffer)
+            if (descriptor.type == EBufferViewType.UniformBuffer)
             {
-                if (Dx12Utility.IsConstantBuffer(buffer.CreateInfo.usage))
+                if (Dx12Utility.IsConstantBuffer(buffer.Descriptor.usage))
                 {
                     m_LifeState.x = true;
 
                     D3D12_CONSTANT_BUFFER_VIEW_DESC desc = new D3D12_CONSTANT_BUFFER_VIEW_DESC();
-                    desc.SizeInBytes = (uint)createInfo.stride;
-                    desc.BufferLocation = m_Dx12Buffer.NativeResource->GetGPUVirtualAddress() + (ulong)(createInfo.stride * createInfo.offset);
+                    desc.SizeInBytes = (uint)descriptor.stride;
+                    desc.BufferLocation = m_Dx12Buffer.NativeResource->GetGPUVirtualAddress() + (ulong)(descriptor.stride * descriptor.offset);
 
                     Dx12DescriptorInfo allocation = m_Dx12Buffer.Dx12Device.AllocateCbvSrvUavDescriptor(1);
                     m_HeapIndex = allocation.index;
@@ -57,17 +57,17 @@ namespace Infinity.Graphics
                     m_Dx12Buffer.Dx12Device.NativeDevice->CreateConstantBufferView(&desc, m_NativeCpuDescriptorHandle);
                 }
             }
-            else if (createInfo.type == EBufferViewType.ShaderResource)
+            else if (descriptor.type == EBufferViewType.ShaderResource)
             {
-                if (Dx12Utility.IsShaderResourceBuffer(buffer.CreateInfo.usage))
+                if (Dx12Utility.IsShaderResourceBuffer(buffer.Descriptor.usage))
                 {
                     m_LifeState.y = true;
 
                     D3D12_SHADER_RESOURCE_VIEW_DESC desc = new D3D12_SHADER_RESOURCE_VIEW_DESC();
                     desc.Format = DXGI_FORMAT.DXGI_FORMAT_UNKNOWN;
-                    desc.Buffer.NumElements = (uint)createInfo.count;
-                    desc.Buffer.FirstElement = (ulong)createInfo.offset;
-                    desc.Buffer.StructureByteStride = (uint)createInfo.stride;
+                    desc.Buffer.NumElements = (uint)descriptor.count;
+                    desc.Buffer.FirstElement = (ulong)descriptor.offset;
+                    desc.Buffer.StructureByteStride = (uint)descriptor.stride;
                     desc.ViewDimension = D3D12_SRV_DIMENSION.D3D12_SRV_DIMENSION_BUFFER;
                     desc.Shader4ComponentMapping = 5768;
 
@@ -79,17 +79,17 @@ namespace Infinity.Graphics
                     m_Dx12Buffer.Dx12Device.NativeDevice->CreateShaderResourceView(m_Dx12Buffer.NativeResource, &desc, m_NativeCpuDescriptorHandle);
                 }
             }
-            else if (createInfo.type == EBufferViewType.UnorderedAccess)
+            else if (descriptor.type == EBufferViewType.UnorderedAccess)
             {
-                if (Dx12Utility.IsUnorderedAccessBuffer(buffer.CreateInfo.usage))
+                if (Dx12Utility.IsUnorderedAccessBuffer(buffer.Descriptor.usage))
                 {
                     m_LifeState.z = true;
 
                     D3D12_UNORDERED_ACCESS_VIEW_DESC desc = new D3D12_UNORDERED_ACCESS_VIEW_DESC();
                     desc.Format = DXGI_FORMAT.DXGI_FORMAT_UNKNOWN;
-                    desc.Buffer.NumElements = (uint)createInfo.count;
-                    desc.Buffer.FirstElement = (ulong)createInfo.offset;
-                    desc.Buffer.StructureByteStride = (uint)createInfo.stride;
+                    desc.Buffer.NumElements = (uint)descriptor.count;
+                    desc.Buffer.FirstElement = (ulong)descriptor.offset;
+                    desc.Buffer.StructureByteStride = (uint)descriptor.stride;
                     desc.ViewDimension = D3D12_UAV_DIMENSION.D3D12_UAV_DIMENSION_BUFFER;
 
                     Dx12DescriptorInfo allocation = m_Dx12Buffer.Dx12Device.AllocateCbvSrvUavDescriptor(1);

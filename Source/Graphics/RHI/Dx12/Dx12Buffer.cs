@@ -25,21 +25,21 @@ namespace Infinity.Graphics
         private Dx12Device m_Dx12Device;
         private ID3D12Resource* m_NativeResource;
 
-        public Dx12Buffer(Dx12Device device, in RHIBufferCreateInfo createInfo)
+        public Dx12Buffer(Dx12Device device, in RHIBufferDescriptor descriptor)
         {
             m_Dx12Device = device;
-            m_CreateInfo = createInfo;
-            m_SizeInBytes = (uint)createInfo.size;
+            m_Descriptor = descriptor;
+            m_SizeInBytes = (uint)descriptor.size;
 
-            D3D12_RESOURCE_DESC resourceDesc = D3D12_RESOURCE_DESC.Buffer((ulong)createInfo.size, Dx12Utility.ConvertToDx12BufferFlag(createInfo.usage));
-            D3D12_HEAP_PROPERTIES heapProperties = new D3D12_HEAP_PROPERTIES(Dx12Utility.ConvertToDx12ResourceFlagByUsage(createInfo.storageMode));
+            D3D12_RESOURCE_DESC resourceDesc = D3D12_RESOURCE_DESC.Buffer((ulong)descriptor.size, Dx12Utility.ConvertToDx12BufferFlag(descriptor.usage));
+            D3D12_HEAP_PROPERTIES heapProperties = new D3D12_HEAP_PROPERTIES(Dx12Utility.ConvertToDx12ResourceFlagByUsage(descriptor.storageMode));
 
-            D3D12_RESOURCE_STATES initialState = Dx12Utility.ConvertToDx12BufferState(createInfo.state);
-            if (createInfo.storageMode == EStorageMode.Static || createInfo.storageMode == EStorageMode.Dynamic)
+            D3D12_RESOURCE_STATES initialState = Dx12Utility.ConvertToDx12BufferState(descriptor.state);
+            if (descriptor.storageMode == EStorageMode.Static || descriptor.storageMode == EStorageMode.Dynamic)
             {
                 initialState = D3D12_RESOURCE_STATES.D3D12_RESOURCE_STATE_GENERIC_READ;
             }
-            if (createInfo.storageMode == EStorageMode.Staging)
+            if (descriptor.storageMode == EStorageMode.Staging)
             {
                 initialState = D3D12_RESOURCE_STATES.D3D12_RESOURCE_STATE_COPY_DEST;
             }
@@ -52,7 +52,7 @@ namespace Infinity.Graphics
 
         public override IntPtr Map(in int length, in int offset)
         {
-            Debug.Assert(!(m_CreateInfo.storageMode == EStorageMode.Default));
+            Debug.Assert(!(m_Descriptor.storageMode == EStorageMode.Default));
 
             void* data;
             D3D12_RANGE range = new D3D12_RANGE((uint)offset, (uint)(offset + length));
@@ -63,14 +63,14 @@ namespace Infinity.Graphics
 
         public override void UnMap()
         {
-            Debug.Assert(!(m_CreateInfo.storageMode == EStorageMode.Default));
+            Debug.Assert(!(m_Descriptor.storageMode == EStorageMode.Default));
 
             m_NativeResource->Unmap(0, null);
         }
 
-        public override RHIBufferView CreateBufferView(in RHIBufferViewCreateInfo createInfo)
+        public override RHIBufferView CreateBufferView(in RHIBufferViewDescriptor descriptor)
         {
-            return new Dx12BufferView(this, createInfo);
+            return new Dx12BufferView(this, descriptor);
         }
 
         protected override void Release()

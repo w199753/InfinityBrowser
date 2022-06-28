@@ -3,7 +3,7 @@ using Infinity.Mathmatics;
 
 namespace Infinity.Graphics
 {
-    public struct RHISwapChainCreateInfo
+    public struct RHISwapChainDescriptor
     {
         public bool frameBufferOnly;
         public int count;

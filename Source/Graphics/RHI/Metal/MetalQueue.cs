@@ -5,7 +5,7 @@ using System.Diagnostics;
 namespace Infinity.Graphics
 {
 #pragma warning disable CS8600, CS8602
-    internal unsafe struct MtlCommandQueueCreateInfo
+    internal unsafe struct MtlCommandQueueDescriptor
     {
         public EQueueType queueType;
         public MTLCommandQueue cmdQueue;
@@ -25,11 +25,11 @@ namespace Infinity.Graphics
         private EQueueType m_QueueType;
         private MTLCommandQueue m_NativeQueue;
 
-        public MtlQueue(MtlDevice device, in MtlCommandQueueCreateInfo createInfo)
+        public MtlQueue(MtlDevice device, in MtlCommandQueueDescriptor descriptor)
         {
             m_MtlDevice = device;
-            m_QueueType = createInfo.queueType;
-            m_NativeQueue = createInfo.cmdQueue;
+            m_QueueType = descriptor.queueType;
+            m_NativeQueue = descriptor.cmdQueue;
         }
 
         public override RHICommandPool CreateCommandPool()

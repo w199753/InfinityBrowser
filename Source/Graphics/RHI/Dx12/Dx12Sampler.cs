@@ -32,19 +32,19 @@ namespace Infinity.Graphics
         private D3D12_CPU_DESCRIPTOR_HANDLE m_NativeCpuDescriptorHandle;
         private D3D12_GPU_DESCRIPTOR_HANDLE m_NativeGpuDescriptorHandle;
 
-        public Dx12Sampler(Dx12Device device, in RHISamplerCreateInfo createInfo)
+        public Dx12Sampler(Dx12Device device, in RHISamplerDescriptor descriptor)
         {
             m_Dx12Device = device;
 
             D3D12_SAMPLER_DESC desc = new D3D12_SAMPLER_DESC();
-            desc.AddressU = /*Dx12Utility.GetNativeAddressMode(createInfo->addressModeU)*/D3D12_TEXTURE_ADDRESS_MODE.D3D12_TEXTURE_ADDRESS_MODE_WRAP;
-            desc.AddressV = /*Dx12Utility.GetNativeAddressMode(createInfo->addressModeV)*/D3D12_TEXTURE_ADDRESS_MODE.D3D12_TEXTURE_ADDRESS_MODE_WRAP;
-            desc.AddressW = /*Dx12Utility.GetNativeAddressMode(createInfo->addressModeW)*/D3D12_TEXTURE_ADDRESS_MODE.D3D12_TEXTURE_ADDRESS_MODE_WRAP;
-            desc.Filter = Dx12Utility.ConvertToDx12Filter(createInfo);
-            desc.MinLOD = createInfo.lodMinClamp;
-            desc.MaxLOD = createInfo.lodMaxClamp;
-            desc.ComparisonFunc = /*Dx12Utility.GetNativeComparisonFunc(createInfo->comparisonFunc)*/D3D12_COMPARISON_FUNC.D3D12_COMPARISON_FUNC_ALWAYS;
-            desc.MaxAnisotropy = (uint)createInfo.maxAnisotropy;
+            desc.AddressU = /*Dx12Utility.GetNativeAddressMode(Descriptor->addressModeU)*/D3D12_TEXTURE_ADDRESS_MODE.D3D12_TEXTURE_ADDRESS_MODE_WRAP;
+            desc.AddressV = /*Dx12Utility.GetNativeAddressMode(Descriptor->addressModeV)*/D3D12_TEXTURE_ADDRESS_MODE.D3D12_TEXTURE_ADDRESS_MODE_WRAP;
+            desc.AddressW = /*Dx12Utility.GetNativeAddressMode(Descriptor->addressModeW)*/D3D12_TEXTURE_ADDRESS_MODE.D3D12_TEXTURE_ADDRESS_MODE_WRAP;
+            desc.Filter = Dx12Utility.ConvertToDx12Filter(descriptor);
+            desc.MinLOD = descriptor.lodMinClamp;
+            desc.MaxLOD = descriptor.lodMaxClamp;
+            desc.ComparisonFunc = /*Dx12Utility.GetNativeComparisonFunc(Descriptor->comparisonFunc)*/D3D12_COMPARISON_FUNC.D3D12_COMPARISON_FUNC_ALWAYS;
+            desc.MaxAnisotropy = (uint)descriptor.maxAnisotropy;
 
             Dx12DescriptorInfo allocation = device.AllocateSamplerDescriptor(1);
             m_HeapIndex = allocation.index;

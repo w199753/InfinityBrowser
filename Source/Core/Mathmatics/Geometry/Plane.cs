@@ -2,7 +2,7 @@ using System;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
 
-namespace Infinity.Mathmatics.Geometry
+namespace Infinity.Mathmatics
 {
     /// <summary>
     /// A plane represented by a normal vector and a distance along the normal from the origin.

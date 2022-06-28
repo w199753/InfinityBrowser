@@ -32,17 +32,17 @@ namespace Infinity.Graphics
             m_Dx12CommandBuffer.NativeCommandList->CopyBufferRegion(dstBuffer.NativeResource, (ulong)dstOffset, srcBuffer.NativeResource, (ulong)srcOffset, (ulong)size);
         }
 
-        public override void CopyBufferToTexture(RHIBuffer src, RHITexture dst, in RHITextureSubResourceInfo subResourceInfo, in int3 size)
+        public override void CopyBufferToTexture(RHIBuffer src, RHITexture dst, in RHITextureSubResourceDescriptor subResourceDescriptor, in int3 size)
         {
             throw new NotImplementedException();
         }
 
-        public override void CopyTextureToBuffer(RHITexture src, RHIBuffer dst, in RHITextureSubResourceInfo subResourceInfo, in int3 size)
+        public override void CopyTextureToBuffer(RHITexture src, RHIBuffer dst, in RHITextureSubResourceDescriptor subResourceDescriptor, in int3 size)
         {
             throw new NotImplementedException();
         }
 
-        public override void CopyTextureToTexture(RHITexture src, in RHITextureSubResourceInfo srcSubResourceInfo, RHITexture dst, in RHITextureSubResourceInfo dstSubResourceInfo, in int3 size)
+        public override void CopyTextureToTexture(RHITexture src, in RHITextureSubResourceDescriptor srcSubResourceDescriptor, RHITexture dst, in RHITextureSubResourceDescriptor dstSubResourceDescriptor, in int3 size)
         {
             //Dx12Texture srcTexture = src as Dx12Texture;
             //Dx12Texture dstTexture = dst as Dx12Texture;
@@ -185,7 +185,7 @@ namespace Infinity.Graphics
                 Dx12PipelineLayout pipelineLayout = m_Dx12ComputePipeline.PipelineLayout;
                 ref Dx12BindGroupParameter bindParameter = ref dx12BindGroup.BindParameters[i];
 
-                Dx12BindTypeAndParameterSlot? parameter = pipelineLayout.QueryRootDescriptorParameterIndex(EShaderStageFlags.Compute, bindGroupLayout.LayoutIndex, bindParameter.slot, bindParameter.bindType);
+                Dx12BindTypeAndParameterSlot? parameter = pipelineLayout.QueryRootDescriptorParameterIndex(EShaderStageFlag.Compute, bindGroupLayout.LayoutIndex, bindParameter.slot, bindParameter.bindType);
                 if (parameter.HasValue)
                 {
                     Debug.Assert(parameter.Value.bindType == bindParameter.bindType);
@@ -239,71 +239,71 @@ namespace Infinity.Graphics
             m_Dx12CommandBuffer = cmdBuffer;
         }
 
-        public override void BeginPass(in RHIGraphicsPassBeginInfo beginInfo)
+        public override void BeginPass(in RHIGraphicsPassDescriptor descriptor)
         {
-            if (beginInfo.name != null)
+            if (descriptor.name != null)
             {
-                PushDebugGroup(beginInfo.name);
+                PushDebugGroup(descriptor.name);
             }
 
             // set render targets
-            D3D12_CPU_DESCRIPTOR_HANDLE* rtvHandles = stackalloc D3D12_CPU_DESCRIPTOR_HANDLE[beginInfo.colorAttachmentCount];
-            for (int i = 0; i < beginInfo.colorAttachmentCount; ++i)
+            D3D12_CPU_DESCRIPTOR_HANDLE* rtvHandles = stackalloc D3D12_CPU_DESCRIPTOR_HANDLE[descriptor.colorAttachmentDescriptors.Length];
+            for (int i = 0; i < descriptor.colorAttachmentDescriptors.Length; ++i)
             {
-                Dx12TextureView textureView = beginInfo.colorAttachments.Span[i].renderTarget as Dx12TextureView;
+                Dx12TextureView textureView = descriptor.colorAttachmentDescriptors.Span[i].renderTarget as Dx12TextureView;
                 Debug.Assert(textureView != null);
 
                 rtvHandles[i] = textureView.NativeCpuDescriptorHandle;
             }
 
             D3D12_CPU_DESCRIPTOR_HANDLE? dsvHandle = null;
-            if (beginInfo.depthStencilAttachment != null)
+            if (descriptor.depthStencilAttachmentDescriptor != null)
             {
-                Dx12TextureView textureView = beginInfo.depthStencilAttachment?.depthStencilTarget as Dx12TextureView;
+                Dx12TextureView textureView = descriptor.depthStencilAttachmentDescriptor?.depthStencilTarget as Dx12TextureView;
                 Debug.Assert(textureView != null);
 
                 dsvHandle = textureView.NativeCpuDescriptorHandle;
             }
-            m_Dx12CommandBuffer.NativeCommandList->OMSetRenderTargets((uint)beginInfo.colorAttachmentCount, rtvHandles, false, dsvHandle.HasValue ? (D3D12_CPU_DESCRIPTOR_HANDLE*)&dsvHandle : null);
+            m_Dx12CommandBuffer.NativeCommandList->OMSetRenderTargets((uint)descriptor.colorAttachmentDescriptors.Length, rtvHandles, false, dsvHandle.HasValue ? (D3D12_CPU_DESCRIPTOR_HANDLE*)&dsvHandle : null);
 
             // clear render targets
-            for (int i = 0; i < beginInfo.colorAttachmentCount; ++i)
+            for (int i = 0; i < descriptor.colorAttachmentDescriptors.Length; ++i)
             {
-                ref RHIGraphicsPassColorAttachment colorAttachment = ref beginInfo.colorAttachments.Span[i];
+                ref RHIColorAttachmentDescriptor colorAttachmentDescriptor = ref descriptor.colorAttachmentDescriptors.Span[i];
 
-                if (colorAttachment.loadOp != ELoadOp.Clear)
+                if (colorAttachmentDescriptor.loadOp != ELoadOp.Clear)
                 {
                     continue;
                 }
 
-                float4 clearValue = colorAttachment.clearValue;
+                float4 clearValue = colorAttachmentDescriptor.clearValue;
                 m_Dx12CommandBuffer.NativeCommandList->ClearRenderTargetView(rtvHandles[i], (float*)&clearValue, 0, null);
             }
             if (dsvHandle.HasValue)
             {
-                RHIGraphicsPassDepthStencilAttachment? depthStencilAttachment = beginInfo.depthStencilAttachment;
-                if (depthStencilAttachment?.depthLoadOp != ELoadOp.Clear && depthStencilAttachment?.stencilLoadOp != ELoadOp.Clear)
+                RHIDepthStencilAttachmentDescriptor? depthStencilAttachmentDescriptor = descriptor.depthStencilAttachmentDescriptor;
+                if (depthStencilAttachmentDescriptor?.depthLoadOp != ELoadOp.Clear && depthStencilAttachmentDescriptor?.stencilLoadOp != ELoadOp.Clear)
                 {
                     return;
                 }
 
-                m_Dx12CommandBuffer.NativeCommandList->ClearDepthStencilView(dsvHandle.Value, Dx12Utility.GetDx12ClearFlagByDSA(depthStencilAttachment.Value), depthStencilAttachment.Value.depthClearValue, Convert.ToByte(depthStencilAttachment.Value.stencilClearValue), 0, null);
+                m_Dx12CommandBuffer.NativeCommandList->ClearDepthStencilView(dsvHandle.Value, Dx12Utility.GetDx12ClearFlagByDSA(depthStencilAttachmentDescriptor.Value), depthStencilAttachmentDescriptor.Value.depthClearValue, Convert.ToByte(depthStencilAttachmentDescriptor.Value.stencilClearValue), 0, null);
             }
             
-            if(beginInfo.shadingRateInfo.HasValue)
+            if(descriptor.shadingRateDescriptor.HasValue)
             {
-                if(beginInfo.shadingRateInfo.Value.shadingRateTexture != null)
+                if(descriptor.shadingRateDescriptor.Value.shadingRateTexture != null)
                 {
-                    D3D12_SHADING_RATE_COMBINER shadingRateCombiner = Dx12Utility.ConvertToDx12ShadingRateCombiner(beginInfo.shadingRateInfo.Value.shadingRateCombiner);
-                    Dx12Texture dx12Texture = beginInfo.shadingRateInfo.Value.shadingRateTexture as Dx12Texture;
-                    m_Dx12CommandBuffer.NativeCommandList->RSSetShadingRate(Dx12Utility.ConvertToDx12ShadingRate(beginInfo.shadingRateInfo.Value.shadingRate), &shadingRateCombiner);
+                    D3D12_SHADING_RATE_COMBINER shadingRateCombiner = Dx12Utility.ConvertToDx12ShadingRateCombiner(descriptor.shadingRateDescriptor.Value.shadingRateCombiner);
+                    Dx12Texture dx12Texture = descriptor.shadingRateDescriptor.Value.shadingRateTexture as Dx12Texture;
+                    m_Dx12CommandBuffer.NativeCommandList->RSSetShadingRate(Dx12Utility.ConvertToDx12ShadingRate(descriptor.shadingRateDescriptor.Value.shadingRate), &shadingRateCombiner);
                     m_Dx12CommandBuffer.NativeCommandList->RSSetShadingRateImage(dx12Texture.NativeResource);
                 }
                 else
                 {
                     //D3D12_SHADING_RATE_COMBINER* shadingRateCombiners = stackalloc D3D12_SHADING_RATE_COMBINER[2] { D3D12_SHADING_RATE_COMBINER.D3D12_SHADING_RATE_COMBINER_MAX, D3D12_SHADING_RATE_COMBINER.D3D12_SHADING_RATE_COMBINER_MAX };
                     //m_Dx12CommandBuffer.NativeCommandList->RSSetShadingRate(Dx12Utility.ConvertToDx12ShadingRate(beginInfo.shadingRateInfo.Value.shadingRate), shadingRateCombiners);
-                    m_Dx12CommandBuffer.NativeCommandList->RSSetShadingRate(Dx12Utility.ConvertToDx12ShadingRate(beginInfo.shadingRateInfo.Value.shadingRate), null);
+                    m_Dx12CommandBuffer.NativeCommandList->RSSetShadingRate(Dx12Utility.ConvertToDx12ShadingRate(descriptor.shadingRateDescriptor.Value.shadingRate), null);
                 }
             }
         }
@@ -376,14 +376,14 @@ namespace Infinity.Graphics
                 Dx12PipelineLayout pipelineLayout = m_Dx12GraphicsPipeline.PipelineLayout;
                 ref Dx12BindGroupParameter bindParameter = ref dx12BindGroup.BindParameters[i];
 
-                parameter = pipelineLayout.QueryRootDescriptorParameterIndex(EShaderStageFlags.Vertex, bindGroupLayout.LayoutIndex, bindParameter.slot, bindParameter.bindType);
+                parameter = pipelineLayout.QueryRootDescriptorParameterIndex(EShaderStageFlag.Vertex, bindGroupLayout.LayoutIndex, bindParameter.slot, bindParameter.bindType);
                 if (parameter.HasValue)
                 {
                     Debug.Assert(parameter.Value.bindType == bindParameter.bindType);
                     m_Dx12CommandBuffer.NativeCommandList->SetGraphicsRootDescriptorTable((uint)parameter.Value.index, bindParameter.dx12GpuDescriptorHandle);
                 }
 
-                parameter = pipelineLayout.QueryRootDescriptorParameterIndex(EShaderStageFlags.Fragment, bindGroupLayout.LayoutIndex, bindParameter.slot, bindParameter.bindType);
+                parameter = pipelineLayout.QueryRootDescriptorParameterIndex(EShaderStageFlag.Fragment, bindGroupLayout.LayoutIndex, bindParameter.slot, bindParameter.bindType);
                 if (parameter.HasValue)
                 {
                     Debug.Assert(parameter.Value.bindType == bindParameter.bindType);
