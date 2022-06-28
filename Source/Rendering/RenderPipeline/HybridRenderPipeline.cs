@@ -103,9 +103,9 @@ namespace Infinity.Rendering
                 textureDescriptor.samples = 1;
                 textureDescriptor.mipLevels = 1;
                 textureDescriptor.format = EPixelFormat.RGBA8_UNorm;
-                textureDescriptor.dimension = ETextureDimension.Tex2D;
                 textureDescriptor.state = ETextureState.Common;
                 textureDescriptor.usage = ETextureUsage.RenderTarget | ETextureUsage.UnorderedAccess;
+                textureDescriptor.dimension = ETextureDimension.Texture2D;
                 textureDescriptor.storageMode = EStorageMode.Default;
             }
             m_ComputeTexture = renderContext.CreateTexture(textureDescriptor);
@@ -117,8 +117,8 @@ namespace Infinity.Rendering
                 outputViewDescriptor.arrayLayerNum = 1;
                 outputViewDescriptor.baseArrayLayer = 0;
                 outputViewDescriptor.format = EPixelFormat.RGBA8_UNorm;
-                outputViewDescriptor.type = ETextureViewType.UnorderedAccess;
-                outputViewDescriptor.dimension = ETextureViewDimension.Tex2D;
+                outputViewDescriptor.viewType = ETextureViewType.UnorderedAccessView;
+                outputViewDescriptor.dimension = ETextureViewDimension.Texture2D;
             }
             m_ComputeTextureView = m_ComputeTexture.CreateTextureView(outputViewDescriptor);
 

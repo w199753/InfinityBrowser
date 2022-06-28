@@ -162,18 +162,18 @@
 
     public enum ETextureDimension : byte
     {
-        Tex2D,
-        Tex3D,
+        Texture2D,
+        Texture3D,
         MAX
     }
 
     public enum ETextureViewDimension : byte
     {
-        Tex2D,
-        Tex2DArray,
-        TexCube,
-        TexCubeArray,
-        Tex3D,
+        Texture2D,
+        Texture2DArray,
+        TextureCube,
+        TextureCubeArray,
+        Texture3D,
         MAX
     }
 
@@ -418,9 +418,9 @@
 
     public enum EBufferViewType : byte
     {
-        UniformBuffer,
-        ShaderResource,
-        UnorderedAccess,
+        UniformBufferView,
+        ShaderResourceView,
+        UnorderedAccessView,
         MAX
     }
 
@@ -435,10 +435,10 @@
 
     public enum ETextureViewType : byte
     {
-        DepthStencil,
-        RenderTarget,
-        ShaderResource,
-        UnorderedAccess,
+        DepthStencilView,
+        RenderTargetView,
+        ShaderResourceView,
+        UnorderedAccessView,
         MAX
     }
 

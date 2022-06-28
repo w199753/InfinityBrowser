@@ -129,8 +129,8 @@ namespace Infinity.Rendering
             viewDescriptor.arrayLayerNum = 1;
             viewDescriptor.baseArrayLayer = 0;
             viewDescriptor.format = EPixelFormat.RGBA8_UNorm;
-            viewDescriptor.type = ETextureViewType.RenderTarget;
-            viewDescriptor.dimension = ETextureViewDimension.Tex2D;
+            viewDescriptor.viewType = ETextureViewType.RenderTargetView;
+            viewDescriptor.dimension = ETextureViewDimension.Texture2D;
             m_SwapChainViews = new RHITextureView[3];
             m_SwapChainViews[0] = m_SwapChain.GetTexture(0).CreateTextureView(viewDescriptor);
             m_SwapChainViews[1] = m_SwapChain.GetTexture(1).CreateTextureView(viewDescriptor);

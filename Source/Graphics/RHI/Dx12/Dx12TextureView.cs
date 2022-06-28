@@ -39,7 +39,7 @@ namespace Infinity.Graphics
             m_LifeState = false;
             m_Dx12Texture = texture;
 
-            if (descriptor.type == ETextureViewType.DepthStencil)
+            if (descriptor.viewType == ETextureViewType.DepthStencilView)
             {
                 if(Dx12Utility.IsDepthStencilTexture(texture.Descriptor.usage))
                 {
@@ -60,7 +60,7 @@ namespace Infinity.Graphics
                     m_Dx12Texture.Dx12Device.NativeDevice->CreateRenderTargetView(texture.NativeResource, &desc, m_NativeCpuDescriptorHandle);*/
                 }
             }
-            else if (descriptor.type == ETextureViewType.RenderTarget)
+            else if (descriptor.viewType == ETextureViewType.RenderTargetView)
             {
                 if (Dx12Utility.IsRenderTargetTexture(texture.Descriptor.usage))
                 {
@@ -81,7 +81,7 @@ namespace Infinity.Graphics
                     m_Dx12Texture.Dx12Device.NativeDevice->CreateRenderTargetView(m_Dx12Texture.NativeResource, &desc, m_NativeCpuDescriptorHandle);
                 }
             } 
-            else if (descriptor.type == ETextureViewType.ShaderResource)
+            else if (descriptor.viewType == ETextureViewType.ShaderResourceView)
             {
                 if(Dx12Utility.IsShaderResourceTexture(texture.Descriptor.usage))
                 {
@@ -104,7 +104,7 @@ namespace Infinity.Graphics
                     m_Dx12Texture.Dx12Device.NativeDevice->CreateShaderResourceView(m_Dx12Texture.NativeResource, &desc, m_NativeCpuDescriptorHandle);
                 }
             }
-            else if (descriptor.type == ETextureViewType.UnorderedAccess)
+            else if (descriptor.viewType == ETextureViewType.UnorderedAccessView)
             {
                 if(Dx12Utility.IsUnorderedAccessTexture(texture.Descriptor.usage))
                 {

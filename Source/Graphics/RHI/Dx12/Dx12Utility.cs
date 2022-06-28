@@ -206,10 +206,10 @@ namespace Infinity.Graphics
         {
             switch (dimension)
             {
-                case ETextureDimension.Tex2D:
+                case ETextureDimension.Texture2D:
                     return D3D12_RESOURCE_DIMENSION.D3D12_RESOURCE_DIMENSION_TEXTURE2D;
 
-                case ETextureDimension.Tex3D:
+                case ETextureDimension.Texture3D:
                     return D3D12_RESOURCE_DIMENSION.D3D12_RESOURCE_DIMENSION_TEXTURE3D;
 
                 default:
@@ -823,7 +823,7 @@ namespace Infinity.Graphics
 
         internal static void FillTexture2DSRV(ref D3D12_TEX2D_SRV srv, in RHITextureViewDescriptor descriptor)
         {
-            if (!((descriptor.dimension & ETextureViewDimension.Tex2D) == ETextureViewDimension.Tex2D)) {
+            if (!((descriptor.dimension & ETextureViewDimension.Texture2D) == ETextureViewDimension.Texture2D)) {
                 return;
             }
             srv.MostDetailedMip = (uint)descriptor.baseMipLevel;
@@ -834,7 +834,7 @@ namespace Infinity.Graphics
 
         internal static void FillTexture2DArraySRV(ref D3D12_TEX2D_ARRAY_SRV srv, in RHITextureViewDescriptor descriptor)
         {
-            if (!((descriptor.dimension & ETextureViewDimension.Tex2DArray) == ETextureViewDimension.Tex2DArray)) {
+            if (!((descriptor.dimension & ETextureViewDimension.Texture2DArray) == ETextureViewDimension.Texture2DArray)) {
                 return;
             }
             srv.MostDetailedMip = (uint)descriptor.baseMipLevel;
@@ -847,7 +847,7 @@ namespace Infinity.Graphics
 
         internal static void FillTextureCubeSRV(ref D3D12_TEXCUBE_SRV srv, in RHITextureViewDescriptor descriptor)
         {
-            if (!((descriptor.dimension & ETextureViewDimension.TexCube) == ETextureViewDimension.TexCube)) {
+            if (!((descriptor.dimension & ETextureViewDimension.TextureCube) == ETextureViewDimension.TextureCube)) {
                 return;
             }
             srv.MipLevels = (uint)descriptor.mipLevelNum;
@@ -857,7 +857,7 @@ namespace Infinity.Graphics
 
         internal static void FillTextureCubeArraySRV(ref D3D12_TEXCUBE_ARRAY_SRV srv, in RHITextureViewDescriptor descriptor)
         {
-            if (!((descriptor.dimension & ETextureViewDimension.TexCubeArray) == ETextureViewDimension.TexCubeArray)) {
+            if (!((descriptor.dimension & ETextureViewDimension.TextureCubeArray) == ETextureViewDimension.TextureCubeArray)) {
                 return;
             }
             srv.MostDetailedMip = (uint)descriptor.baseMipLevel;
@@ -869,7 +869,7 @@ namespace Infinity.Graphics
 
         internal static void FillTexture3DSRV(ref D3D12_TEX3D_SRV srv, in RHITextureViewDescriptor descriptor)
         {
-            if (!((descriptor.dimension & ETextureViewDimension.Tex3D) == ETextureViewDimension.Tex3D)) {
+            if (!((descriptor.dimension & ETextureViewDimension.Texture3D) == ETextureViewDimension.Texture3D)) {
                 return;
             }
             srv.MipLevels = (uint)descriptor.mipLevelNum;
@@ -879,7 +879,7 @@ namespace Infinity.Graphics
 
         internal static void FillTexture2DUAV(ref D3D12_TEX2D_UAV uav, in RHITextureViewDescriptor descriptor)
         {
-            if (!((descriptor.dimension & ETextureViewDimension.Tex2D) == ETextureViewDimension.Tex2D)) {
+            if (!((descriptor.dimension & ETextureViewDimension.Texture2D) == ETextureViewDimension.Texture2D)) {
                 return;
             }
             uav.MipSlice = (uint)descriptor.baseMipLevel;
@@ -888,7 +888,7 @@ namespace Infinity.Graphics
 
         internal static void FillTexture2DArrayUAV(ref D3D12_TEX2D_ARRAY_UAV uav, in RHITextureViewDescriptor descriptor)
         {
-            if (!((descriptor.dimension & ETextureViewDimension.Tex2DArray) == ETextureViewDimension.Tex2DArray)) {
+            if (!((descriptor.dimension & ETextureViewDimension.Texture2DArray) == ETextureViewDimension.Texture2DArray)) {
                 return;
             }
             uav.MipSlice = (uint)descriptor.baseMipLevel;
@@ -899,7 +899,7 @@ namespace Infinity.Graphics
 
         internal static void FillTexture3DUAV(ref D3D12_TEX3D_UAV uav, in RHITextureViewDescriptor descriptor)
         {
-            if (!((descriptor.dimension & ETextureViewDimension.Tex3D) == ETextureViewDimension.Tex3D)) {
+            if (!((descriptor.dimension & ETextureViewDimension.Texture3D) == ETextureViewDimension.Texture3D)) {
                 return;
             }
             uav.WSize = (uint)descriptor.arrayLayerNum;
@@ -909,7 +909,7 @@ namespace Infinity.Graphics
 
         internal static void FillTexture2DRTV(ref D3D12_TEX2D_RTV rtv, in RHITextureViewDescriptor descriptor)
         {
-            if (!((descriptor.dimension & ETextureViewDimension.Tex2D) == ETextureViewDimension.Tex2D)) {
+            if (!((descriptor.dimension & ETextureViewDimension.Texture2D) == ETextureViewDimension.Texture2D)) {
                 return;
             }
             rtv.MipSlice = (uint)descriptor.baseMipLevel;
@@ -918,7 +918,7 @@ namespace Infinity.Graphics
 
         internal static void FillTexture2DArrayRTV(ref D3D12_TEX2D_ARRAY_RTV rtv, in RHITextureViewDescriptor descriptor)
         {
-            if (!((descriptor.dimension & ETextureViewDimension.Tex2DArray) == ETextureViewDimension.Tex2DArray)) {
+            if (!((descriptor.dimension & ETextureViewDimension.Texture2DArray) == ETextureViewDimension.Texture2DArray)) {
                 return;
             }
             rtv.MipSlice = (uint)descriptor.baseMipLevel;
@@ -929,7 +929,7 @@ namespace Infinity.Graphics
 
         internal static void FillTexture3DRTV(ref D3D12_TEX3D_RTV rtv, in RHITextureViewDescriptor descriptor)
         {
-            if (!((descriptor.dimension & ETextureViewDimension.Tex3D) == ETextureViewDimension.Tex3D)) {
+            if (!((descriptor.dimension & ETextureViewDimension.Texture3D) == ETextureViewDimension.Texture3D)) {
                 return;
             }
             rtv.WSize = (uint)descriptor.arrayLayerNum;

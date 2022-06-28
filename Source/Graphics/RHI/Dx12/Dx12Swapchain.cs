@@ -76,9 +76,9 @@ namespace Infinity.Graphics
                 textureDescriptor.samples = 1;
                 textureDescriptor.mipLevels = 1;
                 textureDescriptor.format = descriptor.format;
-                textureDescriptor.dimension = ETextureDimension.Tex2D;
                 textureDescriptor.state = ETextureState.Present;
                 textureDescriptor.usage = ETextureUsage.RenderTarget;
+                textureDescriptor.dimension = ETextureDimension.Texture2D;
                 textureDescriptor.storageMode = EStorageMode.Default;
             }
 
