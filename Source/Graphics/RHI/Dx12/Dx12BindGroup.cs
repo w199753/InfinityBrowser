@@ -7,9 +7,9 @@ namespace Infinity.Graphics
 #pragma warning disable CS8600, CS8602, CS8604, CS8618, CA1416
     internal struct Dx12BindGroupParameter
     {
-        public int slot;
-        public int count;
-        public EBindType bindType;
+        //public int slot;
+        //public int count;
+        //public EBindType bindType;
         public D3D12_GPU_DESCRIPTOR_HANDLE dx12GpuDescriptorHandle;
     }
 
@@ -52,18 +52,19 @@ namespace Infinity.Graphics
             for (int i = 0; i < descriptor.elementCount; ++i)
             {
                 ref RHIBindGroupElement element = ref descriptor.elements.Span[i];
-                Dx12RootParameterKeyInfo keyInfo = bindGroupLayout.RootParameterKeyInfos[i];
+                ref Dx12RootParameterKeyInfo keyInfo = ref bindGroupLayout.RootParameterKeyInfos[i];
 
-                D3D12_GPU_DESCRIPTOR_HANDLE handle = default;
-                GetDescriptorHandleAndHeap(ref handle, ref m_NativeDescriptorHeap, keyInfo, element);
-
+                //D3D12_GPU_DESCRIPTOR_HANDLE handle = default;
                 ref Dx12BindGroupParameter bindParameter = ref m_BindParameters[i];
+                GetDescriptorHandleAndHeap(ref bindParameter.dx12GpuDescriptorHandle, ref m_NativeDescriptorHeap, keyInfo, element);
+
+                //ref Dx12BindGroupParameter bindParameter = ref m_BindParameters[i];
                 //bindParameter.slot = element.slot;
-                bindParameter.slot = keyInfo.slot;
-                bindParameter.count = keyInfo.count;
+                //bindParameter.slot = keyInfo.slot;
+                //bindParameter.count = keyInfo.count;
                 //bindParameter.bindType = element.bindType;
-                bindParameter.bindType = keyInfo.bindType;
-                bindParameter.dx12GpuDescriptorHandle = handle;
+                //bindParameter.bindType = keyInfo.bindType;
+                //bindParameter.dx12GpuDescriptorHandle = handle;
             }
         }
 

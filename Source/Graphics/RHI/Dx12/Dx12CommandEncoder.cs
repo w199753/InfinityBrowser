@@ -183,12 +183,13 @@ namespace Infinity.Graphics
             for (int i = 0; i < dx12BindGroup.BindParameters.Length; ++i) 
             {
                 Dx12PipelineLayout pipelineLayout = m_Dx12ComputePipeline.PipelineLayout;
+                ref Dx12RootParameterKeyInfo keyInfo = ref bindGroupLayout.RootParameterKeyInfos[i];
                 ref Dx12BindGroupParameter bindParameter = ref dx12BindGroup.BindParameters[i];
 
-                Dx12BindTypeAndParameterSlot? parameter = pipelineLayout.QueryRootDescriptorParameterIndex(EShaderStageFlag.Compute, bindGroupLayout.LayoutIndex, bindParameter.slot, bindParameter.bindType);
+                Dx12BindTypeAndParameterSlot? parameter = pipelineLayout.QueryRootDescriptorParameterIndex(EShaderStageFlag.Compute, bindGroupLayout.LayoutIndex, keyInfo.slot, keyInfo.bindType);
                 if (parameter.HasValue)
                 {
-                    Debug.Assert(parameter.Value.bindType == bindParameter.bindType);
+                    Debug.Assert(parameter.Value.bindType == keyInfo.bindType);
                     m_Dx12CommandBuffer.NativeCommandList->SetComputeRootDescriptorTable((uint)parameter.Value.index, bindParameter.dx12GpuDescriptorHandle);
                 }
             }
@@ -374,19 +375,20 @@ namespace Infinity.Graphics
             {
                 Dx12BindTypeAndParameterSlot? parameter = null;
                 Dx12PipelineLayout pipelineLayout = m_Dx12GraphicsPipeline.PipelineLayout;
+                ref Dx12RootParameterKeyInfo keyInfo = ref bindGroupLayout.RootParameterKeyInfos[i];
                 ref Dx12BindGroupParameter bindParameter = ref dx12BindGroup.BindParameters[i];
 
-                parameter = pipelineLayout.QueryRootDescriptorParameterIndex(EShaderStageFlag.Vertex, bindGroupLayout.LayoutIndex, bindParameter.slot, bindParameter.bindType);
+                parameter = pipelineLayout.QueryRootDescriptorParameterIndex(EShaderStageFlag.Vertex, bindGroupLayout.LayoutIndex, keyInfo.slot, keyInfo.bindType);
                 if (parameter.HasValue)
                 {
-                    Debug.Assert(parameter.Value.bindType == bindParameter.bindType);
+                    Debug.Assert(parameter.Value.bindType == keyInfo.bindType);
                     m_Dx12CommandBuffer.NativeCommandList->SetGraphicsRootDescriptorTable((uint)parameter.Value.index, bindParameter.dx12GpuDescriptorHandle);
                 }
 
-                parameter = pipelineLayout.QueryRootDescriptorParameterIndex(EShaderStageFlag.Fragment, bindGroupLayout.LayoutIndex, bindParameter.slot, bindParameter.bindType);
+                parameter = pipelineLayout.QueryRootDescriptorParameterIndex(EShaderStageFlag.Fragment, bindGroupLayout.LayoutIndex, keyInfo.slot, keyInfo.bindType);
                 if (parameter.HasValue)
                 {
-                    Debug.Assert(parameter.Value.bindType == bindParameter.bindType);
+                    Debug.Assert(parameter.Value.bindType == keyInfo.bindType);
                     m_Dx12CommandBuffer.NativeCommandList->SetGraphicsRootDescriptorTable((uint)parameter.Value.index, bindParameter.dx12GpuDescriptorHandle);
                 }
             }
