@@ -180,5 +180,18 @@ namespace Infinity.Graphics
             m_NativePipelineState->Release();
         }
     }
+
+    internal unsafe class Dx12RaytracingPipelineState : RHIRaytracingPipelineState
+    {
+        public Dx12RaytracingPipelineState(Dx12Device device, in RHIRaytracingPipelineDescriptor descriptor)
+        {
+
+        }
+
+        protected override void Release()
+        {
+
+        }
+    }
 #pragma warning restore CS0169, CS0649, CS8600, CS8601, CS8602, CS8604, CS8618, CA1416
 }

@@ -58,13 +58,13 @@ namespace Infinity.Rendering
 
             struct Attributes
 	        {
-		        float4 color : COLOR;
-		        float4 position : POSITION;
+		        float4 color : COLOR1;
+		        float4 position : POSITION0;
 	        };
 
             struct Varyings
             {
-	            float4 color : COLOR;
+	            float4 color : COLOR1;
 	            float4 position : SV_POSITION;
             };
 
@@ -155,6 +155,8 @@ namespace Infinity.Rendering
             {
                 computeShaderDescriptor.size = m_ComputeBlob.BufferSize;
                 computeShaderDescriptor.byteCode = m_ComputeBlob.BufferPointer;
+                computeShaderDescriptor.entryName = "Main";
+                computeShaderDescriptor.shaderStage = EShaderStage.Compute;
             }
             m_ComputeShader = renderContext.CreateShader(computeShaderDescriptor);
 
@@ -266,6 +268,8 @@ namespace Infinity.Rendering
             {
                 vertexShaderDescriptor.size = m_VertexBlob.BufferSize;
                 vertexShaderDescriptor.byteCode = m_VertexBlob.BufferPointer;
+                vertexShaderDescriptor.entryName = "Vertex";
+                vertexShaderDescriptor.shaderStage = EShaderStage.Vertex;
             }
             m_VertexShader = renderContext.CreateShader(vertexShaderDescriptor);
 
@@ -273,6 +277,8 @@ namespace Infinity.Rendering
             {
                 fragmentShaderDescriptor.size = m_FragmentBlob.BufferSize;
                 fragmentShaderDescriptor.byteCode = m_FragmentBlob.BufferPointer;
+                fragmentShaderDescriptor.entryName = "Fragment";
+                fragmentShaderDescriptor.shaderStage = EShaderStage.Fragment;
             }
             m_FragmentShader = renderContext.CreateShader(fragmentShaderDescriptor);
 
@@ -303,7 +309,7 @@ namespace Infinity.Rendering
 
             RHIVertexAttributeDescriptor[] vertexAttributeDescriptors = new RHIVertexAttributeDescriptor[2];
             {
-                vertexAttributeDescriptors[0].index = 0;
+                vertexAttributeDescriptors[0].index = 1;
                 vertexAttributeDescriptors[0].offset = 0;
                 vertexAttributeDescriptors[0].type = ESemanticType.Color;
                 vertexAttributeDescriptors[0].format = ESemanticFormat.Float4;

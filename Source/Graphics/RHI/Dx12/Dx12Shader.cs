@@ -17,6 +17,7 @@ namespace Infinity.Graphics
 
         public Dx12Shader(in RHIShaderDescriptor descriptor)
         {
+            m_Descriptor = descriptor;
             m_NativeShaderBytecode = new D3D12_SHADER_BYTECODE(descriptor.byteCode.ToPointer(), new UIntPtr((uint)descriptor.size));
         }
 

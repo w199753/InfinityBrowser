@@ -455,6 +455,17 @@
         Vertex = 0x1,
         Fragment = 0x2,
         Compute = 0x4,
+        Miss = 0x8,
+        AnyHit = 0x10,
+        CloseHit = 0x20,
+        Intersect = 0x40,
+        RayGenerate = 0x80,
         MAX
+    }
+
+    public enum EHitGroupType
+    {
+        Triangles,
+        Procedural
     }
 }
