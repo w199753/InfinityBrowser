@@ -11,7 +11,7 @@ namespace Infinity.Graphics
         public int count;
         public int layoutIndex;
         public EBindType bindType;
-        public EShaderStageFlag shaderStage;
+        public EShaderStage shaderStage;
 
         internal bool Bindless => count > 1;
     }

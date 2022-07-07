@@ -96,7 +96,7 @@ namespace Infinity.Graphics
                     handle = textureView.NativeGpuDescriptorHandle;
                 }
             }
-            else if (keyInfo.bindType == EBindType.Uniform || keyInfo.bindType == EBindType.Buffer || keyInfo.bindType == EBindType.StorageBuffer)
+            else if (keyInfo.bindType == EBindType.Buffer || keyInfo.bindType == EBindType.UniformBuffer || keyInfo.bindType == EBindType.StorageBuffer)
             {
                 if (keyInfo.Bindless)
                 {

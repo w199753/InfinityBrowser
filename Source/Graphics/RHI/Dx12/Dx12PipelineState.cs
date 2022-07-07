@@ -6,7 +6,7 @@ using static TerraFX.Interop.Windows.Windows;
 namespace Infinity.Graphics
 {
 #pragma warning disable CS0169, CS0649, CS8600, CS8601, CS8602, CS8604, CS8618, CA1416
-    internal unsafe class Dx12ComputePipeline : RHIComputePipeline
+    internal unsafe class Dx12ComputePipelineState : RHIComputePipelineState
     {
         public Dx12PipelineLayout PipelineLayout
         {
@@ -26,7 +26,7 @@ namespace Infinity.Graphics
         private Dx12PipelineLayout m_PipelineLayout;
         private ID3D12PipelineState* m_NativePipelineState;
 
-        public Dx12ComputePipeline(Dx12Device device, in RHIComputePipelineDescriptor descriptor)
+        public Dx12ComputePipelineState(Dx12Device device, in RHIComputePipelineDescriptor descriptor)
         {
             m_PipelineLayout = descriptor.pipelineLayout as Dx12PipelineLayout;
 
@@ -50,7 +50,7 @@ namespace Infinity.Graphics
         }
     }
 
-    internal unsafe class Dx12GraphicsPipeline : RHIGraphicsPipeline
+    internal unsafe class Dx12GraphicsPipelineState : RHIGraphicsPipelineState
     {
         public int StencilRef
         {
@@ -96,7 +96,7 @@ namespace Infinity.Graphics
         private D3D_PRIMITIVE_TOPOLOGY m_PrimitiveTopology;
         private D3D12_PRIMITIVE_TOPOLOGY_TYPE m_PrimitiveTopologyType;
 
-        public Dx12GraphicsPipeline(Dx12Device device, in RHIGraphicsPipelineDescriptor descriptor)
+        public Dx12GraphicsPipelineState(Dx12Device device, in RHIGraphicsPipelineDescriptor descriptor)
         {
             m_PipelineLayout = descriptor.pipelineLayout as Dx12PipelineLayout;
 

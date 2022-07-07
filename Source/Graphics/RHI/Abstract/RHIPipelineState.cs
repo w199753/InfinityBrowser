@@ -126,12 +126,12 @@ namespace Infinity.Graphics
         public RHIVertexStateDescriptor vertexStateDescriptor;
     }
 
-    public abstract class RHIComputePipeline : Disposal
+    public abstract class RHIComputePipelineState : Disposal
     {
 
     }
 
-    public abstract class RHIGraphicsPipeline : Disposal
+    public abstract class RHIGraphicsPipelineState : Disposal
     {
 
     }

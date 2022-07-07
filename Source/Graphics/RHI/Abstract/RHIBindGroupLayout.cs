@@ -7,12 +7,12 @@ namespace Infinity.Graphics
         public int slot;
         public int count;
         public EBindType bindType;
-        public EShaderStageFlag shaderStage;
+        public EShaderStage shaderStage;
     }
     
     public struct RHIBindGroupLayoutDescriptor
     {
-        public int layoutIndex;
+        internal int layoutIndex => 0;
         public int elementCount => elements.Length;
         public Memory<RHIBindGroupLayoutElement> elements;
     }

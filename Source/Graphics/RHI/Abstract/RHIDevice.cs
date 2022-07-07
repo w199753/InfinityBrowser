@@ -21,7 +21,7 @@ namespace Infinity.Graphics
         public abstract RHIBindGroupLayout CreateBindGroupLayout(in RHIBindGroupLayoutDescriptor descriptor);
         public abstract RHIBindGroup CreateBindGroup(in RHIBindGroupDescriptor descriptor);
         public abstract RHIPipelineLayout CreatePipelineLayout(in RHIPipelineLayoutDescriptor descriptor);
-        public abstract RHIComputePipeline CreateComputePipeline(in RHIComputePipelineDescriptor descriptor);
-        public abstract RHIGraphicsPipeline CreateGraphicsPipeline(in RHIGraphicsPipelineDescriptor descriptor);
+        public abstract RHIComputePipelineState CreateComputePipelineState(in RHIComputePipelineDescriptor descriptor);
+        public abstract RHIGraphicsPipelineState CreateGraphicsPipelineState(in RHIGraphicsPipelineDescriptor descriptor);
     }
 }

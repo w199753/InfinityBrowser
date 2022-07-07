@@ -67,17 +67,17 @@ namespace Infinity.Graphics
                     parameter.index = i + j;
                     parameter.bindType = keyInfo.bindType;
 
-                    if ((keyInfo.shaderStage & EShaderStageFlag.Vertex) == EShaderStageFlag.Vertex)
+                    if ((keyInfo.shaderStage & EShaderStage.Vertex) == EShaderStage.Vertex)
                     {
                         m_VertexParameterMap.TryAdd(new int3(keyInfo.layoutIndex << 8, keyInfo.slot, Dx12Utility.GetDx12BindKey(keyInfo.bindType)).GetHashCode(), parameter);
                     }
 
-                    if ((keyInfo.shaderStage & EShaderStageFlag.Fragment) == EShaderStageFlag.Fragment)
+                    if ((keyInfo.shaderStage & EShaderStage.Fragment) == EShaderStage.Fragment)
                     {
                         m_FragmentParameterMap.TryAdd(new int3(keyInfo.layoutIndex << 8, keyInfo.slot, Dx12Utility.GetDx12BindKey(keyInfo.bindType)).GetHashCode(), parameter);
                     }
 
-                    if ((keyInfo.shaderStage & EShaderStageFlag.Compute) == EShaderStageFlag.Compute)
+                    if ((keyInfo.shaderStage & EShaderStage.Compute) == EShaderStage.Compute)
                     {
                         m_ComputeParameterMap.TryAdd(new int3(keyInfo.layoutIndex << 8, keyInfo.slot, Dx12Utility.GetDx12BindKey(keyInfo.bindType)).GetHashCode(), parameter);
                     }
@@ -95,24 +95,24 @@ namespace Infinity.Graphics
             m_NativeRootSignature = rootSignature;
         }
 
-        public Dx12BindTypeAndParameterSlot? QueryRootDescriptorParameterIndex(in EShaderStageFlag shaderStage, in int layoutIndex, in int slot, in EBindType bindType)
+        public Dx12BindTypeAndParameterSlot? QueryRootDescriptorParameterIndex(in EShaderStage shaderStage, in int layoutIndex, in int slot, in EBindType bindType)
         {
             bool hasValue = false;
             Dx12BindTypeAndParameterSlot? outParameter = null;
 
-            if ((shaderStage & EShaderStageFlag.Vertex) == EShaderStageFlag.Vertex)
+            if ((shaderStage & EShaderStage.Vertex) == EShaderStage.Vertex)
             {
                 hasValue = m_VertexParameterMap.TryGetValue(new int3(layoutIndex << 8, slot, Dx12Utility.GetDx12BindKey(bindType)).GetHashCode(), out Dx12BindTypeAndParameterSlot parameter);
                 outParameter = parameter;
             }
 
-            if ((shaderStage & EShaderStageFlag.Fragment) == EShaderStageFlag.Fragment)
+            if ((shaderStage & EShaderStage.Fragment) == EShaderStage.Fragment)
             {
                 hasValue = m_FragmentParameterMap.TryGetValue(new int3(layoutIndex << 8, slot, Dx12Utility.GetDx12BindKey(bindType)).GetHashCode(), out Dx12BindTypeAndParameterSlot parameter);
                 outParameter = parameter;
             }
 
-            if ((shaderStage & EShaderStageFlag.Compute) == EShaderStageFlag.Compute)
+            if ((shaderStage & EShaderStage.Compute) == EShaderStage.Compute)
             {
                 hasValue = m_ComputeParameterMap.TryGetValue(new int3(layoutIndex << 8, slot, Dx12Utility.GetDx12BindKey(bindType)).GetHashCode(), out Dx12BindTypeAndParameterSlot parameter);
                 outParameter = parameter;

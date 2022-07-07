@@ -197,7 +197,7 @@
         Buffer,
         Texture,
         Sampler,
-        Uniform,
+        UniformBuffer,
         StorageBuffer,
         StorageTexture,
         MAX
@@ -442,7 +442,7 @@
         MAX
     }
 
-    public enum EShaderStageFlag
+    public enum EShaderStage
     {
         Vertex = 0x1,
         Fragment = 0x2,

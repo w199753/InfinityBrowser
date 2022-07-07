@@ -310,9 +310,9 @@ namespace Infinity.Rendering
         }*/
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public RHIComputePipeline CreateComputePipeline(in RHIComputePipelineDescriptor descriptor)
+        public RHIComputePipelineState CreateComputePipelineState(in RHIComputePipelineDescriptor descriptor)
         {
-            return m_Device.CreateComputePipeline(descriptor);
+            return m_Device.CreateComputePipelineState(descriptor);
         }
 
         /*[MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -322,9 +322,9 @@ namespace Infinity.Rendering
         }*/
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public RHIGraphicsPipeline CreateGraphicsPipeline(in RHIGraphicsPipelineDescriptor descriptor)
+        public RHIGraphicsPipelineState CreateGraphicsPipelineState(in RHIGraphicsPipelineDescriptor descriptor)
         {
-            return m_Device.CreateGraphicsPipeline(descriptor);
+            return m_Device.CreateGraphicsPipelineState(descriptor);
         }
 
         protected override void Release()

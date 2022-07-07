@@ -30,18 +30,18 @@ namespace Infinity.Rendering
         RHITextureView m_ComputeTextureView;
         RHIBindGroup m_ComputeBindGroup;
         //RHIBindGroup m_GraphicsBindGroup;
-        RHIComputePipeline m_ComputePipeline;
-        RHIGraphicsPipeline m_GraphicsPipeline;
-        RHIPipelineLayout m_ComputePipelineLayout;
-        RHIPipelineLayout m_GraphicsPipelineLayout;
         RHIBindGroupLayout m_ComputeBindGroupLayout;
         RHIBindGroupLayout m_GraphicsBindGroupLayout;
+        RHIPipelineLayout m_ComputePipelineLayout;
+        RHIPipelineLayout m_GraphicsPipelineLayout;
+        RHIComputePipelineState m_ComputePipelineState;
+        RHIGraphicsPipelineState m_GraphicsPipelineState;
         RHIColorAttachmentDescriptor[] m_ColorAttachmentDescriptors;
 
         public HybridRenderPipeline(string pipelineName) : base(pipelineName) 
         {
             string computeCode = new string(@"
-            RWTexture2D<float4> ResultTexture : register(u0, space0);
+            RWTexture2D<float4> ResultTexture : register(u0);
 
             [numthreads(8, 8, 1)]
             void Main (uint3 id : SV_DispatchThreadID)
@@ -53,8 +53,8 @@ namespace Infinity.Rendering
 
             string graphicsCode = new string(
             @"
-            Texture2D<float4> _DiffuseTexture : register(t0, space0);
-            SamplerState _DiffuseTextureSampler : register(s0, space0);
+            Texture2D<float4> _DiffuseTexture : register(t0);
+            SamplerState _DiffuseSampler : register(s0);
 
             struct Attributes
 	        {
@@ -79,7 +79,7 @@ namespace Infinity.Rendering
             float4 Fragment(Varyings input) : SV_Target
             {
                 return input.color;
-	            //return _DiffuseTexture.Sample(Sampler_DiffuseTexture, input.uv * Tiling);
+	            //return _DiffuseTexture.Sample(_DiffuseSampler, float2(0, 0));
             }");
 
             m_ComputeResult = Vortice.Dxc.DxcCompiler.Compile(Vortice.Dxc.DxcShaderStage.Compute, computeCode, "Main");
@@ -91,7 +91,7 @@ namespace Infinity.Rendering
             m_FragmentResult = Vortice.Dxc.DxcCompiler.Compile(Vortice.Dxc.DxcShaderStage.Pixel, graphicsCode, "Fragment");
             m_FragmentBlob = m_FragmentResult.GetOutput(Vortice.Dxc.DxcOutKind.Object);
 
-            string msl = Evergine.HLSLEverywhere.HLSLTranslator.HLSLTo(computeCode, Evergine.Common.Graphics.ShaderStages.Compute, Evergine.Common.Graphics.GraphicsProfile.Level_12_1, "Main", Evergine.HLSLEverywhere.ShadingLanguage.Msl_iOS);
+            string msl = Evergine.HLSLEverywhere.HLSLTranslator.HLSLTo(graphicsCode, Evergine.Common.Graphics.ShaderStages.Pixel, Evergine.Common.Graphics.GraphicsProfile.Level_12_1, "Fragment", Evergine.HLSLEverywhere.ShadingLanguage.Hlsl);
         }
 
         public override void Init(RenderContext renderContext)
@@ -130,11 +130,10 @@ namespace Infinity.Rendering
                 computeBindGroupLayoutElements[0].slot = 0;
                 computeBindGroupLayoutElements[0].count = 1;
                 computeBindGroupLayoutElements[0].bindType = EBindType.StorageTexture;
-                computeBindGroupLayoutElements[0].shaderStage = EShaderStageFlag.Compute;
+                computeBindGroupLayoutElements[0].shaderStage = EShaderStage.Compute;
             }
             RHIBindGroupLayoutDescriptor computeBindGroupLayoutDescriptor;
             {
-                computeBindGroupLayoutDescriptor.layoutIndex = 0;
                 computeBindGroupLayoutDescriptor.elements = new Memory<RHIBindGroupLayoutElement>(computeBindGroupLayoutElements);
             }
             m_ComputeBindGroupLayout = renderContext.CreateBindGroupLayout(computeBindGroupLayoutDescriptor);
@@ -165,13 +164,13 @@ namespace Infinity.Rendering
             }
             m_ComputePipelineLayout = renderContext.CreatePipelineLayout(computePipelienLayoutDescriptor);
 
-            RHIComputePipelineDescriptor computePipelineDescriptor;
+            RHIComputePipelineDescriptor computePipelineStateDescriptor;
             {
-                computePipelineDescriptor.threadSize = new uint3(8, 8, 1);
-                computePipelineDescriptor.computeShader = m_ComputeShader;
-                computePipelineDescriptor.pipelineLayout = m_ComputePipelineLayout;
+                computePipelineStateDescriptor.threadSize = new uint3(8, 8, 1);
+                computePipelineStateDescriptor.computeShader = m_ComputeShader;
+                computePipelineStateDescriptor.pipelineLayout = m_ComputePipelineLayout;
             }
-            m_ComputePipeline = renderContext.CreateComputePipeline(computePipelineDescriptor);
+            m_ComputePipelineState = renderContext.CreateComputePipelineState(computePipelineStateDescriptor);
 
             // CreateSampler
             //RHISamplerDescriptor samplerDescriptor = new RHISamplerDescriptor();
@@ -238,16 +237,15 @@ namespace Infinity.Rendering
                 graphicsBindGroupLayoutElements[0].slot = 0;
                 graphicsBindGroupLayoutElements[0].count = 1;
                 graphicsBindGroupLayoutElements[0].bindType = EBindType.Texture;
-                graphicsBindGroupLayoutElements[0].shaderStage = EShaderStageFlag.Fragment;
+                graphicsBindGroupLayoutElements[0].shaderStage = EShaderStage.Fragment;
 
                 graphicsBindGroupLayoutElements[1].slot = 0;
                 graphicsBindGroupLayoutElements[1].count = 1;
                 graphicsBindGroupLayoutElements[1].bindType = EBindType.Sampler;
-                graphicsBindGroupLayoutElements[1].shaderStage = EShaderStageFlag.Fragment;
+                graphicsBindGroupLayoutElements[1].shaderStage = EShaderStage.Fragment;
             }
             RHIBindGroupLayoutDescriptor graphicsBindGroupLayoutDescriptor;
             {
-                graphicsBindGroupLayoutDescriptor.layoutIndex = 0;
                 graphicsBindGroupLayoutDescriptor.elements = new Memory<RHIBindGroupLayoutElement>(graphicsBindGroupLayoutElements);
             }
             m_GraphicsBindGroupLayout = renderContext.CreateBindGroupLayout(graphicsBindGroupLayoutDescriptor);
@@ -392,16 +390,16 @@ namespace Infinity.Rendering
                 renderStateDescriptor.depthStencilStateDescriptor = depthStencilStateDescriptor;
             }
 
-            RHIGraphicsPipelineDescriptor graphicsPipelineDescriptor;
+            RHIGraphicsPipelineDescriptor graphicsPipelineStateDescriptor;
             {
-                graphicsPipelineDescriptor.vertexShader = m_VertexShader;
-                graphicsPipelineDescriptor.fragmentShader = m_FragmentShader;
-                graphicsPipelineDescriptor.pipelineLayout = m_GraphicsPipelineLayout;
-                graphicsPipelineDescriptor.outputStateDescriptor = outputStateDescriptor;
-                graphicsPipelineDescriptor.renderStateDescriptor = renderStateDescriptor;
-                graphicsPipelineDescriptor.vertexStateDescriptor = vertexStateDescriptor;
+                graphicsPipelineStateDescriptor.vertexShader = m_VertexShader;
+                graphicsPipelineStateDescriptor.fragmentShader = m_FragmentShader;
+                graphicsPipelineStateDescriptor.pipelineLayout = m_GraphicsPipelineLayout;
+                graphicsPipelineStateDescriptor.outputStateDescriptor = outputStateDescriptor;
+                graphicsPipelineStateDescriptor.renderStateDescriptor = renderStateDescriptor;
+                graphicsPipelineStateDescriptor.vertexStateDescriptor = vertexStateDescriptor;
             }
-            m_GraphicsPipeline = renderContext.CreateGraphicsPipeline(graphicsPipelineDescriptor);
+            m_GraphicsPipelineState = renderContext.CreateGraphicsPipelineState(graphicsPipelineStateDescriptor);
 
             m_ColorAttachmentDescriptors = new RHIColorAttachmentDescriptor[1];
             {
@@ -432,7 +430,7 @@ namespace Infinity.Rendering
                 {
                     computeEncoder.SetPipelineLayout(m_ComputePipelineLayout);
                     computeEncoder.PushDebugGroup("GenereteUV");
-                    computeEncoder.SetPipelineState(m_ComputePipeline);
+                    computeEncoder.SetPipelineState(m_ComputePipelineState);
                     computeEncoder.SetBindGroup(m_ComputeBindGroup);
                     computeEncoder.Dispatch((uint)math.ceil((float)renderContext.ScreenSize.x / 8), (uint)math.ceil((float)renderContext.ScreenSize.y / 8), 1);
                     computeEncoder.PopDebugGroup();
@@ -450,7 +448,7 @@ namespace Infinity.Rendering
                     graphicsEncoder.SetScissorRect(new Rect(0, 0, (uint)renderContext.ScreenSize.x, (uint)renderContext.ScreenSize.y));
                     graphicsEncoder.SetPipelineLayout(m_GraphicsPipelineLayout);
                     graphicsEncoder.PushDebugGroup("DrawTriange");
-                    graphicsEncoder.SetPipelineState(m_GraphicsPipeline);
+                    graphicsEncoder.SetPipelineState(m_GraphicsPipelineState);
                     graphicsEncoder.SetVertexBuffer(m_VertexBuffer);
                     graphicsEncoder.SetIndexBuffer(m_IndexBuffer, EIndexFormat.UInt16);
                     //graphicsEncoder.Draw(3, 1, 0, 0);
@@ -485,12 +483,12 @@ namespace Infinity.Rendering
             m_VertexShader.Dispose();
             m_FragmentShader.Dispose();
             m_ComputeShader.Dispose();
-            m_ComputePipeline.Dispose();
             m_ComputeBindGroup.Dispose();
-            m_ComputeBindGroupLayout.Dispose();
+            m_ComputePipelineState.Dispose();
             m_ComputePipelineLayout.Dispose();
-            m_GraphicsPipeline.Dispose();
+            m_ComputeBindGroupLayout.Dispose();
             //m_GraphicsBindGroup.Dispose();
+            m_GraphicsPipelineState.Dispose();
             m_GraphicsPipelineLayout.Dispose();
             m_GraphicsBindGroupLayout.Dispose();
             Console.WriteLine("Release RenderPipeline");

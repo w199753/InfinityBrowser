@@ -687,7 +687,7 @@ namespace Infinity.Graphics
                 case EBindType.Sampler:
                     return D3D12_DESCRIPTOR_RANGE_TYPE.D3D12_DESCRIPTOR_RANGE_TYPE_SAMPLER;
 
-                case EBindType.Uniform:
+                case EBindType.UniformBuffer:
                     return D3D12_DESCRIPTOR_RANGE_TYPE.D3D12_DESCRIPTOR_RANGE_TYPE_CBV;
 
                 case EBindType.StorageBuffer:
@@ -710,7 +710,7 @@ namespace Infinity.Graphics
                 case EBindType.Sampler:
                     return 128;
 
-                case EBindType.Uniform:
+                case EBindType.UniformBuffer:
                     return 256;
 
                 case EBindType.StorageBuffer:
@@ -733,7 +733,7 @@ namespace Infinity.Graphics
                 case EBindType.Sampler:
                     return D3D12_DESCRIPTOR_RANGE_FLAGS.D3D12_DESCRIPTOR_RANGE_FLAG_DESCRIPTORS_VOLATILE;
 
-                case EBindType.Uniform:
+                case EBindType.UniformBuffer:
                     return D3D12_DESCRIPTOR_RANGE_FLAGS.D3D12_DESCRIPTOR_RANGE_FLAG_DESCRIPTORS_VOLATILE | D3D12_DESCRIPTOR_RANGE_FLAGS.D3D12_DESCRIPTOR_RANGE_FLAG_DATA_VOLATILE;
 
                 case EBindType.StorageBuffer:
@@ -745,14 +745,14 @@ namespace Infinity.Graphics
             }
         }
 
-        internal static D3D12_SHADER_VISIBILITY ConvertToDx12ShaderStage(in EShaderStageFlag shaderStage)
+        internal static D3D12_SHADER_VISIBILITY ConvertToDx12ShaderStage(in EShaderStage shaderStage)
         {
             switch (shaderStage)
             {
-                case EShaderStageFlag.Vertex:
+                case EShaderStage.Vertex:
                     return D3D12_SHADER_VISIBILITY.D3D12_SHADER_VISIBILITY_VERTEX;
 
-                case EShaderStageFlag.Fragment:
+                case EShaderStage.Fragment:
                     return D3D12_SHADER_VISIBILITY.D3D12_SHADER_VISIBILITY_PIXEL;
 
                 default:

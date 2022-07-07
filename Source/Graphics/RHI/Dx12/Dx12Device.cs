@@ -227,14 +227,14 @@ namespace Infinity.Graphics
             return new Dx12PipelineLayout(this, descriptor);
         }
 
-        public override RHIComputePipeline CreateComputePipeline(in RHIComputePipelineDescriptor descriptor)
+        public override RHIComputePipelineState CreateComputePipelineState(in RHIComputePipelineDescriptor descriptor)
         {
-            return new Dx12ComputePipeline(this, descriptor);
+            return new Dx12ComputePipelineState(this, descriptor);
         }
 
-        public override RHIGraphicsPipeline CreateGraphicsPipeline(in RHIGraphicsPipelineDescriptor descriptor)
+        public override RHIGraphicsPipelineState CreateGraphicsPipelineState(in RHIGraphicsPipelineDescriptor descriptor)
         {
-            return new Dx12GraphicsPipeline(this, descriptor);
+            return new Dx12GraphicsPipelineState(this, descriptor);
         }
 
         public Dx12DescriptorInfo AllocateDsvDescriptor(in int count)
