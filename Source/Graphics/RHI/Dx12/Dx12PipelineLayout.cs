@@ -105,21 +105,21 @@ namespace Infinity.Graphics
 
             if ((shaderStage & EShaderStage.Vertex) == EShaderStage.Vertex)
             {
-                hasValue = m_VertexParameterMap.TryGetValue(new int2(Dx12Utility.GetDx12BindKey(bindType)).GetHashCode(), out Dx12BindTypeAndParameterSlot parameter);
+                hasValue = m_VertexParameterMap.TryGetValue(new int2(slot, Dx12Utility.GetDx12BindKey(bindType)).GetHashCode(), out Dx12BindTypeAndParameterSlot parameter);
                 //hasValue = m_VertexParameterMap.TryGetValue(new int3(layoutIndex << 8, slot, Dx12Utility.GetDx12BindKey(bindType)).GetHashCode(), out Dx12BindTypeAndParameterSlot parameter);
                 outParameter = parameter;
             }
 
             if ((shaderStage & EShaderStage.Fragment) == EShaderStage.Fragment)
             {
-                hasValue = m_FragmentParameterMap.TryGetValue(new int2(Dx12Utility.GetDx12BindKey(bindType)).GetHashCode(), out Dx12BindTypeAndParameterSlot parameter);
+                hasValue = m_FragmentParameterMap.TryGetValue(new int2(slot, Dx12Utility.GetDx12BindKey(bindType)).GetHashCode(), out Dx12BindTypeAndParameterSlot parameter);
                 //hasValue = m_FragmentParameterMap.TryGetValue(new int3(layoutIndex << 8, slot, Dx12Utility.GetDx12BindKey(bindType)).GetHashCode(), out Dx12BindTypeAndParameterSlot parameter);
                 outParameter = parameter;
             }
 
             if ((shaderStage & EShaderStage.Compute) == EShaderStage.Compute)
             {
-                hasValue = m_ComputeParameterMap.TryGetValue(new int2(Dx12Utility.GetDx12BindKey(bindType)).GetHashCode(), out Dx12BindTypeAndParameterSlot parameter);
+                hasValue = m_ComputeParameterMap.TryGetValue(new int2(slot, Dx12Utility.GetDx12BindKey(bindType)).GetHashCode(), out Dx12BindTypeAndParameterSlot parameter);
                 //hasValue = m_ComputeParameterMap.TryGetValue(new int3(layoutIndex << 8, slot, Dx12Utility.GetDx12BindKey(bindType)).GetHashCode(), out Dx12BindTypeAndParameterSlot parameter);
                 outParameter = parameter;
             }

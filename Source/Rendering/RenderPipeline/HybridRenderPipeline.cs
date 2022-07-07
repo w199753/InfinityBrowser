@@ -368,6 +368,7 @@ namespace Infinity.Rendering
                 depthStencilStateDescriptor.depthWriteMask = true;
                 depthStencilStateDescriptor.comparisonMode = EComparisonMode.LessEqual;
                 depthStencilStateDescriptor.stencilEnable = true;
+                depthStencilStateDescriptor.stencilReference = 5;
                 depthStencilStateDescriptor.stencilReadMask = 255;
                 depthStencilStateDescriptor.stencilWriteMask = 255;
                 depthStencilStateDescriptor.backFaceDescriptor.comparisonMode = EComparisonMode.Always;
@@ -382,9 +383,7 @@ namespace Infinity.Rendering
 
             RHIRenderStateDescriptor renderStateDescriptor;
             {
-                renderStateDescriptor.stencilRef = 0;
                 renderStateDescriptor.sampleMask = null;
-                renderStateDescriptor.blendFactor = null;
                 renderStateDescriptor.blendStateDescriptor = blendStateDescriptor;
                 renderStateDescriptor.rasterizerStateDescriptor = rasterizerStateDescriptor;
                 renderStateDescriptor.depthStencilStateDescriptor = depthStencilStateDescriptor;
@@ -428,9 +427,8 @@ namespace Infinity.Rendering
 
                 using (computeEncoder.BeginScopedPass("ComputePass"))
                 {
-                    computeEncoder.SetPipelineLayout(m_ComputePipelineLayout);
                     computeEncoder.PushDebugGroup("GenereteUV");
-                    computeEncoder.SetPipelineState(m_ComputePipelineState);
+                    computeEncoder.SetPipeline(m_ComputePipelineState);
                     computeEncoder.SetBindGroup(m_ComputeBindGroup);
                     computeEncoder.Dispatch((uint)math.ceil((float)renderContext.ScreenSize.x / 8), (uint)math.ceil((float)renderContext.ScreenSize.y / 8), 1);
                     computeEncoder.PopDebugGroup();
@@ -446,11 +444,12 @@ namespace Infinity.Rendering
                 {
                     graphicsEncoder.SetViewport(new Viewport(0, 0, (uint)renderContext.ScreenSize.x, (uint)renderContext.ScreenSize.y, 0, 1));
                     graphicsEncoder.SetScissorRect(new Rect(0, 0, (uint)renderContext.ScreenSize.x, (uint)renderContext.ScreenSize.y));
-                    graphicsEncoder.SetPipelineLayout(m_GraphicsPipelineLayout);
                     graphicsEncoder.PushDebugGroup("DrawTriange");
-                    graphicsEncoder.SetPipelineState(m_GraphicsPipelineState);
+                    graphicsEncoder.SetPipeline(m_GraphicsPipelineState);
+                    //graphicsEncoder.SetBindGroup(m_GraphicsBindGroup);
                     graphicsEncoder.SetVertexBuffer(m_VertexBuffer);
                     graphicsEncoder.SetIndexBuffer(m_IndexBuffer, EIndexFormat.UInt16);
+                    graphicsEncoder.SetBlendFactor(1);
                     //graphicsEncoder.Draw(3, 1, 0, 0);
                     graphicsEncoder.DrawIndexed(3, 1, 0, 0, 0);
                     graphicsEncoder.PopDebugGroup();

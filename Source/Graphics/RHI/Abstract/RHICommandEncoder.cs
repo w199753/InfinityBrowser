@@ -184,8 +184,7 @@ namespace Infinity.Graphics
         }
 
         public abstract void BeginPass(string? name);
-        public abstract void SetPipelineState(RHIComputePipelineState pipelineState);
-        public abstract void SetPipelineLayout(RHIPipelineLayout pipelineLayout);
+        public abstract void SetPipeline(RHIComputePipelineState pipelineState);
         public abstract void SetBindGroup(RHIBindGroup bindGroup);
         public abstract void Dispatch(in uint groupCountX, in uint groupCountY, in uint groupCountZ);
         public abstract void DispatchIndirect(RHIBuffer argsBuffer, in uint argsOffset);
@@ -203,19 +202,15 @@ namespace Infinity.Graphics
         }
 
         public abstract void BeginPass(in RHIGraphicsPassDescriptor descriptor);
-        public abstract void SetPipelineState(RHIGraphicsPipelineState pipelineState);
-        public abstract void SetPipelineLayout(RHIPipelineLayout pipelineLayout);
+        public abstract void SetPipeline(RHIGraphicsPipelineState pipelineState);
         public abstract void SetViewport(in Viewport viewport);
         public abstract void SetViewport(in Memory<Viewport> viewports);
         public abstract void SetScissorRect(in Rect rect);
         public abstract void SetScissorRect(in Memory<Rect> rects);
-        public abstract void SetStencilRef(in uint value);
-        public abstract void SetBlendFactor(in float value);
-        public abstract void SetBlendFactor(in Memory<float> values);
+        public abstract void SetBlendFactor(in float4 value);
         public abstract void SetBindGroup(RHIBindGroup bindGroup);
         public abstract void SetVertexBuffer(RHIBuffer buffer, in uint slot = 0, uint offset = 0);
         public abstract void SetIndexBuffer(RHIBuffer buffer, EIndexFormat format, uint offset = 0);
-        public abstract void SetPrimitiveTopology(in EPrimitiveTopology primitiveTopology);
         public abstract void Draw(in uint vertexCount, in uint instanceCount, in uint firstVertex, in uint firstInstance);
         public abstract void DrawIndexed(in uint indexCount, in uint instanceCount, in uint firstIndex, in uint baseVertex, in uint firstInstance);
         public abstract void DrawIndirect(RHIBuffer argsBuffer, uint offset);

@@ -113,7 +113,7 @@ namespace Infinity.Graphics
                 }
             }
 
-            m_StencilRef = descriptor.renderStateDescriptor.stencilRef;
+            m_StencilRef = descriptor.renderStateDescriptor.depthStencilStateDescriptor.stencilReference;
             m_ScissorEnabled = descriptor.renderStateDescriptor.rasterizerStateDescriptor.scissorEnable;
             m_PrimitiveTopology = Dx12Utility.ConvertToDx12PrimitiveTopology(descriptor.vertexStateDescriptor.primitiveTopology);
             m_PrimitiveTopologyType = Dx12Utility.ConvertToDx12PrimitiveTopologyType(descriptor.vertexStateDescriptor.primitiveTopology);

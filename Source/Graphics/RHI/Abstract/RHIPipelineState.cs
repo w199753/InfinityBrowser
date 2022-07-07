@@ -92,6 +92,7 @@ namespace Infinity.Graphics
         public bool depthEnable;
         public bool depthWriteMask;
         public bool stencilEnable;
+        public byte stencilReference;
         public byte stencilReadMask;
         public byte stencilWriteMask;
         public EComparisonMode comparisonMode;
@@ -101,9 +102,7 @@ namespace Infinity.Graphics
 
     public struct RHIRenderStateDescriptor
     {
-        public int stencilRef;
         public int? sampleMask;
-        public float4? blendFactor;
         public RHIBlendStateDescriptor blendStateDescriptor;
         public RHIRasterizerStateDescriptor rasterizerStateDescriptor;
         public RHIDepthStencilStateDescriptor depthStencilStateDescriptor;
