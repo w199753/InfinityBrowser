@@ -24,6 +24,6 @@ namespace Infinity.Graphics
 
     public abstract class RHIQuery : Disposal
     {
-
+        public abstract bool GetData(in uint startIndex, in uint count, in Span<ulong> results);
     }
 }
