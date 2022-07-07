@@ -58,7 +58,7 @@ namespace Infinity.Graphics
                     ref Dx12RootParameterKeyInfo keyInfo = ref bindGroupLayout.RootParameterKeyInfos[j];
 
                     ref D3D12_DESCRIPTOR_RANGE1 rootDescriptorRange = ref rootDescriptorRangeViews[i + j];
-                    rootDescriptorRange.Init(Dx12Utility.ConvertToDx12BindType(keyInfo.bindType), (uint)keyInfo.count, (uint)keyInfo.slot, (uint)keyInfo.layoutIndex, Dx12Utility.GetDx12DescriptorRangeFalag(keyInfo.bindType));
+                    rootDescriptorRange.Init(Dx12Utility.ConvertToDx12BindType(keyInfo.bindType), (uint)keyInfo.count, (uint)keyInfo.slot, /*(uint)keyInfo.layoutIndex*/0, Dx12Utility.GetDx12DescriptorRangeFalag(keyInfo.bindType));
 
                     ref D3D12_ROOT_PARAMETER1 rootParameterView = ref rootParameterViews[i + j];
                     rootParameterView.InitAsDescriptorTable(1, rootDescriptorRangePtr + (i + j), Dx12Utility.ConvertToDx12ShaderStage(keyInfo.shaderStage));
@@ -69,17 +69,20 @@ namespace Infinity.Graphics
 
                     if ((keyInfo.shaderStage & EShaderStage.Vertex) == EShaderStage.Vertex)
                     {
-                        m_VertexParameterMap.TryAdd(new int3(keyInfo.layoutIndex << 8, keyInfo.slot, Dx12Utility.GetDx12BindKey(keyInfo.bindType)).GetHashCode(), parameter);
+                        m_VertexParameterMap.TryAdd(new int2(keyInfo.slot, Dx12Utility.GetDx12BindKey(keyInfo.bindType)).GetHashCode(), parameter);
+                        //m_VertexParameterMap.TryAdd(new int3(keyInfo.layoutIndex << 8, keyInfo.slot, Dx12Utility.GetDx12BindKey(keyInfo.bindType)).GetHashCode(), parameter);
                     }
 
                     if ((keyInfo.shaderStage & EShaderStage.Fragment) == EShaderStage.Fragment)
                     {
-                        m_FragmentParameterMap.TryAdd(new int3(keyInfo.layoutIndex << 8, keyInfo.slot, Dx12Utility.GetDx12BindKey(keyInfo.bindType)).GetHashCode(), parameter);
+                        m_FragmentParameterMap.TryAdd(new int2(keyInfo.slot, Dx12Utility.GetDx12BindKey(keyInfo.bindType)).GetHashCode(), parameter);
+                        //m_FragmentParameterMap.TryAdd(new int3(keyInfo.layoutIndex << 8, keyInfo.slot, Dx12Utility.GetDx12BindKey(keyInfo.bindType)).GetHashCode(), parameter);
                     }
 
                     if ((keyInfo.shaderStage & EShaderStage.Compute) == EShaderStage.Compute)
                     {
-                        m_ComputeParameterMap.TryAdd(new int3(keyInfo.layoutIndex << 8, keyInfo.slot, Dx12Utility.GetDx12BindKey(keyInfo.bindType)).GetHashCode(), parameter);
+                        m_ComputeParameterMap.TryAdd(new int2(keyInfo.slot, Dx12Utility.GetDx12BindKey(keyInfo.bindType)).GetHashCode(), parameter);
+                        //m_ComputeParameterMap.TryAdd(new int3(keyInfo.layoutIndex << 8, keyInfo.slot, Dx12Utility.GetDx12BindKey(keyInfo.bindType)).GetHashCode(), parameter);
                     }
                 }
             }
@@ -102,19 +105,22 @@ namespace Infinity.Graphics
 
             if ((shaderStage & EShaderStage.Vertex) == EShaderStage.Vertex)
             {
-                hasValue = m_VertexParameterMap.TryGetValue(new int3(layoutIndex << 8, slot, Dx12Utility.GetDx12BindKey(bindType)).GetHashCode(), out Dx12BindTypeAndParameterSlot parameter);
+                hasValue = m_VertexParameterMap.TryGetValue(new int2(Dx12Utility.GetDx12BindKey(bindType)).GetHashCode(), out Dx12BindTypeAndParameterSlot parameter);
+                //hasValue = m_VertexParameterMap.TryGetValue(new int3(layoutIndex << 8, slot, Dx12Utility.GetDx12BindKey(bindType)).GetHashCode(), out Dx12BindTypeAndParameterSlot parameter);
                 outParameter = parameter;
             }
 
             if ((shaderStage & EShaderStage.Fragment) == EShaderStage.Fragment)
             {
-                hasValue = m_FragmentParameterMap.TryGetValue(new int3(layoutIndex << 8, slot, Dx12Utility.GetDx12BindKey(bindType)).GetHashCode(), out Dx12BindTypeAndParameterSlot parameter);
+                hasValue = m_FragmentParameterMap.TryGetValue(new int2(Dx12Utility.GetDx12BindKey(bindType)).GetHashCode(), out Dx12BindTypeAndParameterSlot parameter);
+                //hasValue = m_FragmentParameterMap.TryGetValue(new int3(layoutIndex << 8, slot, Dx12Utility.GetDx12BindKey(bindType)).GetHashCode(), out Dx12BindTypeAndParameterSlot parameter);
                 outParameter = parameter;
             }
 
             if ((shaderStage & EShaderStage.Compute) == EShaderStage.Compute)
             {
-                hasValue = m_ComputeParameterMap.TryGetValue(new int3(layoutIndex << 8, slot, Dx12Utility.GetDx12BindKey(bindType)).GetHashCode(), out Dx12BindTypeAndParameterSlot parameter);
+                hasValue = m_ComputeParameterMap.TryGetValue(new int2(Dx12Utility.GetDx12BindKey(bindType)).GetHashCode(), out Dx12BindTypeAndParameterSlot parameter);
+                //hasValue = m_ComputeParameterMap.TryGetValue(new int3(layoutIndex << 8, slot, Dx12Utility.GetDx12BindKey(bindType)).GetHashCode(), out Dx12BindTypeAndParameterSlot parameter);
                 outParameter = parameter;
             }
 

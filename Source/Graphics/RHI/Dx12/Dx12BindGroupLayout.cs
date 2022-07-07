@@ -9,7 +9,7 @@ namespace Infinity.Graphics
     {
         public int slot;
         public int count;
-        public int layoutIndex;
+        //public int layoutIndex;
         public EBindType bindType;
         public EShaderStage shaderStage;
 
@@ -18,13 +18,13 @@ namespace Infinity.Graphics
 
     internal unsafe class Dx12BindGroupLayout : RHIBindGroupLayout
     {
-        public int LayoutIndex
+        /*public int LayoutIndex
         {
             get
             {
                 return m_LayoutIndex;
             }
-        }
+        }*/
         /*public D3D12_ROOT_PARAMETER1[] NativeRootParameters
         {
             get
@@ -40,13 +40,13 @@ namespace Infinity.Graphics
             }
         }
 
-        private int m_LayoutIndex;
+        //private int m_LayoutIndex;
         //private D3D12_ROOT_PARAMETER1[] m_NativeRootParameters;
         private Dx12RootParameterKeyInfo[] m_RootParameterKeyInfos;
 
         public Dx12BindGroupLayout(in RHIBindGroupLayoutDescriptor descriptor)
         {
-            m_LayoutIndex = descriptor.layoutIndex;
+            //m_LayoutIndex = descriptor.layoutIndex;
             //m_NativeRootParameters = new D3D12_ROOT_PARAMETER1[descriptor.elementCount];
             m_RootParameterKeyInfos = new Dx12RootParameterKeyInfo[descriptor.elementCount];
 
@@ -62,7 +62,7 @@ namespace Infinity.Graphics
                 ref Dx12RootParameterKeyInfo keyInfo = ref m_RootParameterKeyInfos[i];
                 keyInfo.slot = element.slot;
                 keyInfo.count = element.count;
-                keyInfo.layoutIndex = descriptor.layoutIndex;
+                //keyInfo.layoutIndex = descriptor.layoutIndex;
                 keyInfo.bindType = element.bindType;
                 keyInfo.shaderStage = element.shaderStage;
             }
@@ -70,7 +70,7 @@ namespace Infinity.Graphics
 
         protected override void Release()
         {
-            m_LayoutIndex = 0;
+            //m_LayoutIndex = 0;
         }
     }
 #pragma warning restore CS8600, CS8602, CS8604, CS8618, CA1416
