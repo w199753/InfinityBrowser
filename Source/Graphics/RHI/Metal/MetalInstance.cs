@@ -12,7 +12,7 @@ namespace Infinity.Graphics
 
         private List<MtlGPU> m_GPUs;
 
-        public MtlInstance()
+        public MtlInstance(in RHIInstanceDescriptor descriptor)
         {
             int gpuCount = 0;
             IntPtr gpusPtr = IntPtr.Zero;

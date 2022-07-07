@@ -11,7 +11,7 @@ namespace Infinity.Graphics
         public override int GpuCount => 1;
         public override ERHIBackend RHIType => ERHIBackend.MAX;
 
-        public VkInstance()
+        public VkInstance(in RHIInstanceDescriptor descriptor)
         {
 
         }

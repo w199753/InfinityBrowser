@@ -23,6 +23,14 @@
         MAX
     }
 
+    public enum EQueryType : byte
+    {
+        Timestamp,
+        Occlusion,
+        BinaryOcclusion,
+        MAX
+    }
+
     public enum EPixelFormat : byte
     {
         // 8-Bits

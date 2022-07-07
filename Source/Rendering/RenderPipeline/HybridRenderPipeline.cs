@@ -367,7 +367,7 @@ namespace Infinity.Rendering
                 depthStencilStateDescriptor.depthEnable = true;
                 depthStencilStateDescriptor.depthWriteMask = true;
                 depthStencilStateDescriptor.comparisonMode = EComparisonMode.LessEqual;
-                depthStencilStateDescriptor.stencilEnable = true;
+                depthStencilStateDescriptor.stencilEnable = false;
                 depthStencilStateDescriptor.stencilReference = 5;
                 depthStencilStateDescriptor.stencilReadMask = 255;
                 depthStencilStateDescriptor.stencilWriteMask = 255;
@@ -428,7 +428,7 @@ namespace Infinity.Rendering
                 using (computeEncoder.BeginScopedPass("ComputePass"))
                 {
                     computeEncoder.PushDebugGroup("GenereteUV");
-                    computeEncoder.SetPipeline(m_ComputePipelineState);
+                    computeEncoder.SetPipelineState(m_ComputePipelineState);
                     computeEncoder.SetBindGroup(m_ComputeBindGroup);
                     computeEncoder.Dispatch((uint)math.ceil((float)renderContext.ScreenSize.x / 8), (uint)math.ceil((float)renderContext.ScreenSize.y / 8), 1);
                     computeEncoder.PopDebugGroup();
@@ -445,7 +445,7 @@ namespace Infinity.Rendering
                     graphicsEncoder.SetViewport(new Viewport(0, 0, (uint)renderContext.ScreenSize.x, (uint)renderContext.ScreenSize.y, 0, 1));
                     graphicsEncoder.SetScissorRect(new Rect(0, 0, (uint)renderContext.ScreenSize.x, (uint)renderContext.ScreenSize.y));
                     graphicsEncoder.PushDebugGroup("DrawTriange");
-                    graphicsEncoder.SetPipeline(m_GraphicsPipelineState);
+                    graphicsEncoder.SetPipelineState(m_GraphicsPipelineState);
                     //graphicsEncoder.SetBindGroup(m_GraphicsBindGroup);
                     graphicsEncoder.SetVertexBuffer(m_VertexBuffer);
                     graphicsEncoder.SetIndexBuffer(m_IndexBuffer, EIndexFormat.UInt16);

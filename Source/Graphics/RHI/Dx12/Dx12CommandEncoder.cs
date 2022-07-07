@@ -158,7 +158,7 @@ namespace Infinity.Graphics
             }
         }
 
-        public override void SetPipeline(RHIComputePipelineState pipelineState)
+        public override void SetPipelineState(RHIComputePipelineState pipelineState)
         {
             m_Dx12ComputePipelineState = pipelineState as Dx12ComputePipelineState;
             Dx12PipelineLayout dx12PipelineLayout = m_Dx12ComputePipelineState.PipelineLayout;
@@ -312,7 +312,7 @@ namespace Infinity.Graphics
             }
         }
 
-        public override void SetPipeline(RHIGraphicsPipelineState pipelineState)
+        public override void SetPipelineState(RHIGraphicsPipelineState pipelineState)
         {
             m_Dx12GraphicsPipelineState = pipelineState as Dx12GraphicsPipelineState;
             Dx12PipelineLayout dx12PipelineLayout = m_Dx12GraphicsPipelineState.PipelineLayout;

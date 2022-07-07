@@ -21,38 +21,44 @@ namespace Infinity.Graphics
         private List<Dx12GPU> m_GPUs;
         private IDXGIFactory7* m_DXGIFactory;
 
-        public Dx12Instance()
+        public Dx12Instance(in RHIInstanceDescriptor descriptor)
         {
             m_GPUs = new List<Dx12GPU>(4);
-            CreateDX12Factory();
-            EnumerateAdapters();
+            CreateDX12Factory(descriptor);
+            EnumerateAdapters(descriptor);
         }
 
-        private void CreateDX12Factory()
+        private void CreateDX12Factory(in RHIInstanceDescriptor descriptor)
         {
             uint factoryFlags = 0;
 
-#if BUILD_CONFIG_DEBUG
-            ID3D12Debug* debugController;
-            if (SUCCEEDED(DirectX.D3D12GetDebugInterface(__uuidof<ID3D12Debug>(), (void**)&debugController))) 
+            if(descriptor.enableDebugLayer)
             {
-                debugController->EnableDebugLayer();
-                factoryFlags |= DXGI.DXGI_CREATE_FACTORY_DEBUG;
-            }
+                ID3D12Debug* debug;
+                if (SUCCEEDED(DirectX.D3D12GetDebugInterface(__uuidof<ID3D12Debug>(), (void**)&debug)))
+                {
+                    debug->EnableDebugLayer();
+                    factoryFlags |= DXGI.DXGI_CREATE_FACTORY_DEBUG;
 
-            ID3D12Debug1* debugController2;
-            SUCCEEDED(debugController->QueryInterface(__uuidof<ID3D12Debug1>(), (void**)&debugController2));
-            debugController2->SetEnableGPUBasedValidation(true);
-#endif
+                    if (descriptor.enableGpuValidatior)
+                    {
+                        ID3D12Debug1* debug1;
+                        if (SUCCEEDED(debug->QueryInterface(__uuidof<ID3D12Debug1>(), (void**)&debug1)))
+                        {
+                            debug1->SetEnableGPUBasedValidation(true);
+                            debug1->Release();
+                        }
+                    }
+                }
+            }
 
             IDXGIFactory7* factory;
             bool success =  SUCCEEDED(DirectX.CreateDXGIFactory2(factoryFlags, __uuidof<IDXGIFactory7>(), (void**)&factory));
             Debug.Assert(success);
-
             m_DXGIFactory = factory;
         }
 
-        private void EnumerateAdapters()
+        private void EnumerateAdapters(in RHIInstanceDescriptor descriptor)
         {
             IDXGIAdapter1* adapter = null;
 

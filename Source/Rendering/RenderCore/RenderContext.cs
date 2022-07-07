@@ -84,7 +84,14 @@ namespace Infinity.Rendering
             m_ScreenSize = new int2(width, height);
 
             // Create Instance
-            m_Instance = RHIInstance.CreateByPlatform();
+            RHIInstanceDescriptor descriptor;
+            {
+                //descriptor.backend = ERHIBackend.DirectX12;
+                descriptor.backend = RHIInstance.GetPlatformBackend(false);
+                descriptor.enableDebugLayer = true;
+                descriptor.enableGpuValidatior = false;
+            }
+            m_Instance = RHIInstance.Create(descriptor);
 
             // Select Gpu
             m_Gpu = m_Instance.GetGpu(0);
