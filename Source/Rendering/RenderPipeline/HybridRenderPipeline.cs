@@ -299,7 +299,6 @@ namespace Infinity.Rendering
                 rasterizerStateDescriptor.depthBias = 0;
                 rasterizerStateDescriptor.depthBiasClamp = 0;
                 rasterizerStateDescriptor.slopeScaledDepthBias = 0;
-                rasterizerStateDescriptor.scissorEnable = true;
                 rasterizerStateDescriptor.depthClipEnable = true;
                 rasterizerStateDescriptor.conservativeRaster = false;
                 rasterizerStateDescriptor.antialiasedLineEnable = false;
