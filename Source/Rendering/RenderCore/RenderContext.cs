@@ -297,12 +297,6 @@ namespace Infinity.Rendering
             return m_Device.CreateBindGroup(descriptor);
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public RHIPipelineLayout CreatePipelineLayout(in RHIPipelineLayoutDescriptor descriptor)
-        {
-            return m_Device.CreatePipelineLayout(descriptor);
-        }
-
         /*[MethodImpl(MethodImplOptions.AggressiveInlining)]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public RHIQuery GetQuery(in EQueryType queryType, string name)
@@ -317,22 +311,34 @@ namespace Infinity.Rendering
         }*/
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public RHIComputePipelineState CreateComputePipelineState(in RHIComputePipelineDescriptor descriptor)
+        public RHIComputePipeline CreateComputePipeline(in RHIComputePipelineDescriptor descriptor)
         {
-            return m_Device.CreateComputePipelineState(descriptor);
+            return m_Device.CreateComputePipeline(descriptor);
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public RHIRaytracingPipeline CreateRaytracingPipeline(in RHIRaytracingPipelineDescriptor descriptor)
+        {
+            return m_Device.CreateRaytracingPipeline(descriptor);
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public RHIMeshletPipeline CreateMeshletPipeline(in RHIMeshletPipelineDescriptor descriptor)
+        {
+            return m_Device.CreateMeshletPipeline(descriptor);
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public RHIGraphicsPipeline CreateGraphicsPipeline(in RHIGraphicsPipelineDescriptor descriptor)
+        {
+            return m_Device.CreateGraphicsPipeline(descriptor);
         }
 
         /*[MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public RHIRayTracePipeline CreateRayTracePipeline(in RHIRayTracePipelineDescriptor descriptor)
+        public RHIRayTracePipeline CreateRaytracePipeline(in RHIRaytracePipelineDescriptor descriptor)
         {
-            
-        }*/
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public RHIGraphicsPipelineState CreateGraphicsPipelineState(in RHIGraphicsPipelineDescriptor descriptor)
-        {
-            return m_Device.CreateGraphicsPipelineState(descriptor);
-        }
+        }*/
 
         protected override void Release()
         {

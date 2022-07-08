@@ -89,17 +89,27 @@ namespace Infinity.Graphics
             throw new NotImplementedException();
         }
 
-        public override RHIPipelineLayout CreatePipelineLayout(in RHIPipelineLayoutDescriptor descriptor)
+        internal override RHIPipelineLayout CreatePipelineLayout(in RHIPipelineLayoutDescriptor descriptor)
         {
             throw new NotImplementedException();
         }
 
-        public override RHIComputePipelineState CreateComputePipelineState(in RHIComputePipelineDescriptor descriptor)
+        public override RHIComputePipeline CreateComputePipeline(in RHIComputePipelineDescriptor descriptor)
         {
             throw new NotImplementedException();
         }
 
-        public override RHIGraphicsPipelineState CreateGraphicsPipelineState(in RHIGraphicsPipelineDescriptor descriptor)
+        public override RHIRaytracingPipeline CreateRaytracingPipeline(in RHIRaytracingPipelineDescriptor descriptor)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override RHIMeshletPipeline CreateMeshletPipeline(in RHIMeshletPipelineDescriptor descriptor)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override RHIGraphicsPipeline CreateGraphicsPipeline(in RHIGraphicsPipelineDescriptor descriptor)
         {
             throw new NotImplementedException();
         }

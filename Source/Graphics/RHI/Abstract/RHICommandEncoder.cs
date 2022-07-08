@@ -184,7 +184,7 @@ namespace Infinity.Graphics
         }
 
         public abstract void BeginPass(string? name);
-        public abstract void SetPipelineState(RHIComputePipelineState pipelineState);
+        public abstract void SetPipeline(RHIComputePipeline pipeline);
         public abstract void SetBindGroup(RHIBindGroup bindGroup);
         public abstract void Dispatch(in uint groupCountX, in uint groupCountY, in uint groupCountZ);
         public abstract void DispatchIndirect(RHIBuffer argsBuffer, in uint argsOffset);
@@ -202,7 +202,7 @@ namespace Infinity.Graphics
         }
 
         public abstract void BeginPass(in RHIGraphicsPassDescriptor descriptor);
-        public abstract void SetPipelineState(RHIGraphicsPipelineState pipelineState);
+        public abstract void SetPipeline(RHIGraphicsPipeline pipeline);
         public abstract void SetViewport(in Viewport viewport);
         public abstract void SetViewport(in Memory<Viewport> viewports);
         public abstract void SetScissorRect(in Rect rect);

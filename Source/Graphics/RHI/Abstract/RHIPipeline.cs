@@ -112,14 +112,14 @@ namespace Infinity.Graphics
     {
         public uint3 threadSize;
         public RHIShader computeShader;
-        public RHIPipelineLayout pipelineLayout;
+        public RHIBindGroupLayout[] bindGroupLayouts;
     }
 
     public struct RHIGraphicsPipelineDescriptor
     {
         public RHIShader vertexShader;
         public RHIShader fragmentShader;
-        public RHIPipelineLayout pipelineLayout;
+        public RHIBindGroupLayout[] bindGroupLayouts;
         public RHIOutputStateDescriptor outputStateDescriptor;
         public RHIRenderStateDescriptor renderStateDescriptor;
         public RHIVertexStateDescriptor vertexStateDescriptor;
@@ -127,11 +127,11 @@ namespace Infinity.Graphics
 
     public struct RHIMeshletPipelineDescriptor
     {
+        public RHIShader taskShader;
         public RHIShader meshShader;
-        public RHIShader objectShader;
         public RHIShader fragmentShader;
-        public RHIPipelineLayout pipelineLayout;
         public EPrimitiveTopology primitiveTopology;
+        public RHIBindGroupLayout[] bindGroupLayouts;
         public RHIOutputStateDescriptor outputStateDescriptor;
         public RHIRenderStateDescriptor renderStateDescriptor;
     }
@@ -143,7 +143,7 @@ namespace Infinity.Graphics
         public RHIShader anyHitShader;
         public RHIShader closeHitShader;
         public RHIShader intersectShader;
-        public RHIBindGroupLayout[] bindGroupLayouts;
+        public RHIBindGroupLayout bindGroupLayout;
     }
 
     public struct RHIRaytracingPipelineDescriptor
@@ -153,26 +153,40 @@ namespace Infinity.Graphics
         public uint recursionDepth;
         public RHIShader missShader;
         public RHIShader generateShader;
-        public RHIPipelineLayout pipelineLayout;
+        public RHIBindGroupLayout[] bindGroupLayouts;
         public Memory<RHIHitGroupDescription> hitGroupDescriptors;
     }
 
-    public abstract class RHIComputePipelineState : Disposal
+    internal struct RHIPipelineLayoutDescriptor
+    {
+        public int bindGroupCount => bindGroupLayouts.Length;
+        public RHIBindGroupLayout[] bindGroupLayouts;
+        // TODO pipeline constant
+        // uint32 pipelineConstantCount;
+        // PipelineConstantLayout pipelineConstantLayouts;
+    };
+
+    internal abstract class RHIPipelineLayout : Disposal
     {
 
     }
 
-    public abstract class RHIGraphicsPipelineState : Disposal
+    public abstract class RHIComputePipeline : Disposal
     {
 
     }
 
-    public abstract class RHIMeshletPipelineState : Disposal
+    public abstract class RHIGraphicsPipeline : Disposal
     {
 
     }
 
-    public abstract class RHIRaytracingPipelineState : Disposal
+    public abstract class RHIMeshletPipeline : Disposal
+    {
+
+    }
+
+    public abstract class RHIRaytracingPipeline : Disposal
     {
 
     }
