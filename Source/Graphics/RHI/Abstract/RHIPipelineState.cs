@@ -125,6 +125,17 @@ namespace Infinity.Graphics
         public RHIVertexStateDescriptor vertexStateDescriptor;
     }
 
+    public struct RHIMeshletPipelineDescriptor
+    {
+        public RHIShader meshShader;
+        public RHIShader objectShader;
+        public RHIShader fragmentShader;
+        public RHIPipelineLayout pipelineLayout;
+        public EPrimitiveTopology primitiveTopology;
+        public RHIOutputStateDescriptor outputStateDescriptor;
+        public RHIRenderStateDescriptor renderStateDescriptor;
+    }
+
     public struct RHIHitGroupDescription
     {
         public string name;
@@ -132,16 +143,16 @@ namespace Infinity.Graphics
         public RHIShader anyHitShader;
         public RHIShader closeHitShader;
         public RHIShader intersectShader;
-        public RHIBindGroup[] bindGroups;
+        public RHIBindGroupLayout[] bindGroupLayouts;
     }
 
     public struct RHIRaytracingPipelineDescriptor
     {
-        public uint maxPayloadSizeInBytes;
-        public uint maxTraceRecursionDepth;
-        public uint maxAttributeSizeInBytes;
+        public uint payloadSize;
+        public uint attributeSize;
+        public uint recursionDepth;
         public RHIShader missShader;
-        public RHIShader rayGenerateShader;
+        public RHIShader generateShader;
         public RHIPipelineLayout pipelineLayout;
         public Memory<RHIHitGroupDescription> hitGroupDescriptors;
     }
@@ -152,6 +163,11 @@ namespace Infinity.Graphics
     }
 
     public abstract class RHIGraphicsPipelineState : Disposal
+    {
+
+    }
+
+    public abstract class RHIMeshletPipelineState : Disposal
     {
 
     }

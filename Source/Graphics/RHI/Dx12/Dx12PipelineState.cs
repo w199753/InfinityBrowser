@@ -193,5 +193,18 @@ namespace Infinity.Graphics
 
         }
     }
+
+    internal unsafe class Dx12MeshletPipelineState : RHIMeshletPipelineState
+    {
+        public Dx12MeshletPipelineState(Dx12Device device, in RHIMeshletPipelineDescriptor descriptor)
+        {
+
+        }
+
+        protected override void Release()
+        {
+
+        }
+    }
 #pragma warning restore CS0169, CS0649, CS8600, CS8601, CS8602, CS8604, CS8618, CA1416
 }
