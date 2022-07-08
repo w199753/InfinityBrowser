@@ -181,6 +181,92 @@ namespace Infinity.Graphics
         }
     }
 
+    internal unsafe class Dx12RaytracingPipeline : RHIRaytracingPipeline
+    {
+        public Dx12PipelineLayout GlobalPipelineLayout
+        {
+            get
+            {
+                return m_GlobalPipelineLayout;
+            }
+        }
+        public ID3D12PipelineState* NativePipelineState
+        {
+            get
+            {
+                return m_NativePipelineState;
+            }
+        }
+
+        private Dx12PipelineLayout m_GlobalPipelineLayout;
+        private ID3D12PipelineState* m_NativePipelineState;
+        private Dictionary<RHIBindGroupLayout, Dx12PipelineLayout> m_LocalPipelineLayoutMap;
+
+        public Dx12RaytracingPipeline(Dx12Device device, in RHIRaytracingPipelineDescriptor descriptor)
+        {
+
+        }
+
+        protected override void Release()
+        {
+            m_GlobalPipelineLayout.Dispose();
+            m_NativePipelineState->Release();
+
+            foreach (KeyValuePair<RHIBindGroupLayout, Dx12PipelineLayout> localPipelineLayout in m_LocalPipelineLayoutMap)
+            {
+                localPipelineLayout.Value.Dispose();
+            }
+        }
+    }
+
+    internal unsafe class Dx12MeshletPipeline : RHIMeshletPipeline
+    {
+        public int StencilRef
+        {
+            get
+            {
+                return m_StencilRef;
+            }
+        }
+        public Dx12PipelineLayout PipelineLayout
+        {
+            get
+            {
+                return m_PipelineLayout;
+            }
+        }
+        public ID3D12PipelineState* NativePipelineState
+        {
+            get
+            {
+                return m_NativePipelineState;
+            }
+        }
+        public D3D_PRIMITIVE_TOPOLOGY PrimitiveTopology
+        {
+            get
+            {
+                return m_PrimitiveTopology;
+            }
+        }
+
+        private int m_StencilRef;
+        private Dx12PipelineLayout m_PipelineLayout;
+        private ID3D12PipelineState* m_NativePipelineState;
+        private D3D_PRIMITIVE_TOPOLOGY m_PrimitiveTopology;
+
+        public Dx12MeshletPipeline(Dx12Device device, in RHIMeshletPipelineDescriptor descriptor)
+        {
+
+        }
+
+        protected override void Release()
+        {
+            m_PipelineLayout.Dispose();
+            m_NativePipelineState->Release();
+        }
+    }
+
     internal unsafe class Dx12GraphicsPipeline : RHIGraphicsPipeline
     {
         public int StencilRef
@@ -220,12 +306,10 @@ namespace Infinity.Graphics
         }
 
         private int m_StencilRef;
-        private bool m_ScissorEnabled;
         private int[] m_VertexStrides;
         private Dx12PipelineLayout m_PipelineLayout;
         private ID3D12PipelineState* m_NativePipelineState;
         private D3D_PRIMITIVE_TOPOLOGY m_PrimitiveTopology;
-        private D3D12_PRIMITIVE_TOPOLOGY_TYPE m_PrimitiveTopologyType;
 
         public Dx12GraphicsPipeline(Dx12Device device, in RHIGraphicsPipelineDescriptor descriptor)
         {
@@ -249,9 +333,9 @@ namespace Infinity.Graphics
             }
 
             m_StencilRef = descriptor.renderStateDescriptor.depthStencilStateDescriptor.stencilReference;
-            m_ScissorEnabled = descriptor.renderStateDescriptor.rasterizerStateDescriptor.scissorEnable;
             m_PrimitiveTopology = Dx12Utility.ConvertToDx12PrimitiveTopology(descriptor.vertexStateDescriptor.primitiveTopology);
-            m_PrimitiveTopologyType = Dx12Utility.ConvertToDx12PrimitiveTopologyType(descriptor.vertexStateDescriptor.primitiveTopology);
+
+            D3D12_PRIMITIVE_TOPOLOGY_TYPE primitiveTopologyType = Dx12Utility.ConvertToDx12PrimitiveTopologyType(descriptor.vertexStateDescriptor.primitiveTopology);
 
             int inputElementCount = Dx12Utility.GetDx12VertexLayoutCount(vertexLayoutDescriptors);
             D3D12_INPUT_ELEMENT_DESC* inputElementsPtr = stackalloc D3D12_INPUT_ELEMENT_DESC[inputElementCount];
@@ -267,7 +351,7 @@ namespace Infinity.Graphics
             {
                 InputLayout = outputLayout,
                 pRootSignature = m_PipelineLayout.NativeRootSignature,
-                PrimitiveTopologyType = m_PrimitiveTopologyType,
+                PrimitiveTopologyType = primitiveTopologyType,
 
                 SampleMask = descriptor.renderStateDescriptor.sampleMask.HasValue ? ((uint)descriptor.renderStateDescriptor.sampleMask.Value) : uint.MaxValue,
                 BlendState = Dx12Utility.CreateDx12BlendState(descriptor.renderStateDescriptor.blendStateDescriptor),
@@ -314,32 +398,6 @@ namespace Infinity.Graphics
         {
             m_PipelineLayout.Dispose();
             m_NativePipelineState->Release();
-        }
-    }
-
-    internal unsafe class Dx12RaytracingPipeline : RHIRaytracingPipeline
-    {
-        public Dx12RaytracingPipeline(Dx12Device device, in RHIRaytracingPipelineDescriptor descriptor)
-        {
-
-        }
-
-        protected override void Release()
-        {
-
-        }
-    }
-
-    internal unsafe class Dx12MeshletPipeline : RHIMeshletPipeline
-    {
-        public Dx12MeshletPipeline(Dx12Device device, in RHIMeshletPipelineDescriptor descriptor)
-        {
-
-        }
-
-        protected override void Release()
-        {
-
         }
     }
 #pragma warning restore CS0169, CS0649, CS8600, CS8601, CS8602, CS8604, CS8618, CA1416

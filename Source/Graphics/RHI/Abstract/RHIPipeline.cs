@@ -69,7 +69,6 @@ namespace Infinity.Graphics
     {
         public EFillMode FillMode;
         public ECullMode CullMode;
-        public bool scissorEnable;
         public bool depthClipEnable;
         public bool conservativeRaster;
         public bool antialiasedLineEnable;
@@ -146,15 +145,22 @@ namespace Infinity.Graphics
         public RHIBindGroupLayout bindGroupLayout;
     }
 
+    public struct RHIRayGeneralDescription
+    {
+        public string name;
+        public RHIShader generalShader;
+        public RHIBindGroupLayout bindGroupLayout;
+    }
+
     public struct RHIRaytracingPipelineDescriptor
     {
         public uint payloadSize;
         public uint attributeSize;
         public uint recursionDepth;
-        public RHIShader missShader;
         public RHIShader generateShader;
         public RHIBindGroupLayout[] bindGroupLayouts;
         public Memory<RHIHitGroupDescription> hitGroupDescriptors;
+        public Memory<RHIRayGeneralDescription> rayGeneralDescriptors;
     }
 
     internal struct RHIPipelineLayoutDescriptor
@@ -176,7 +182,7 @@ namespace Infinity.Graphics
 
     }
 
-    public abstract class RHIGraphicsPipeline : Disposal
+    public abstract class RHIRaytracingPipeline : Disposal
     {
 
     }
@@ -186,7 +192,7 @@ namespace Infinity.Graphics
 
     }
 
-    public abstract class RHIRaytracingPipeline : Disposal
+    public abstract class RHIGraphicsPipeline : Disposal
     {
 
     }
