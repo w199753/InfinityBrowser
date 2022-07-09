@@ -74,7 +74,7 @@ namespace Infinity.Graphics
             {
                 textureDescriptor.extent = new int3(descriptor.extent.xy, 1);
                 textureDescriptor.samples = 1;
-                textureDescriptor.mipLevels = 1;
+                textureDescriptor.mipCount = 1;
                 textureDescriptor.format = descriptor.format;
                 textureDescriptor.state = ETextureState.Present;
                 textureDescriptor.usage = ETextureUsage.RenderTarget;

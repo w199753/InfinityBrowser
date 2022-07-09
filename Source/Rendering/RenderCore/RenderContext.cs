@@ -131,9 +131,9 @@ namespace Infinity.Rendering
             m_SwapChain = m_Device.CreateSwapChain(swapChainDescriptor);
 
             RHITextureViewDescriptor viewDescriptor = new RHITextureViewDescriptor();
-            viewDescriptor.mipLevelNum = 1;
+            viewDescriptor.mipCount = 1;
             viewDescriptor.baseMipLevel = 0;
-            viewDescriptor.arrayLayerNum = 1;
+            viewDescriptor.arrayLayerCount = 1;
             viewDescriptor.baseArrayLayer = 0;
             viewDescriptor.format = EPixelFormat.RGBA8_UNorm;
             viewDescriptor.viewType = ETextureViewType.RenderTargetView;

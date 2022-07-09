@@ -3,6 +3,22 @@ using Infinity.Mathmatics;
 
 namespace Infinity.Graphics
 {
+    public struct RHIBufferCopyDescriptor
+    {
+        public uint offset;
+        public uint rowPitch;
+        public uint3 textureHeight;
+        public RHIBuffer buffer;
+    }
+
+    public struct RHITextureCopyDescriptor
+    {
+        public uint mipLevel;
+        public uint arrayLayer;
+        public uint3 origin;
+        public RHITexture texture;
+    }
+
     public struct RHIIndirectDispatchArgs
     {
         public uint GroupCountX;
@@ -46,13 +62,6 @@ namespace Infinity.Graphics
             BaseVertexLocation = baseVertexLocation;
             StartInstanceLocation = startInstanceLocation;
         }
-    }
-
-    public struct RHITextureSubResourceDescriptor
-    {
-        public uint slice;
-        public uint mipLevel;
-        public uint3 origin;
     }
 
     public struct RHIShadingRateDescriptor
@@ -162,10 +171,10 @@ namespace Infinity.Graphics
         }
 
         public abstract void BeginPass(string? name);
-        public abstract void CopyBufferToBuffer(RHIBuffer src, in int srcOffset, RHIBuffer dst, in int dstOffset, in int size);
-        public abstract void CopyBufferToTexture(RHIBuffer src, RHITexture dst, in RHITextureSubResourceDescriptor subResourceDescriptor, in int3 size);
-        public abstract void CopyTextureToBuffer(RHITexture src, RHIBuffer dst, in RHITextureSubResourceDescriptor subResourceDescriptor, in int3 size);
-        public abstract void CopyTextureToTexture(RHITexture src, in RHITextureSubResourceDescriptor srcSubResourceDescriptor, RHITexture dst, in RHITextureSubResourceDescriptor dstSubResourceDescriptor, in int3 size);
+        public abstract void CopyBufferToBuffer(RHIBuffer srcBuffer, in int srcOffset, RHIBuffer dstBuffer, in int dstOffset, in int size);
+        public abstract void CopyBufferToTexture(in RHIBufferCopyDescriptor src, in RHITextureCopyDescriptor dst, in int3 size);
+        public abstract void CopyTextureToBuffer(in RHITextureCopyDescriptor src, in RHIBufferCopyDescriptor dst, in int3 size);
+        public abstract void CopyTextureToTexture(in RHITextureCopyDescriptor src, in RHITextureCopyDescriptor dst, in int3 size);
         public abstract void ResourceBarrier(in RHIBarrier barrier);
         public abstract void ResourceBarrier(in Memory<RHIBarrier> barriers);
         public abstract void PushDebugGroup(string name);

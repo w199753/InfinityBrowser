@@ -827,7 +827,7 @@ namespace Infinity.Graphics
                 return;
             }
             srv.MostDetailedMip = (uint)descriptor.baseMipLevel;
-            srv.MipLevels = (uint)descriptor.mipLevelNum;
+            srv.MipLevels = (uint)descriptor.mipCount;
             srv.PlaneSlice = 0;
             srv.ResourceMinLODClamp = descriptor.baseMipLevel;
         }
@@ -838,9 +838,9 @@ namespace Infinity.Graphics
                 return;
             }
             srv.MostDetailedMip = (uint)descriptor.baseMipLevel;
-            srv.MipLevels = (uint)descriptor.mipLevelNum;
+            srv.MipLevels = (uint)descriptor.mipCount;
             srv.FirstArraySlice = (uint)descriptor.baseArrayLayer;
-            srv.ArraySize = (uint)descriptor.arrayLayerNum;
+            srv.ArraySize = (uint)descriptor.arrayLayerCount;
             srv.PlaneSlice = 0;
             srv.ResourceMinLODClamp = descriptor.baseMipLevel;
         }
@@ -850,7 +850,7 @@ namespace Infinity.Graphics
             if (!((descriptor.dimension & ETextureViewDimension.TextureCube) == ETextureViewDimension.TextureCube)) {
                 return;
             }
-            srv.MipLevels = (uint)descriptor.mipLevelNum;
+            srv.MipLevels = (uint)descriptor.mipCount;
             srv.MostDetailedMip = (uint)descriptor.baseMipLevel;
             srv.ResourceMinLODClamp = descriptor.baseMipLevel;
         }
@@ -861,8 +861,8 @@ namespace Infinity.Graphics
                 return;
             }
             srv.MostDetailedMip = (uint)descriptor.baseMipLevel;
-            srv.MipLevels = (uint)descriptor.mipLevelNum;
-            srv.NumCubes = (uint)descriptor.arrayLayerNum;
+            srv.MipLevels = (uint)descriptor.mipCount;
+            srv.NumCubes = (uint)descriptor.arrayLayerCount;
             srv.First2DArrayFace = (uint)descriptor.baseArrayLayer;
             srv.ResourceMinLODClamp = descriptor.baseMipLevel;
         }
@@ -872,7 +872,7 @@ namespace Infinity.Graphics
             if (!((descriptor.dimension & ETextureViewDimension.Texture3D) == ETextureViewDimension.Texture3D)) {
                 return;
             }
-            srv.MipLevels = (uint)descriptor.mipLevelNum;
+            srv.MipLevels = (uint)descriptor.mipCount;
             srv.MostDetailedMip = (uint)descriptor.baseMipLevel;
             srv.ResourceMinLODClamp = descriptor.baseMipLevel;
         }
@@ -893,7 +893,7 @@ namespace Infinity.Graphics
             }
             uav.MipSlice = (uint)descriptor.baseMipLevel;
             uav.FirstArraySlice = (uint)descriptor.baseArrayLayer;
-            uav.ArraySize = (uint)descriptor.arrayLayerNum;
+            uav.ArraySize = (uint)descriptor.arrayLayerCount;
             uav.PlaneSlice = 0;
         }
 
@@ -902,7 +902,7 @@ namespace Infinity.Graphics
             if (!((descriptor.dimension & ETextureViewDimension.Texture3D) == ETextureViewDimension.Texture3D)) {
                 return;
             }
-            uav.WSize = (uint)descriptor.arrayLayerNum;
+            uav.WSize = (uint)descriptor.arrayLayerCount;
             uav.MipSlice = (uint)descriptor.baseMipLevel;
             uav.FirstWSlice = (uint)descriptor.baseArrayLayer;
         }
@@ -923,7 +923,7 @@ namespace Infinity.Graphics
             }
             rtv.MipSlice = (uint)descriptor.baseMipLevel;
             rtv.FirstArraySlice = (uint)descriptor.baseArrayLayer;
-            rtv.ArraySize = (uint)descriptor.arrayLayerNum;
+            rtv.ArraySize = (uint)descriptor.arrayLayerCount;
             rtv.PlaneSlice = 0;
         }
 
@@ -932,7 +932,7 @@ namespace Infinity.Graphics
             if (!((descriptor.dimension & ETextureViewDimension.Texture3D) == ETextureViewDimension.Texture3D)) {
                 return;
             }
-            rtv.WSize = (uint)descriptor.arrayLayerNum;
+            rtv.WSize = (uint)descriptor.arrayLayerCount;
             rtv.MipSlice = (uint)descriptor.baseMipLevel;
             rtv.FirstWSlice = (uint)descriptor.baseArrayLayer;
         }

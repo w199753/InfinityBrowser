@@ -2,9 +2,9 @@
 {
     public struct RHITextureViewDescriptor
     {
-        public int mipLevelNum;
+        public int mipCount;
         public int baseMipLevel;
-        public int arrayLayerNum;
+        public int arrayLayerCount;
         public int baseArrayLayer;
         public EPixelFormat format;
         public ETextureViewType viewType;

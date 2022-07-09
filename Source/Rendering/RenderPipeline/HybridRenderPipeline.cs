@@ -89,7 +89,7 @@ namespace Infinity.Rendering
             m_FragmentResult = Vortice.Dxc.DxcCompiler.Compile(Vortice.Dxc.DxcShaderStage.Pixel, graphicsCode, "Fragment");
             m_FragmentBlob = m_FragmentResult.GetOutput(Vortice.Dxc.DxcOutKind.Object);
 
-            string msl = Evergine.HLSLEverywhere.HLSLTranslator.HLSLTo(graphicsCode, Evergine.Common.Graphics.ShaderStages.Pixel, Evergine.Common.Graphics.GraphicsProfile.Level_12_1, "Fragment", Evergine.HLSLEverywhere.ShadingLanguage.Hlsl);
+            string msl = Evergine.HLSLEverywhere.HLSLTranslator.HLSLTo(computeCode, Evergine.Common.Graphics.ShaderStages.Compute, Evergine.Common.Graphics.GraphicsProfile.Level_12_1, "Main", Evergine.HLSLEverywhere.ShadingLanguage.Hlsl);
         }
 
         public override void Init(RenderContext renderContext)
@@ -101,7 +101,7 @@ namespace Infinity.Rendering
             {
                 textureDescriptor.extent = new int3(renderContext.ScreenSize.xy, 1);
                 textureDescriptor.samples = 1;
-                textureDescriptor.mipLevels = 1;
+                textureDescriptor.mipCount = 1;
                 textureDescriptor.format = EPixelFormat.RGBA8_UNorm;
                 textureDescriptor.state = ETextureState.Common;
                 textureDescriptor.usage = ETextureUsage.RenderTarget | ETextureUsage.UnorderedAccess;
@@ -112,9 +112,9 @@ namespace Infinity.Rendering
 
             RHITextureViewDescriptor outputViewDescriptor;
             {
-                outputViewDescriptor.mipLevelNum = textureDescriptor.mipLevels;
+                outputViewDescriptor.mipCount = textureDescriptor.mipCount;
                 outputViewDescriptor.baseMipLevel = 0;
-                outputViewDescriptor.arrayLayerNum = 1;
+                outputViewDescriptor.arrayLayerCount = 1;
                 outputViewDescriptor.baseArrayLayer = 0;
                 outputViewDescriptor.format = EPixelFormat.RGBA8_UNorm;
                 outputViewDescriptor.viewType = ETextureViewType.UnorderedAccessView;

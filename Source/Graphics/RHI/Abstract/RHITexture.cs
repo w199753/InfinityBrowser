@@ -4,9 +4,9 @@ namespace Infinity.Graphics
 {
     public struct RHITextureDescriptor
     {
+        public int mipCount;
         public int3 extent;
         public int2 samples;
-        public int mipLevels;
         public EPixelFormat format;
         public ETextureDimension dimension;
         public ETextureState state;
