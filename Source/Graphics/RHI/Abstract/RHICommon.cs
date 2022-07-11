@@ -82,26 +82,6 @@
         MAX
     }
 
-    public enum EShadingRate : byte
-    {
-        Rate1x1 = 0,
-        Rate1x2 = 1,
-        Rate2x1 = 4,
-        Rate2x2 = 5,
-        Rate2x4 = 6,
-        Rate4x2 = 9,
-        Rate4x4 = 10
-    }
-
-    public enum EShadingRateCombiner : byte
-    {
-        Min = 0,
-        Max = 1,
-        Sum = 2,
-        Override = 3,
-        Passthrough = 4
-    }
-
     public enum ESemanticFormat : byte
     {
         UByte,
@@ -168,6 +148,26 @@
         MAX
     }
 
+    public enum EShadingRate : byte
+    {
+        Rate1x1 = 0,
+        Rate1x2 = 1,
+        Rate2x1 = 4,
+        Rate2x2 = 5,
+        Rate2x4 = 6,
+        Rate4x2 = 9,
+        Rate4x4 = 10
+    }
+
+    public enum EShadingRateCombiner : byte
+    {
+        Min = 0,
+        Max = 1,
+        Sum = 2,
+        Override = 3,
+        Passthrough = 4
+    }
+
     public enum ETextureDimension : byte
     {
         Texture2D,
@@ -195,8 +195,9 @@
 
     public enum EFilterMode : byte
     {
-        Nearset,
+        Point,
         Linear,
+        Anisotropic,
         MAX
     }
 
@@ -455,15 +456,16 @@
         Vertex = 0x1,
         Fragment = 0x2,
         Compute = 0x4,
-        Miss = 0x8,
-        AnyHit = 0x10,
-        CloseHit = 0x20,
-        Intersect = 0x40,
-        RayGenerate = 0x80,
+        Task = 0x10,
+        Mesh = 0x20,
+        AnyHit = 0x40,
+        CloseHit = 0x80,
+        Intersect = 0x100,
+        RayGenerate = 0x200,
         MAX
     }
 
-    public enum EHitGroupType
+    public enum EHitGroupType : byte
     {
         Triangles,
         Procedural

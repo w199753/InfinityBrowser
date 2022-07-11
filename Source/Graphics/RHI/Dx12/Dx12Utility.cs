@@ -44,14 +44,15 @@ namespace Infinity.Graphics
             EFilterMode magFilter = descriptor.magFilter;
             EFilterMode mipFilter = descriptor.mipFilter;
 
-            if (minFilter == EFilterMode.Nearset && magFilter == EFilterMode.Nearset && mipFilter == EFilterMode.Nearset) { return D3D12_FILTER.D3D12_FILTER_MIN_MAG_MIP_POINT; }
-            if (minFilter == EFilterMode.Nearset && magFilter == EFilterMode.Nearset && mipFilter == EFilterMode.Linear)  { return D3D12_FILTER.D3D12_FILTER_MIN_MAG_POINT_MIP_LINEAR; }
-            if (minFilter == EFilterMode.Nearset && magFilter == EFilterMode.Linear  && mipFilter == EFilterMode.Nearset) { return D3D12_FILTER.D3D12_FILTER_MIN_POINT_MAG_LINEAR_MIP_POINT; }
-            if (minFilter == EFilterMode.Nearset && magFilter == EFilterMode.Linear  && mipFilter == EFilterMode.Linear)  { return D3D12_FILTER.D3D12_FILTER_MIN_POINT_MAG_MIP_LINEAR; }
-            if (minFilter == EFilterMode.Linear  && magFilter == EFilterMode.Nearset && mipFilter == EFilterMode.Nearset) { return D3D12_FILTER.D3D12_FILTER_MIN_LINEAR_MAG_MIP_POINT; }
-            if (minFilter == EFilterMode.Linear  && magFilter == EFilterMode.Nearset && mipFilter == EFilterMode.Linear)  { return D3D12_FILTER.D3D12_FILTER_MIN_LINEAR_MAG_POINT_MIP_LINEAR; }
-            if (minFilter == EFilterMode.Linear  && magFilter == EFilterMode.Linear  && mipFilter == EFilterMode.Nearset) { return D3D12_FILTER.D3D12_FILTER_MIN_MAG_LINEAR_MIP_POINT; }
+            if (minFilter == EFilterMode.Point && magFilter == EFilterMode.Point && mipFilter == EFilterMode.Point) { return D3D12_FILTER.D3D12_FILTER_MIN_MAG_MIP_POINT; }
+            if (minFilter == EFilterMode.Point && magFilter == EFilterMode.Point && mipFilter == EFilterMode.Linear)  { return D3D12_FILTER.D3D12_FILTER_MIN_MAG_POINT_MIP_LINEAR; }
+            if (minFilter == EFilterMode.Point && magFilter == EFilterMode.Linear  && mipFilter == EFilterMode.Point) { return D3D12_FILTER.D3D12_FILTER_MIN_POINT_MAG_LINEAR_MIP_POINT; }
+            if (minFilter == EFilterMode.Point && magFilter == EFilterMode.Linear  && mipFilter == EFilterMode.Linear)  { return D3D12_FILTER.D3D12_FILTER_MIN_POINT_MAG_MIP_LINEAR; }
+            if (minFilter == EFilterMode.Linear  && magFilter == EFilterMode.Point && mipFilter == EFilterMode.Point) { return D3D12_FILTER.D3D12_FILTER_MIN_LINEAR_MAG_MIP_POINT; }
+            if (minFilter == EFilterMode.Linear  && magFilter == EFilterMode.Point && mipFilter == EFilterMode.Linear)  { return D3D12_FILTER.D3D12_FILTER_MIN_LINEAR_MAG_POINT_MIP_LINEAR; }
+            if (minFilter == EFilterMode.Linear  && magFilter == EFilterMode.Linear  && mipFilter == EFilterMode.Point) { return D3D12_FILTER.D3D12_FILTER_MIN_MAG_LINEAR_MIP_POINT; }
             if (minFilter == EFilterMode.Linear  && magFilter == EFilterMode.Linear  && mipFilter == EFilterMode.Linear)  { return D3D12_FILTER.D3D12_FILTER_MIN_MAG_MIP_LINEAR; }
+            if (minFilter == EFilterMode.Anisotropic) { return D3D12_FILTER.D3D12_FILTER_ANISOTROPIC; }
             return D3D12_FILTER.D3D12_FILTER_MIN_MAG_MIP_POINT;
         }
 
