@@ -96,7 +96,7 @@ namespace Infinity.Rendering
         {
             Console.WriteLine("Init RenderPipeline");
 
-            // CreateOutputTexture
+            // Create OutputTexture
             RHITextureDescriptor textureDescriptor;
             {
                 textureDescriptor.extent = new int3(renderContext.ScreenSize.xy, 1);
@@ -122,17 +122,7 @@ namespace Infinity.Rendering
             }
             m_ComputeTextureView = m_ComputeTexture.CreateTextureView(outputViewDescriptor);
 
-            // CreateComputePipeline
-            RHIShaderDescriptor computeShaderDescriptor;
-            {
-                computeShaderDescriptor.size = m_ComputeBlob.BufferSize;
-                computeShaderDescriptor.byteCode = m_ComputeBlob.BufferPointer;
-                computeShaderDescriptor.entryName = "Main";
-                computeShaderDescriptor.shaderStage = EShaderStage.Compute;
-            }
-            m_ComputeShader = renderContext.CreateShader(computeShaderDescriptor);
-
-            // CreateComputeBindGroupLayout
+            // Create ComputeBindGroupLayout
             RHIBindGroupLayoutElement[] computeBindGroupLayoutElements = new RHIBindGroupLayoutElement[1];
             {
                 computeBindGroupLayoutElements[0].slot = 0;
@@ -147,7 +137,7 @@ namespace Infinity.Rendering
             }
             m_ComputeBindGroupLayout = renderContext.CreateBindGroupLayout(computeBindGroupLayoutDescriptor);
 
-            // CreateComputeBindGroup
+            // Create ComputeBindGroup
             RHIBindGroupElement[] computeBindGroupElements = new RHIBindGroupElement[1];
             {
                 computeBindGroupElements[0].textureView = m_ComputeTextureView;
@@ -159,7 +149,16 @@ namespace Infinity.Rendering
             }
             m_ComputeBindGroup = renderContext.CreateBindGroup(computeBindGroupDescriptor);
 
-            // CreateComputePipeline
+            // Create ComputePipeline
+            RHIShaderDescriptor computeShaderDescriptor;
+            {
+                computeShaderDescriptor.size = m_ComputeBlob.BufferSize;
+                computeShaderDescriptor.byteCode = m_ComputeBlob.BufferPointer;
+                computeShaderDescriptor.entryName = "Main";
+                computeShaderDescriptor.shaderStage = EShaderStage.Compute;
+            }
+            m_ComputeShader = renderContext.CreateShader(computeShaderDescriptor);
+
             RHIComputePipelineDescriptor computePipelineDescriptor;
             {
                 computePipelineDescriptor.threadSize = new uint3(8, 8, 1);
@@ -168,11 +167,11 @@ namespace Infinity.Rendering
             }
             m_ComputePipeline = renderContext.CreateComputePipeline(computePipelineDescriptor);
 
-            // CreateSampler
+            // Create Sampler
             //RHISamplerDescriptor samplerDescriptor = new RHISamplerDescriptor();
             //RHISampler textureSampler = device.CreateSampler(samplerDescriptor);
 
-            // CreateUniformBuffer
+            // Create UniformBuffer
             /*RHIBufferViewDescriptor bufferViewDescriptor = new RHIBufferViewDescriptor();
             bufferViewDescriptor.offset = 0;
             bufferViewDescriptor.count = vertices.Length;
@@ -180,7 +179,7 @@ namespace Infinity.Rendering
             bufferViewDescriptor.stride = (bufferDescriptor.size + 255) & ~255;
             RHIBufferView uniformBufferView = vertexBuffer.CreateBufferView(bufferViewDescriptor);*/
 
-            // CreateIndexBuffer
+            // Create IndexBuffer
             ushort[] indexs = new ushort[3];
             {
                 indexs[0] = 0;
@@ -202,7 +201,7 @@ namespace Infinity.Rendering
             MemoryUtility.MemCpy(indexsPtr.ToPointer(), indexData.ToPointer(), indexBufferDescriptor.size);
             indexsHandle.Free();
 
-            // CreateVertexBuffer
+            // Create VertexBuffer
             Vertex[] vertices = new Vertex[3];
             {
                 vertices[0].color = new float4(1, 0, 0, 1);
@@ -333,26 +332,7 @@ namespace Infinity.Rendering
                 renderStateDescriptor.depthStencilStateDescriptor = depthStencilStateDescriptor;
             }
 
-            // CreateGraphicsPipeline
-            RHIShaderDescriptor vertexShaderDescriptor;
-            {
-                vertexShaderDescriptor.size = m_VertexBlob.BufferSize;
-                vertexShaderDescriptor.byteCode = m_VertexBlob.BufferPointer;
-                vertexShaderDescriptor.entryName = "Vertex";
-                vertexShaderDescriptor.shaderStage = EShaderStage.Vertex;
-            }
-            m_VertexShader = renderContext.CreateShader(vertexShaderDescriptor);
-
-            RHIShaderDescriptor fragmentShaderDescriptor;
-            {
-                fragmentShaderDescriptor.size = m_FragmentBlob.BufferSize;
-                fragmentShaderDescriptor.byteCode = m_FragmentBlob.BufferPointer;
-                fragmentShaderDescriptor.entryName = "Fragment";
-                fragmentShaderDescriptor.shaderStage = EShaderStage.Fragment;
-            }
-            m_FragmentShader = renderContext.CreateShader(fragmentShaderDescriptor);
-
-            // CreateGraphicsBindGroupLayout
+            // Create GraphicsBindGroupLayout
             RHIBindGroupLayoutElement[] graphicsBindGroupLayoutElements = new RHIBindGroupLayoutElement[2];
             {
                 graphicsBindGroupLayoutElements[0].slot = 0;
@@ -372,7 +352,7 @@ namespace Infinity.Rendering
             }
             m_GraphicsBindGroupLayout = renderContext.CreateBindGroupLayout(graphicsBindGroupLayoutDescriptor);
 
-            // CreateGraphicsBindGroup
+            // Create GraphicsBindGroup
             /*RHIBindGroupElement[] graphicsBindGroupElements = new RHIBindGroupElement[2];
             {
                 graphicsBindGroupElements[0].textureView = textureView;
@@ -385,7 +365,26 @@ namespace Infinity.Rendering
             }
             RHIBindGroup m_GraphicsBindGroup = device.CreateBindGroup(graphicsBindGroupDescriptor);*/
 
-            // CreateGraphicsPipeline
+            // Create GraphicsPipeline
+            RHIShaderDescriptor vertexShaderDescriptor;
+            {
+                vertexShaderDescriptor.size = m_VertexBlob.BufferSize;
+                vertexShaderDescriptor.byteCode = m_VertexBlob.BufferPointer;
+                vertexShaderDescriptor.entryName = "Vertex";
+                vertexShaderDescriptor.shaderStage = EShaderStage.Vertex;
+            }
+            m_VertexShader = renderContext.CreateShader(vertexShaderDescriptor);
+
+            RHIShaderDescriptor fragmentShaderDescriptor;
+            {
+                fragmentShaderDescriptor.size = m_FragmentBlob.BufferSize;
+                fragmentShaderDescriptor.byteCode = m_FragmentBlob.BufferPointer;
+                fragmentShaderDescriptor.entryName = "Fragment";
+                fragmentShaderDescriptor.shaderStage = EShaderStage.Fragment;
+            }
+            m_FragmentShader = renderContext.CreateShader(fragmentShaderDescriptor);
+
+            // Create GraphicsPipeline
             RHIGraphicsPipelineDescriptor graphicsPipelineDescriptor;
             {
                 graphicsPipelineDescriptor.vertexShader = m_VertexShader;
