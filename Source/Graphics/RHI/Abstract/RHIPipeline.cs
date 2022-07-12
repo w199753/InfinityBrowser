@@ -107,34 +107,6 @@ namespace Infinity.Graphics
         public RHIDepthStencilStateDescriptor depthStencilStateDescriptor;
     }
 
-    public struct RHIComputePipelineDescriptor
-    {
-        public uint3 threadSize;
-        public RHIShader computeShader;
-        public RHIBindGroupLayout[] bindGroupLayouts;
-    }
-
-    public struct RHIGraphicsPipelineDescriptor
-    {
-        public RHIShader vertexShader;
-        public RHIShader fragmentShader;
-        public RHIBindGroupLayout[] bindGroupLayouts;
-        public RHIOutputStateDescriptor outputStateDescriptor;
-        public RHIRenderStateDescriptor renderStateDescriptor;
-        public RHIVertexStateDescriptor vertexStateDescriptor;
-    }
-
-    public struct RHIMeshletPipelineDescriptor
-    {
-        public RHIShader taskShader;
-        public RHIShader meshShader;
-        public RHIShader fragmentShader;
-        public EPrimitiveTopology primitiveTopology;
-        public RHIBindGroupLayout[] bindGroupLayouts;
-        public RHIOutputStateDescriptor outputStateDescriptor;
-        public RHIRenderStateDescriptor renderStateDescriptor;
-    }
-
     public struct RHIHitGroupDescription
     {
         public string name;
@@ -152,6 +124,13 @@ namespace Infinity.Graphics
         public RHIBindGroupLayout bindGroupLayout;
     }
 
+    public struct RHIComputePipelineDescriptor
+    {
+        public uint3 threadSize;
+        public RHIShader computeShader;
+        public RHIBindGroupLayout[] bindGroupLayouts;
+    }
+
     public struct RHIRaytracingPipelineDescriptor
     {
         public uint payloadSize;
@@ -161,6 +140,27 @@ namespace Infinity.Graphics
         public RHIBindGroupLayout[] bindGroupLayouts;
         public Memory<RHIHitGroupDescription> hitGroupDescriptors;
         public Memory<RHIRayGeneralDescription> rayGeneralDescriptors;
+    }
+
+    public struct RHIMeshletPipelineDescriptor
+    {
+        public RHIShader taskShader;
+        public RHIShader meshShader;
+        public RHIShader fragmentShader;
+        public EPrimitiveTopology primitiveTopology;
+        public RHIBindGroupLayout[] bindGroupLayouts;
+        public RHIOutputStateDescriptor outputStateDescriptor;
+        public RHIRenderStateDescriptor renderStateDescriptor;
+    }
+
+    public struct RHIGraphicsPipelineDescriptor
+    {
+        public RHIShader vertexShader;
+        public RHIShader fragmentShader;
+        public RHIBindGroupLayout[] bindGroupLayouts;
+        public RHIOutputStateDescriptor outputStateDescriptor;
+        public RHIRenderStateDescriptor renderStateDescriptor;
+        public RHIVertexStateDescriptor vertexStateDescriptor;
     }
 
     internal struct RHIPipelineLayoutDescriptor

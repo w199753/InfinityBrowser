@@ -47,9 +47,9 @@ namespace Infinity.Graphics
             Debug.Assert(bindGroupLayout != null);
 
             m_BindGroupLayout = bindGroupLayout;
-            m_BindParameters = new Dx12BindGroupParameter[descriptor.elementCount];
+            m_BindParameters = new Dx12BindGroupParameter[descriptor.elements.Length];
 
-            for (int i = 0; i < descriptor.elementCount; ++i)
+            for (int i = 0; i < descriptor.elements.Length; ++i)
             {
                 ref RHIBindGroupElement element = ref descriptor.elements.Span[i];
                 ref Dx12RootParameterKeyInfo keyInfo = ref bindGroupLayout.RootParameterKeyInfos[i];

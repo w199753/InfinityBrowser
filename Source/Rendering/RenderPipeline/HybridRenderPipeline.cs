@@ -39,7 +39,7 @@ namespace Infinity.Rendering
         public HybridRenderPipeline(string pipelineName) : base(pipelineName) 
         {
             string computeCode = new string(@"
-            RWTexture2D<float4> ResultTexture : register(u0);
+            RWTexture2D<float4> ResultTexture : register(u0, space1);
 
             [numthreads(8, 8, 1)]
             void Main (uint3 id : SV_DispatchThreadID)
@@ -51,8 +51,8 @@ namespace Infinity.Rendering
 
             string graphicsCode = new string(
             @"
-            Texture2D _DiffuseTexture : register(t0);
-            SamplerState _DiffuseSampler : register(s0);
+            Texture2D<half4> _DiffuseTexture : register(t0, space1);
+            SamplerState _DiffuseSampler : register(s0, space1);
 
             struct Attributes
 	        {
@@ -142,6 +142,7 @@ namespace Infinity.Rendering
             }
             RHIBindGroupLayoutDescriptor computeBindGroupLayoutDescriptor;
             {
+                computeBindGroupLayoutDescriptor.index = 1;
                 computeBindGroupLayoutDescriptor.elements = new Memory<RHIBindGroupLayoutElement>(computeBindGroupLayoutElements);
             }
             m_ComputeBindGroupLayout = renderContext.CreateBindGroupLayout(computeBindGroupLayoutDescriptor);
@@ -366,6 +367,7 @@ namespace Infinity.Rendering
             }
             RHIBindGroupLayoutDescriptor graphicsBindGroupLayoutDescriptor;
             {
+                graphicsBindGroupLayoutDescriptor.index = 1;
                 graphicsBindGroupLayoutDescriptor.elements = new Memory<RHIBindGroupLayoutElement>(graphicsBindGroupLayoutElements);
             }
             m_GraphicsBindGroupLayout = renderContext.CreateBindGroupLayout(graphicsBindGroupLayoutDescriptor);
@@ -445,7 +447,6 @@ namespace Infinity.Rendering
                     graphicsEncoder.SetVertexBuffer(m_VertexBuffer);
                     graphicsEncoder.SetIndexBuffer(m_IndexBuffer, EIndexFormat.UInt16);
                     graphicsEncoder.SetBlendFactor(1);
-                    //graphicsEncoder.Draw(3, 1, 0, 0);
                     graphicsEncoder.DrawIndexed(3, 1, 0, 0, 0);
                     graphicsEncoder.PopDebugGroup();
                 }

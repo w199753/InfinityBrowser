@@ -13,7 +13,6 @@ namespace Infinity.Graphics
 
     public struct RHIBindGroupDescriptor
     {
-        public int elementCount => elements.Length;
         public RHIBindGroupLayout layout;
         public Memory<RHIBindGroupElement> elements;
     }

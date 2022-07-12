@@ -207,7 +207,7 @@ namespace Infinity.Graphics
                 ref Dx12RootParameterKeyInfo keyInfo = ref bindGroupLayout.RootParameterKeyInfos[i];
                 ref Dx12BindGroupParameter bindParameter = ref dx12BindGroup.BindParameters[i];
 
-                Dx12BindTypeAndParameterSlot? parameter = pipelineLayout.QueryRootDescriptorParameterIndex(EShaderStage.Compute, /*bindGroupLayout.LayoutIndex*/0, keyInfo.slot, keyInfo.bindType);
+                Dx12BindTypeAndParameterSlot? parameter = pipelineLayout.QueryRootDescriptorParameterIndex(EShaderStage.Compute, bindGroupLayout.Index, keyInfo.slot, keyInfo.bindType);
                 if (parameter.HasValue)
                 {
                     Debug.Assert(parameter.Value.bindType == keyInfo.bindType);
@@ -399,14 +399,14 @@ namespace Infinity.Graphics
                 ref Dx12RootParameterKeyInfo keyInfo = ref bindGroupLayout.RootParameterKeyInfos[i];
                 ref Dx12BindGroupParameter bindParameter = ref dx12BindGroup.BindParameters[i];
 
-                parameter = pipelineLayout.QueryRootDescriptorParameterIndex(EShaderStage.Vertex, /*bindGroupLayout.LayoutIndex*/0, keyInfo.slot, keyInfo.bindType);
+                parameter = pipelineLayout.QueryRootDescriptorParameterIndex(EShaderStage.Vertex, bindGroupLayout.Index, keyInfo.slot, keyInfo.bindType);
                 if (parameter.HasValue)
                 {
                     Debug.Assert(parameter.Value.bindType == keyInfo.bindType);
                     m_Dx12CommandBuffer.NativeCommandList->SetGraphicsRootDescriptorTable((uint)parameter.Value.index, bindParameter.dx12GpuDescriptorHandle);
                 }
 
-                parameter = pipelineLayout.QueryRootDescriptorParameterIndex(EShaderStage.Fragment, /*bindGroupLayout.LayoutIndex*/0, keyInfo.slot, keyInfo.bindType);
+                parameter = pipelineLayout.QueryRootDescriptorParameterIndex(EShaderStage.Fragment, bindGroupLayout.Index, keyInfo.slot, keyInfo.bindType);
                 if (parameter.HasValue)
                 {
                     Debug.Assert(parameter.Value.bindType == keyInfo.bindType);
