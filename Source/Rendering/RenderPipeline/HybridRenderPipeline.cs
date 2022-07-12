@@ -384,7 +384,6 @@ namespace Infinity.Rendering
             }
             m_FragmentShader = renderContext.CreateShader(fragmentShaderDescriptor);
 
-            // Create GraphicsPipeline
             RHIGraphicsPipelineDescriptor graphicsPipelineDescriptor;
             {
                 graphicsPipelineDescriptor.vertexShader = m_VertexShader;
