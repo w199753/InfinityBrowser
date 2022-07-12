@@ -39,6 +39,7 @@ namespace Infinity.Rendering
         public HybridRenderPipeline(string pipelineName) : base(pipelineName) 
         {
             string computeCode = new string(@"
+            [[vk::binding(1, 0)]]
             RWTexture2D<float4> ResultTexture : register(u0, space1);
 
             [numthreads(8, 8, 1)]
@@ -51,7 +52,10 @@ namespace Infinity.Rendering
 
             string graphicsCode = new string(
             @"
+            [[vk::binding(1, 0)]]
             Texture2D<half4> _DiffuseTexture : register(t0, space1);
+
+            [[vk::binding(1, 0)]]
             SamplerState _DiffuseSampler : register(s0, space1);
 
             struct Attributes
@@ -89,7 +93,7 @@ namespace Infinity.Rendering
             m_FragmentResult = Vortice.Dxc.DxcCompiler.Compile(Vortice.Dxc.DxcShaderStage.Pixel, graphicsCode, "Fragment");
             m_FragmentBlob = m_FragmentResult.GetOutput(Vortice.Dxc.DxcOutKind.Object);
 
-            string msl = Evergine.HLSLEverywhere.HLSLTranslator.HLSLTo(computeCode, Evergine.Common.Graphics.ShaderStages.Compute, Evergine.Common.Graphics.GraphicsProfile.Level_12_1, "Main", Evergine.HLSLEverywhere.ShadingLanguage.Hlsl);
+            string msl = Evergine.HLSLEverywhere.HLSLTranslator.HLSLTo(computeCode, Evergine.Common.Graphics.ShaderStages.Compute, Evergine.Common.Graphics.GraphicsProfile.Level_12_1, "Main", Evergine.HLSLEverywhere.ShadingLanguage.Msl_iOS);
         }
 
         public override void Init(RenderContext renderContext)
