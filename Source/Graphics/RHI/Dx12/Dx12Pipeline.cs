@@ -36,7 +36,7 @@ namespace Infinity.Graphics
             m_ComputeParameterMap = new Dictionary<int, Dx12BindTypeAndParameterSlot>(8);
 
             int parameterCount = 0;
-            for (int i = 0; i < descriptor.bindGroupCount; ++i)
+            for (int i = 0; i < descriptor.bindGroupLayouts.Length; ++i)
             {
                 Dx12BindGroupLayout bindGroupLayout = descriptor.bindGroupLayouts[i] as Dx12BindGroupLayout;
                 parameterCount += bindGroupLayout.RootParameterKeyInfos.Length;
@@ -48,7 +48,7 @@ namespace Infinity.Graphics
             D3D12_ROOT_PARAMETER1* rootParameterPtr = stackalloc D3D12_ROOT_PARAMETER1[parameterCount];
             Span<D3D12_ROOT_PARAMETER1> rootParameterViews = new Span<D3D12_ROOT_PARAMETER1>(rootParameterPtr, parameterCount);
 
-            for (int i = 0; i < descriptor.bindGroupCount; ++i)
+            for (int i = 0; i < descriptor.bindGroupLayouts.Length; ++i)
             {
                 Dx12BindGroupLayout bindGroupLayout = descriptor.bindGroupLayouts[i] as Dx12BindGroupLayout;
 

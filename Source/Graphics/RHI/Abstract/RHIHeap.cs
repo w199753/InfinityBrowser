@@ -7,12 +7,12 @@ using System.Threading.Tasks;
 namespace Infinity.Graphics
 {
 #pragma warning disable CS8618
-    public struct RHIIndirectCommandBufferDescription
+    public struct RHIHeapDescription
     {
 
     }
 
-    public abstract class RHIIndirectCommandBuffer : Disposal
+    public abstract class RHIHeap : Disposal
     {
 
     }

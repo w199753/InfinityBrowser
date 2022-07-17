@@ -463,11 +463,11 @@ namespace Infinity.Graphics
             m_Dx12CommandBuffer.NativeCommandList->ExecuteIndirect(dx12Device.DrawIndexedIndirectSignature, 1, dx12Buffer.NativeResource, offset, null, 0);
         }
 
-        public override void DrawMultiIndexedIndirect(RHIIndirectCommandBuffer indirectCommandBuffer)
+        /*public override void ExecuteBundles(RHIIndirectCommandBuffer indirectCommandBuffer)
         {
             //Dx12IndirectCommandBuffer dx12IndirectCommandBuffer = indirectCommandBuffer as Dx12IndirectCommandBuffer;
             //m_Dx12CommandBuffer.NativeCommandList->ExecuteIndirect(null, indirectCommandBuffer.Count, dx12IndirectCommandBuffer.NativeResource, indirectCommandBuffer.Offset, null, 0);
-        }
+        }*/
 
         public override void PushDebugGroup(string name)
         {

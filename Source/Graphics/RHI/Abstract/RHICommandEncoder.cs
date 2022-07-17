@@ -111,8 +111,8 @@ namespace Infinity.Graphics
     {
         public string? name;
         public RHIShadingRateDescriptor? shadingRateDescriptor;
-        public RHIDepthStencilAttachmentDescriptor? depthStencilAttachmentDescriptor;
         public Memory<RHIColorAttachmentDescriptor> colorAttachmentDescriptors;
+        public RHIDepthStencilAttachmentDescriptor? depthStencilAttachmentDescriptor;
         // TODO timestampWrites https://gpuweb.github.io/gpuweb/#render-pass-encoder-creation
         // TODO occlusionQuerySet https://gpuweb.github.io/gpuweb/#render-pass-encoder-creation
     }
@@ -224,10 +224,9 @@ namespace Infinity.Graphics
         public abstract void DrawIndexed(in uint indexCount, in uint instanceCount, in uint firstIndex, in uint baseVertex, in uint firstInstance);
         public abstract void DrawIndirect(RHIBuffer argsBuffer, uint offset);
         public abstract void DrawIndexedIndirect(RHIBuffer argsBuffer, uint offset);
-        public abstract void DrawMultiIndexedIndirect(RHIIndirectCommandBuffer indirectCommandBuffer);
+        //public abstract void ExecuteBundles(RHIIndirectCommandBuffer indirectCommandBuffer);
         public abstract void PushDebugGroup(string name);
         public abstract void PopDebugGroup();
-        // TODO ExecuteBundles(...)
         public abstract void EndPass();
     }
 }

@@ -165,11 +165,8 @@ namespace Infinity.Graphics
 
     internal struct RHIPipelineLayoutDescriptor
     {
-        public int bindGroupCount => bindGroupLayouts.Length;
+        //public RHIConstantLayout[] constantLayouts;
         public RHIBindGroupLayout[] bindGroupLayouts;
-        // TODO pipeline constant
-        // uint32 pipelineConstantCount;
-        // PipelineConstantLayout pipelineConstantLayouts;
     };
 
     internal abstract class RHIPipelineLayout : Disposal

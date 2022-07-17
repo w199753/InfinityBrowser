@@ -24,6 +24,7 @@ namespace Infinity.Graphics
 
     public abstract class RHIQuery : Disposal
     {
-        public abstract bool GetData(in uint startIndex, in uint count, in Span<ulong> results);
+        public abstract bool ResolveData(RHIBlitEncoder blotEncoder);
+        public abstract bool ReadData(in uint startIndex, in uint count, in Span<ulong> results);
     }
 }
