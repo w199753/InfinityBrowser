@@ -43,7 +43,7 @@ namespace Infinity.Rendering
             RWTexture2D<float4> ResultTexture : register(u0, space1);
 
             [numthreads(8, 8, 1)]
-            void Main (uint3 id : SV_DispatchThreadID)
+            void CSMain (uint3 id : SV_DispatchThreadID)
             {
                 float2 UV = (id.xy + 0.5) / float2(1600, 900);
                 ResultTexture[id.xy] = float4(UV, 0, 1);
@@ -70,7 +70,7 @@ namespace Infinity.Rendering
 	            float4 position : SV_POSITION;
             };
 
-            Varyings Vertex(Attributes input)
+            Varyings VSMain(Attributes input)
             {
 	            Varyings output = (Varyings)0;
 	            output.color = input.color;
@@ -78,22 +78,22 @@ namespace Infinity.Rendering
 	            return output;
             }
 
-            float4 Fragment(Varyings input) : SV_Target
+            float4 PSMain(Varyings input) : SV_Target
             {
                 return input.color;
 	            //return _DiffuseTexture.Sample(_DiffuseSampler, float2(0, 0));
             }");
 
-            m_ComputeResult = Vortice.Dxc.DxcCompiler.Compile(Vortice.Dxc.DxcShaderStage.Compute, computeCode, "Main");
+            m_ComputeResult = Vortice.Dxc.DxcCompiler.Compile(Vortice.Dxc.DxcShaderStage.Compute, computeCode, "CSMain");
             m_ComputeBlob = m_ComputeResult.GetOutput(Vortice.Dxc.DxcOutKind.Object);
 
-            m_VertexResult = Vortice.Dxc.DxcCompiler.Compile(Vortice.Dxc.DxcShaderStage.Vertex, graphicsCode, "Vertex");
+            m_VertexResult = Vortice.Dxc.DxcCompiler.Compile(Vortice.Dxc.DxcShaderStage.Vertex, graphicsCode, "VSMain");
             m_VertexBlob = m_VertexResult.GetOutput(Vortice.Dxc.DxcOutKind.Object);
 
-            m_FragmentResult = Vortice.Dxc.DxcCompiler.Compile(Vortice.Dxc.DxcShaderStage.Pixel, graphicsCode, "Fragment");
+            m_FragmentResult = Vortice.Dxc.DxcCompiler.Compile(Vortice.Dxc.DxcShaderStage.Pixel, graphicsCode, "PSMain");
             m_FragmentBlob = m_FragmentResult.GetOutput(Vortice.Dxc.DxcOutKind.Object);
 
-            string msl = Evergine.HLSLEverywhere.HLSLTranslator.HLSLTo(computeCode, Evergine.Common.Graphics.ShaderStages.Compute, Evergine.Common.Graphics.GraphicsProfile.Level_12_1, "Main", Evergine.HLSLEverywhere.ShadingLanguage.Msl_iOS);
+            string msl = Evergine.HLSLEverywhere.HLSLTranslator.HLSLTo(computeCode, Evergine.Common.Graphics.ShaderStages.Compute, Evergine.Common.Graphics.GraphicsProfile.Level_12_1, "CSMain", Evergine.HLSLEverywhere.ShadingLanguage.Msl_iOS);
         }
 
         public override void Init(RenderContext renderContext)
