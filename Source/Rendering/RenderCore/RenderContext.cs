@@ -245,7 +245,10 @@ namespace Infinity.Rendering
             {
                 RHICommandBuffer cmdBuffer = m_CommandBufferAutoRelease[i];
                 m_CommandBufferPools[(int)cmdBuffer.CommandPool.Queue.Type].Push(cmdBuffer);
+                m_CommandBufferAutoRelease[i] = null;
             }
+
+            m_CommandBufferAutoRelease.Clear();
         }
 
         /*[MethodImpl(MethodImplOptions.AggressiveInlining)]
