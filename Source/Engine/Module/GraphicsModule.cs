@@ -5,7 +5,7 @@ using Infinity.Windowing;
 using System.Runtime.CompilerServices;
 using Semaphore = Infinity.Threading.Semaphore;
 
-namespace Infinity
+namespace Infinity.Engine
 {
     internal class GraphicsModule : Disposal
     {

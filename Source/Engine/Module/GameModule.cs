@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using Semaphore = Infinity.Threading.Semaphore;
 
-namespace Infinity
+namespace Infinity.Engine
 {
     internal delegate void FGamePlayFunc();
     internal delegate void FGameTickFunc();

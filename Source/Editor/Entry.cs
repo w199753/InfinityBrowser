@@ -1,4 +1,5 @@
 ﻿using System;
+using Infinity.Engine;
 using Infinity.Graphics;
 using Infinity.Rendering;
 using Infinity.Analytics;
@@ -7,7 +8,6 @@ using System.Collections;
 
 namespace Infinity.Editor
 {
-    [Serializable]
     public class TestComponent : Component
     {
         /*int numData = 100000;
@@ -87,7 +87,6 @@ namespace Infinity.Editor
         }
     }
 
-    [Serializable]
     public class TestEntity : Entity
     {
         //FTaskHandle m_AsynTaskRef;
@@ -96,19 +95,16 @@ namespace Infinity.Editor
         public TestEntity() : base()
         {
             m_Component = new TestComponent();
-            //AddComponent(m_Component);
         }
 
         public TestEntity(string name) : base(name)
         {
             m_Component = new TestComponent();
-            //AddComponent(m_Component);
         }
 
         public TestEntity(string name, Entity parent) : base(name, parent)
         {
             m_Component = new TestComponent();
-            //AddComponent(m_Component);
         }
 
         IEnumerator TestWaitSeconds()
@@ -153,38 +149,19 @@ namespace Infinity.Editor
         }
     }
 
-    public class TestApplication : Application
-    {
-        private TestEntity m_Entity;
-
-        public TestApplication(int width, int height, string name) : base(width, height, name)
-        {
-            m_Entity = new TestEntity("TestEntity");
-        }
-
-        protected override void Play()
-        {
-            m_Entity.OnEnable();
-        }
-
-        protected override void Tick()
-        {
-            m_Entity.OnUpdate(Timer.DeltaTime);
-        }
-
-        protected override void End()
-        {
-            m_Entity.OnDisable();
-        }
-    }
-
-    [Serializable]
-    public class MainClass
+    public class EditorEntry
     {
         static void Main(string[] args)
         {
-            TestApplication App = new TestApplication(1600, 900, "Infinity Editor");
-            App.Execute();
+            Application editorApp = new Application(1600, 900, "Infinity Editor");
+
+            GameScene persistentScene = new GameScene();
+            editorApp.GameWorld.SetPersistentScene(persistentScene);
+
+            TestEntity testEntity = new TestEntity("TestEntity");
+            editorApp.GameWorld.PersistentScene.AddEntity(testEntity);
+
+            editorApp.Run();
 
             /*Console.WriteLine("Fuck you");
             Console.ReadKey();*/

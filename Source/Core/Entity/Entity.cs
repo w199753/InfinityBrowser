@@ -62,7 +62,8 @@ namespace Infinity
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public bool Equals(Entity target)
         {
-            return name.Equals(target.name) && m_Parent.Equals(target.m_Parent) && m_Childs.Equals(target.m_Childs) && m_Components.Equals(target.m_Components) && m_Transform.Equals(target.m_Transform);
+            return this == target;
+            //return name.Equals(target.name) && m_Parent.Equals(target.m_Parent) && m_Childs.Equals(target.m_Childs) && m_Components.Equals(target.m_Components) && m_Transform.Equals(target.m_Transform);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -80,7 +81,7 @@ namespace Infinity
             }
         }
 
-        public virtual void OnTransform()
+        protected virtual void OnTransform()
         {
             for (int i = 0; i < m_Components.length; ++i)
             {
