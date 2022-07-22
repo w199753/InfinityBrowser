@@ -38,7 +38,7 @@ namespace Infinity.Engine
 
         internal void StartWorld()
         {
-            m_MainScene.StartScene();
+            m_PersistentScene.StartScene();
 
             for (int i = 0; i < m_Scenes.length; ++i)
             {
