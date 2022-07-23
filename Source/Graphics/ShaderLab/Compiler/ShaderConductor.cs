@@ -48,27 +48,25 @@ namespace Infinity.Shaderlib
         [DllImport("ShaderConductorWrapper.dll", CharSet = CharSet.Ansi, CallingConvention = CallingConvention.Cdecl)]
         public static extern int GetShaderConductorBlobSize(IntPtr blob);
 
-        public enum ShaderStage
+        public enum EShaderStage
         {
             Vertex = 0,
             Pixel = 1,
-            //Geometry = 2,
-            //Hull = 3,
-            //Domain = 4,
+            Geometry = 2,
+            Hull = 3,
+            Domain = 4,
             Compute = 5,
-            Max,
         };
 
-        public enum ShadingLanguage
+        public enum EShaderLanguage
         {
             Dxil = 0,
             SpirV = 1,
-            //Hlsl = 2,
-            //Glsl = 3,
-            //Essl = 4,
+            Hlsl = 2,
+            Glsl = 3,
+            Essl = 4,
             Msl_macOS = 5,
             Msl_iOS = 6,
-            NumShadingLanguages,
         }
 
         [StructLayout(LayoutKind.Sequential)]
@@ -83,7 +81,7 @@ namespace Infinity.Shaderlib
         {
             public string source;
             public string entryPoint;
-            public ShaderStage stage;
+            public EShaderStage stage;
         }
 
         [StructLayout(LayoutKind.Sequential)]
@@ -140,7 +138,7 @@ namespace Infinity.Shaderlib
         [StructLayout(LayoutKind.Sequential)]
         public struct TargetDesc
         {
-            public ShadingLanguage language;
+            public EShaderLanguage language;
             public string version;
             public bool asModule;
         }
@@ -157,7 +155,7 @@ namespace Infinity.Shaderlib
         [StructLayout(LayoutKind.Sequential)]
         public struct DisassembleDesc
         {
-            public ShadingLanguage language;
+            public EShaderLanguage language;
             public IntPtr binary;
             public int binarySize;
         }

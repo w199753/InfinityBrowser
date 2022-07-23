@@ -58,6 +58,7 @@
 	<ItemGroup>
 		<ProjectReference Include="..\..\Core\Infinity.Core.csproj" />
 		<ProjectReference Include="..\..\ThirdParty\Antlr4\Antlr4.csproj" />
+		<ProjectReference Include="..\RHI\Infinity.RHI.csproj" />
 	</ItemGroup>
 
 </Project>

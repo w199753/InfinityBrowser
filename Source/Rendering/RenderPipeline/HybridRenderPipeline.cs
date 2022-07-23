@@ -4,7 +4,6 @@ using Infinity.Graphics;
 using Infinity.Shaderlib;
 using Infinity.Mathmatics;
 using System.Runtime.InteropServices;
-using static Infinity.Shaderlib.ShaderConductorWrapper;
 
 namespace Infinity.Rendering
 {
@@ -97,7 +96,7 @@ namespace Infinity.Rendering
             m_FragmentResult = Vortice.Dxc.DxcCompiler.Compile(Vortice.Dxc.DxcShaderStage.Pixel, graphicsCode, "PSMain");
             m_FragmentBlob = m_FragmentResult.GetOutput(Vortice.Dxc.DxcOutKind.Object);
 
-            string msl = CrossCompiler.HLSLTo(graphicsCode, ShaderStage.Pixel, "PSMain", ShadingLanguage.Msl_iOS);
+            string msl = CrossCompiler.HLSLTo(graphicsCode, "PSMain", EShaderStage.Fragment, ShaderConductorWrapper.EShaderLanguage.Msl_iOS);
         }
 
         public override void Init(RenderContext renderContext)

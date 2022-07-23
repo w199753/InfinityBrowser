@@ -5,14 +5,12 @@
         Metal,
         Vulkan,
         DirectX12,
-        MAX
     }
 
     public enum EGpuType : byte
     {
         Hardware,
         Software,
-        MAX
     }
 
     public enum EQueueType : byte
@@ -20,7 +18,6 @@
         Blit,
         Compute,
         Graphics,
-        MAX
     }
 
     public enum EQueryType : byte
@@ -28,7 +25,6 @@
         Timestamp,
         Occlusion,
         BinaryOcclusion,
-        MAX
     }
 
     public enum EPixelFormat : byte
@@ -79,7 +75,6 @@
         D24_UNorm_S8_UInt,
         D32_Float,
         // TODO features / bc / etc / astc
-        MAX
     }
 
     public enum ESemanticFormat : byte
@@ -132,7 +127,6 @@
         Int2,
         Int3,
         Int4,
-        MAX
     }
 
     public enum ESemanticType : byte
@@ -145,7 +139,6 @@
         Color = 5,
         BlendIndices = 6,
         BlendWeight = 7,
-        MAX
     }
 
     public enum EShadingRate : byte
@@ -172,7 +165,6 @@
     {
         Texture2D,
         Texture3D,
-        MAX
     }
 
     public enum ETextureViewDimension : byte
@@ -182,15 +174,13 @@
         TextureCube,
         TextureCubeArray,
         Texture3D,
-        MAX
     }
 
     public enum EAddressMode : byte
     {
         Repeat,
         ClampToEdge,
-        Mirror_Repeat,
-        MAX
+        MirrorRepeat,
     }
 
     public enum EFilterMode : byte
@@ -198,7 +188,6 @@
         Point,
         Linear,
         Anisotropic,
-        MAX
     }
 
     public enum EBindType : byte
@@ -209,14 +198,12 @@
         UniformBuffer,
         StorageBuffer,
         StorageTexture,
-        MAX
     }
 
     public enum EVertexStepMode : byte
     {
         PerVertex,
         PerInstance,
-        MAX
     }
 
     public enum EPrimitiveTopology : byte
@@ -230,7 +217,6 @@
         LineStripAdj,
         TriangleListAdj,
         TriangleStripAdj,
-        MAX
     }
 
     public enum EPrimitiveTopologyType : byte
@@ -238,14 +224,12 @@
         Point,
         Line,
         Triangle,
-        MAX
     }
 
     public enum EIndexFormat : byte
     {
         UInt16,
         UInt32,
-        MAX
     }
 
     public enum ESampleCount : byte
@@ -254,7 +238,6 @@
         Count2 = 2,
         Count4 = 4,
         Count8 = 8,
-        MAX
     }
 
     public enum EBlendMode : byte
@@ -339,7 +322,6 @@
         Load,
         Clear,
         DontCare,
-        MAX
     }
 
     public enum EStoreOp : byte
@@ -348,7 +330,6 @@
         Resolve,
         StoreAndResolve,
         DontCare,
-        MAX
     }
 
     public enum EPresentMode : byte
@@ -358,14 +339,12 @@
         // 2. Vulkan VkPresentModeKHR #see https://www.khronos.org/registry/vulkan/specs/1.3-extensions/man/html/VkPresentModeKHR.html
         VSync,
         Immediately,
-        MAX
     }
 
     public enum EResourceType : byte
     {
         Buffer,
         Texture,
-        MAX
     }
 
     public enum EStorageMode : byte
@@ -392,7 +371,6 @@
         AccelStructWrite = 0x00000800,
         AccelStructBuildInput = 0x00001000,
         AccelStructBuildBlast = 0x00002000,
-        MAX
     }
 
     public enum ETextureState
@@ -410,7 +388,6 @@
         ShaderResource = 0x00000200,
         UnorderedAccess = 0x00000400,
         ShadingRateSurface = 0x00000800,
-        MAX
     }
 
     public enum EBufferUsage
@@ -422,7 +399,6 @@
         ShaderResource = 0x10,
         UnorderedAccess = 0x20,
         AccelerationStructure = 0x400,
-        MAX
     }
 
     public enum EBufferViewType : byte
@@ -430,7 +406,6 @@
         UniformBufferView,
         ShaderResourceView,
         UnorderedAccessView,
-        MAX
     }
 
     public enum ETextureUsage
@@ -439,7 +414,6 @@
         RenderTarget = 0x2,
         ShaderResource = 0x4,
         UnorderedAccess = 0x8,
-        MAX
     }
 
     public enum ETextureViewType : byte
@@ -448,7 +422,6 @@
         RenderTargetView,
         ShaderResourceView,
         UnorderedAccessView,
-        MAX
     }
 
     public enum EShaderStage
@@ -462,7 +435,6 @@
         CloseHit = 0x80,
         Intersect = 0x100,
         RayGenerate = 0x200,
-        MAX
     }
 
     public enum EHitGroupType : byte

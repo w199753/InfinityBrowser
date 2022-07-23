@@ -12,7 +12,7 @@ namespace Infinity.Shaderlib
             IntPtr destination = Marshal.AllocHGlobal((int) bytecode.Length);
             Marshal.Copy(bytecode, 0, destination, bytecode.Length);
             ShaderConductorWrapper.DisassembleDesc source = new ShaderConductorWrapper.DisassembleDesc {
-                language = ShaderConductorWrapper.ShadingLanguage.SpirV,
+                language = ShaderConductorWrapper.EShaderLanguage.SpirV,
                 binary = destination,
                 binarySize = bytecode.Length
             };
@@ -23,7 +23,7 @@ namespace Infinity.Shaderlib
             return Marshal.PtrToStringAnsi(ShaderConductorWrapper.GetShaderConductorBlobData(desc2.target), ShaderConductorWrapper.GetShaderConductorBlobSize(desc2.target));
         }
 
-        public static string HLSLTo(string hlslSource, in ShaderConductorWrapper.ShaderStage stage, string entryPoint, in ShaderConductorWrapper.ShadingLanguage language, in bool keepDebugInfo = false, in bool disableOptimization = false)
+        public static string HLSLTo(string hlslSource, string entryPoint, in Graphics.EShaderStage stage, in ShaderConductorWrapper.EShaderLanguage language, in bool keepDebugInfo = false, in bool disableOptimization = false)
         {
             int version = 450;
 
@@ -31,7 +31,7 @@ namespace Infinity.Shaderlib
             string str2;
             ShaderConductorWrapper.SourceDesc source = new ShaderConductorWrapper.SourceDesc {
                 source = hlslSource,
-                stage = stage,
+                stage = stage.ToShaderConductorStage(),
                 entryPoint = entryPoint
             };
             ShaderConductorWrapper.OptionsDesc options = ShaderConductorWrapper.OptionsDesc.Default;
@@ -41,7 +41,7 @@ namespace Infinity.Shaderlib
             options.disableOptimizations = disableOptimization;
             options.optimizationLevel = 3;
             options.packMatricesInRowMajor = true;
-            if (language == ShaderConductorWrapper.ShadingLanguage.SpirV)
+            if (language == ShaderConductorWrapper.EShaderLanguage.SpirV)
             {
                 options.shiftAllUABuffersBindings = 20;
                 options.shiftAllSamplersBindings = 40;
@@ -80,12 +80,12 @@ namespace Infinity.Shaderlib
             return str2;
         }
 
-        public static byte[] HLSLToBinarySpirV(string hlslSource, in ShaderConductorWrapper.ShaderStage stage, string entryPoint, in bool keepDebugInfo = false, in bool disableOptimization = false)
+        public static byte[] HLSLToBinarySpirV(string hlslSource, string entryPoint, in Graphics.EShaderStage stage, in bool keepDebugInfo = false, in bool disableOptimization = false)
         {
             ShaderConductorWrapper.ResultDesc desc4;
             ShaderConductorWrapper.SourceDesc source = new ShaderConductorWrapper.SourceDesc {
                 source = hlslSource,
-                stage = stage,
+                stage = stage.ToShaderConductorStage(),
                 entryPoint = entryPoint
             };
             ShaderConductorWrapper.OptionsDesc options = ShaderConductorWrapper.OptionsDesc.Default;
@@ -99,7 +99,7 @@ namespace Infinity.Shaderlib
             options.shiftAllSamplersBindings = 40;
             options.shiftAllTexturesBindings = 60;
             ShaderConductorWrapper.TargetDesc target = new ShaderConductorWrapper.TargetDesc {
-                language = ShaderConductorWrapper.ShadingLanguage.SpirV,
+                language = ShaderConductorWrapper.EShaderLanguage.SpirV,
                 version = string.Empty
             };
             ShaderConductorWrapper.Compile(ref source, ref options, ref target, out desc4);
@@ -119,6 +119,25 @@ namespace Infinity.Shaderlib
             ShaderConductorWrapper.DestroyShaderConductorBlob(desc4.target);
             ShaderConductorWrapper.DestroyShaderConductorBlob(desc4.errorWarningMsg);
             return destination;
+        }
+
+        private static ShaderConductorWrapper.EShaderStage ToShaderConductorStage(this Graphics.EShaderStage stage)
+        {
+            switch (stage)
+            {
+                case Graphics.EShaderStage.Vertex:
+                    return ShaderConductorWrapper.EShaderStage.Vertex;
+
+                case Graphics.EShaderStage.Fragment:
+                    return ShaderConductorWrapper.EShaderStage.Pixel;
+
+                case Graphics.EShaderStage.Compute:
+                    return ShaderConductorWrapper.EShaderStage.Compute;
+
+                default:
+                    return ShaderConductorWrapper.EShaderStage.Pixel;
+            }
+            throw new Exception($"Stage:{stage} not supported");
         }
 
         /*private static string TranslationFixes(ShaderConductorWrapper.ShadingLanguage language, ShaderConductorWrapper.ShaderStage stage, int version, string translation)
