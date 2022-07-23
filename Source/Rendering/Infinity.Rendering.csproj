@@ -41,7 +41,7 @@
 
 	<ItemGroup>
 	  <ProjectReference Include="..\Graphics\RHI\Infinity.RHI.csproj" />
-	  <ProjectReference Include="..\Graphics\ShaderLab\Infinity.Shaderlab.csproj" />
+	  <ProjectReference Include="..\Graphics\ShaderLab\Infinity.Shaderlib.csproj" />
 	</ItemGroup>
 
 </Project>

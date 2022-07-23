@@ -1,8 +1,10 @@
 ﻿using System;
 using Infinity.Memory;
 using Infinity.Graphics;
+using Infinity.Shaderlib;
 using Infinity.Mathmatics;
 using System.Runtime.InteropServices;
+using static Infinity.Shaderlib.ShaderConductorWrapper;
 
 namespace Infinity.Rendering
 {
@@ -41,7 +43,7 @@ namespace Infinity.Rendering
         {
             string computeCode = new string(@"
             [[vk::binding(2, 1)]]
-            RWTexture2D<half4> _ResultTexture : register(u1, space2);
+            RWTexture2D<float4> _ResultTexture : register(u1, space2);
 
             [numthreads(8, 8, 1)]
             void CSMain (uint3 id : SV_DispatchThreadID)
@@ -54,7 +56,7 @@ namespace Infinity.Rendering
             string graphicsCode = new string(
             @"
             [[vk::binding(3, 2)]]
-            Texture2D<half4> _DiffuseTexture : register(t2, space3);
+            Texture2D _DiffuseTexture : register(t2, space3);
 
             [[vk::binding(3, 2)]]
             SamplerState _DiffuseSampler : register(s2, space3);
@@ -82,7 +84,8 @@ namespace Infinity.Rendering
             float4 PSMain(Varyings input) : SV_Target
             {
                 return input.color;
-	            //return _DiffuseTexture.Sample(_DiffuseSampler, float2(0, 0));
+                //half4 albedoMap = _DiffuseTexture.Sample(_DiffuseSampler, float2(0, 0));
+	            //return albedoMap;
             }");
 
             m_ComputeResult = Vortice.Dxc.DxcCompiler.Compile(Vortice.Dxc.DxcShaderStage.Compute, computeCode, "CSMain");
@@ -94,7 +97,7 @@ namespace Infinity.Rendering
             m_FragmentResult = Vortice.Dxc.DxcCompiler.Compile(Vortice.Dxc.DxcShaderStage.Pixel, graphicsCode, "PSMain");
             m_FragmentBlob = m_FragmentResult.GetOutput(Vortice.Dxc.DxcOutKind.Object);
 
-            string msl = Evergine.HLSLEverywhere.HLSLTranslator.HLSLTo(computeCode, Evergine.Common.Graphics.ShaderStages.Compute, Evergine.Common.Graphics.GraphicsProfile.Level_12_1, "CSMain", Evergine.HLSLEverywhere.ShadingLanguage.Msl_iOS);
+            string msl = CrossCompiler.HLSLTo(graphicsCode, ShaderStage.Pixel, "PSMain", ShadingLanguage.Msl_iOS);
         }
 
         public override void Init(RenderContext renderContext)
@@ -461,7 +464,7 @@ namespace Infinity.Rendering
                 }
             }
 
-            cmdBuffer.Commit();
+            renderContext.ExecuteCommandBuffer(cmdBuffer);
         }
 
         protected override void Release()

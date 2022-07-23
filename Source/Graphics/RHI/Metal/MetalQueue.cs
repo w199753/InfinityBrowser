@@ -37,6 +37,11 @@ namespace Infinity.Graphics
             throw new NotImplementedException();
         }
 
+        public override void Submit(RHICommandBuffer cmdBuffer, RHIFence fence)
+        {
+            throw new NotImplementedException();
+        }
+
         protected override void Release()
         {
             ObjectiveCRuntime.release(m_NativeQueue.NativePtr);

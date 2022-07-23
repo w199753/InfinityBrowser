@@ -48,7 +48,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "iOSGame", "Source\Game\iOS\
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Graphics", "Graphics", "{5E09497A-A848-4CEE-B6DA-D88C418FDDD0}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Infinity.Shaderlab", "Source\Graphics\ShaderLab\Infinity.Shaderlab.csproj", "{0CD7D801-4C6C-449D-959F-5C6DEB1CD734}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Infinity.Shaderlib", "Source\Graphics\ShaderLab\Infinity.Shaderlib.csproj", "{0CD7D801-4C6C-449D-959F-5C6DEB1CD734}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Infinity.RHI", "Source\Graphics\RHI\Infinity.RHI.csproj", "{2AA815F9-27F7-43BA-9A31-7F2C089893D7}"
 EndProject

@@ -41,7 +41,7 @@ namespace Infinity.Graphics
         public abstract RHIComputeEncoder GetComputeEncoder();
         public abstract RHIGraphicsEncoder GetGraphicsEncoder();
         public abstract void End();
-        public abstract void Commit(RHIFence? fence = null);
+        //public abstract void Commit(RHIFence? fence = null);
         //public abstract void WaitUntilCompleted();
     }
 #pragma warning restore CS8618

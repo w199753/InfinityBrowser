@@ -71,7 +71,7 @@ namespace Infinity.Graphics
             m_NativeCommandList->Close();
         }
 
-        public override void Commit(RHIFence? fence)
+        /*public override void Commit(RHIFence? fence)
         {
             Dx12CommandPool dx12CommandPool = m_CommandPool as Dx12CommandPool;
             Dx12Queue queue = m_CommandPool.Queue as Dx12Queue;
@@ -85,7 +85,7 @@ namespace Infinity.Graphics
                 dx12Fence.Reset();
                 queue.NativeCommandQueue->Signal(dx12Fence.NativeFence, 1);
             }
-        }
+        }*/
 
         protected override void Release()
         {

@@ -205,9 +205,9 @@ namespace Infinity.Rendering
             RHICommandBuffer cmdBuffer = GetCommandBuffer(EContextType.Graphics);
             cmdBuffer.Begin();
             cmdBuffer.End();
-            cmdBuffer.Commit(m_FrameFence);
+            ExecuteCommandBuffer(cmdBuffer, m_FrameFence);
             m_FrameFence.Wait();
-            ReleaseCommandBuffer();
+            GCFrameCommandBuffer();
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -224,10 +224,10 @@ namespace Infinity.Rendering
             RHICommandBuffer cmdBuffer = GetCommandBuffer(EContextType.Graphics);
             cmdBuffer.Begin();
             cmdBuffer.End();
-            cmdBuffer.Commit(m_FrameFence);
+            ExecuteCommandBuffer(cmdBuffer, m_FrameFence);
             m_SwapChain.Present(EPresentMode.VSync);
             m_FrameFence.Wait();
-            ReleaseCommandBuffer();
+            GCFrameCommandBuffer();
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -239,7 +239,7 @@ namespace Infinity.Rendering
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private void ReleaseCommandBuffer()
+        private void GCFrameCommandBuffer()
         {
             for(int i = 0; i < m_CommandBufferAutoRelease.length; ++i)
             {
@@ -251,12 +251,11 @@ namespace Infinity.Rendering
             m_CommandBufferAutoRelease.Clear();
         }
 
-        /*[MethodImpl(MethodImplOptions.AggressiveInlining)]
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void ExecuteCommandBuffer(RHICommandBuffer cmdBuffer, RHIFence fence = null)
         {
-            cmdBuffer.Commit(fence);
-            m_CommandBufferPools[(int)cmdBuffer.CommandPool.Queue.Type].Push(cmdBuffer);
-        }*/
+            m_Queues[(int)cmdBuffer.CommandPool.Queue.Type].Submit(cmdBuffer, fence);
+        }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public RHIFence CreateFence()

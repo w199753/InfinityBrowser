@@ -42,6 +42,23 @@ namespace Infinity.Graphics
             return new Dx12CommandPool(this);
         }
 
+        public override void Submit(RHICommandBuffer cmdBuffer, RHIFence fence)
+        {
+            Dx12CommandBuffer dx12CommandBuffer = cmdBuffer as Dx12CommandBuffer;
+            Dx12CommandPool dx12CommandPool = cmdBuffer.CommandPool as Dx12CommandPool;
+            Dx12Queue dx12Queue = dx12CommandPool.Queue as Dx12Queue;
+
+            ID3D12CommandList** ppCommandLists = stackalloc ID3D12CommandList*[1] { (ID3D12CommandList*)dx12CommandBuffer.NativeCommandList };
+            dx12Queue.NativeCommandQueue->ExecuteCommandLists(1, ppCommandLists);
+
+            if (fence != null)
+            {
+                Dx12Fence dx12Fence = fence as Dx12Fence;
+                dx12Fence.Reset();
+                dx12Queue.NativeCommandQueue->Signal(dx12Fence.NativeFence, 1);
+            }
+        }
+
         protected override void Release()
         {
             m_NativeCommandQueue->Release();
