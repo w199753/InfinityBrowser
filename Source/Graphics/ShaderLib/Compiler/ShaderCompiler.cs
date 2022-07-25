@@ -23,10 +23,8 @@ namespace Infinity.Shaderlib
             return Marshal.PtrToStringAnsi(ShaderConductorWrapper.GetShaderConductorBlobData(desc2.target), ShaderConductorWrapper.GetShaderConductorBlobSize(desc2.target));
         }
 
-        public static string HLSLTo(string hlslSource, string entryPoint, in Graphics.EShaderStage stage, in ShaderConductorWrapper.EShaderLanguage language, in bool keepDebugInfo = false, in bool disableOptimization = false)
+        public static string HLSLTo(string hlslSource, string entryPoint, in Graphics.EShaderStage stage, in ShaderConductorWrapper.EShaderLanguage language, int version = 450, in bool keepDebugInfo = false, in bool disableOptimization = false)
         {
-            int version = 450;
-
             ShaderConductorWrapper.ResultDesc desc4;
             string str2;
             ShaderConductorWrapper.SourceDesc source = new ShaderConductorWrapper.SourceDesc {
@@ -60,7 +58,7 @@ namespace Infinity.Shaderlib
             if (desc4.isText)
             {
                 str2 = Marshal.PtrToStringAnsi(ShaderConductorWrapper.GetShaderConductorBlobData(desc4.target), ShaderConductorWrapper.GetShaderConductorBlobSize(desc4.target));
-                //str2 = TranslationFixes(language, stage, version, str2);
+                str2 = TranslationFixes(language, stage.ToShaderConductorStage(), version, str2);
             }
             else
             {
@@ -140,18 +138,18 @@ namespace Infinity.Shaderlib
             throw new Exception($"Stage:{stage} not supported");
         }
 
-        /*private static string TranslationFixes(ShaderConductorWrapper.ShadingLanguage language, ShaderConductorWrapper.ShaderStage stage, int version, string translation)
+        private static string TranslationFixes(ShaderConductorWrapper.EShaderLanguage language, ShaderConductorWrapper.EShaderStage stage, int version, string translation)
         {
             string input = translation;
-            if (language == ShaderConductorWrapper.ShadingLanguage.Essl)
+            if (language == ShaderConductorWrapper.EShaderLanguage.Essl)
             {
                 if (version < 310)
                 {
-                    if (stage == ShaderConductorWrapper.ShaderStage.Vertex)
+                    if (stage == ShaderConductorWrapper.EShaderStage.Vertex)
                     {
                         input = input.Replace("out_var_", "var_");
                     }
-                    if (stage == ShaderConductorWrapper.ShaderStage.Pixel)
+                    if (stage == ShaderConductorWrapper.EShaderStage.Pixel)
                     {
                         input = input.Replace("in_var_", "var_");
                     }
@@ -159,7 +157,7 @@ namespace Infinity.Shaderlib
                 input = Regex.Replace(input, @"(findLSB\(.*\))", "uint($1)");
             }
             return input;
-        }*/
+        }
     }
 }
 

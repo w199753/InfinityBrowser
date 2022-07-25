@@ -95,7 +95,7 @@ namespace Infinity.Rendering
             m_FragmentResult = Vortice.Dxc.DxcCompiler.Compile(Vortice.Dxc.DxcShaderStage.Pixel, graphicsCode, "PSMain");
             m_FragmentBlob = m_FragmentResult.GetOutput(Vortice.Dxc.DxcOutKind.Object);
 
-            string msl = ShaderCompiler.HLSLTo(graphicsCode, "PSMain", EShaderStage.Fragment, ShaderConductorWrapper.EShaderLanguage.Msl_iOS);
+            string msl = ShaderCompiler.HLSLTo(graphicsCode, "PSMain", EShaderStage.Fragment, ShaderConductorWrapper.EShaderLanguage.Glsl);
         }
 
         public override void Init(RenderContext renderContext)
