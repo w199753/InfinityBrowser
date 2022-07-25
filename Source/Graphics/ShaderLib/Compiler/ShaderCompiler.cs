@@ -4,7 +4,7 @@ using System.Text.RegularExpressions;
 
 namespace Infinity.Shaderlib
 {
-    public static class CrossCompiler
+    public static class ShaderCompiler
     {
         public static string DisassemblySPIRV(byte[] bytecode)
         {
