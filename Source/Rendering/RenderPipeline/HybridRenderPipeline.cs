@@ -281,21 +281,21 @@ namespace Infinity.Rendering
             {
                 blendStateDescriptor.alphaToCoverage = false;
                 blendStateDescriptor.independentBlend = false;
-                blendStateDescriptor.attachmentDescriptor0.blendEnable = false;
-                blendStateDescriptor.attachmentDescriptor0.blendOpColor = EBlendOp.Add;
-                blendStateDescriptor.attachmentDescriptor0.blendOpAlpha = EBlendOp.Add;
-                blendStateDescriptor.attachmentDescriptor0.colorWriteChannel = EColorWriteChannel.All;
-                blendStateDescriptor.attachmentDescriptor0.srcBlendColor = EBlendMode.One;
-                blendStateDescriptor.attachmentDescriptor0.srcBlendAlpha = EBlendMode.One;
-                blendStateDescriptor.attachmentDescriptor0.dstBlendColor = EBlendMode.Zero;
-                blendStateDescriptor.attachmentDescriptor0.dstBlendAlpha = EBlendMode.Zero;
-                blendStateDescriptor.attachmentDescriptor1 = blendStateDescriptor.attachmentDescriptor0;
-                blendStateDescriptor.attachmentDescriptor2 = blendStateDescriptor.attachmentDescriptor0;
-                blendStateDescriptor.attachmentDescriptor3 = blendStateDescriptor.attachmentDescriptor0;
-                blendStateDescriptor.attachmentDescriptor4 = blendStateDescriptor.attachmentDescriptor0;
-                blendStateDescriptor.attachmentDescriptor5 = blendStateDescriptor.attachmentDescriptor0;
-                blendStateDescriptor.attachmentDescriptor6 = blendStateDescriptor.attachmentDescriptor0;
-                blendStateDescriptor.attachmentDescriptor7 = blendStateDescriptor.attachmentDescriptor0;
+                blendStateDescriptor.blendDescriptor0.blendEnable = false;
+                blendStateDescriptor.blendDescriptor0.blendOpColor = EBlendOp.Add;
+                blendStateDescriptor.blendDescriptor0.blendOpAlpha = EBlendOp.Add;
+                blendStateDescriptor.blendDescriptor0.colorWriteChannel = EColorWriteChannel.All;
+                blendStateDescriptor.blendDescriptor0.srcBlendColor = EBlendMode.One;
+                blendStateDescriptor.blendDescriptor0.srcBlendAlpha = EBlendMode.One;
+                blendStateDescriptor.blendDescriptor0.dstBlendColor = EBlendMode.Zero;
+                blendStateDescriptor.blendDescriptor0.dstBlendAlpha = EBlendMode.Zero;
+                blendStateDescriptor.blendDescriptor1 = blendStateDescriptor.blendDescriptor0;
+                blendStateDescriptor.blendDescriptor2 = blendStateDescriptor.blendDescriptor0;
+                blendStateDescriptor.blendDescriptor3 = blendStateDescriptor.blendDescriptor0;
+                blendStateDescriptor.blendDescriptor4 = blendStateDescriptor.blendDescriptor0;
+                blendStateDescriptor.blendDescriptor5 = blendStateDescriptor.blendDescriptor0;
+                blendStateDescriptor.blendDescriptor6 = blendStateDescriptor.blendDescriptor0;
+                blendStateDescriptor.blendDescriptor7 = blendStateDescriptor.blendDescriptor0;
             }
 
             RHIRasterizerStateDescriptor rasterizerStateDescriptor;

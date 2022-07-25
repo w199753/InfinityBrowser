@@ -329,18 +329,18 @@ namespace Infinity.Graphics
             D3D12_BLEND_DESC blendDescription = new D3D12_BLEND_DESC();
             blendDescription.AlphaToCoverageEnable = blendStateDescriptor.alphaToCoverage;
             blendDescription.IndependentBlendEnable = blendStateDescriptor.independentBlend;
-            fixed (RHIAttachmentBlendDescriptor* attachmentDescriptorPtr = &blendStateDescriptor.attachmentDescriptor0)
+            fixed (RHIBlendDescriptor* blendDescriptorPtr = &blendStateDescriptor.blendDescriptor0)
             {
                 for (int i = 0; i < 8; i++)
                 {
-                    blendDescription.RenderTarget[i].BlendEnable = attachmentDescriptorPtr[i].blendEnable;
-                    blendDescription.RenderTarget[i].BlendOp = (D3D12_BLEND_OP)attachmentDescriptorPtr[i].blendOpColor;
-                    blendDescription.RenderTarget[i].SrcBlend = (D3D12_BLEND)attachmentDescriptorPtr[i].srcBlendColor;
-                    blendDescription.RenderTarget[i].DestBlend = (D3D12_BLEND)attachmentDescriptorPtr[i].dstBlendColor;
-                    blendDescription.RenderTarget[i].BlendOpAlpha = (D3D12_BLEND_OP)attachmentDescriptorPtr[i].blendOpAlpha;
-                    blendDescription.RenderTarget[i].SrcBlendAlpha = (D3D12_BLEND)attachmentDescriptorPtr[i].srcBlendAlpha;
-                    blendDescription.RenderTarget[i].DestBlendAlpha = (D3D12_BLEND)attachmentDescriptorPtr[i].dstBlendAlpha;
-                    blendDescription.RenderTarget[i].RenderTargetWriteMask = (byte)attachmentDescriptorPtr[i].colorWriteChannel;
+                    blendDescription.RenderTarget[i].BlendEnable = blendDescriptorPtr[i].blendEnable;
+                    blendDescription.RenderTarget[i].BlendOp = (D3D12_BLEND_OP)blendDescriptorPtr[i].blendOpColor;
+                    blendDescription.RenderTarget[i].SrcBlend = (D3D12_BLEND)blendDescriptorPtr[i].srcBlendColor;
+                    blendDescription.RenderTarget[i].DestBlend = (D3D12_BLEND)blendDescriptorPtr[i].dstBlendColor;
+                    blendDescription.RenderTarget[i].BlendOpAlpha = (D3D12_BLEND_OP)blendDescriptorPtr[i].blendOpAlpha;
+                    blendDescription.RenderTarget[i].SrcBlendAlpha = (D3D12_BLEND)blendDescriptorPtr[i].srcBlendAlpha;
+                    blendDescription.RenderTarget[i].DestBlendAlpha = (D3D12_BLEND)blendDescriptorPtr[i].dstBlendAlpha;
+                    blendDescription.RenderTarget[i].RenderTargetWriteMask = (byte)blendDescriptorPtr[i].colorWriteChannel;
                 }
             }
             return blendDescription;

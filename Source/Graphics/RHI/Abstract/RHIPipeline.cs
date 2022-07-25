@@ -39,7 +39,7 @@ namespace Infinity.Graphics
         public Memory<RHIVertexLayoutDescriptor> vertexLayoutDescriptors;
     }
 
-    public struct RHIAttachmentBlendDescriptor
+    public struct RHIBlendDescriptor
     {
         public bool blendEnable;
         public EBlendOp blendOpColor;
@@ -55,14 +55,14 @@ namespace Infinity.Graphics
     {
         public bool alphaToCoverage;
         public bool independentBlend;
-        public RHIAttachmentBlendDescriptor attachmentDescriptor0;
-        public RHIAttachmentBlendDescriptor attachmentDescriptor1;
-        public RHIAttachmentBlendDescriptor attachmentDescriptor2;
-        public RHIAttachmentBlendDescriptor attachmentDescriptor3;
-        public RHIAttachmentBlendDescriptor attachmentDescriptor4;
-        public RHIAttachmentBlendDescriptor attachmentDescriptor5;
-        public RHIAttachmentBlendDescriptor attachmentDescriptor6;
-        public RHIAttachmentBlendDescriptor attachmentDescriptor7;
+        public RHIBlendDescriptor blendDescriptor0;
+        public RHIBlendDescriptor blendDescriptor1;
+        public RHIBlendDescriptor blendDescriptor2;
+        public RHIBlendDescriptor blendDescriptor3;
+        public RHIBlendDescriptor blendDescriptor4;
+        public RHIBlendDescriptor blendDescriptor5;
+        public RHIBlendDescriptor blendDescriptor6;
+        public RHIBlendDescriptor blendDescriptor7;
     }
 
     public struct RHIRasterizerStateDescriptor
