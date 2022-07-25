@@ -95,7 +95,16 @@ namespace Infinity.Rendering
             m_FragmentResult = Vortice.Dxc.DxcCompiler.Compile(Vortice.Dxc.DxcShaderStage.Pixel, graphicsCode, "PSMain");
             m_FragmentBlob = m_FragmentResult.GetOutput(Vortice.Dxc.DxcOutKind.Object);
 
-            string msl = ShaderCompiler.HLSLTo(graphicsCode, "PSMain", EShaderStage.Fragment, ShaderConductorWrapper.EShaderLanguage.Glsl);
+            string entryName = "PSMain";
+            string shaderCode = graphicsCode;
+            EShaderStage shaderStage = EShaderStage.Fragment;
+            string glsl = ShaderCompiler.HLSLTo(shaderCode, entryName, shaderStage, ShaderConductorWrapper.EShaderLanguage.Glsl);
+            string essl = ShaderCompiler.HLSLTo(shaderCode, entryName, shaderStage, ShaderConductorWrapper.EShaderLanguage.Essl);
+            string hlsl = ShaderCompiler.HLSLTo(shaderCode, entryName, shaderStage, ShaderConductorWrapper.EShaderLanguage.Hlsl);
+            string dxil = ShaderCompiler.HLSLTo(shaderCode, entryName, shaderStage, ShaderConductorWrapper.EShaderLanguage.Dxil);
+            string spirv = ShaderCompiler.HLSLTo(shaderCode, entryName, shaderStage, ShaderConductorWrapper.EShaderLanguage.SpirV);
+            string msl_ios = ShaderCompiler.HLSLTo(shaderCode, entryName, shaderStage, ShaderConductorWrapper.EShaderLanguage.Msl_iOS);
+            string msl_macOS = ShaderCompiler.HLSLTo(shaderCode, entryName, shaderStage, ShaderConductorWrapper.EShaderLanguage.Msl_macOS);
         }
 
         public override void Init(RenderContext renderContext)
