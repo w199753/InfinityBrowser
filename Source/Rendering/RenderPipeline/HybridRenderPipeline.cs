@@ -82,9 +82,8 @@ namespace Infinity.Rendering
 
             float4 PSMain(Varyings input) : SV_Target
             {
-                return input.color;
-                //half4 albedoMap = _DiffuseTexture.Sample(_DiffuseSampler, float2(0, 0));
-	            //return albedoMap;
+                //return input.color;
+	            return input.color + _DiffuseTexture.Sample(_DiffuseSampler, float2(0, 0));
             }");
 
             m_ComputeResult = Vortice.Dxc.DxcCompiler.Compile(Vortice.Dxc.DxcShaderStage.Compute, computeCode, "CSMain");
