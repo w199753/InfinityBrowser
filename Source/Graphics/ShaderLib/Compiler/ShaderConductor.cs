@@ -51,14 +51,14 @@ namespace Infinity.Shaderlib
         public enum EShaderStage
         {
             Vertex = 0,
-            Pixel = 1,
+            Fragment = 1,
             Geometry = 2,
             Hull = 3,
             Domain = 4,
             Compute = 5,
         };
 
-        public enum EShaderLanguage
+        public enum EShadingLanguage
         {
             Dxil = 0,
             SpirV = 1,
@@ -138,7 +138,7 @@ namespace Infinity.Shaderlib
         [StructLayout(LayoutKind.Sequential)]
         public struct TargetDesc
         {
-            public EShaderLanguage language;
+            public EShadingLanguage language;
             public string version;
             public bool asModule;
         }
@@ -155,7 +155,7 @@ namespace Infinity.Shaderlib
         [StructLayout(LayoutKind.Sequential)]
         public struct DisassembleDesc
         {
-            public EShaderLanguage language;
+            public EShadingLanguage language;
             public IntPtr binary;
             public int binarySize;
         }

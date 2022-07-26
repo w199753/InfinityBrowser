@@ -97,14 +97,14 @@ namespace Infinity.Rendering
 
             string entryName = "PSMain";
             string shaderCode = graphicsCode;
-            EShaderStage shaderStage = EShaderStage.Fragment;
-            string glsl = ShaderCompiler.HLSLTo(shaderCode, entryName, shaderStage, ShaderConductorWrapper.EShaderLanguage.Glsl);
-            string essl = ShaderCompiler.HLSLTo(shaderCode, entryName, shaderStage, ShaderConductorWrapper.EShaderLanguage.Essl);
-            string hlsl = ShaderCompiler.HLSLTo(shaderCode, entryName, shaderStage, ShaderConductorWrapper.EShaderLanguage.Hlsl);
-            string dxil = ShaderCompiler.HLSLTo(shaderCode, entryName, shaderStage, ShaderConductorWrapper.EShaderLanguage.Dxil);
-            string spirv = ShaderCompiler.HLSLTo(shaderCode, entryName, shaderStage, ShaderConductorWrapper.EShaderLanguage.SpirV);
-            string msl_ios = ShaderCompiler.HLSLTo(shaderCode, entryName, shaderStage, ShaderConductorWrapper.EShaderLanguage.Msl_iOS);
-            string msl_macOS = ShaderCompiler.HLSLTo(shaderCode, entryName, shaderStage, ShaderConductorWrapper.EShaderLanguage.Msl_macOS);
+            ShaderConductorWrapper.EShaderStage shaderStage = ShaderConductorWrapper.EShaderStage.Fragment;
+            string glsl = ShaderCompiler.HLSLTo(shaderCode, entryName, shaderStage, ShaderConductorWrapper.EShadingLanguage.Glsl);
+            string essl = ShaderCompiler.HLSLTo(shaderCode, entryName, shaderStage, ShaderConductorWrapper.EShadingLanguage.Essl);
+            string hlsl = ShaderCompiler.HLSLTo(shaderCode, entryName, shaderStage, ShaderConductorWrapper.EShadingLanguage.Hlsl);
+            string dxil = ShaderCompiler.HLSLTo(shaderCode, entryName, shaderStage, ShaderConductorWrapper.EShadingLanguage.Dxil);
+            string spirv = ShaderCompiler.HLSLTo(shaderCode, entryName, shaderStage, ShaderConductorWrapper.EShadingLanguage.SpirV);
+            string msl_ios = ShaderCompiler.HLSLTo(shaderCode, entryName, shaderStage, ShaderConductorWrapper.EShadingLanguage.Msl_iOS);
+            string msl_macOS = ShaderCompiler.HLSLTo(shaderCode, entryName, shaderStage, ShaderConductorWrapper.EShadingLanguage.Msl_macOS);
         }
 
         public override void Init(RenderContext renderContext)
