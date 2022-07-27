@@ -92,5 +92,18 @@ namespace Infinity.Graphics
             m_NativeCommandList->Release();
         }
     }
+
+    internal unsafe class Dx12IndirectCommandBuffer : RHIIndirectCommandBuffer
+    {
+        public Dx12IndirectCommandBuffer(Dx12Device device, in RHIIndirectCommandBufferDescription descriptor)
+        {
+
+        }
+
+        protected override void Release()
+        {
+
+        }
+    }
 #pragma warning restore CS8600, CS8602, CS8604, CS8618, CA1416
 }

@@ -44,5 +44,15 @@ namespace Infinity.Graphics
         //public abstract void Commit(RHIFence? fence = null);
         //public abstract void WaitUntilCompleted();
     }
+
+    public struct RHIIndirectCommandBufferDescription
+    {
+
+    }
+
+    public abstract class RHIIndirectCommandBuffer : Disposal
+    {
+
+    }
 #pragma warning restore CS8618
 }
