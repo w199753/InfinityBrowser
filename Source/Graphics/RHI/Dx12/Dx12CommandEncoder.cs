@@ -449,14 +449,14 @@ namespace Infinity.Graphics
             m_Dx12CommandBuffer.NativeCommandList->DrawIndexedInstanced(indexCount, instanceCount, firstIndex, (int)baseVertex, firstInstance);
         }
 
-        public override void DrawIndirect(RHIBuffer argsBuffer, uint offset)
+        public override void DrawIndirect(RHIBuffer argsBuffer, in uint offset)
         {
             Dx12Buffer dx12Buffer = argsBuffer as Dx12Buffer;
             Dx12Device dx12Device = ((Dx12Queue)m_Dx12CommandBuffer.CommandPool.Queue).Dx12Device;
             m_Dx12CommandBuffer.NativeCommandList->ExecuteIndirect(dx12Device.DrawIndirectSignature, 1, dx12Buffer.NativeResource, offset, null, 0);
         }
 
-        public override void DrawIndexedIndirect(RHIBuffer argsBuffer, uint offset)
+        public override void DrawIndexedIndirect(RHIBuffer argsBuffer, in uint offset)
         {
             Dx12Buffer dx12Buffer = argsBuffer as Dx12Buffer;
             Dx12Device dx12Device = ((Dx12Queue)m_Dx12CommandBuffer.CommandPool.Queue).Dx12Device;

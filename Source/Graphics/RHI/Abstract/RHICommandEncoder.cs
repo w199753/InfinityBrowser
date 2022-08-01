@@ -222,8 +222,8 @@ namespace Infinity.Graphics
         public abstract void SetIndexBuffer(RHIBuffer buffer, EIndexFormat format, uint offset = 0);
         public abstract void Draw(in uint vertexCount, in uint instanceCount, in uint firstVertex, in uint firstInstance);
         public abstract void DrawIndexed(in uint indexCount, in uint instanceCount, in uint firstIndex, in uint baseVertex, in uint firstInstance);
-        public abstract void DrawIndirect(RHIBuffer argsBuffer, uint offset);
-        public abstract void DrawIndexedIndirect(RHIBuffer argsBuffer, uint offset);
+        public abstract void DrawIndirect(RHIBuffer argsBuffer, in uint offset);
+        public abstract void DrawIndexedIndirect(RHIBuffer argsBuffer, in uint offset);
         //public abstract void ExecuteBundles(RHIIndirectCommandBuffer indirectCommandBuffer);
         public abstract void PushDebugGroup(string name);
         public abstract void PopDebugGroup();
