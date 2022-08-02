@@ -415,7 +415,7 @@ namespace Infinity.Graphics
             }
         }
 
-        public override void SetVertexBuffer(RHIBuffer buffer, in uint slot = 0, uint offset = 0)
+        public override void SetVertexBuffer(RHIBuffer buffer, in uint slot = 0, in uint offset = 0)
         {
             Dx12Buffer dx12Buffer = buffer as Dx12Buffer;
             D3D12_VERTEX_BUFFER_VIEW vertexBufferView = new D3D12_VERTEX_BUFFER_VIEW
@@ -427,7 +427,7 @@ namespace Infinity.Graphics
             m_Dx12CommandBuffer.NativeCommandList->IASetVertexBuffers(slot, 1, &vertexBufferView);
         }
 
-        public override void SetIndexBuffer(RHIBuffer buffer, EIndexFormat format, uint offset = 0)
+        public override void SetIndexBuffer(RHIBuffer buffer, in EIndexFormat format, in uint offset = 0)
         {
             Dx12Buffer dx12Buffer = buffer as Dx12Buffer;
             D3D12_INDEX_BUFFER_VIEW indexBufferView = new D3D12_INDEX_BUFFER_VIEW

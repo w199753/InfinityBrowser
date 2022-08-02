@@ -218,8 +218,8 @@ namespace Infinity.Graphics
         public abstract void SetScissorRect(in Memory<Rect> rects);
         public abstract void SetBlendFactor(in float4 value);
         public abstract void SetBindGroup(RHIBindGroup bindGroup);
-        public abstract void SetVertexBuffer(RHIBuffer buffer, in uint slot = 0, uint offset = 0);
-        public abstract void SetIndexBuffer(RHIBuffer buffer, EIndexFormat format, uint offset = 0);
+        public abstract void SetVertexBuffer(RHIBuffer buffer, in uint slot = 0, in uint offset = 0);
+        public abstract void SetIndexBuffer(RHIBuffer buffer, in EIndexFormat format, in uint offset = 0);
         public abstract void Draw(in uint vertexCount, in uint instanceCount, in uint firstVertex, in uint firstInstance);
         public abstract void DrawIndexed(in uint indexCount, in uint instanceCount, in uint firstIndex, in uint baseVertex, in uint firstInstance);
         public abstract void DrawIndirect(RHIBuffer argsBuffer, in uint offset);
