@@ -9,6 +9,7 @@
 		<RootNamespace>Infinity.Engine</RootNamespace>
 		<AllowUnsafeBlocks>True</AllowUnsafeBlocks>
 		<IntermediateOutputPath>../../Intermediate/Engine/</IntermediateOutputPath>
+		<BaseOutputPath>$(ProjectDir)../../Binaries/Engine/</BaseOutputPath>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">

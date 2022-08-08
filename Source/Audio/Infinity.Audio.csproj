@@ -7,6 +7,7 @@
     <RootNamespace>Infinity.Audio</RootNamespace>
     <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
 	<IntermediateOutputPath>../../Intermediate/Audio/</IntermediateOutputPath>
+	<BaseOutputPath>$(ProjectDir)../../Binaries/Audio/</BaseOutputPath>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">

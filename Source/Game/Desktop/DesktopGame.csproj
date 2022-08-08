@@ -9,6 +9,7 @@
     <OutputType>Exe</OutputType>
     <PlatformTarget>x64</PlatformTarget>
 	<IntermediateOutputPath>../../../Intermediate/Game/Desktop/</IntermediateOutputPath>
+	<BaseOutputPath>$(ProjectDir)../../../Binaries/Game/Desktop/</BaseOutputPath>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">

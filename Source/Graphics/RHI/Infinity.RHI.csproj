@@ -8,6 +8,7 @@
 		<AllowUnsafeBlocks>True</AllowUnsafeBlocks>
 		<IntermediateOutputPath>../../../Intermediate/Graphics/RHI/</IntermediateOutputPath>
 		<Nullable>enable</Nullable>
+		<BaseOutputPath>$(ProjectDir)../../../Binaries/Graphics/RHI/</BaseOutputPath>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">

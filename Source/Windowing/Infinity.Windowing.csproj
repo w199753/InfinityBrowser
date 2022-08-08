@@ -7,6 +7,7 @@
     <RootNamespace>Infinity.Windowing</RootNamespace>
     <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
 	  <IntermediateOutputPath>../../Intermediate/Windowing/</IntermediateOutputPath>
+	  <BaseOutputPath>$(ProjectDir)../../Binaries/Windowing/</BaseOutputPath>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">

@@ -35,6 +35,7 @@
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <Platforms>x64;ARM64</Platforms>
 	<IntermediateOutputPath>../../../Intermediate/ThirdParty/Antlr4/</IntermediateOutputPath>
+	<BaseOutputPath>$(ProjectDir)../../../Binaries/ThirdParty/Antlr4/</BaseOutputPath>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">

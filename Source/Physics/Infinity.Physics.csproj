@@ -9,6 +9,7 @@
 		<RootNamespace>Infinity.Physics</RootNamespace>
 		<AllowUnsafeBlocks>True</AllowUnsafeBlocks>
 		<IntermediateOutputPath>../../Intermediate/Physcis/</IntermediateOutputPath>
+		<BaseOutputPath>$(ProjectDir)../../Binaries/Physics/</BaseOutputPath>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">

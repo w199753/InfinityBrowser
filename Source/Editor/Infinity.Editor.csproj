@@ -8,6 +8,7 @@
     <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
 	<IntermediateOutputPath>../../Intermediate/Editor/</IntermediateOutputPath>
 	<OutputType>Exe</OutputType>
+	<BaseOutputPath>$(ProjectDir)../../Binaries/Editor/</BaseOutputPath>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">

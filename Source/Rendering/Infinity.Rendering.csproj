@@ -9,6 +9,7 @@
 		<RootNamespace>Infinity.Renderer</RootNamespace>
 		<AllowUnsafeBlocks>True</AllowUnsafeBlocks>
 		<IntermediateOutputPath>../../Intermediate/Rendering/</IntermediateOutputPath>
+		<BaseOutputPath>$(ProjectDir)../../Binaries/Rendering/</BaseOutputPath>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">

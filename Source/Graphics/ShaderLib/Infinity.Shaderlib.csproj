@@ -7,6 +7,7 @@
 		<RootNamespace>Infinity.Shaderlib</RootNamespace>
 		<AllowUnsafeBlocks>True</AllowUnsafeBlocks>
 		<IntermediateOutputPath>../../../Intermediate/Graphics/Shaderlib/</IntermediateOutputPath>
+		<BaseOutputPath>$(ProjectDir)../../../Binaries/Graphics/Shaderlib/</BaseOutputPath>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
