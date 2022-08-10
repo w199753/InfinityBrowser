@@ -109,7 +109,7 @@ namespace Infinity.Graphics
 
     public struct RHIGraphicsPassDescriptor
     {
-        public string? name;
+        public string name;
         public RHIShadingRateDescriptor? shadingRateDescriptor;
         public Memory<RHIColorAttachmentDescriptor> colorAttachmentDescriptors;
         public RHIDepthStencilAttachmentDescriptor? depthStencilAttachmentDescriptor;
@@ -164,13 +164,13 @@ namespace Infinity.Graphics
 
     public abstract class RHIBlitEncoder : Disposal
     {
-        public RHIBlitPassScoper BeginScopedPass(string? name = null)
+        public RHIBlitPassScoper BeginScopedPass(string name)
         {
             BeginPass(name);
             return new RHIBlitPassScoper(this);
         }
 
-        public abstract void BeginPass(string? name);
+        public abstract void BeginPass(string name);
         public abstract void CopyBufferToBuffer(RHIBuffer srcBuffer, in int srcOffset, RHIBuffer dstBuffer, in int dstOffset, in int size);
         public abstract void CopyBufferToTexture(in RHIBufferCopyDescriptor src, in RHITextureCopyDescriptor dst, in int3 size);
         public abstract void CopyTextureToBuffer(in RHITextureCopyDescriptor src, in RHIBufferCopyDescriptor dst, in int3 size);
@@ -186,13 +186,13 @@ namespace Infinity.Graphics
 
     public abstract class RHIComputeEncoder : Disposal
     {
-        public RHIComputePassScoper BeginScopedPass(string? name)
+        public RHIComputePassScoper BeginScopedPass(string name)
         {
             BeginPass(name);
             return new RHIComputePassScoper(this);
         }
 
-        public abstract void BeginPass(string? name);
+        public abstract void BeginPass(string name);
         public abstract void SetPipeline(RHIComputePipeline pipeline);
         public abstract void SetBindGroup(RHIBindGroup bindGroup);
         public abstract void Dispatch(in uint groupCountX, in uint groupCountY, in uint groupCountZ);

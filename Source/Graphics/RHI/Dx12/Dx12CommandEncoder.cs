@@ -17,12 +17,9 @@ namespace Infinity.Graphics
             m_Dx12CommandBuffer = cmdBuffer;
         }
 
-        public override void BeginPass(string? name)
+        public override void BeginPass(string name)
         {
-            if(name != null)
-            {
-                PushDebugGroup(name);
-            }
+            PushDebugGroup(name);
         }
 
         public override void CopyBufferToBuffer(RHIBuffer srcBuffer, in int srcOffset, RHIBuffer dstBuffer, in int dstOffset, in int size)
@@ -164,12 +161,9 @@ namespace Infinity.Graphics
             m_Dx12CommandBuffer = cmdBuffer;
         }
 
-        public override void BeginPass(string? name)
+        public override void BeginPass(string name)
         {
-            if (name != null)
-            {
-                PushDebugGroup(name);
-            }
+            PushDebugGroup(name);
         }
 
         public override void SetPipeline(RHIComputePipeline pipeline)
@@ -265,10 +259,7 @@ namespace Infinity.Graphics
 
         public override void BeginPass(in RHIGraphicsPassDescriptor descriptor)
         {
-            if (descriptor.name != null)
-            {
-                PushDebugGroup(descriptor.name);
-            }
+            PushDebugGroup(descriptor.name);
 
             // set render targets
             D3D12_CPU_DESCRIPTOR_HANDLE* rtvHandles = stackalloc D3D12_CPU_DESCRIPTOR_HANDLE[descriptor.colorAttachmentDescriptors.Length];

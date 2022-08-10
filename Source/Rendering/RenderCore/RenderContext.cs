@@ -202,10 +202,7 @@ namespace Infinity.Rendering
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void EndInit()
         {
-            RHICommandBuffer cmdBuffer = GetCommandBuffer(EContextType.Graphics);
-            cmdBuffer.Begin();
-            cmdBuffer.End();
-            ExecuteCommandBuffer(cmdBuffer, m_FrameFence);
+            m_Queues[(int)EQueueType.Graphics].Submit(null, m_FrameFence);
             m_FrameFence.Wait();
             GCFrameCommandBuffer();
         }
@@ -221,10 +218,7 @@ namespace Infinity.Rendering
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void EndFrame()
         {
-            RHICommandBuffer cmdBuffer = GetCommandBuffer(EContextType.Graphics);
-            cmdBuffer.Begin();
-            cmdBuffer.End();
-            ExecuteCommandBuffer(cmdBuffer, m_FrameFence);
+            m_Queues[(int)EQueueType.Graphics].Submit(null, m_FrameFence);
             m_SwapChain.Present(EPresentMode.VSync);
             m_FrameFence.Wait();
             GCFrameCommandBuffer();

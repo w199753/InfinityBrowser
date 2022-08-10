@@ -635,7 +635,7 @@ namespace Infinity.Graphics
             int num = 0;
             for (int i = 0; i < vertexLayoutDescriptors.Length; ++i)
             {
-                num += vertexLayoutDescriptors[i].attributeDescriptors.Length;
+                num += vertexLayoutDescriptors[i].vertexElementDescriptors.Length;
             }
 
             return num;
@@ -649,26 +649,26 @@ namespace Infinity.Graphics
             while (slot < vertexLayoutDescriptors.Length)
             {
                 ref RHIVertexLayoutDescriptor vertexLayoutDescriptor = ref vertexLayoutDescriptors[slot];
-                Span<RHIVertexAttributeDescriptor> vertexAttributeDescriptors = vertexLayoutDescriptor.attributeDescriptors.Span;
+                Span<RHIVertexElementDescriptor> vertexElementDescriptors = vertexLayoutDescriptor.vertexElementDescriptors.Span;
 
                 int num6 = 0;
 
                 while (true)
                 {
-                    if (num6 >= vertexAttributeDescriptors.Length)
+                    if (num6 >= vertexElementDescriptors.Length)
                     {
                         slot++;
                         break;
                     }
-                    RHIVertexAttributeDescriptor vertexAttributeDescriptor = vertexAttributeDescriptors[num6];
-                    byte[] semanticByte = ConvertToDx12SemanticNameByte(vertexAttributeDescriptor.type);
+                    RHIVertexElementDescriptor vertexElementDescriptor = vertexElementDescriptors[num6];
+                    byte[] semanticByte = ConvertToDx12SemanticNameByte(vertexElementDescriptor.type);
                     ref D3D12_INPUT_ELEMENT_DESC element = ref inputElementsView[index];
-                    element.Format = ConvertToDx12SemanticFormat(vertexAttributeDescriptor.format);
+                    element.Format = ConvertToDx12SemanticFormat(vertexElementDescriptor.format);
                     element.InputSlot = (uint)slot;
                     element.SemanticName = (sbyte*)Unsafe.AsPointer(ref MemoryMarshal.GetReference(new ReadOnlySpan<byte>(semanticByte)));
-                    element.SemanticIndex = vertexAttributeDescriptor.index;
+                    element.SemanticIndex = vertexElementDescriptor.index;
                     element.InputSlotClass = ConvertToDx12InputSlotClass(vertexLayoutDescriptor.stepMode);
-                    element.AlignedByteOffset = (uint)vertexAttributeDescriptor.offset;
+                    element.AlignedByteOffset = (uint)vertexElementDescriptor.offset;
                     element.InstanceDataStepRate = (uint)vertexLayoutDescriptor.stepRate;
 
                     ++num6;

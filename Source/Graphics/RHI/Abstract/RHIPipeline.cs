@@ -13,11 +13,11 @@ namespace Infinity.Graphics
     {
         //public uint sliceCount;
         public ESampleCount sampleCount;
-        public RHIOutputAttachmentDescriptor? depthAttachmentDescriptor;
-        public Memory<RHIOutputAttachmentDescriptor> colorAttachmentDescriptors;
+        public RHIOutputAttachmentDescriptor? outputDepthAttachmentDescriptor;
+        public Memory<RHIOutputAttachmentDescriptor> outputColorAttachmentDescriptors;
     }
 
-    public struct RHIVertexAttributeDescriptor
+    public struct RHIVertexElementDescriptor
     {
         public int offset;
         public uint index;
@@ -30,7 +30,7 @@ namespace Infinity.Graphics
         public int stride;
         public int stepRate;
         public EVertexStepMode stepMode;
-        public Memory<RHIVertexAttributeDescriptor> attributeDescriptors;
+        public Memory<RHIVertexElementDescriptor> vertexElementDescriptors;
     }
 
     public struct RHIVertexStateDescriptor

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Runtime.InteropServices;
 using TerraFX.Interop.DirectX;
 using static TerraFX.Interop.Windows.Windows;
 
@@ -37,13 +38,17 @@ namespace Infinity.Graphics
             m_GraphicsEncoder = new Dx12GraphicsEncoder(this);
         }
 
-        public override void Begin()
+        public override void Begin(string name)
         {
             Dx12CommandPool dx12CommandPool = m_CommandPool as Dx12CommandPool;
             Dx12Queue queue = m_CommandPool.Queue as Dx12Queue;
 
             m_NativeCommandList->Close();
             m_NativeCommandList->Reset(dx12CommandPool.NativeCommandAllocator, null);
+
+            IntPtr namePtr = Marshal.StringToHGlobalUni(name);
+            m_NativeCommandList->BeginEvent(0, namePtr.ToPointer(), (uint)name.Length * 2);
+            Marshal.FreeHGlobal(namePtr);
 
             ID3D12DescriptorHeap** resourceBarriers = stackalloc ID3D12DescriptorHeap*[2];
             resourceBarriers[0] = queue.Dx12Device.SamplerHeap.DescriptorHeap;
@@ -68,6 +73,7 @@ namespace Infinity.Graphics
 
         public override void End()
         {
+            m_NativeCommandList->EndEvent();
             m_NativeCommandList->Close();
         }
 

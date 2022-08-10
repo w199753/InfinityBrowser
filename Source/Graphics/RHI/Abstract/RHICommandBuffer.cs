@@ -30,13 +30,13 @@ namespace Infinity.Graphics
 
         protected RHICommandPool m_CommandPool;
 
-        public RHICommandBufferScoper BeginScoped()
+        public RHICommandBufferScoper BeginScoped(string name)
         {
-            Begin();
+            Begin(name);
             return new RHICommandBufferScoper(this);
         }
 
-        public abstract void Begin();
+        public abstract void Begin(string name);
         public abstract RHIBlitEncoder GetBlitEncoder();
         public abstract RHIComputeEncoder GetComputeEncoder();
         public abstract RHIGraphicsEncoder GetGraphicsEncoder();

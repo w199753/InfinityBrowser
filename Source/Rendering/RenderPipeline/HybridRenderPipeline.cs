@@ -256,28 +256,28 @@ namespace Infinity.Rendering
             RHIOutputStateDescriptor outputStateDescriptor;
             {
                 outputStateDescriptor.sampleCount = ESampleCount.None;
-                outputStateDescriptor.depthAttachmentDescriptor = outputDepthAttachmentDescriptor;
-                outputStateDescriptor.colorAttachmentDescriptors = new Memory<RHIOutputAttachmentDescriptor>(outputColorAttachmentDescriptors);
+                outputStateDescriptor.outputDepthAttachmentDescriptor = outputDepthAttachmentDescriptor;
+                outputStateDescriptor.outputColorAttachmentDescriptors = new Memory<RHIOutputAttachmentDescriptor>(outputColorAttachmentDescriptors);
             }
 
-            RHIVertexAttributeDescriptor[] vertexAttributeDescriptors = new RHIVertexAttributeDescriptor[2];
+            RHIVertexElementDescriptor[] vertexElementDescriptors = new RHIVertexElementDescriptor[2];
             {
-                vertexAttributeDescriptors[0].index = 1;
-                vertexAttributeDescriptors[0].offset = 0;
-                vertexAttributeDescriptors[0].type = ESemanticType.Color;
-                vertexAttributeDescriptors[0].format = ESemanticFormat.Float4;
+                vertexElementDescriptors[0].index = 1;
+                vertexElementDescriptors[0].offset = 0;
+                vertexElementDescriptors[0].type = ESemanticType.Color;
+                vertexElementDescriptors[0].format = ESemanticFormat.Float4;
 
-                vertexAttributeDescriptors[1].index = 0;
-                vertexAttributeDescriptors[1].offset = 16;
-                vertexAttributeDescriptors[1].type = ESemanticType.Position;
-                vertexAttributeDescriptors[1].format = ESemanticFormat.Float4;
+                vertexElementDescriptors[1].index = 0;
+                vertexElementDescriptors[1].offset = 16;
+                vertexElementDescriptors[1].type = ESemanticType.Position;
+                vertexElementDescriptors[1].format = ESemanticFormat.Float4;
             }
 
             RHIVertexLayoutDescriptor[] vertexLayoutDescriptors = new RHIVertexLayoutDescriptor[1];
             {
                 vertexLayoutDescriptors[0].stride = MemoryUtility.SizeOf<Vertex>();
                 vertexLayoutDescriptors[0].stepMode = EVertexStepMode.PerVertex;
-                vertexLayoutDescriptors[0].attributeDescriptors = new Memory<RHIVertexAttributeDescriptor>(vertexAttributeDescriptors);
+                vertexLayoutDescriptors[0].vertexElementDescriptors = new Memory<RHIVertexElementDescriptor>(vertexElementDescriptors);
             }
 
             RHIVertexStateDescriptor vertexStateDescriptor;
@@ -423,13 +423,13 @@ namespace Infinity.Rendering
         {
             RHICommandBuffer cmdBuffer = renderContext.GetCommandBuffer(EContextType.Graphics);
 
-            using (cmdBuffer.BeginScoped())
+            using (cmdBuffer.BeginScoped("FrameRendering"))
             {
                 RHIBlitEncoder blitEncoder = cmdBuffer.GetBlitEncoder();
                 RHIComputeEncoder computeEncoder = cmdBuffer.GetComputeEncoder();
                 RHIGraphicsEncoder graphicsEncoder = cmdBuffer.GetGraphicsEncoder();
 
-                using (blitEncoder.BeginScopedPass())
+                using (blitEncoder.BeginScopedPass("ResourceBarrier"))
                 {
                     blitEncoder.ResourceBarrier(RHIBarrier.Transition(m_ComputeTexture, ETextureState.Common, ETextureState.UnorderedAccess));
                     blitEncoder.ResourceBarrier(RHIBarrier.Transition(renderContext.BackBuffer, ETextureState.Present, ETextureState.RenderTarget));
@@ -464,7 +464,7 @@ namespace Infinity.Rendering
                     graphicsEncoder.PopDebugGroup();
                 }
 
-                using (blitEncoder.BeginScopedPass())
+                using (blitEncoder.BeginScopedPass("ResourceBarrier"))
                 {
                     blitEncoder.ResourceBarrier(RHIBarrier.Transition(m_ComputeTexture, ETextureState.UnorderedAccess, ETextureState.Common));
                     blitEncoder.ResourceBarrier(RHIBarrier.Transition(renderContext.BackBuffer, ETextureState.RenderTarget, ETextureState.Present));
