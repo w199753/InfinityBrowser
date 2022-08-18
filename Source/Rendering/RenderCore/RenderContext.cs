@@ -7,7 +7,7 @@ using System.Runtime.CompilerServices;
 
 namespace Infinity.Rendering
 {
-    public enum EContextType
+    public enum ECommandType
     {
         Compute = 1,
         Graphics = 2,
@@ -86,8 +86,8 @@ namespace Infinity.Rendering
             // Create Instance
             RHIInstanceDescriptor descriptor;
             {
-                //descriptor.backend = ERHIBackend.DirectX12;
-                descriptor.backend = RHIInstance.GetPlatformBackend(false);
+                descriptor.backend = ERHIBackend.DirectX12;
+                //descriptor.backend = RHIInstance.GetPlatformBackend(false);
                 descriptor.enableDebugLayer = true;
                 descriptor.enableGpuValidatior = false;
             }
@@ -117,13 +117,10 @@ namespace Infinity.Rendering
             m_Queues[1] = m_Device.GetQueue(EQueueType.Compute, 0);
             m_Queues[2] = m_Device.GetQueue(EQueueType.Graphics, 0);
 
-            // Create FrameFence
-            m_FrameFence = m_Device.CreateFence();
-
             // Create SwapChain
             RHISwapChainDescriptor swapChainDescriptor = new RHISwapChainDescriptor();
             swapChainDescriptor.count = 3;
-            swapChainDescriptor.window = surface;
+            swapChainDescriptor.surface = surface;
             swapChainDescriptor.frameBufferOnly = true;
             swapChainDescriptor.extent = m_ScreenSize;
             swapChainDescriptor.format = EPixelFormat.RGBA8_UNorm;
@@ -136,12 +133,15 @@ namespace Infinity.Rendering
             viewDescriptor.arrayLayerCount = 1;
             viewDescriptor.baseArrayLayer = 0;
             viewDescriptor.format = EPixelFormat.RGBA8_UNorm;
-            viewDescriptor.viewType = ETextureViewType.RenderTargetView;
+            viewDescriptor.viewType = ETextureViewType.RenderTarget;
             viewDescriptor.dimension = ETextureViewDimension.Texture2D;
             m_SwapChainViews = new RHITextureView[3];
             m_SwapChainViews[0] = m_SwapChain.GetTexture(0).CreateTextureView(viewDescriptor);
             m_SwapChainViews[1] = m_SwapChain.GetTexture(1).CreateTextureView(viewDescriptor);
             m_SwapChainViews[2] = m_SwapChain.GetTexture(2).CreateTextureView(viewDescriptor);
+
+            // Create FrameFence
+            m_FrameFence = m_Device.CreateFence();
 
             //Create CommandPool
             m_CommandPools = new RHICommandPool[3];
@@ -225,9 +225,9 @@ namespace Infinity.Rendering
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public RHICommandBuffer GetCommandBuffer(in EContextType contextType)
+        public RHICommandBuffer GetCommandBuffer(in ECommandType commandType)
         {
-            RHICommandBuffer cmdBuffer = m_CommandBufferPools[(int)contextType].Pull();
+            RHICommandBuffer cmdBuffer = m_CommandBufferPools[(int)commandType].Pull();
             m_CommandBufferAutoRelease.Add(cmdBuffer);
             return cmdBuffer;
         }

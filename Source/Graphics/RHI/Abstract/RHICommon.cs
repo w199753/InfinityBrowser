@@ -403,9 +403,9 @@
 
     public enum EBufferViewType : byte
     {
-        UniformBufferView,
-        ShaderResourceView,
-        UnorderedAccessView,
+        UniformBuffer,
+        ShaderResource,
+        UnorderedAccess,
     }
 
     public enum ETextureUsage
@@ -418,10 +418,10 @@
 
     public enum ETextureViewType : byte
     {
-        DepthStencilView,
-        RenderTargetView,
-        ShaderResourceView,
-        UnorderedAccessView,
+        DepthStencil,
+        RenderTarget,
+        ShaderResource,
+        UnorderedAccess,
     }
 
     public enum EShaderStage

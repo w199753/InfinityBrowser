@@ -8,7 +8,7 @@ namespace Infinity.Graphics
         public bool frameBufferOnly;
         public int count;
         public int2 extent;
-        public IntPtr window;
+        public IntPtr surface;
         public EPixelFormat format;
         public RHIQueue presentQueue;
     }

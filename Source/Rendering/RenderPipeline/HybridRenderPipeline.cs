@@ -132,7 +132,7 @@ namespace Infinity.Rendering
                 outputViewDescriptor.arrayLayerCount = 1;
                 outputViewDescriptor.baseArrayLayer = 0;
                 outputViewDescriptor.format = EPixelFormat.RGBA8_UNorm;
-                outputViewDescriptor.viewType = ETextureViewType.UnorderedAccessView;
+                outputViewDescriptor.viewType = ETextureViewType.UnorderedAccess;
                 outputViewDescriptor.dimension = ETextureViewDimension.Texture2D;
             }
             m_ComputeTextureView = m_ComputeTexture.CreateTextureView(outputViewDescriptor);
@@ -421,7 +421,7 @@ namespace Infinity.Rendering
 
         public override void Render(RenderContext renderContext)
         {
-            RHICommandBuffer cmdBuffer = renderContext.GetCommandBuffer(EContextType.Graphics);
+            RHICommandBuffer cmdBuffer = renderContext.GetCommandBuffer(ECommandType.Graphics);
 
             using (cmdBuffer.BeginScoped("FrameRendering"))
             {

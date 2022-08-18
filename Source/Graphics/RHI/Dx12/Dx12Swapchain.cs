@@ -63,7 +63,7 @@ namespace Infinity.Graphics
             desc.SampleDesc = new DXGI_SAMPLE_DESC(1, 0);
 
             IDXGISwapChain1* dx12SwapChain1;
-            bool success = SUCCEEDED(dx12Instance.DXGIFactory->CreateSwapChainForHwnd((IUnknown*)dx12Queue.NativeCommandQueue, new HWND(descriptor.window.ToPointer()), &desc, null, null, &dx12SwapChain1));
+            bool success = SUCCEEDED(dx12Instance.DXGIFactory->CreateSwapChainForHwnd((IUnknown*)dx12Queue.NativeCommandQueue, new HWND(descriptor.surface.ToPointer()), &desc, null, null, &dx12SwapChain1));
             Debug.Assert(success);
             m_NativeSwapChain = (IDXGISwapChain4*)dx12SwapChain1;
         }
