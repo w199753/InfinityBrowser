@@ -49,11 +49,6 @@ namespace Infinity.Graphics
             return queueArray[index];
         }
 
-        public override RHIQuery CreateQuery()
-        {
-            throw new NotImplementedException();
-        }
-
         public override RHIFence CreateFence()
         {
             throw new NotImplementedException();
@@ -64,7 +59,12 @@ namespace Infinity.Graphics
             throw new NotImplementedException();
         }
 
-        public override RHIHeap CreateHeap()
+        public override RHIQuery CreateQuery(in RHIQueryDescription descriptor)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override RHIHeap CreateHeap(in RHIHeapDescription descriptor)
         {
             throw new NotImplementedException();
         }

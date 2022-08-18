@@ -12,10 +12,10 @@ namespace Infinity.Graphics
     {
         public abstract int GetQueueCount(in EQueueType type);
         public abstract RHIQueue GetQueue(in EQueueType type, in int index);
-        public abstract RHIQuery CreateQuery();
         public abstract RHIFence CreateFence();
         public abstract RHISemaphore CreateSemaphore();
-        public abstract RHIHeap CreateHeap();
+        public abstract RHIQuery CreateQuery(in RHIQueryDescription descriptor);
+        public abstract RHIHeap CreateHeap(in RHIHeapDescription descriptor);
         public abstract RHIBuffer CreateBuffer(in RHIBufferDescriptor descriptor);
         public abstract RHITexture CreateTexture(in RHITextureDescriptor descriptor);
         public abstract RHISampler CreateSampler(in RHISamplerDescriptor descriptor);
