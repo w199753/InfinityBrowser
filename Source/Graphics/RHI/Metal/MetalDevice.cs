@@ -49,12 +49,22 @@ namespace Infinity.Graphics
             return queueArray[index];
         }
 
+        public override RHIQuery CreateQuery()
+        {
+            throw new NotImplementedException();
+        }
+
         public override RHIFence CreateFence()
         {
             throw new NotImplementedException();
         }
 
-        public override RHISwapChain CreateSwapChain(in RHISwapChainDescriptor descriptor)
+        public override RHISemaphore CreateSemaphore()
+        {
+            throw new NotImplementedException();
+        }
+
+        public override RHIHeap CreateHeap()
         {
             throw new NotImplementedException();
         }
@@ -79,17 +89,17 @@ namespace Infinity.Graphics
             throw new NotImplementedException();
         }
 
+        public override RHISwapChain CreateSwapChain(in RHISwapChainDescriptor descriptor)
+        {
+            throw new NotImplementedException();
+        }
+
         public override RHIBindGroupLayout CreateBindGroupLayout(in RHIBindGroupLayoutDescriptor descriptor)
         {
             throw new NotImplementedException();
         }
 
         public override RHIBindGroup CreateBindGroup(in RHIBindGroupDescriptor descriptor)
-        {
-            throw new NotImplementedException();
-        }
-
-        internal override RHIPipelineLayout CreatePipelineLayout(in RHIPipelineLayoutDescriptor descriptor)
         {
             throw new NotImplementedException();
         }
@@ -110,6 +120,11 @@ namespace Infinity.Graphics
         }
 
         public override RHIGraphicsPipeline CreateGraphicsPipeline(in RHIGraphicsPipelineDescriptor descriptor)
+        {
+            throw new NotImplementedException();
+        }
+
+        internal override RHIPipelineLayout CreatePipelineLayout(in RHIPipelineLayoutDescriptor descriptor)
         {
             throw new NotImplementedException();
         }

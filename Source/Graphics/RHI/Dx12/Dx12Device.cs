@@ -182,14 +182,24 @@ namespace Infinity.Graphics
             return queueArray[index];
         }
 
+        public override RHIQuery CreateQuery()
+        {
+            throw new NotImplementedException();
+        }
+
         public override RHIFence CreateFence()
         {
             return new Dx12Fence(this);
         }
 
-        public override RHISwapChain CreateSwapChain(in RHISwapChainDescriptor descriptor)
+        public override RHISemaphore CreateSemaphore()
         {
-            return new Dx12SwapChain(this, descriptor);
+            throw new NotImplementedException();
+        }
+
+        public override RHIHeap CreateHeap()
+        {
+            throw new NotImplementedException();
         }
 
         public override RHIBuffer CreateBuffer(in RHIBufferDescriptor descriptor)
@@ -212,6 +222,11 @@ namespace Infinity.Graphics
             return new Dx12Shader(descriptor);
         }
 
+        public override RHISwapChain CreateSwapChain(in RHISwapChainDescriptor descriptor)
+        {
+            return new Dx12SwapChain(this, descriptor);
+        }
+
         public override RHIBindGroupLayout CreateBindGroupLayout(in RHIBindGroupLayoutDescriptor descriptor)
         {
             return new Dx12BindGroupLayout(descriptor);
@@ -220,11 +235,6 @@ namespace Infinity.Graphics
         public override RHIBindGroup CreateBindGroup(in RHIBindGroupDescriptor descriptor)
         {
             return new Dx12BindGroup(descriptor);
-        }
-
-        internal override RHIPipelineLayout CreatePipelineLayout(in RHIPipelineLayoutDescriptor descriptor)
-        {
-            return new Dx12PipelineLayout(this, descriptor);
         }
 
         public override RHIComputePipeline CreateComputePipeline(in RHIComputePipelineDescriptor descriptor)
@@ -245,6 +255,11 @@ namespace Infinity.Graphics
         public override RHIGraphicsPipeline CreateGraphicsPipeline(in RHIGraphicsPipelineDescriptor descriptor)
         {
             return new Dx12GraphicsPipeline(this, descriptor);
+        }
+
+        internal override RHIPipelineLayout CreatePipelineLayout(in RHIPipelineLayoutDescriptor descriptor)
+        {
+            return new Dx12PipelineLayout(this, descriptor);
         }
 
         public Dx12DescriptorInfo AllocateDsvDescriptor(in int count)

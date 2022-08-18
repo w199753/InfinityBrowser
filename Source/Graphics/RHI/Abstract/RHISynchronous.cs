@@ -63,5 +63,10 @@
         public abstract void Reset();
         public abstract void Wait();
     }
+
+    public abstract class RHISemaphore : Disposal
+    {
+
+    }
 #pragma warning restore CS0414
 }
