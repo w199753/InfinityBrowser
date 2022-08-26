@@ -41,8 +41,8 @@ namespace Infinity.Rendering
         public HybridRenderPipeline(string pipelineName) : base(pipelineName) 
         {
             string computeCode = new string(@"
-            [[vk::binding(2, 1)]]
-            RWTexture2D<float4> _ResultTexture : register(u1, space2);
+            [[vk::binding(0, 0)]]
+            RWTexture2D<float4> _ResultTexture : register(u0, space0);
 
             [numthreads(8, 8, 1)]
             void CSMain (uint3 id : SV_DispatchThreadID)
@@ -54,11 +54,11 @@ namespace Infinity.Rendering
 
             string graphicsCode = new string(
             @"
-            [[vk::binding(3, 2)]]
-            Texture2D _DiffuseTexture : register(t2, space3);
+            [[vk::binding(0, 0)]]
+            Texture2D _DiffuseTexture : register(t0, space0);
 
-            [[vk::binding(3, 2)]]
-            SamplerState _DiffuseSampler : register(s2, space3);
+            [[vk::binding(1, 0)]]
+            SamplerState _DiffuseSampler : register(s1, space0);
 
             struct Attributes
 	        {
@@ -140,14 +140,14 @@ namespace Infinity.Rendering
             // Create ComputeBindGroupLayout
             RHIBindGroupLayoutElement[] computeBindGroupLayoutElements = new RHIBindGroupLayoutElement[1];
             {
-                computeBindGroupLayoutElements[0].slot = 1;
+                computeBindGroupLayoutElements[0].slot = 0;
                 computeBindGroupLayoutElements[0].count = 1;
                 computeBindGroupLayoutElements[0].bindType = EBindType.StorageTexture;
                 computeBindGroupLayoutElements[0].shaderStage = EShaderStage.Compute;
             }
             RHIBindGroupLayoutDescriptor computeBindGroupLayoutDescriptor;
             {
-                computeBindGroupLayoutDescriptor.index = 2;
+                computeBindGroupLayoutDescriptor.index = 0;
                 computeBindGroupLayoutDescriptor.elements = new Memory<RHIBindGroupLayoutElement>(computeBindGroupLayoutElements);
             }
             m_ComputeBindGroupLayout = renderContext.CreateBindGroupLayout(computeBindGroupLayoutDescriptor);
@@ -350,19 +350,19 @@ namespace Infinity.Rendering
             // Create GraphicsBindGroupLayout
             RHIBindGroupLayoutElement[] graphicsBindGroupLayoutElements = new RHIBindGroupLayoutElement[2];
             {
-                graphicsBindGroupLayoutElements[0].slot = 2;
+                graphicsBindGroupLayoutElements[0].slot = 0;
                 graphicsBindGroupLayoutElements[0].count = 1;
                 graphicsBindGroupLayoutElements[0].bindType = EBindType.Texture;
                 graphicsBindGroupLayoutElements[0].shaderStage = EShaderStage.Fragment;
 
-                graphicsBindGroupLayoutElements[1].slot = 2;
+                graphicsBindGroupLayoutElements[1].slot = 1;
                 graphicsBindGroupLayoutElements[1].count = 1;
                 graphicsBindGroupLayoutElements[1].bindType = EBindType.Sampler;
                 graphicsBindGroupLayoutElements[1].shaderStage = EShaderStage.Fragment;
             }
             RHIBindGroupLayoutDescriptor graphicsBindGroupLayoutDescriptor;
             {
-                graphicsBindGroupLayoutDescriptor.index = 3;
+                graphicsBindGroupLayoutDescriptor.index = 0;
                 graphicsBindGroupLayoutDescriptor.elements = new Memory<RHIBindGroupLayoutElement>(graphicsBindGroupLayoutElements);
             }
             m_GraphicsBindGroupLayout = renderContext.CreateBindGroupLayout(graphicsBindGroupLayoutDescriptor);
