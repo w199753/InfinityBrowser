@@ -1,6 +1,7 @@
 ﻿using System.Diagnostics;
 using TerraFX.Interop.DirectX;
 using System.Collections.Generic;
+using TerraFX.Interop.Windows;
 
 namespace Infinity.Graphics
 {
@@ -22,13 +23,6 @@ namespace Infinity.Graphics
                 return m_BindGroupLayout;
             }
         }
-        public ID3D12DescriptorHeap* NativeDescriptorHeap
-        {
-            get
-            {
-                return m_NativeDescriptorHeap;
-            }
-        }
         public Dx12BindGroupParameter[] BindParameters
         {
             get
@@ -38,7 +32,6 @@ namespace Infinity.Graphics
         }
 
         private Dx12BindGroupLayout m_BindGroupLayout;
-        private ID3D12DescriptorHeap* m_NativeDescriptorHeap;
         private Dx12BindGroupParameter[] m_BindParameters;
 
         public Dx12BindGroup(in RHIBindGroupDescriptor descriptor)
@@ -51,69 +44,70 @@ namespace Infinity.Graphics
 
             for (int i = 0; i < descriptor.elements.Length; ++i)
             {
+                ref Dx12BindInfo bindInfo = ref bindGroupLayout.BindInfos[i];
                 ref RHIBindGroupElement element = ref descriptor.elements.Span[i];
-                ref Dx12RootParameterKeyInfo keyInfo = ref bindGroupLayout.RootParameterKeyInfos[i];
 
-                //D3D12_GPU_DESCRIPTOR_HANDLE handle = default;
                 ref Dx12BindGroupParameter bindParameter = ref m_BindParameters[i];
-                GetDescriptorHandleAndHeap(ref bindParameter.dx12GpuDescriptorHandle, ref m_NativeDescriptorHeap, keyInfo, element);
+                switch (bindInfo.bindType)
+                {
+                    case EBindType.Buffer:
+                    case EBindType.UniformBuffer:
+                    case EBindType.StorageBuffer:
+                        Dx12BufferView bufferView = element.bufferView as Dx12BufferView;
+                        bindParameter.dx12GpuDescriptorHandle = bufferView.NativeGpuDescriptorHandle;
+                        break;
 
-                //ref Dx12BindGroupParameter bindParameter = ref m_BindParameters[i];
-                //bindParameter.slot = element.slot;
-                //bindParameter.slot = keyInfo.slot;
-                //bindParameter.count = keyInfo.count;
-                //bindParameter.bindType = element.bindType;
-                //bindParameter.bindType = keyInfo.bindType;
-                //bindParameter.dx12GpuDescriptorHandle = handle;
+                    case EBindType.Sampler:
+                        Dx12Sampler textureSampler = element.textureSampler as Dx12Sampler;
+                        bindParameter.dx12GpuDescriptorHandle = textureSampler.NativeGpuDescriptorHandle;
+                        break;
+
+                    case EBindType.Texture:
+                    case EBindType.StorageTexture:
+                        Dx12TextureView textureView = element.textureView as Dx12TextureView;
+                        bindParameter.dx12GpuDescriptorHandle = textureView.NativeGpuDescriptorHandle;
+                        break;
+
+                    case EBindType.ArrayTexture:
+                        //Todo Bindless
+                        break;
+                }
             }
         }
 
-        internal unsafe static void GetDescriptorHandleAndHeap(ref D3D12_GPU_DESCRIPTOR_HANDLE handle, ref ID3D12DescriptorHeap* heap, in Dx12RootParameterKeyInfo keyInfo, in RHIBindGroupElement element)
+        public override void SetBindElement(in RHIBindGroupElement element, in EBindType bindType, in int slot)
         {
-            if (keyInfo.bindType == EBindType.Sampler)
-            {
-                if (keyInfo.Bindless)
-                {
+            ref Dx12BindGroupParameter bindParameter = ref m_BindParameters[slot];
 
-                }
-                else
-                {
-                    Dx12Sampler textureSampler = element.textureSampler as Dx12Sampler;
-                    heap = textureSampler.NativeDescriptorHeap;
-                    handle = textureSampler.NativeGpuDescriptorHandle;
-                }
-            }
-            else if (keyInfo.bindType == EBindType.Texture || keyInfo.bindType == EBindType.StorageTexture)
+            switch (bindType)
             {
-                if (keyInfo.Bindless)
-                {
-
-                }
-                else
-                {
-                    Dx12TextureView textureView = element.textureView as Dx12TextureView;
-                    heap = textureView.NativeDescriptorHeap;
-                    handle = textureView.NativeGpuDescriptorHandle;
-                }
-            }
-            else if (keyInfo.bindType == EBindType.Buffer || keyInfo.bindType == EBindType.UniformBuffer || keyInfo.bindType == EBindType.StorageBuffer)
-            {
-                if (keyInfo.Bindless)
-                {
-
-                }
-                else
-                {
+                case EBindType.Buffer:
+                case EBindType.UniformBuffer:
+                case EBindType.StorageBuffer:
                     Dx12BufferView bufferView = element.bufferView as Dx12BufferView;
-                    heap = bufferView.NativeDescriptorHeap;
-                    handle = bufferView.NativeGpuDescriptorHandle;
-                }
+                    bindParameter.dx12GpuDescriptorHandle = bufferView.NativeGpuDescriptorHandle;
+                    break;
+
+                case EBindType.Sampler:
+                    Dx12Sampler textureSampler = element.textureSampler as Dx12Sampler;
+                    bindParameter.dx12GpuDescriptorHandle = textureSampler.NativeGpuDescriptorHandle;
+                    break;
+
+                case EBindType.Texture:
+                case EBindType.StorageTexture:
+                    Dx12TextureView textureView = element.textureView as Dx12TextureView;
+                    bindParameter.dx12GpuDescriptorHandle = textureView.NativeGpuDescriptorHandle;
+                    break;
+
+                case EBindType.ArrayTexture:
+                    //Todo Bindless
+                    break;
             }
         }
 
         protected override void Release()
         {
-            m_NativeDescriptorHeap = null;
+
         }
     }
 #pragma warning restore CS8600, CS8602, CS8604, CS8618, CA1416

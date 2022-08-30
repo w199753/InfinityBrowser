@@ -195,9 +195,11 @@
         Buffer,
         Texture,
         Sampler,
+        ArrayTexture,
         UniformBuffer,
         StorageBuffer,
         StorageTexture,
+        PipelineConstant
     }
 
     public enum EVertexStepMode : byte

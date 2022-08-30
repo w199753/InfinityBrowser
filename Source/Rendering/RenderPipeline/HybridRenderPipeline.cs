@@ -371,7 +371,7 @@ namespace Infinity.Rendering
             /*RHIBindGroupElement[] graphicsBindGroupElements = new RHIBindGroupElement[2];
             {
                 graphicsBindGroupElements[0].textureView = m_ComputeTextureView;
-                graphicsBindGroupElements[1].textureSampler = textureSampler;
+                graphicsBindGroupElements[1].textureSampler = m_ComputeSampler;
             }
             RHIBindGroupDescriptor graphicsBindGroupDescriptor = new RHIBindGroupDescriptor();
             {

@@ -19,6 +19,6 @@ namespace Infinity.Graphics
 
     public abstract class RHIBindGroup : Disposal
     {
-
+        public abstract void SetBindElement(in RHIBindGroupElement element, in EBindType bindType, in int slot);
     }
 }

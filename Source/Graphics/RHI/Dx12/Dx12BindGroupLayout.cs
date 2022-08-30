@@ -5,7 +5,7 @@ using System.Collections.Generic;
 namespace Infinity.Graphics
 {
 #pragma warning disable CS8600, CS8602, CS8604, CS8618, CA1416
-    internal struct Dx12RootParameterKeyInfo
+    internal struct Dx12BindInfo
     {
         public int slot;
         public int index;
@@ -13,7 +13,7 @@ namespace Infinity.Graphics
         public EBindType bindType;
         public EShaderStage shaderStage;
 
-        internal bool Bindless => count > 1;
+        internal bool Bindless => bindType == EBindType.ArrayTexture;
     }
 
     internal unsafe class Dx12BindGroupLayout : RHIBindGroupLayout
@@ -25,46 +25,32 @@ namespace Infinity.Graphics
                 return m_Index;
             }
         }
-        /*public D3D12_ROOT_PARAMETER1[] NativeRootParameters
+        public Dx12BindInfo[] BindInfos
         {
             get
             {
-                return m_NativeRootParameters;
-            }
-        }*/
-        public Dx12RootParameterKeyInfo[] RootParameterKeyInfos
-        {
-            get
-            {
-                return m_RootParameterKeyInfos;
+                return m_BindInfos;
             }
         }
 
         private int m_Index;
-        //private D3D12_ROOT_PARAMETER1[] m_NativeRootParameters;
-        private Dx12RootParameterKeyInfo[] m_RootParameterKeyInfos;
+        private Dx12BindInfo[] m_BindInfos;
 
         public Dx12BindGroupLayout(in RHIBindGroupLayoutDescriptor descriptor)
         {
             m_Index = descriptor.index;
-            //m_NativeRootParameters = new D3D12_ROOT_PARAMETER1[descriptor.elementCount];
-            m_RootParameterKeyInfos = new Dx12RootParameterKeyInfo[descriptor.elements.Length];
+            m_BindInfos = new Dx12BindInfo[descriptor.elements.Length];
 
             Span<RHIBindGroupLayoutElement> elements = descriptor.elements.Span;
             for (int i = 0; i < descriptor.elements.Length; ++i)
             {
-                //ref RHIBindGroupLayoutElement element = ref elements[i];
-                //D3D12_DESCRIPTOR_RANGE1 dx12DescriptorRange = new D3D12_DESCRIPTOR_RANGE1();
-                //dx12DescriptorRange.Init(Dx12Utility.ConvertToDx12BindType(element.bindType), 1, (uint)element.slot, (uint)descriptor.layoutIndex, D3D12_DESCRIPTOR_RANGE_FLAGS.D3D12_DESCRIPTOR_RANGE_FLAG_DATA_STATIC);
-                //m_NativeRootParameters[i].InitAsDescriptorTable(1, &dx12DescriptorRange, Dx12Utility.ConvertToDx12ShaderStage(element.shaderStage));
-
                 ref RHIBindGroupLayoutElement element = ref elements[i];
-                ref Dx12RootParameterKeyInfo keyInfo = ref m_RootParameterKeyInfos[i];
-                keyInfo.slot = element.slot;
-                keyInfo.index = descriptor.index;
-                keyInfo.count = element.count;
-                keyInfo.bindType = element.bindType;
-                keyInfo.shaderStage = element.shaderStage;
+                ref Dx12BindInfo bindInfo = ref m_BindInfos[i];
+                bindInfo.slot = element.slot;
+                bindInfo.index = descriptor.index;
+                bindInfo.count = element.count;
+                bindInfo.bindType = element.bindType;
+                bindInfo.shaderStage = element.shaderStage;
             }
         }
 
