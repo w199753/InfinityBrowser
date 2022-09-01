@@ -40,9 +40,9 @@ namespace Infinity.Graphics
 
         internal static D3D12_FILTER ConvertToDx12Filter(in RHISamplerDescriptor descriptor)
         {
-            EFilterMode minFilter = descriptor.minFilter;
-            EFilterMode magFilter = descriptor.magFilter;
-            EFilterMode mipFilter = descriptor.mipFilter;
+            EFilterMode minFilter = descriptor.MinFilter;
+            EFilterMode magFilter = descriptor.MagFilter;
+            EFilterMode mipFilter = descriptor.MipFilter;
 
             if (minFilter == EFilterMode.Point && magFilter == EFilterMode.Point && mipFilter == EFilterMode.Point) { return D3D12_FILTER.D3D12_FILTER_MIN_MAG_MIP_POINT; }
             if (minFilter == EFilterMode.Point && magFilter == EFilterMode.Point && mipFilter == EFilterMode.Linear)  { return D3D12_FILTER.D3D12_FILTER_MIN_MAG_POINT_MIP_LINEAR; }
@@ -327,20 +327,20 @@ namespace Infinity.Graphics
         internal static unsafe D3D12_BLEND_DESC CreateDx12BlendState(in RHIBlendStateDescriptor blendStateDescriptor)
         {
             D3D12_BLEND_DESC blendDescription = new D3D12_BLEND_DESC();
-            blendDescription.AlphaToCoverageEnable = blendStateDescriptor.alphaToCoverage;
-            blendDescription.IndependentBlendEnable = blendStateDescriptor.independentBlend;
-            fixed (RHIBlendDescriptor* blendDescriptorPtr = &blendStateDescriptor.blendDescriptor0)
+            blendDescription.AlphaToCoverageEnable = blendStateDescriptor.AlphaToCoverage;
+            blendDescription.IndependentBlendEnable = blendStateDescriptor.IndependentBlend;
+            fixed (RHIBlendDescriptor* blendDescriptorPtr = &blendStateDescriptor.BlendDescriptor0)
             {
                 for (int i = 0; i < 8; i++)
                 {
-                    blendDescription.RenderTarget[i].BlendEnable = blendDescriptorPtr[i].blendEnable;
-                    blendDescription.RenderTarget[i].BlendOp = (D3D12_BLEND_OP)blendDescriptorPtr[i].blendOpColor;
-                    blendDescription.RenderTarget[i].SrcBlend = (D3D12_BLEND)blendDescriptorPtr[i].srcBlendColor;
-                    blendDescription.RenderTarget[i].DestBlend = (D3D12_BLEND)blendDescriptorPtr[i].dstBlendColor;
-                    blendDescription.RenderTarget[i].BlendOpAlpha = (D3D12_BLEND_OP)blendDescriptorPtr[i].blendOpAlpha;
-                    blendDescription.RenderTarget[i].SrcBlendAlpha = (D3D12_BLEND)blendDescriptorPtr[i].srcBlendAlpha;
-                    blendDescription.RenderTarget[i].DestBlendAlpha = (D3D12_BLEND)blendDescriptorPtr[i].dstBlendAlpha;
-                    blendDescription.RenderTarget[i].RenderTargetWriteMask = (byte)blendDescriptorPtr[i].colorWriteChannel;
+                    blendDescription.RenderTarget[i].BlendEnable = blendDescriptorPtr[i].BlendEnable;
+                    blendDescription.RenderTarget[i].BlendOp = (D3D12_BLEND_OP)blendDescriptorPtr[i].BlendOpColor;
+                    blendDescription.RenderTarget[i].SrcBlend = (D3D12_BLEND)blendDescriptorPtr[i].SrcBlendColor;
+                    blendDescription.RenderTarget[i].DestBlend = (D3D12_BLEND)blendDescriptorPtr[i].DstBlendColor;
+                    blendDescription.RenderTarget[i].BlendOpAlpha = (D3D12_BLEND_OP)blendDescriptorPtr[i].BlendOpAlpha;
+                    blendDescription.RenderTarget[i].SrcBlendAlpha = (D3D12_BLEND)blendDescriptorPtr[i].SrcBlendAlpha;
+                    blendDescription.RenderTarget[i].DestBlendAlpha = (D3D12_BLEND)blendDescriptorPtr[i].DstBlendAlpha;
+                    blendDescription.RenderTarget[i].RenderTargetWriteMask = (byte)blendDescriptorPtr[i].ColorWriteChannel;
                 }
             }
             return blendDescription;
@@ -353,13 +353,13 @@ namespace Infinity.Graphics
             rasterDescription.CullMode = (D3D12_CULL_MODE)description.CullMode;
             rasterDescription.ForcedSampleCount = 0;
             rasterDescription.MultisampleEnable = bMultisample;
-            rasterDescription.DepthBias = description.depthBias;
-            rasterDescription.DepthBiasClamp = description.depthBiasClamp;
-            rasterDescription.DepthClipEnable = description.depthClipEnable;
-            rasterDescription.SlopeScaledDepthBias = description.slopeScaledDepthBias;
-            rasterDescription.AntialiasedLineEnable = description.antialiasedLineEnable;
-            rasterDescription.FrontCounterClockwise = description.frontCounterClockwise;
-            rasterDescription.ConservativeRaster = description.conservativeRaster ? D3D12_CONSERVATIVE_RASTERIZATION_MODE.D3D12_CONSERVATIVE_RASTERIZATION_MODE_ON : D3D12_CONSERVATIVE_RASTERIZATION_MODE.D3D12_CONSERVATIVE_RASTERIZATION_MODE_OFF;
+            rasterDescription.DepthBias = description.DepthBias;
+            rasterDescription.DepthBiasClamp = description.DepthBiasClamp;
+            rasterDescription.DepthClipEnable = description.DepthClipEnable;
+            rasterDescription.SlopeScaledDepthBias = description.SlopeScaledDepthBias;
+            rasterDescription.AntialiasedLineEnable = description.AntialiasedLineEnable;
+            rasterDescription.FrontCounterClockwise = description.FrontCounterClockwise;
+            rasterDescription.ConservativeRaster = description.ConservativeRaster ? D3D12_CONSERVATIVE_RASTERIZATION_MODE.D3D12_CONSERVATIVE_RASTERIZATION_MODE_ON : D3D12_CONSERVATIVE_RASTERIZATION_MODE.D3D12_CONSERVATIVE_RASTERIZATION_MODE_OFF;
             return rasterDescription;
         }
 
@@ -398,28 +398,28 @@ namespace Infinity.Graphics
         {
             D3D12_DEPTH_STENCIL_DESC depthStencilDescription = new D3D12_DEPTH_STENCIL_DESC
             {
-                DepthEnable = depthStencilStateDescriptor.depthEnable,
-                DepthFunc = ConvertToDx12Comparison(depthStencilStateDescriptor.comparisonMode),
-                DepthWriteMask = depthStencilStateDescriptor.depthWriteMask ? D3D12_DEPTH_WRITE_MASK.D3D12_DEPTH_WRITE_MASK_ALL : D3D12_DEPTH_WRITE_MASK.D3D12_DEPTH_WRITE_MASK_ZERO,
-                StencilEnable = depthStencilStateDescriptor.stencilEnable,
-                StencilReadMask = depthStencilStateDescriptor.stencilReadMask,
-                StencilWriteMask = depthStencilStateDescriptor.stencilWriteMask
+                DepthEnable = depthStencilStateDescriptor.DepthEnable,
+                DepthFunc = ConvertToDx12Comparison(depthStencilStateDescriptor.ComparisonMode),
+                DepthWriteMask = depthStencilStateDescriptor.DepthWriteMask ? D3D12_DEPTH_WRITE_MASK.D3D12_DEPTH_WRITE_MASK_ALL : D3D12_DEPTH_WRITE_MASK.D3D12_DEPTH_WRITE_MASK_ZERO,
+                StencilEnable = depthStencilStateDescriptor.StencilEnable,
+                StencilReadMask = depthStencilStateDescriptor.StencilReadMask,
+                StencilWriteMask = depthStencilStateDescriptor.StencilWriteMask
             };
             D3D12_DEPTH_STENCILOP_DESC frontFaceDescription = new D3D12_DEPTH_STENCILOP_DESC
             {
-                StencilFunc = ConvertToDx12Comparison(depthStencilStateDescriptor.frontFaceDescriptor.comparisonMode),
-                StencilFailOp = (D3D12_STENCIL_OP)depthStencilStateDescriptor.frontFaceDescriptor.stencilFailOp,
-                StencilPassOp = (D3D12_STENCIL_OP)depthStencilStateDescriptor.frontFaceDescriptor.stencilPassOp,
-                StencilDepthFailOp = (D3D12_STENCIL_OP)depthStencilStateDescriptor.frontFaceDescriptor.stencilDepthFailOp
+                StencilFunc = ConvertToDx12Comparison(depthStencilStateDescriptor.FrontFaceDescriptor.ComparisonMode),
+                StencilFailOp = (D3D12_STENCIL_OP)depthStencilStateDescriptor.FrontFaceDescriptor.StencilFailOp,
+                StencilPassOp = (D3D12_STENCIL_OP)depthStencilStateDescriptor.FrontFaceDescriptor.StencilPassOp,
+                StencilDepthFailOp = (D3D12_STENCIL_OP)depthStencilStateDescriptor.FrontFaceDescriptor.StencilDepthFailOp
             };
             depthStencilDescription.FrontFace = frontFaceDescription;
 
             D3D12_DEPTH_STENCILOP_DESC backFaceDescription = new D3D12_DEPTH_STENCILOP_DESC
             {
-                StencilFunc = ConvertToDx12Comparison(depthStencilStateDescriptor.backFaceDescriptor.comparisonMode),
-                StencilFailOp = (D3D12_STENCIL_OP)depthStencilStateDescriptor.backFaceDescriptor.stencilFailOp,
-                StencilPassOp = (D3D12_STENCIL_OP)depthStencilStateDescriptor.backFaceDescriptor.stencilPassOp,
-                StencilDepthFailOp = (D3D12_STENCIL_OP)depthStencilStateDescriptor.backFaceDescriptor.stencilDepthFailOp
+                StencilFunc = ConvertToDx12Comparison(depthStencilStateDescriptor.BackFaceDescriptor.ComparisonMode),
+                StencilFailOp = (D3D12_STENCIL_OP)depthStencilStateDescriptor.BackFaceDescriptor.StencilFailOp,
+                StencilPassOp = (D3D12_STENCIL_OP)depthStencilStateDescriptor.BackFaceDescriptor.StencilPassOp,
+                StencilDepthFailOp = (D3D12_STENCIL_OP)depthStencilStateDescriptor.BackFaceDescriptor.StencilDepthFailOp
             };
             depthStencilDescription.BackFace = backFaceDescription;
             return depthStencilDescription;
@@ -635,7 +635,7 @@ namespace Infinity.Graphics
             int num = 0;
             for (int i = 0; i < vertexLayoutDescriptors.Length; ++i)
             {
-                num += vertexLayoutDescriptors[i].vertexElementDescriptors.Length;
+                num += vertexLayoutDescriptors[i].VertexElementDescriptors.Length;
             }
 
             return num;
@@ -649,7 +649,7 @@ namespace Infinity.Graphics
             while (slot < vertexLayoutDescriptors.Length)
             {
                 ref RHIVertexLayoutDescriptor vertexLayoutDescriptor = ref vertexLayoutDescriptors[slot];
-                Span<RHIVertexElementDescriptor> vertexElementDescriptors = vertexLayoutDescriptor.vertexElementDescriptors.Span;
+                Span<RHIVertexElementDescriptor> vertexElementDescriptors = vertexLayoutDescriptor.VertexElementDescriptors.Span;
 
                 int num6 = 0;
 
@@ -661,15 +661,15 @@ namespace Infinity.Graphics
                         break;
                     }
                     RHIVertexElementDescriptor vertexElementDescriptor = vertexElementDescriptors[num6];
-                    byte[] semanticByte = ConvertToDx12SemanticNameByte(vertexElementDescriptor.type);
+                    byte[] semanticByte = ConvertToDx12SemanticNameByte(vertexElementDescriptor.Type);
                     ref D3D12_INPUT_ELEMENT_DESC element = ref inputElementsView[index];
-                    element.Format = ConvertToDx12SemanticFormat(vertexElementDescriptor.format);
+                    element.Format = ConvertToDx12SemanticFormat(vertexElementDescriptor.Format);
                     element.InputSlot = (uint)slot;
                     element.SemanticName = (sbyte*)Unsafe.AsPointer(ref MemoryMarshal.GetReference(new ReadOnlySpan<byte>(semanticByte)));
-                    element.SemanticIndex = vertexElementDescriptor.index;
-                    element.InputSlotClass = ConvertToDx12InputSlotClass(vertexLayoutDescriptor.stepMode);
-                    element.AlignedByteOffset = (uint)vertexElementDescriptor.offset;
-                    element.InstanceDataStepRate = (uint)vertexLayoutDescriptor.stepRate;
+                    element.SemanticIndex = vertexElementDescriptor.Index;
+                    element.InputSlotClass = ConvertToDx12InputSlotClass(vertexLayoutDescriptor.StepMode);
+                    element.AlignedByteOffset = (uint)vertexElementDescriptor.Offset;
+                    element.InstanceDataStepRate = (uint)vertexLayoutDescriptor.StepRate;
 
                     ++num6;
                     ++index;
@@ -765,12 +765,12 @@ namespace Infinity.Graphics
         {
             D3D12_CLEAR_FLAGS result = new D3D12_CLEAR_FLAGS();
 
-            if (depthStencilAttachment.depthLoadOp == ELoadOp.Clear) 
+            if (depthStencilAttachment.DepthLoadOp == ELoadOp.Clear) 
             {
                 result |= D3D12_CLEAR_FLAGS.D3D12_CLEAR_FLAG_DEPTH;
             }
 
-            if (depthStencilAttachment.stencilLoadOp == ELoadOp.Clear) 
+            if (depthStencilAttachment.StencilLoadOp == ELoadOp.Clear) 
             {
                 result |= D3D12_CLEAR_FLAGS.D3D12_CLEAR_FLAG_STENCIL;
             }
@@ -824,118 +824,118 @@ namespace Infinity.Graphics
 
         internal static void FillTexture2DSRV(ref D3D12_TEX2D_SRV srv, in RHITextureViewDescriptor descriptor)
         {
-            if (!((descriptor.dimension & ETextureViewDimension.Texture2D) == ETextureViewDimension.Texture2D)) {
+            if (!((descriptor.Dimension & ETextureViewDimension.Texture2D) == ETextureViewDimension.Texture2D)) {
                 return;
             }
-            srv.MostDetailedMip = (uint)descriptor.baseMipLevel;
-            srv.MipLevels = (uint)descriptor.mipCount;
+            srv.MostDetailedMip = (uint)descriptor.BaseMipLevel;
+            srv.MipLevels = (uint)descriptor.MipCount;
             srv.PlaneSlice = 0;
-            srv.ResourceMinLODClamp = descriptor.baseMipLevel;
+            srv.ResourceMinLODClamp = descriptor.BaseMipLevel;
         }
 
         internal static void FillTexture2DArraySRV(ref D3D12_TEX2D_ARRAY_SRV srv, in RHITextureViewDescriptor descriptor)
         {
-            if (!((descriptor.dimension & ETextureViewDimension.Texture2DArray) == ETextureViewDimension.Texture2DArray)) {
+            if (!((descriptor.Dimension & ETextureViewDimension.Texture2DArray) == ETextureViewDimension.Texture2DArray)) {
                 return;
             }
-            srv.MostDetailedMip = (uint)descriptor.baseMipLevel;
-            srv.MipLevels = (uint)descriptor.mipCount;
-            srv.FirstArraySlice = (uint)descriptor.baseArrayLayer;
-            srv.ArraySize = (uint)descriptor.arrayLayerCount;
+            srv.MostDetailedMip = (uint)descriptor.BaseMipLevel;
+            srv.MipLevels = (uint)descriptor.MipCount;
+            srv.FirstArraySlice = (uint)descriptor.BaseArrayLayer;
+            srv.ArraySize = (uint)descriptor.ArrayLayerCount;
             srv.PlaneSlice = 0;
-            srv.ResourceMinLODClamp = descriptor.baseMipLevel;
+            srv.ResourceMinLODClamp = descriptor.BaseMipLevel;
         }
 
         internal static void FillTextureCubeSRV(ref D3D12_TEXCUBE_SRV srv, in RHITextureViewDescriptor descriptor)
         {
-            if (!((descriptor.dimension & ETextureViewDimension.TextureCube) == ETextureViewDimension.TextureCube)) {
+            if (!((descriptor.Dimension & ETextureViewDimension.TextureCube) == ETextureViewDimension.TextureCube)) {
                 return;
             }
-            srv.MipLevels = (uint)descriptor.mipCount;
-            srv.MostDetailedMip = (uint)descriptor.baseMipLevel;
-            srv.ResourceMinLODClamp = descriptor.baseMipLevel;
+            srv.MipLevels = (uint)descriptor.MipCount;
+            srv.MostDetailedMip = (uint)descriptor.BaseMipLevel;
+            srv.ResourceMinLODClamp = descriptor.BaseMipLevel;
         }
 
         internal static void FillTextureCubeArraySRV(ref D3D12_TEXCUBE_ARRAY_SRV srv, in RHITextureViewDescriptor descriptor)
         {
-            if (!((descriptor.dimension & ETextureViewDimension.TextureCubeArray) == ETextureViewDimension.TextureCubeArray)) {
+            if (!((descriptor.Dimension & ETextureViewDimension.TextureCubeArray) == ETextureViewDimension.TextureCubeArray)) {
                 return;
             }
-            srv.MostDetailedMip = (uint)descriptor.baseMipLevel;
-            srv.MipLevels = (uint)descriptor.mipCount;
-            srv.NumCubes = (uint)descriptor.arrayLayerCount;
-            srv.First2DArrayFace = (uint)descriptor.baseArrayLayer;
-            srv.ResourceMinLODClamp = descriptor.baseMipLevel;
+            srv.MostDetailedMip = (uint)descriptor.BaseMipLevel;
+            srv.MipLevels = (uint)descriptor.MipCount;
+            srv.NumCubes = (uint)descriptor.ArrayLayerCount;
+            srv.First2DArrayFace = (uint)descriptor.BaseArrayLayer;
+            srv.ResourceMinLODClamp = descriptor.BaseMipLevel;
         }
 
         internal static void FillTexture3DSRV(ref D3D12_TEX3D_SRV srv, in RHITextureViewDescriptor descriptor)
         {
-            if (!((descriptor.dimension & ETextureViewDimension.Texture3D) == ETextureViewDimension.Texture3D)) {
+            if (!((descriptor.Dimension & ETextureViewDimension.Texture3D) == ETextureViewDimension.Texture3D)) {
                 return;
             }
-            srv.MipLevels = (uint)descriptor.mipCount;
-            srv.MostDetailedMip = (uint)descriptor.baseMipLevel;
-            srv.ResourceMinLODClamp = descriptor.baseMipLevel;
+            srv.MipLevels = (uint)descriptor.MipCount;
+            srv.MostDetailedMip = (uint)descriptor.BaseMipLevel;
+            srv.ResourceMinLODClamp = descriptor.BaseMipLevel;
         }
 
         internal static void FillTexture2DUAV(ref D3D12_TEX2D_UAV uav, in RHITextureViewDescriptor descriptor)
         {
-            if (!((descriptor.dimension & ETextureViewDimension.Texture2D) == ETextureViewDimension.Texture2D)) {
+            if (!((descriptor.Dimension & ETextureViewDimension.Texture2D) == ETextureViewDimension.Texture2D)) {
                 return;
             }
-            uav.MipSlice = (uint)descriptor.baseMipLevel;
+            uav.MipSlice = (uint)descriptor.BaseMipLevel;
             uav.PlaneSlice = 0;
         }
 
         internal static void FillTexture2DArrayUAV(ref D3D12_TEX2D_ARRAY_UAV uav, in RHITextureViewDescriptor descriptor)
         {
-            if (!((descriptor.dimension & ETextureViewDimension.Texture2DArray) == ETextureViewDimension.Texture2DArray)) {
+            if (!((descriptor.Dimension & ETextureViewDimension.Texture2DArray) == ETextureViewDimension.Texture2DArray)) {
                 return;
             }
-            uav.MipSlice = (uint)descriptor.baseMipLevel;
-            uav.FirstArraySlice = (uint)descriptor.baseArrayLayer;
-            uav.ArraySize = (uint)descriptor.arrayLayerCount;
+            uav.MipSlice = (uint)descriptor.BaseMipLevel;
+            uav.FirstArraySlice = (uint)descriptor.BaseArrayLayer;
+            uav.ArraySize = (uint)descriptor.ArrayLayerCount;
             uav.PlaneSlice = 0;
         }
 
         internal static void FillTexture3DUAV(ref D3D12_TEX3D_UAV uav, in RHITextureViewDescriptor descriptor)
         {
-            if (!((descriptor.dimension & ETextureViewDimension.Texture3D) == ETextureViewDimension.Texture3D)) {
+            if (!((descriptor.Dimension & ETextureViewDimension.Texture3D) == ETextureViewDimension.Texture3D)) {
                 return;
             }
-            uav.WSize = (uint)descriptor.arrayLayerCount;
-            uav.MipSlice = (uint)descriptor.baseMipLevel;
-            uav.FirstWSlice = (uint)descriptor.baseArrayLayer;
+            uav.WSize = (uint)descriptor.ArrayLayerCount;
+            uav.MipSlice = (uint)descriptor.BaseMipLevel;
+            uav.FirstWSlice = (uint)descriptor.BaseArrayLayer;
         }
 
         internal static void FillTexture2DRTV(ref D3D12_TEX2D_RTV rtv, in RHITextureViewDescriptor descriptor)
         {
-            if (!((descriptor.dimension & ETextureViewDimension.Texture2D) == ETextureViewDimension.Texture2D)) {
+            if (!((descriptor.Dimension & ETextureViewDimension.Texture2D) == ETextureViewDimension.Texture2D)) {
                 return;
             }
-            rtv.MipSlice = (uint)descriptor.baseMipLevel;
+            rtv.MipSlice = (uint)descriptor.BaseMipLevel;
             rtv.PlaneSlice = 0;
         }
 
         internal static void FillTexture2DArrayRTV(ref D3D12_TEX2D_ARRAY_RTV rtv, in RHITextureViewDescriptor descriptor)
         {
-            if (!((descriptor.dimension & ETextureViewDimension.Texture2DArray) == ETextureViewDimension.Texture2DArray)) {
+            if (!((descriptor.Dimension & ETextureViewDimension.Texture2DArray) == ETextureViewDimension.Texture2DArray)) {
                 return;
             }
-            rtv.MipSlice = (uint)descriptor.baseMipLevel;
-            rtv.FirstArraySlice = (uint)descriptor.baseArrayLayer;
-            rtv.ArraySize = (uint)descriptor.arrayLayerCount;
+            rtv.MipSlice = (uint)descriptor.BaseMipLevel;
+            rtv.FirstArraySlice = (uint)descriptor.BaseArrayLayer;
+            rtv.ArraySize = (uint)descriptor.ArrayLayerCount;
             rtv.PlaneSlice = 0;
         }
 
         internal static void FillTexture3DRTV(ref D3D12_TEX3D_RTV rtv, in RHITextureViewDescriptor descriptor)
         {
-            if (!((descriptor.dimension & ETextureViewDimension.Texture3D) == ETextureViewDimension.Texture3D)) {
+            if (!((descriptor.Dimension & ETextureViewDimension.Texture3D) == ETextureViewDimension.Texture3D)) {
                 return;
             }
-            rtv.WSize = (uint)descriptor.arrayLayerCount;
-            rtv.MipSlice = (uint)descriptor.baseMipLevel;
-            rtv.FirstWSlice = (uint)descriptor.baseArrayLayer;
+            rtv.WSize = (uint)descriptor.ArrayLayerCount;
+            rtv.MipSlice = (uint)descriptor.BaseMipLevel;
+            rtv.FirstWSlice = (uint)descriptor.BaseArrayLayer;
         }
     }
 #pragma warning restore CS8600, CS8602

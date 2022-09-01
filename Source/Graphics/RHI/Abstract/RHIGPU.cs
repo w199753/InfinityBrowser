@@ -2,9 +2,9 @@
 {
     public struct RHIGpuProperty
     {
-        public EGpuType type;
-        public uint vendorId;
-        public uint deviceId;
+        public EGpuType Type;
+        public uint VendorId;
+        public uint DeviceId;
     }
 
     public abstract class RHIGPU : Disposal

@@ -86,10 +86,10 @@ namespace Infinity.Rendering
             // Create Instance
             RHIInstanceDescriptor descriptor;
             {
-                descriptor.backend = ERHIBackend.DirectX12;
-                //descriptor.backend = RHIInstance.GetPlatformBackend(false);
-                descriptor.enableDebugLayer = true;
-                descriptor.enableGpuValidatior = false;
+                descriptor.Backend = ERHIBackend.DirectX12;
+                //descriptor.Backend = RHIInstance.GetPlatformBackend(false);
+                descriptor.EnableDebugLayer = true;
+                descriptor.EnableGpuValidatior = false;
             }
             m_Instance = RHIInstance.Create(descriptor);
 
@@ -99,16 +99,16 @@ namespace Infinity.Rendering
             // Create Device
             RHIQueueDescriptor[] queueInfos = new RHIQueueDescriptor[3];
             {
-                queueInfos[0].count = 1;
-                queueInfos[0].type = EQueueType.Blit;
-                queueInfos[1].count = 1;
-                queueInfos[1].type = EQueueType.Compute;
-                queueInfos[2].count = 1;
-                queueInfos[2].type = EQueueType.Graphics;
+                queueInfos[0].Count = 1;
+                queueInfos[0].Type = EQueueType.Blit;
+                queueInfos[1].Count = 1;
+                queueInfos[1].Type = EQueueType.Compute;
+                queueInfos[2].Count = 1;
+                queueInfos[2].Type = EQueueType.Graphics;
             }
             Memory<RHIQueueDescriptor> queueInfosView = new Memory<RHIQueueDescriptor>(queueInfos);
             RHIDeviceDescriptor deviceDescriptor = new RHIDeviceDescriptor();
-            deviceDescriptor.queueInfos = queueInfosView;
+            deviceDescriptor.QueueInfos = queueInfosView;
             m_Device = m_Gpu.CreateDevice(deviceDescriptor);
 
             // Get GpuQueue
@@ -119,22 +119,22 @@ namespace Infinity.Rendering
 
             // Create SwapChain
             RHISwapChainDescriptor swapChainDescriptor = new RHISwapChainDescriptor();
-            swapChainDescriptor.count = 3;
-            swapChainDescriptor.surface = surface;
-            swapChainDescriptor.frameBufferOnly = true;
-            swapChainDescriptor.extent = m_ScreenSize;
-            swapChainDescriptor.format = EPixelFormat.RGBA8_UNorm;
-            swapChainDescriptor.presentQueue = m_Queues[(int)EQueueType.Graphics];
+            swapChainDescriptor.Count = 3;
+            swapChainDescriptor.Extent = m_ScreenSize;
+            swapChainDescriptor.Format = EPixelFormat.RGBA8_UNorm;
+            swapChainDescriptor.Surface = surface;
+            swapChainDescriptor.PresentQueue = m_Queues[(int)EQueueType.Graphics];
+            swapChainDescriptor.FrameBufferOnly = true;
             m_SwapChain = m_Device.CreateSwapChain(swapChainDescriptor);
 
             RHITextureViewDescriptor viewDescriptor = new RHITextureViewDescriptor();
-            viewDescriptor.mipCount = 1;
-            viewDescriptor.baseMipLevel = 0;
-            viewDescriptor.arrayLayerCount = 1;
-            viewDescriptor.baseArrayLayer = 0;
-            viewDescriptor.format = EPixelFormat.RGBA8_UNorm;
-            viewDescriptor.viewType = ETextureViewType.RenderTarget;
-            viewDescriptor.dimension = ETextureViewDimension.Texture2D;
+            viewDescriptor.MipCount = 1;
+            viewDescriptor.BaseMipLevel = 0;
+            viewDescriptor.ArrayLayerCount = 1;
+            viewDescriptor.BaseArrayLayer = 0;
+            viewDescriptor.Format = EPixelFormat.RGBA8_UNorm;
+            viewDescriptor.ViewType = ETextureViewType.RenderTarget;
+            viewDescriptor.Dimension = ETextureViewDimension.Texture2D;
             m_SwapChainViews = new RHITextureView[3];
             m_SwapChainViews[0] = m_SwapChain.GetTexture(0).CreateTextureView(viewDescriptor);
             m_SwapChainViews[1] = m_SwapChain.GetTexture(1).CreateTextureView(viewDescriptor);

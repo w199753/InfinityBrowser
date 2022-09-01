@@ -4,9 +4,9 @@ namespace Infinity.Graphics
 {
     public struct RHIInstanceDescriptor
     {
-        public ERHIBackend backend;
-        public bool enableDebugLayer;
-        public bool enableGpuValidatior;
+        public ERHIBackend Backend;
+        public bool EnableDebugLayer;
+        public bool EnableGpuValidatior;
     }
 
     public abstract class RHIInstance : Disposal
@@ -41,7 +41,7 @@ namespace Infinity.Graphics
 
         public static RHIInstance? Create(in RHIInstanceDescriptor descriptor)
         {
-            switch (descriptor.backend)
+            switch (descriptor.Backend)
             {
                 case ERHIBackend.Metal:
                     return new MtlInstance(descriptor);

@@ -4,8 +4,8 @@ namespace Infinity.Graphics
 {
     public struct RHIDeviceDescriptor
     {
-        public uint queueInfoCount => (uint)queueInfos.Length;
-        public Memory<RHIQueueDescriptor> queueInfos;
+        public int QueueInfoCount => QueueInfos.Length;
+        public Memory<RHIQueueDescriptor> QueueInfos;
     }
 
     public abstract class RHIDevice : Disposal

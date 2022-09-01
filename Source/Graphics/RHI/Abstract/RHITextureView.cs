@@ -2,13 +2,13 @@
 {
     public struct RHITextureViewDescriptor
     {
-        public int mipCount;
-        public int baseMipLevel;
-        public int arrayLayerCount;
-        public int baseArrayLayer;
-        public EPixelFormat format;
-        public ETextureViewType viewType;
-        public ETextureViewDimension dimension;
+        public int MipCount;
+        public int BaseMipLevel;
+        public int ArrayLayerCount;
+        public int BaseArrayLayer;
+        public EPixelFormat Format;
+        public ETextureViewType ViewType;
+        public ETextureViewDimension Dimension;
     }
 
     public abstract class RHITextureView : Disposal

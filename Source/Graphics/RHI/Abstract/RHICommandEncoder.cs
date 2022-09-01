@@ -5,18 +5,18 @@ namespace Infinity.Graphics
 {
     public struct RHIBufferCopyDescriptor
     {
-        public uint offset;
-        public uint rowPitch;
-        public uint3 textureHeight;
-        public RHIBuffer buffer;
+        public uint Offset;
+        public uint RowPitch;
+        public uint3 TextureHeight;
+        public RHIBuffer Buffer;
     }
 
     public struct RHITextureCopyDescriptor
     {
-        public uint mipLevel;
-        public uint arrayLayer;
-        public uint3 origin;
-        public RHITexture texture;
+        public uint MipLevel;
+        public uint ArrayLayer;
+        public uint3 Origin;
+        public RHITexture Texture;
     }
 
     public struct RHIIndirectDispatchArgs
@@ -66,55 +66,55 @@ namespace Infinity.Graphics
 
     public struct RHIShadingRateDescriptor
     {
-        public EShadingRate shadingRate;
-        public RHITexture? shadingRateTexture;
-        public EShadingRateCombiner shadingRateCombiner;
+        public EShadingRate ShadingRate;
+        public RHITexture? ShadingRateTexture;
+        public EShadingRateCombiner ShadingRateCombiner;
 
         public RHIShadingRateDescriptor(in EShadingRate shadingRate, in EShadingRateCombiner shadingRateCombiner = EShadingRateCombiner.Max)
         {
-            this.shadingRate = shadingRate;
-            this.shadingRateTexture = null;
-            this.shadingRateCombiner = shadingRateCombiner;
+            ShadingRate = shadingRate;
+            ShadingRateTexture = null;
+            ShadingRateCombiner = shadingRateCombiner;
         }
 
         public RHIShadingRateDescriptor(RHITexture shadingRateTexture, in EShadingRateCombiner shadingRateCombiner = EShadingRateCombiner.Max)
         {
-            this.shadingRate = EShadingRate.Rate1x1;
-            this.shadingRateTexture = shadingRateTexture;
-            this.shadingRateCombiner = shadingRateCombiner;
+            ShadingRate = EShadingRate.Rate1x1;
+            ShadingRateTexture = shadingRateTexture;
+            ShadingRateCombiner = shadingRateCombiner;
         }
     }
 
     public struct RHIColorAttachmentDescriptor
     {
-        public ELoadOp loadOp;
-        public EStoreOp storeOp;
-        public float4 clearValue;
-        public RHITextureView renderTarget;
-        public RHITextureView resolveTarget;
+        public ELoadOp LoadOp;
+        public EStoreOp StoreOp;
+        public float4 ClearValue;
+        public RHITextureView RenderTarget;
+        public RHITextureView ResolveTarget;
     }
 
     public struct RHIDepthStencilAttachmentDescriptor
     {
-        public bool depthReadOnly;
-        public float depthClearValue;
-        public ELoadOp depthLoadOp;
-        public EStoreOp depthStoreOp;
-        public bool stencilReadOnly;
-        public int stencilClearValue;
-        public ELoadOp stencilLoadOp;
-        public EStoreOp stencilStoreOp;
-        public RHITextureView depthStencilTarget;
+        public bool DepthReadOnly;
+        public float DepthClearValue;
+        public ELoadOp DepthLoadOp;
+        public EStoreOp DepthStoreOp;
+        public bool StencilReadOnly;
+        public int StencilClearValue;
+        public ELoadOp StencilLoadOp;
+        public EStoreOp StencilStoreOp;
+        public RHITextureView DepthStencilTarget;
     }
 
     public struct RHIGraphicsPassDescriptor
     {
-        public string name;
-        public RHIShadingRateDescriptor? shadingRateDescriptor;
-        public Memory<RHIColorAttachmentDescriptor> colorAttachmentDescriptors;
-        public RHIDepthStencilAttachmentDescriptor? depthStencilAttachmentDescriptor;
-        // TODO timestampWrites https://gpuweb.github.io/gpuweb/#render-pass-encoder-creation
-        // TODO occlusionQuerySet https://gpuweb.github.io/gpuweb/#render-pass-encoder-creation
+        public string Name;
+        public RHIShadingRateDescriptor? ShadingRateDescriptor;
+        public Memory<RHIColorAttachmentDescriptor> ColorAttachmentDescriptors;
+        public RHIDepthStencilAttachmentDescriptor? DepthStencilAttachmentDescriptor;
+        // ToDo TimestampQuery https://gpuweb.github.io/gpuweb/#render-pass-encoder-creation
+        // ToDo OcclusionQuery https://gpuweb.github.io/gpuweb/#render-pass-encoder-creation
     }
 
     public struct RHIBlitPassScoper : IDisposable

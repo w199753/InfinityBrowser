@@ -2,17 +2,16 @@
 {
     public struct RHISamplerDescriptor
     {
-        public int maxAnisotropy;
-        public float lodMinClamp;
-        public float lodMaxClamp;
-        public EFilterMode magFilter;
-        public EFilterMode minFilter;
-        // TODO remove mip filter ?
-        public EFilterMode mipFilter;
-        public EAddressMode addressModeU;
-        public EAddressMode addressModeV;
-        public EAddressMode addressModeW;
-        public EComparisonMode comparisonMode;
+        public int Anisotropy;
+        public float LodMinClamp;
+        public float LodMaxClamp;
+        public EFilterMode MagFilter;
+        public EFilterMode MinFilter;
+        public EFilterMode MipFilter;
+        public EAddressMode AddressModeU;
+        public EAddressMode AddressModeV;
+        public EAddressMode AddressModeW;
+        public EComparisonMode ComparisonMode;
     }
 
     public abstract class RHISampler : Disposal

@@ -195,11 +195,10 @@
         Buffer,
         Texture,
         Sampler,
-        ArrayTexture,
+        Bindless,
         UniformBuffer,
         StorageBuffer,
-        StorageTexture,
-        PipelineConstant
+        StorageTexture
     }
 
     public enum EVertexStepMode : byte
@@ -336,7 +335,7 @@
 
     public enum EPresentMode : byte
     {
-        // TODO check this
+        // ToDo
         // 1. DirectX SwapEffect #see https://docs.microsoft.com/en-us/windows/win32/api/dxgi/ne-dxgi-dxgi_swap_effect
         // 2. Vulkan VkPresentModeKHR #see https://www.khronos.org/registry/vulkan/specs/1.3-extensions/man/html/VkPresentModeKHR.html
         VSync,

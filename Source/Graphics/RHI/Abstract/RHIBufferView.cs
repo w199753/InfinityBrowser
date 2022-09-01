@@ -2,10 +2,10 @@
 {
     public struct RHIBufferViewDescriptor
     {
-        public int count;
-        public int offset;
-        public int stride;
-        public EBufferViewType viewType;
+        public int Count;
+        public int Offset;
+        public int Stride;
+        public EBufferViewType ViewType;
     }
 
     public abstract class RHIBufferView : Disposal

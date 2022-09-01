@@ -35,9 +35,9 @@ namespace Infinity.Graphics
             m_DXGIAdapter->GetDesc1(&desc);
 
             RHIGpuProperty property = new RHIGpuProperty();
-            property.vendorId = desc.VendorId;
-            property.deviceId = desc.DeviceId;
-            property.type = (desc.Flags & (uint)DXGI_ADAPTER_FLAG.DXGI_ADAPTER_FLAG_SOFTWARE) == 1 ? EGpuType.Software : EGpuType.Hardware;
+            property.VendorId = desc.VendorId;
+            property.DeviceId = desc.DeviceId;
+            property.Type = (desc.Flags & (uint)DXGI_ADAPTER_FLAG.DXGI_ADAPTER_FLAG_SOFTWARE) == 1 ? EGpuType.Software : EGpuType.Hardware;
             return property;
         }
 

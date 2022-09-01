@@ -37,20 +37,20 @@ namespace Infinity.Graphics
             m_Dx12Device = device;
 
             D3D12_SAMPLER_DESC desc = new D3D12_SAMPLER_DESC();
-            desc.AddressU = /*Dx12Utility.GetNativeAddressMode(Descriptor->addressModeU)*/D3D12_TEXTURE_ADDRESS_MODE.D3D12_TEXTURE_ADDRESS_MODE_WRAP;
-            desc.AddressV = /*Dx12Utility.GetNativeAddressMode(Descriptor->addressModeV)*/D3D12_TEXTURE_ADDRESS_MODE.D3D12_TEXTURE_ADDRESS_MODE_WRAP;
-            desc.AddressW = /*Dx12Utility.GetNativeAddressMode(Descriptor->addressModeW)*/D3D12_TEXTURE_ADDRESS_MODE.D3D12_TEXTURE_ADDRESS_MODE_WRAP;
+            desc.AddressU = /*Dx12Utility.GetNativeAddressMode(Descriptor->AddressModeU)*/D3D12_TEXTURE_ADDRESS_MODE.D3D12_TEXTURE_ADDRESS_MODE_WRAP;
+            desc.AddressV = /*Dx12Utility.GetNativeAddressMode(Descriptor->AddressModeV)*/D3D12_TEXTURE_ADDRESS_MODE.D3D12_TEXTURE_ADDRESS_MODE_WRAP;
+            desc.AddressW = /*Dx12Utility.GetNativeAddressMode(Descriptor->AddressModeW)*/D3D12_TEXTURE_ADDRESS_MODE.D3D12_TEXTURE_ADDRESS_MODE_WRAP;
             desc.Filter = Dx12Utility.ConvertToDx12Filter(descriptor);
-            desc.MinLOD = descriptor.lodMinClamp;
-            desc.MaxLOD = descriptor.lodMaxClamp;
-            desc.ComparisonFunc = /*Dx12Utility.GetNativeComparisonFunc(Descriptor->comparisonFunc)*/D3D12_COMPARISON_FUNC.D3D12_COMPARISON_FUNC_ALWAYS;
-            desc.MaxAnisotropy = (uint)descriptor.maxAnisotropy;
+            desc.MinLOD = descriptor.LodMinClamp;
+            desc.MaxLOD = descriptor.LodMaxClamp;
+            desc.ComparisonFunc = /*Dx12Utility.GetNativeComparisonFunc(Descriptor->ComparisonFunc)*/D3D12_COMPARISON_FUNC.D3D12_COMPARISON_FUNC_ALWAYS;
+            desc.MaxAnisotropy = (uint)descriptor.Anisotropy;
 
             Dx12DescriptorInfo allocation = device.AllocateSamplerDescriptor(1);
-            m_HeapIndex = allocation.index;
-            m_NativeDescriptorHeap = allocation.descriptorHeap;
-            m_NativeCpuDescriptorHandle = allocation.cpuHandle;
-            m_NativeGpuDescriptorHandle = allocation.gpuHandle;
+            m_HeapIndex = allocation.Index;
+            m_NativeDescriptorHeap = allocation.DescriptorHeap;
+            m_NativeCpuDescriptorHandle = allocation.CpuHandle;
+            m_NativeGpuDescriptorHandle = allocation.GpuHandle;
             device.NativeDevice->CreateSampler(&desc, m_NativeCpuDescriptorHandle);
         }
 

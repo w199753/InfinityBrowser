@@ -7,13 +7,13 @@ namespace Infinity.Graphics
 #pragma warning disable CS8600, CS8602, CS8604, CS8618, CA1416
     internal struct Dx12BindInfo
     {
-        public int slot;
-        public int index;
-        public int count;
-        public EBindType bindType;
-        public EShaderStage shaderStage;
+        public int Slot;
+        public int Index;
+        public int Count;
+        public EBindType BindType;
+        public EShaderStage ShaderStage;
 
-        internal bool Bindless => bindType == EBindType.ArrayTexture;
+        internal bool IsBindless => BindType == EBindType.Bindless;
     }
 
     internal unsafe class Dx12BindGroupLayout : RHIBindGroupLayout
@@ -38,19 +38,19 @@ namespace Infinity.Graphics
 
         public Dx12BindGroupLayout(in RHIBindGroupLayoutDescriptor descriptor)
         {
-            m_Index = descriptor.index;
-            m_BindInfos = new Dx12BindInfo[descriptor.elements.Length];
+            m_Index = descriptor.Index;
+            m_BindInfos = new Dx12BindInfo[descriptor.Elements.Length];
 
-            Span<RHIBindGroupLayoutElement> elements = descriptor.elements.Span;
-            for (int i = 0; i < descriptor.elements.Length; ++i)
+            Span<RHIBindGroupLayoutElement> elements = descriptor.Elements.Span;
+            for (int i = 0; i < descriptor.Elements.Length; ++i)
             {
                 ref RHIBindGroupLayoutElement element = ref elements[i];
                 ref Dx12BindInfo bindInfo = ref m_BindInfos[i];
-                bindInfo.slot = element.slot;
-                bindInfo.index = descriptor.index;
-                bindInfo.count = element.count;
-                bindInfo.bindType = element.bindType;
-                bindInfo.shaderStage = element.shaderStage;
+                bindInfo.Slot = element.Slot;
+                bindInfo.Index = descriptor.Index;
+                bindInfo.Count = element.Count;
+                bindInfo.BindType = element.BindType;
+                bindInfo.ShaderStage = element.ShaderStage;
             }
         }
 

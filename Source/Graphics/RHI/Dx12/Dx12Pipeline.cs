@@ -10,8 +10,8 @@ namespace Infinity.Graphics
 #pragma warning disable CS0169, CS0649, CS8600, CS8601, CS8602, CS8604, CS8618, CA1416
     internal struct Dx12BindTypeAndParameterSlot
     {
-        public int slot;
-        public EBindType bindType;
+        public int Slot;
+        public EBindType BindType;
     }
 
     internal unsafe class Dx12PipelineLayout : RHIPipelineLayout
@@ -36,9 +36,9 @@ namespace Infinity.Graphics
             m_ComputeParameterMap = new Dictionary<int, Dx12BindTypeAndParameterSlot>(8);
 
             int parameterCount = 0;
-            for (int i = 0; i < descriptor.bindGroupLayouts.Length; ++i)
+            for (int i = 0; i < descriptor.BindGroupLayouts.Length; ++i)
             {
-                Dx12BindGroupLayout bindGroupLayout = descriptor.bindGroupLayouts[i] as Dx12BindGroupLayout;
+                Dx12BindGroupLayout bindGroupLayout = descriptor.BindGroupLayouts[i] as Dx12BindGroupLayout;
                 parameterCount += bindGroupLayout.BindInfos.Length;
             }
 
@@ -48,37 +48,37 @@ namespace Infinity.Graphics
             D3D12_ROOT_PARAMETER1* rootParameterPtr = stackalloc D3D12_ROOT_PARAMETER1[parameterCount];
             Span<D3D12_ROOT_PARAMETER1> rootParameterViews = new Span<D3D12_ROOT_PARAMETER1>(rootParameterPtr, parameterCount);
 
-            for (int i = 0; i < descriptor.bindGroupLayouts.Length; ++i)
+            for (int i = 0; i < descriptor.BindGroupLayouts.Length; ++i)
             {
-                Dx12BindGroupLayout bindGroupLayout = descriptor.bindGroupLayouts[i] as Dx12BindGroupLayout;
+                Dx12BindGroupLayout bindGroupLayout = descriptor.BindGroupLayouts[i] as Dx12BindGroupLayout;
 
                 for (int j = 0; j < bindGroupLayout.BindInfos.Length; ++j)
                 {
                     ref Dx12BindInfo bindInfo = ref bindGroupLayout.BindInfos[j];
 
                     ref D3D12_DESCRIPTOR_RANGE1 rootDescriptorRange = ref rootDescriptorRangeViews[i + j];
-                    rootDescriptorRange.Init(Dx12Utility.ConvertToDx12BindType(bindInfo.bindType), bindInfo.Bindless ? (uint)bindInfo.count : 1, (uint)bindInfo.slot, (uint)bindInfo.index, Dx12Utility.GetDx12DescriptorRangeFalag(bindInfo.bindType));
+                    rootDescriptorRange.Init(Dx12Utility.ConvertToDx12BindType(bindInfo.BindType), bindInfo.IsBindless ? (uint)bindInfo.Count : 1, (uint)bindInfo.Slot, (uint)bindInfo.Index, Dx12Utility.GetDx12DescriptorRangeFalag(bindInfo.BindType));
 
                     ref D3D12_ROOT_PARAMETER1 rootParameterView = ref rootParameterViews[i + j];
-                    rootParameterView.InitAsDescriptorTable(1, rootDescriptorRangePtr + (i + j), Dx12Utility.ConvertToDx12ShaderStage(bindInfo.shaderStage));
+                    rootParameterView.InitAsDescriptorTable(1, rootDescriptorRangePtr + (i + j), Dx12Utility.ConvertToDx12ShaderStage(bindInfo.ShaderStage));
 
                     Dx12BindTypeAndParameterSlot parameter;
-                    parameter.slot = i + j;
-                    parameter.bindType = bindInfo.bindType;
+                    parameter.Slot = i + j;
+                    parameter.BindType = bindInfo.BindType;
 
-                    if ((bindInfo.shaderStage & EShaderStage.Vertex) == EShaderStage.Vertex)
+                    if ((bindInfo.ShaderStage & EShaderStage.Vertex) == EShaderStage.Vertex)
                     {
-                        m_VertexParameterMap.TryAdd(new int3(bindInfo.index << 8, bindInfo.slot, Dx12Utility.GetDx12BindKey(bindInfo.bindType)).GetHashCode(), parameter);
+                        m_VertexParameterMap.TryAdd(new int3(bindInfo.Index << 8, bindInfo.Slot, Dx12Utility.GetDx12BindKey(bindInfo.BindType)).GetHashCode(), parameter);
                     }
 
-                    if ((bindInfo.shaderStage & EShaderStage.Fragment) == EShaderStage.Fragment)
+                    if ((bindInfo.ShaderStage & EShaderStage.Fragment) == EShaderStage.Fragment)
                     {
-                        m_FragmentParameterMap.TryAdd(new int3(bindInfo.index << 8, bindInfo.slot, Dx12Utility.GetDx12BindKey(bindInfo.bindType)).GetHashCode(), parameter);
+                        m_FragmentParameterMap.TryAdd(new int3(bindInfo.Index << 8, bindInfo.Slot, Dx12Utility.GetDx12BindKey(bindInfo.BindType)).GetHashCode(), parameter);
                     }
 
-                    if ((bindInfo.shaderStage & EShaderStage.Compute) == EShaderStage.Compute)
+                    if ((bindInfo.ShaderStage & EShaderStage.Compute) == EShaderStage.Compute)
                     {
-                        m_ComputeParameterMap.TryAdd(new int3(bindInfo.index << 8, bindInfo.slot, Dx12Utility.GetDx12BindKey(bindInfo.bindType)).GetHashCode(), parameter);
+                        m_ComputeParameterMap.TryAdd(new int3(bindInfo.Index << 8, bindInfo.Slot, Dx12Utility.GetDx12BindKey(bindInfo.BindType)).GetHashCode(), parameter);
                     }
                 }
             }
@@ -153,11 +153,11 @@ namespace Infinity.Graphics
         {
             RHIPipelineLayoutDescriptor pipelienLayoutDescriptor;
             {
-                pipelienLayoutDescriptor.bindGroupLayouts = descriptor.bindGroupLayouts;
+                pipelienLayoutDescriptor.BindGroupLayouts = descriptor.BindGroupLayouts;
             }
             m_PipelineLayout = device.CreatePipelineLayout(pipelienLayoutDescriptor) as Dx12PipelineLayout;
 
-            Dx12Shader computeShader = descriptor.computeShader as Dx12Shader;
+            Dx12Shader computeShader = descriptor.ComputeShader as Dx12Shader;
 
             D3D12_COMPUTE_PIPELINE_STATE_DESC description = new D3D12_COMPUTE_PIPELINE_STATE_DESC();
             description.CS.BytecodeLength = computeShader.NativeShaderBytecode.BytecodeLength;
@@ -312,27 +312,27 @@ namespace Infinity.Graphics
         {
             RHIPipelineLayoutDescriptor pipelienLayoutDescriptor;
             {
-                pipelienLayoutDescriptor.bindGroupLayouts = descriptor.bindGroupLayouts;
+                pipelienLayoutDescriptor.BindGroupLayouts = descriptor.BindGroupLayouts;
             }
             m_PipelineLayout = device.CreatePipelineLayout(pipelienLayoutDescriptor) as Dx12PipelineLayout;
 
-            Dx12Shader vertexShader = descriptor.vertexShader as Dx12Shader;
-            Dx12Shader fragmentShader = descriptor.fragmentShader as Dx12Shader;
-            Span<RHIVertexLayoutDescriptor> vertexLayoutDescriptors = descriptor.vertexStateDescriptor.vertexLayoutDescriptors.Span;
+            Dx12Shader vertexShader = descriptor.VertexShader as Dx12Shader;
+            Dx12Shader fragmentShader = descriptor.FragmentShader as Dx12Shader;
+            Span<RHIVertexLayoutDescriptor> vertexLayoutDescriptors = descriptor.VertexStateDescriptor.VertexLayoutDescriptors.Span;
 
             if ((vertexShader != null))
             {
                 m_VertexStrides = new int[vertexLayoutDescriptors.Length];
                 for (int j = 0; j < vertexLayoutDescriptors.Length; ++j)
                 {
-                    m_VertexStrides[j] = vertexLayoutDescriptors[j].stride;
+                    m_VertexStrides[j] = vertexLayoutDescriptors[j].Stride;
                 }
             }
 
-            m_StencilRef = descriptor.renderStateDescriptor.depthStencilStateDescriptor.stencilReference;
-            m_PrimitiveTopology = Dx12Utility.ConvertToDx12PrimitiveTopology(descriptor.vertexStateDescriptor.primitiveTopology);
+            m_StencilRef = descriptor.RenderStateDescriptor.DepthStencilStateDescriptor.StencilReference;
+            m_PrimitiveTopology = Dx12Utility.ConvertToDx12PrimitiveTopology(descriptor.VertexStateDescriptor.PrimitiveTopology);
 
-            D3D12_PRIMITIVE_TOPOLOGY_TYPE primitiveTopologyType = Dx12Utility.ConvertToDx12PrimitiveTopologyType(descriptor.vertexStateDescriptor.primitiveTopology);
+            D3D12_PRIMITIVE_TOPOLOGY_TYPE primitiveTopologyType = Dx12Utility.ConvertToDx12PrimitiveTopologyType(descriptor.VertexStateDescriptor.PrimitiveTopology);
 
             int inputElementCount = Dx12Utility.GetDx12VertexLayoutCount(vertexLayoutDescriptors);
             D3D12_INPUT_ELEMENT_DESC* inputElementsPtr = stackalloc D3D12_INPUT_ELEMENT_DESC[inputElementCount];
@@ -350,36 +350,36 @@ namespace Infinity.Graphics
                 pRootSignature = m_PipelineLayout.NativeRootSignature,
                 PrimitiveTopologyType = primitiveTopologyType,
 
-                SampleMask = descriptor.renderStateDescriptor.sampleMask.HasValue ? ((uint)descriptor.renderStateDescriptor.sampleMask.Value) : uint.MaxValue,
-                BlendState = Dx12Utility.CreateDx12BlendState(descriptor.renderStateDescriptor.blendStateDescriptor),
-                RasterizerState = Dx12Utility.CreateDx12RasterizerState(descriptor.renderStateDescriptor.rasterizerStateDescriptor, descriptor.outputStateDescriptor.sampleCount != ESampleCount.None),
-                DepthStencilState = Dx12Utility.CreateDx12DepthStencilState(descriptor.renderStateDescriptor.depthStencilStateDescriptor)
+                SampleMask = descriptor.RenderStateDescriptor.SampleMask.HasValue ? ((uint)descriptor.RenderStateDescriptor.SampleMask.Value) : uint.MaxValue,
+                BlendState = Dx12Utility.CreateDx12BlendState(descriptor.RenderStateDescriptor.BlendStateDescriptor),
+                RasterizerState = Dx12Utility.CreateDx12RasterizerState(descriptor.RenderStateDescriptor.RasterizerStateDescriptor, descriptor.OutputStateDescriptor.SampleCount != ESampleCount.None),
+                DepthStencilState = Dx12Utility.CreateDx12DepthStencilState(descriptor.RenderStateDescriptor.DepthStencilStateDescriptor)
             };
 
-            if (descriptor.outputStateDescriptor.outputDepthAttachmentDescriptor.HasValue)
+            if (descriptor.OutputStateDescriptor.OutputDepthAttachmentDescriptor.HasValue)
             {
                 description.DSVFormat = DXGI_FORMAT.DXGI_FORMAT_D32_FLOAT_S8X24_UINT;
                 //description.DSVFormat = Dx12Utility.ConvertToDx12Format(descriptor.outputState.depthAttachment.Value.format);
             }
 
-            for (int i = 0; i < descriptor.outputStateDescriptor.outputColorAttachmentDescriptors.Length; ++i)
+            for (int i = 0; i < descriptor.OutputStateDescriptor.OutputColorAttachmentDescriptors.Length; ++i)
             {
                 description.RTVFormats[i] = DXGI_FORMAT.DXGI_FORMAT_R8G8B8A8_UNORM;
                 //description.RTVFormats[i] = Dx12Utility.ConvertToDx12Format(descriptor.outputState.colorAttachments.Span[i].format);
             }
 
             description.Flags = D3D12_PIPELINE_STATE_FLAGS.D3D12_PIPELINE_STATE_FLAG_NONE;
-            description.NumRenderTargets = (uint)descriptor.outputStateDescriptor.outputColorAttachmentDescriptors.Length;
-            description.SampleDesc = Dx12Utility.ConvertToDx12SampleCount(descriptor.outputStateDescriptor.sampleCount);
+            description.NumRenderTargets = (uint)descriptor.OutputStateDescriptor.OutputColorAttachmentDescriptors.Length;
+            description.SampleDesc = Dx12Utility.ConvertToDx12SampleCount(descriptor.OutputStateDescriptor.SampleCount);
             //description.StreamOutput = new StreamOutputDescription();
 
-            if (descriptor.vertexShader != null)
+            if (descriptor.VertexShader != null)
             {
                 description.VS.BytecodeLength = vertexShader.NativeShaderBytecode.BytecodeLength;
                 description.VS.pShaderBytecode = vertexShader.NativeShaderBytecode.pShaderBytecode;
             }
 
-            if (descriptor.fragmentShader != null)
+            if (descriptor.FragmentShader != null)
             {
                 description.PS.BytecodeLength = fragmentShader.NativeShaderBytecode.BytecodeLength;
                 description.PS.pShaderBytecode = fragmentShader.NativeShaderBytecode.pShaderBytecode;

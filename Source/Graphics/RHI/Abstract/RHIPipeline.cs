@@ -5,168 +5,168 @@ namespace Infinity.Graphics
 {
     public struct RHIOutputAttachmentDescriptor
     {
-        public bool resolveMSAA;
-        public EPixelFormat format;
+        public bool ResolveMSAA;
+        public EPixelFormat Format;
     }
 
     public struct RHIOutputStateDescriptor
     {
-        //public uint sliceCount;
-        public ESampleCount sampleCount;
-        public RHIOutputAttachmentDescriptor? outputDepthAttachmentDescriptor;
-        public Memory<RHIOutputAttachmentDescriptor> outputColorAttachmentDescriptors;
+        //public uint SliceCount;
+        public ESampleCount SampleCount;
+        public RHIOutputAttachmentDescriptor? OutputDepthAttachmentDescriptor;
+        public Memory<RHIOutputAttachmentDescriptor> OutputColorAttachmentDescriptors;
     }
 
     public struct RHIVertexElementDescriptor
     {
-        public int offset;
-        public uint index;
-        public ESemanticType type;
-        public ESemanticFormat format;
+        public int Offset;
+        public uint Index;
+        public ESemanticType Type;
+        public ESemanticFormat Format;
     }
 
     public struct RHIVertexLayoutDescriptor
     {
-        public int stride;
-        public int stepRate;
-        public EVertexStepMode stepMode;
-        public Memory<RHIVertexElementDescriptor> vertexElementDescriptors;
+        public int Stride;
+        public int StepRate;
+        public EVertexStepMode StepMode;
+        public Memory<RHIVertexElementDescriptor> VertexElementDescriptors;
     }
 
     public struct RHIVertexStateDescriptor
     {
-        public EPrimitiveTopology primitiveTopology;
-        public Memory<RHIVertexLayoutDescriptor> vertexLayoutDescriptors;
+        public EPrimitiveTopology PrimitiveTopology;
+        public Memory<RHIVertexLayoutDescriptor> VertexLayoutDescriptors;
     }
 
     public struct RHIBlendDescriptor
     {
-        public bool blendEnable;
-        public EBlendOp blendOpColor;
-        public EBlendMode srcBlendColor;
-        public EBlendMode dstBlendColor;
-        public EBlendOp blendOpAlpha;
-        public EBlendMode srcBlendAlpha;
-        public EBlendMode dstBlendAlpha;
-        public EColorWriteChannel colorWriteChannel;
+        public bool BlendEnable;
+        public EBlendOp BlendOpColor;
+        public EBlendMode SrcBlendColor;
+        public EBlendMode DstBlendColor;
+        public EBlendOp BlendOpAlpha;
+        public EBlendMode SrcBlendAlpha;
+        public EBlendMode DstBlendAlpha;
+        public EColorWriteChannel ColorWriteChannel;
     }
 
     public struct RHIBlendStateDescriptor
     {
-        public bool alphaToCoverage;
-        public bool independentBlend;
-        public RHIBlendDescriptor blendDescriptor0;
-        public RHIBlendDescriptor blendDescriptor1;
-        public RHIBlendDescriptor blendDescriptor2;
-        public RHIBlendDescriptor blendDescriptor3;
-        public RHIBlendDescriptor blendDescriptor4;
-        public RHIBlendDescriptor blendDescriptor5;
-        public RHIBlendDescriptor blendDescriptor6;
-        public RHIBlendDescriptor blendDescriptor7;
+        public bool AlphaToCoverage;
+        public bool IndependentBlend;
+        public RHIBlendDescriptor BlendDescriptor0;
+        public RHIBlendDescriptor BlendDescriptor1;
+        public RHIBlendDescriptor BlendDescriptor2;
+        public RHIBlendDescriptor BlendDescriptor3;
+        public RHIBlendDescriptor BlendDescriptor4;
+        public RHIBlendDescriptor BlendDescriptor5;
+        public RHIBlendDescriptor BlendDescriptor6;
+        public RHIBlendDescriptor BlendDescriptor7;
     }
 
     public struct RHIRasterizerStateDescriptor
     {
         public EFillMode FillMode;
         public ECullMode CullMode;
-        public bool depthClipEnable;
-        public bool conservativeRaster;
-        public bool antialiasedLineEnable;
-        public bool frontCounterClockwise;
-        public int depthBias;
-        public float depthBiasClamp;
-        public float slopeScaledDepthBias;
+        public bool DepthClipEnable;
+        public bool ConservativeRaster;
+        public bool AntialiasedLineEnable;
+        public bool FrontCounterClockwise;
+        public int DepthBias;
+        public float DepthBiasClamp;
+        public float SlopeScaledDepthBias;
     }
 
     public struct RHIStencilStateDescriptor
     {
-        public EStencilOp stencilPassOp;
-        public EStencilOp stencilFailOp;
-        public EStencilOp stencilDepthFailOp;
-        public EComparisonMode comparisonMode;
+        public EStencilOp StencilPassOp;
+        public EStencilOp StencilFailOp;
+        public EStencilOp StencilDepthFailOp;
+        public EComparisonMode ComparisonMode;
     }
 
     public struct RHIDepthStencilStateDescriptor
     {
-        public bool depthEnable;
-        public bool depthWriteMask;
-        public bool stencilEnable;
-        public byte stencilReference;
-        public byte stencilReadMask;
-        public byte stencilWriteMask;
-        public EComparisonMode comparisonMode;
-        public RHIStencilStateDescriptor backFaceDescriptor;
-        public RHIStencilStateDescriptor frontFaceDescriptor;
+        public bool DepthEnable;
+        public bool DepthWriteMask;
+        public bool StencilEnable;
+        public byte StencilReference;
+        public byte StencilReadMask;
+        public byte StencilWriteMask;
+        public EComparisonMode ComparisonMode;
+        public RHIStencilStateDescriptor BackFaceDescriptor;
+        public RHIStencilStateDescriptor FrontFaceDescriptor;
     }
 
     public struct RHIRenderStateDescriptor
     {
-        public int? sampleMask;
-        public RHIBlendStateDescriptor blendStateDescriptor;
-        public RHIRasterizerStateDescriptor rasterizerStateDescriptor;
-        public RHIDepthStencilStateDescriptor depthStencilStateDescriptor;
+        public int? SampleMask;
+        public RHIBlendStateDescriptor BlendStateDescriptor;
+        public RHIRasterizerStateDescriptor RasterizerStateDescriptor;
+        public RHIDepthStencilStateDescriptor DepthStencilStateDescriptor;
     }
 
     public struct RHIHitGroupDescription
     {
-        public string name;
-        public EHitGroupType type;
-        public RHIShader anyHitShader;
-        public RHIShader closeHitShader;
-        public RHIShader intersectShader;
-        public RHIBindGroupLayout bindGroupLayout;
+        public string Name;
+        public EHitGroupType Type;
+        public RHIShader AnyHitShader;
+        public RHIShader CloseHitShader;
+        public RHIShader IntersectShader;
+        public RHIBindGroupLayout BindGroupLayout;
     }
 
     public struct RHIRayGeneralDescription
     {
-        public string name;
-        public RHIShader generalShader;
-        public RHIBindGroupLayout bindGroupLayout;
+        public string Name;
+        public RHIShader GeneralShader;
+        public RHIBindGroupLayout BindGroupLayout;
     }
 
     public struct RHIComputePipelineDescriptor
     {
-        public uint3 threadSize;
-        public RHIShader computeShader;
-        public RHIBindGroupLayout[] bindGroupLayouts;
+        public uint3 ThreadSize;
+        public RHIShader ComputeShader;
+        public RHIBindGroupLayout[] BindGroupLayouts;
     }
 
     public struct RHIRaytracingPipelineDescriptor
     {
-        public uint payloadSize;
-        public uint attributeSize;
-        public uint recursionDepth;
-        public RHIShader generateShader;
-        public RHIBindGroupLayout[] bindGroupLayouts;
-        public Memory<RHIHitGroupDescription> hitGroupDescriptors;
-        public Memory<RHIRayGeneralDescription> rayGeneralDescriptors;
+        public uint PayloadSize;
+        public uint AttributeSize;
+        public uint RecursionDepth;
+        public RHIShader GenerateShader;
+        public RHIBindGroupLayout[] BindGroupLayouts;
+        public Memory<RHIHitGroupDescription> HitGroupDescriptors;
+        public Memory<RHIRayGeneralDescription> RayGeneralDescriptors;
     }
 
     public struct RHIMeshletPipelineDescriptor
     {
-        public RHIShader taskShader;
-        public RHIShader meshShader;
-        public RHIShader fragmentShader;
-        public EPrimitiveTopology primitiveTopology;
-        public RHIBindGroupLayout[] bindGroupLayouts;
-        public RHIOutputStateDescriptor outputStateDescriptor;
-        public RHIRenderStateDescriptor renderStateDescriptor;
+        public RHIShader TaskShader;
+        public RHIShader MeshShader;
+        public RHIShader FragmentShader;
+        public RHIBindGroupLayout[] BindGroupLayouts;
+        public EPrimitiveTopology PrimitiveTopology;
+        public RHIOutputStateDescriptor OutputStateDescriptor;
+        public RHIRenderStateDescriptor RenderStateDescriptor;
     }
 
     public struct RHIGraphicsPipelineDescriptor
     {
-        public RHIShader vertexShader;
-        public RHIShader fragmentShader;
-        public RHIBindGroupLayout[] bindGroupLayouts;
-        public RHIOutputStateDescriptor outputStateDescriptor;
-        public RHIRenderStateDescriptor renderStateDescriptor;
-        public RHIVertexStateDescriptor vertexStateDescriptor;
+        public RHIShader VertexShader;
+        public RHIShader FragmentShader;
+        public RHIBindGroupLayout[] BindGroupLayouts;
+        public RHIOutputStateDescriptor OutputStateDescriptor;
+        public RHIRenderStateDescriptor RenderStateDescriptor;
+        public RHIVertexStateDescriptor VertexStateDescriptor;
     }
 
     internal struct RHIPipelineLayoutDescriptor
     {
-        //public RHIConstantLayout[] constantLayouts;
-        public RHIBindGroupLayout[] bindGroupLayouts;
+        public RHIBindGroupLayout[] BindGroupLayouts;
+        //public RHIPipelineConstantLayout[] PipelineConstantLayouts;
     };
 
     internal abstract class RHIPipelineLayout : Disposal

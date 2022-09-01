@@ -4,17 +4,17 @@ namespace Infinity.Graphics
 {
     public struct RHIBindGroupElement
     {
-        //public int slot;
-        //public EBindType bindType;
-        public RHIBufferView bufferView;
-        public RHITextureView textureView;
-        public RHISampler textureSampler;
+        //public int Slot;
+        //public EBindType BindType;
+        public RHISampler Sampler;
+        public RHIBufferView BufferView;
+        public RHITextureView TextureView;
     }
 
     public struct RHIBindGroupDescriptor
     {
-        public RHIBindGroupLayout layout;
-        public Memory<RHIBindGroupElement> elements;
+        public RHIBindGroupLayout Layout;
+        public Memory<RHIBindGroupElement> Elements;
     }
 
     public abstract class RHIBindGroup : Disposal

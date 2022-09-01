@@ -138,15 +138,15 @@ namespace Infinity.Graphics
         private void CreateQueues(in RHIDeviceDescriptor descriptor)
         {
             Dictionary<EQueueType, int> queueCountMap = new Dictionary<EQueueType, int>(3);
-            for (int i = 0; i < descriptor.queueInfoCount; ++i)
+            for (int i = 0; i < descriptor.QueueInfoCount; ++i)
             {
-                RHIQueueDescriptor queueInfo = descriptor.queueInfos.Span[i];
-                if (queueCountMap.TryGetValue(queueInfo.type, out int value))
+                RHIQueueDescriptor queueInfo = descriptor.QueueInfos.Span[i];
+                if (queueCountMap.TryGetValue(queueInfo.Type, out int value))
                 {
-                    queueCountMap[queueInfo.type] = 0;
+                    queueCountMap[queueInfo.Type] = 0;
                 }
 
-                queueCountMap.TryAdd(queueInfo.type, (int)queueInfo.count);
+                queueCountMap.TryAdd(queueInfo.Type, (int)queueInfo.Count);
             }
 
             m_Queues = new Dictionary<EQueueType, List<MtlQueue>>(3);

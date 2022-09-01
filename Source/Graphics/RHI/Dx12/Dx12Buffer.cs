@@ -29,17 +29,17 @@ namespace Infinity.Graphics
         {
             m_Dx12Device = device;
             m_Descriptor = descriptor;
-            m_SizeInBytes = (uint)descriptor.size;
+            m_SizeInBytes = (uint)descriptor.Size;
 
-            D3D12_RESOURCE_DESC resourceDesc = D3D12_RESOURCE_DESC.Buffer((ulong)descriptor.size, Dx12Utility.ConvertToDx12BufferFlag(descriptor.usage));
-            D3D12_HEAP_PROPERTIES heapProperties = new D3D12_HEAP_PROPERTIES(Dx12Utility.ConvertToDx12ResourceFlagByUsage(descriptor.storageMode));
+            D3D12_RESOURCE_DESC resourceDesc = D3D12_RESOURCE_DESC.Buffer((ulong)descriptor.Size, Dx12Utility.ConvertToDx12BufferFlag(descriptor.Usage));
+            D3D12_HEAP_PROPERTIES heapProperties = new D3D12_HEAP_PROPERTIES(Dx12Utility.ConvertToDx12ResourceFlagByUsage(descriptor.StorageMode));
 
-            D3D12_RESOURCE_STATES initialState = Dx12Utility.ConvertToDx12BufferState(descriptor.state);
-            if (descriptor.storageMode == EStorageMode.Static || descriptor.storageMode == EStorageMode.Dynamic)
+            D3D12_RESOURCE_STATES initialState = Dx12Utility.ConvertToDx12BufferState(descriptor.State);
+            if (descriptor.StorageMode == EStorageMode.Static || descriptor.StorageMode == EStorageMode.Dynamic)
             {
                 initialState = D3D12_RESOURCE_STATES.D3D12_RESOURCE_STATE_GENERIC_READ;
             }
-            if (descriptor.storageMode == EStorageMode.Staging)
+            if (descriptor.StorageMode == EStorageMode.Staging)
             {
                 initialState = D3D12_RESOURCE_STATES.D3D12_RESOURCE_STATE_COPY_DEST;
             }
@@ -52,7 +52,7 @@ namespace Infinity.Graphics
 
         public override IntPtr Map(in int length, in int offset)
         {
-            Debug.Assert(!(m_Descriptor.storageMode == EStorageMode.Default));
+            Debug.Assert(!(m_Descriptor.StorageMode == EStorageMode.Default));
 
             void* data;
             D3D12_RANGE range = new D3D12_RANGE((uint)offset, (uint)(offset + length));
@@ -63,7 +63,7 @@ namespace Infinity.Graphics
 
         public override void UnMap()
         {
-            Debug.Assert(!(m_Descriptor.storageMode == EStorageMode.Default));
+            Debug.Assert(!(m_Descriptor.StorageMode == EStorageMode.Default));
 
             m_NativeResource->Unmap(0, null);
         }

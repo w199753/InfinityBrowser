@@ -5,12 +5,12 @@ namespace Infinity.Graphics
 {
     public struct RHISwapChainDescriptor
     {
-        public bool frameBufferOnly;
-        public int count;
-        public int2 extent;
-        public IntPtr surface;
-        public EPixelFormat format;
-        public RHIQueue presentQueue;
+        public bool FrameBufferOnly;
+        public int Count;
+        public int2 Extent;
+        public IntPtr Surface;
+        public EPixelFormat Format;
+        public RHIQueue PresentQueue;
     }
 
     public abstract class RHISwapChain : Disposal

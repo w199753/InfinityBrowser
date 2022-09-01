@@ -6,8 +6,8 @@ namespace Infinity.Graphics
 #pragma warning disable CS8600, CS8602
     internal unsafe struct Dx12CommandQueueDescriptor
     {
-        public EQueueType type;
-        public ID3D12CommandQueue* queue;
+        public EQueueType Type;
+        public ID3D12CommandQueue* Queue;
     }
 
     internal unsafe class Dx12Queue : RHIQueue
@@ -32,9 +32,9 @@ namespace Infinity.Graphics
 
         public Dx12Queue(Dx12Device device, in Dx12CommandQueueDescriptor descriptor)
         {
-            m_Type = descriptor.type;
+            m_Type = descriptor.Type;
             m_Dx12Device = device;
-            m_NativeCommandQueue = descriptor.queue;
+            m_NativeCommandQueue = descriptor.Queue;
         }
 
         public override RHICommandPool CreateCommandPool()

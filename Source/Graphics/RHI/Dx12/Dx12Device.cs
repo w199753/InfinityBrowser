@@ -12,10 +12,10 @@ namespace Infinity.Graphics
 #pragma warning disable CS8600, CS8602, CS8604, CS8618, CA1416
     internal unsafe struct Dx12DescriptorInfo
     {
-        public int index;
-        public ID3D12DescriptorHeap* descriptorHeap;
-        public D3D12_CPU_DESCRIPTOR_HANDLE cpuHandle;
-        public D3D12_GPU_DESCRIPTOR_HANDLE gpuHandle;
+        public int Index;
+        public ID3D12DescriptorHeap* DescriptorHeap;
+        public D3D12_CPU_DESCRIPTOR_HANDLE CpuHandle;
+        public D3D12_GPU_DESCRIPTOR_HANDLE GpuHandle;
     };
 
     internal unsafe class Dx12DescriptorHeap : Disposal
@@ -266,10 +266,10 @@ namespace Infinity.Graphics
         {
             int index = m_DsvHeap.Allocate();
             Dx12DescriptorInfo descriptorInfo;
-            descriptorInfo.index = index;
-            descriptorInfo.cpuHandle = m_DsvHeap.CpuStartHandle.Offset(index, m_DsvHeap.DescriptorSize);
-            descriptorInfo.gpuHandle = m_DsvHeap.GpuStartHandle.Offset(index, m_DsvHeap.DescriptorSize);
-            descriptorInfo.descriptorHeap = m_DsvHeap.DescriptorHeap;
+            descriptorInfo.Index = index;
+            descriptorInfo.CpuHandle = m_DsvHeap.CpuStartHandle.Offset(index, m_DsvHeap.DescriptorSize);
+            descriptorInfo.GpuHandle = m_DsvHeap.GpuStartHandle.Offset(index, m_DsvHeap.DescriptorSize);
+            descriptorInfo.DescriptorHeap = m_DsvHeap.DescriptorHeap;
             return descriptorInfo;
         }
 
@@ -277,10 +277,10 @@ namespace Infinity.Graphics
         {
             int index = m_RtvHeap.Allocate();
             Dx12DescriptorInfo descriptorInfo;
-            descriptorInfo.index = index;
-            descriptorInfo.cpuHandle = m_RtvHeap.CpuStartHandle.Offset(index, m_RtvHeap.DescriptorSize);
-            descriptorInfo.gpuHandle = m_RtvHeap.GpuStartHandle.Offset(index, m_RtvHeap.DescriptorSize);
-            descriptorInfo.descriptorHeap = m_RtvHeap.DescriptorHeap;
+            descriptorInfo.Index = index;
+            descriptorInfo.CpuHandle = m_RtvHeap.CpuStartHandle.Offset(index, m_RtvHeap.DescriptorSize);
+            descriptorInfo.GpuHandle = m_RtvHeap.GpuStartHandle.Offset(index, m_RtvHeap.DescriptorSize);
+            descriptorInfo.DescriptorHeap = m_RtvHeap.DescriptorHeap;
             return descriptorInfo;
         }
 
@@ -288,10 +288,10 @@ namespace Infinity.Graphics
         {
             int index = m_SamplerHeap.Allocate();
             Dx12DescriptorInfo descriptorInfo;
-            descriptorInfo.index = index;
-            descriptorInfo.cpuHandle = m_SamplerHeap.CpuStartHandle.Offset(index, m_SamplerHeap.DescriptorSize);
-            descriptorInfo.gpuHandle = m_SamplerHeap.GpuStartHandle.Offset(index, m_SamplerHeap.DescriptorSize);
-            descriptorInfo.descriptorHeap = m_SamplerHeap.DescriptorHeap;
+            descriptorInfo.Index = index;
+            descriptorInfo.CpuHandle = m_SamplerHeap.CpuStartHandle.Offset(index, m_SamplerHeap.DescriptorSize);
+            descriptorInfo.GpuHandle = m_SamplerHeap.GpuStartHandle.Offset(index, m_SamplerHeap.DescriptorSize);
+            descriptorInfo.DescriptorHeap = m_SamplerHeap.DescriptorHeap;
             return descriptorInfo;
         }
 
@@ -299,10 +299,10 @@ namespace Infinity.Graphics
         {
             int index = m_CbvSrvUavHeap.Allocate();
             Dx12DescriptorInfo descriptorInfo;
-            descriptorInfo.index = index;
-            descriptorInfo.cpuHandle = m_CbvSrvUavHeap.CpuStartHandle.Offset(index, m_CbvSrvUavHeap.DescriptorSize);
-            descriptorInfo.gpuHandle = m_CbvSrvUavHeap.GpuStartHandle.Offset(index, m_CbvSrvUavHeap.DescriptorSize);
-            descriptorInfo.descriptorHeap = m_CbvSrvUavHeap.DescriptorHeap;
+            descriptorInfo.Index = index;
+            descriptorInfo.CpuHandle = m_CbvSrvUavHeap.CpuStartHandle.Offset(index, m_CbvSrvUavHeap.DescriptorSize);
+            descriptorInfo.GpuHandle = m_CbvSrvUavHeap.GpuStartHandle.Offset(index, m_CbvSrvUavHeap.DescriptorSize);
+            descriptorInfo.DescriptorHeap = m_CbvSrvUavHeap.DescriptorHeap;
             return descriptorInfo;
         }
 
@@ -343,15 +343,15 @@ namespace Infinity.Graphics
         private void CreateQueues(in RHIDeviceDescriptor descriptor)
         {
             Dictionary<EQueueType, int> queueCountMap = new Dictionary<EQueueType, int>(3);
-            for (int i = 0; i < descriptor.queueInfoCount; ++i)
+            for (int i = 0; i < descriptor.QueueInfoCount; ++i)
             {
-                RHIQueueDescriptor queueInfo = descriptor.queueInfos.Span[i];
-                if (queueCountMap.TryGetValue(queueInfo.type, out int value))
+                RHIQueueDescriptor queueInfo = descriptor.QueueInfos.Span[i];
+                if (queueCountMap.TryGetValue(queueInfo.Type, out int value))
                 {
-                    queueCountMap[queueInfo.type] = 0;
+                    queueCountMap[queueInfo.Type] = 0;
                 }
 
-                queueCountMap.TryAdd(queueInfo.type, (int)queueInfo.count);
+                queueCountMap.TryAdd(queueInfo.Type, (int)queueInfo.Count);
             }
 
             m_GpuQueues = new Dictionary<EQueueType, List<Dx12Queue>>(3);
@@ -369,8 +369,8 @@ namespace Infinity.Graphics
                     Debug.Assert(success);
 
                     Dx12CommandQueueDescriptor queueDescriptor;
-                    queueDescriptor.type = iter.Key;
-                    queueDescriptor.queue = commandQueue;
+                    queueDescriptor.Type = iter.Key;
+                    queueDescriptor.Queue = commandQueue;
                     tempQueues.Add(new Dx12Queue(this, queueDescriptor));
                 }
 

@@ -4,16 +4,16 @@ namespace Infinity.Graphics
 {
     public struct RHIBindGroupLayoutElement
     {
-        public int slot;
-        public int count;
-        public EBindType bindType;
-        public EShaderStage shaderStage;
+        public int Slot;
+        public int Count;
+        public EBindType BindType;
+        public EShaderStage ShaderStage;
     }
     
     public struct RHIBindGroupLayoutDescriptor
     {
-        public int index;
-        public Memory<RHIBindGroupLayoutElement> elements;
+        public int Index;
+        public Memory<RHIBindGroupLayoutElement> Elements;
     }
 
     public abstract class RHIBindGroupLayout : Disposal

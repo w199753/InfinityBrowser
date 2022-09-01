@@ -5,17 +5,17 @@ namespace Infinity.Graphics
 {
     public struct RHIQueryDescription : IEquatable<RHIQueryDescription>
     {
-        public uint count;
-        public EQueryType type;
+        public uint Count;
+        public EQueryType Type;
 
-        public bool Equals(RHIQueryDescription other) => (type == other.type) && (count == other.count);
+        public bool Equals(RHIQueryDescription other) => (Type == other.Type) && (Count == other.Count);
 
         public override bool Equals(object? obj)
         {
             return (obj != null) ? Equals((RHIQueryDescription)obj) : false;
         }
 
-        public override int GetHashCode() => new uint2(count, (uint)type).GetHashCode();
+        public override int GetHashCode() => new uint2(Count, (uint)Type).GetHashCode();
 
         public static bool operator == (in RHIQueryDescription value1, in RHIQueryDescription value2) => value1.Equals(value2);
 

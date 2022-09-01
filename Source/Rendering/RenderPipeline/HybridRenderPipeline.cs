@@ -114,71 +114,71 @@ namespace Infinity.Rendering
             // Create OutputTexture
             RHITextureDescriptor textureDescriptor;
             {
-                textureDescriptor.extent = new int3(renderContext.ScreenSize.xy, 1);
-                textureDescriptor.samples = 1;
-                textureDescriptor.mipCount = 1;
-                textureDescriptor.format = EPixelFormat.RGBA8_UNorm;
-                textureDescriptor.state = ETextureState.Common;
-                textureDescriptor.usage = ETextureUsage.RenderTarget | ETextureUsage.UnorderedAccess;
-                textureDescriptor.dimension = ETextureDimension.Texture2D;
-                textureDescriptor.storageMode = EStorageMode.Default;
+                textureDescriptor.Extent = new int3(renderContext.ScreenSize.xy, 1);
+                textureDescriptor.Samples = 1;
+                textureDescriptor.MipCount = 1;
+                textureDescriptor.Format = EPixelFormat.RGBA8_UNorm;
+                textureDescriptor.State = ETextureState.Common;
+                textureDescriptor.Usage = ETextureUsage.RenderTarget | ETextureUsage.UnorderedAccess;
+                textureDescriptor.Dimension = ETextureDimension.Texture2D;
+                textureDescriptor.StorageMode = EStorageMode.Default;
             }
             m_ComputeTexture = renderContext.CreateTexture(textureDescriptor);
 
             RHITextureViewDescriptor outputViewDescriptor;
             {
-                outputViewDescriptor.mipCount = textureDescriptor.mipCount;
-                outputViewDescriptor.baseMipLevel = 0;
-                outputViewDescriptor.arrayLayerCount = 1;
-                outputViewDescriptor.baseArrayLayer = 0;
-                outputViewDescriptor.format = EPixelFormat.RGBA8_UNorm;
-                outputViewDescriptor.viewType = ETextureViewType.UnorderedAccess;
-                outputViewDescriptor.dimension = ETextureViewDimension.Texture2D;
+                outputViewDescriptor.MipCount = textureDescriptor.MipCount;
+                outputViewDescriptor.BaseMipLevel = 0;
+                outputViewDescriptor.ArrayLayerCount = 1;
+                outputViewDescriptor.BaseArrayLayer = 0;
+                outputViewDescriptor.Format = EPixelFormat.RGBA8_UNorm;
+                outputViewDescriptor.ViewType = ETextureViewType.UnorderedAccess;
+                outputViewDescriptor.Dimension = ETextureViewDimension.Texture2D;
             }
             m_ComputeTextureView = m_ComputeTexture.CreateTextureView(outputViewDescriptor);
 
             // Create ComputeBindGroupLayout
             RHIBindGroupLayoutElement[] computeBindGroupLayoutElements = new RHIBindGroupLayoutElement[1];
             {
-                computeBindGroupLayoutElements[0].slot = 0;
-                computeBindGroupLayoutElements[0].count = 1;
-                computeBindGroupLayoutElements[0].bindType = EBindType.StorageTexture;
-                computeBindGroupLayoutElements[0].shaderStage = EShaderStage.Compute;
+                computeBindGroupLayoutElements[0].Slot = 0;
+                computeBindGroupLayoutElements[0].Count = 1;
+                computeBindGroupLayoutElements[0].BindType = EBindType.StorageTexture;
+                computeBindGroupLayoutElements[0].ShaderStage = EShaderStage.Compute;
             }
             RHIBindGroupLayoutDescriptor computeBindGroupLayoutDescriptor;
             {
-                computeBindGroupLayoutDescriptor.index = 0;
-                computeBindGroupLayoutDescriptor.elements = new Memory<RHIBindGroupLayoutElement>(computeBindGroupLayoutElements);
+                computeBindGroupLayoutDescriptor.Index = 0;
+                computeBindGroupLayoutDescriptor.Elements = new Memory<RHIBindGroupLayoutElement>(computeBindGroupLayoutElements);
             }
             m_ComputeBindGroupLayout = renderContext.CreateBindGroupLayout(computeBindGroupLayoutDescriptor);
 
             // Create ComputeBindGroup
             RHIBindGroupElement[] computeBindGroupElements = new RHIBindGroupElement[1];
             {
-                computeBindGroupElements[0].textureView = m_ComputeTextureView;
+                computeBindGroupElements[0].TextureView = m_ComputeTextureView;
             }
             RHIBindGroupDescriptor computeBindGroupDescriptor;
             {
-                computeBindGroupDescriptor.layout = m_ComputeBindGroupLayout;
-                computeBindGroupDescriptor.elements = new Memory<RHIBindGroupElement>(computeBindGroupElements);
+                computeBindGroupDescriptor.Layout = m_ComputeBindGroupLayout;
+                computeBindGroupDescriptor.Elements = new Memory<RHIBindGroupElement>(computeBindGroupElements);
             }
             m_ComputeBindGroup = renderContext.CreateBindGroup(computeBindGroupDescriptor);
 
             // Create ComputePipeline
             RHIShaderDescriptor computeShaderDescriptor;
             {
-                computeShaderDescriptor.size = m_ComputeBlob.BufferSize;
-                computeShaderDescriptor.byteCode = m_ComputeBlob.BufferPointer;
-                computeShaderDescriptor.entryName = "Main";
-                computeShaderDescriptor.shaderStage = EShaderStage.Compute;
+                computeShaderDescriptor.Size = m_ComputeBlob.BufferSize;
+                computeShaderDescriptor.ByteCode = m_ComputeBlob.BufferPointer;
+                computeShaderDescriptor.EntryName = "Main";
+                computeShaderDescriptor.ShaderStage = EShaderStage.Compute;
             }
             m_ComputeShader = renderContext.CreateShader(computeShaderDescriptor);
 
             RHIComputePipelineDescriptor computePipelineDescriptor;
             {
-                computePipelineDescriptor.threadSize = new uint3(8, 8, 1);
-                computePipelineDescriptor.computeShader = m_ComputeShader;
-                computePipelineDescriptor.bindGroupLayouts = new RHIBindGroupLayout[] { m_ComputeBindGroupLayout };
+                computePipelineDescriptor.ThreadSize = new uint3(8, 8, 1);
+                computePipelineDescriptor.ComputeShader = m_ComputeShader;
+                computePipelineDescriptor.BindGroupLayouts = new RHIBindGroupLayout[] { m_ComputeBindGroupLayout };
             }
             m_ComputePipeline = renderContext.CreateComputePipeline(computePipelineDescriptor);
 
@@ -188,10 +188,10 @@ namespace Infinity.Rendering
 
             // Create UniformBuffer
             /*RHIBufferViewDescriptor bufferViewDescriptor = new RHIBufferViewDescriptor();
-            bufferViewDescriptor.offset = 0;
-            bufferViewDescriptor.count = vertices.Length;
-            bufferViewDescriptor.type = EBufferViewType.UniformBuffer;
-            bufferViewDescriptor.stride = (bufferDescriptor.size + 255) & ~255;
+            bufferViewDescriptor.Offset = 0;
+            bufferViewDescriptor.Count = vertices.Length;
+            bufferViewDescriptor.Type = EBufferViewType.UniformBuffer;
+            bufferViewDescriptor.Stride = (bufferDescriptor.size + 255) & ~255;
             RHIBufferView uniformBufferView = vertexBuffer.CreateBufferView(bufferViewDescriptor);*/
 
             // Create IndexBuffer
@@ -203,17 +203,17 @@ namespace Infinity.Rendering
             }
             RHIBufferDescriptor indexBufferDescriptor;
             {
-                indexBufferDescriptor.size = indexs.Length * MemoryUtility.SizeOf<ushort>();
-                indexBufferDescriptor.state = EBufferState.Common;
-                indexBufferDescriptor.usage = EBufferUsage.IndexBuffer;
-                indexBufferDescriptor.storageMode = EStorageMode.Dynamic;
+                indexBufferDescriptor.Size = indexs.Length * MemoryUtility.SizeOf<ushort>();
+                indexBufferDescriptor.State = EBufferState.Common;
+                indexBufferDescriptor.Usage = EBufferUsage.IndexBuffer;
+                indexBufferDescriptor.StorageMode = EStorageMode.Dynamic;
             }
             m_IndexBuffer = renderContext.CreateBuffer(indexBufferDescriptor);
 
-            IntPtr indexData = m_IndexBuffer.Map(indexBufferDescriptor.size, 0);
+            IntPtr indexData = m_IndexBuffer.Map(indexBufferDescriptor.Size, 0);
             GCHandle indexsHandle = GCHandle.Alloc(indexs, GCHandleType.Pinned);
             IntPtr indexsPtr = indexsHandle.AddrOfPinnedObject();
-            MemoryUtility.MemCpy(indexsPtr.ToPointer(), indexData.ToPointer(), indexBufferDescriptor.size);
+            MemoryUtility.MemCpy(indexsPtr.ToPointer(), indexData.ToPointer(), indexBufferDescriptor.Size);
             indexsHandle.Free();
 
             // Create VertexBuffer
@@ -228,194 +228,194 @@ namespace Infinity.Rendering
             }
             RHIBufferDescriptor vertexBufferDescriptor;
             {
-                vertexBufferDescriptor.size = vertices.Length * MemoryUtility.SizeOf<Vertex>();
-                vertexBufferDescriptor.state = EBufferState.Common;
-                vertexBufferDescriptor.usage = EBufferUsage.VertexBuffer;
-                vertexBufferDescriptor.storageMode = EStorageMode.Dynamic;
+                vertexBufferDescriptor.Size = vertices.Length * MemoryUtility.SizeOf<Vertex>();
+                vertexBufferDescriptor.State = EBufferState.Common;
+                vertexBufferDescriptor.Usage = EBufferUsage.VertexBuffer;
+                vertexBufferDescriptor.StorageMode = EStorageMode.Dynamic;
             }
             m_VertexBuffer = renderContext.CreateBuffer(vertexBufferDescriptor);
 
-            IntPtr vertexData = m_VertexBuffer.Map(vertexBufferDescriptor.size, 0);
+            IntPtr vertexData = m_VertexBuffer.Map(vertexBufferDescriptor.Size, 0);
             GCHandle verticesHandle = GCHandle.Alloc(vertices, GCHandleType.Pinned);
             IntPtr verticesPtr = verticesHandle.AddrOfPinnedObject();
-            MemoryUtility.MemCpy(verticesPtr.ToPointer(), vertexData.ToPointer(), vertexBufferDescriptor.size);
+            MemoryUtility.MemCpy(verticesPtr.ToPointer(), vertexData.ToPointer(), vertexBufferDescriptor.Size);
             verticesHandle.Free();
 
             RHIOutputAttachmentDescriptor[] outputColorAttachmentDescriptors = new RHIOutputAttachmentDescriptor[1];
             {
-                outputColorAttachmentDescriptors[0].format = EPixelFormat.RGBA8_UNorm;
-                outputColorAttachmentDescriptors[0].resolveMSAA = false;
+                outputColorAttachmentDescriptors[0].Format = EPixelFormat.RGBA8_UNorm;
+                outputColorAttachmentDescriptors[0].ResolveMSAA = false;
             }
 
             RHIOutputAttachmentDescriptor outputDepthAttachmentDescriptor;
             {
-                outputDepthAttachmentDescriptor.format = EPixelFormat.D32_Float;
-                outputDepthAttachmentDescriptor.resolveMSAA = false;
+                outputDepthAttachmentDescriptor.Format = EPixelFormat.D32_Float;
+                outputDepthAttachmentDescriptor.ResolveMSAA = false;
             }
 
             RHIOutputStateDescriptor outputStateDescriptor;
             {
-                outputStateDescriptor.sampleCount = ESampleCount.None;
-                outputStateDescriptor.outputDepthAttachmentDescriptor = outputDepthAttachmentDescriptor;
-                outputStateDescriptor.outputColorAttachmentDescriptors = new Memory<RHIOutputAttachmentDescriptor>(outputColorAttachmentDescriptors);
+                outputStateDescriptor.SampleCount = ESampleCount.None;
+                outputStateDescriptor.OutputDepthAttachmentDescriptor = outputDepthAttachmentDescriptor;
+                outputStateDescriptor.OutputColorAttachmentDescriptors = new Memory<RHIOutputAttachmentDescriptor>(outputColorAttachmentDescriptors);
             }
 
             RHIVertexElementDescriptor[] vertexElementDescriptors = new RHIVertexElementDescriptor[2];
             {
-                vertexElementDescriptors[0].index = 1;
-                vertexElementDescriptors[0].offset = 0;
-                vertexElementDescriptors[0].type = ESemanticType.Color;
-                vertexElementDescriptors[0].format = ESemanticFormat.Float4;
+                vertexElementDescriptors[0].Index = 1;
+                vertexElementDescriptors[0].Offset = 0;
+                vertexElementDescriptors[0].Type = ESemanticType.Color;
+                vertexElementDescriptors[0].Format = ESemanticFormat.Float4;
 
-                vertexElementDescriptors[1].index = 0;
-                vertexElementDescriptors[1].offset = 16;
-                vertexElementDescriptors[1].type = ESemanticType.Position;
-                vertexElementDescriptors[1].format = ESemanticFormat.Float4;
+                vertexElementDescriptors[1].Index = 0;
+                vertexElementDescriptors[1].Offset = 16;
+                vertexElementDescriptors[1].Type = ESemanticType.Position;
+                vertexElementDescriptors[1].Format = ESemanticFormat.Float4;
             }
 
             RHIVertexLayoutDescriptor[] vertexLayoutDescriptors = new RHIVertexLayoutDescriptor[1];
             {
-                vertexLayoutDescriptors[0].stride = MemoryUtility.SizeOf<Vertex>();
-                vertexLayoutDescriptors[0].stepMode = EVertexStepMode.PerVertex;
-                vertexLayoutDescriptors[0].vertexElementDescriptors = new Memory<RHIVertexElementDescriptor>(vertexElementDescriptors);
+                vertexLayoutDescriptors[0].Stride = MemoryUtility.SizeOf<Vertex>();
+                vertexLayoutDescriptors[0].StepMode = EVertexStepMode.PerVertex;
+                vertexLayoutDescriptors[0].VertexElementDescriptors = new Memory<RHIVertexElementDescriptor>(vertexElementDescriptors);
             }
 
             RHIVertexStateDescriptor vertexStateDescriptor;
             {
-                vertexStateDescriptor.primitiveTopology = EPrimitiveTopology.TriangleList;
-                vertexStateDescriptor.vertexLayoutDescriptors = new Memory<RHIVertexLayoutDescriptor>(vertexLayoutDescriptors);
+                vertexStateDescriptor.PrimitiveTopology = EPrimitiveTopology.TriangleList;
+                vertexStateDescriptor.VertexLayoutDescriptors = new Memory<RHIVertexLayoutDescriptor>(vertexLayoutDescriptors);
             }
 
             RHIBlendStateDescriptor blendStateDescriptor;
             {
-                blendStateDescriptor.alphaToCoverage = false;
-                blendStateDescriptor.independentBlend = false;
-                blendStateDescriptor.blendDescriptor0.blendEnable = false;
-                blendStateDescriptor.blendDescriptor0.blendOpColor = EBlendOp.Add;
-                blendStateDescriptor.blendDescriptor0.blendOpAlpha = EBlendOp.Add;
-                blendStateDescriptor.blendDescriptor0.colorWriteChannel = EColorWriteChannel.All;
-                blendStateDescriptor.blendDescriptor0.srcBlendColor = EBlendMode.One;
-                blendStateDescriptor.blendDescriptor0.srcBlendAlpha = EBlendMode.One;
-                blendStateDescriptor.blendDescriptor0.dstBlendColor = EBlendMode.Zero;
-                blendStateDescriptor.blendDescriptor0.dstBlendAlpha = EBlendMode.Zero;
-                blendStateDescriptor.blendDescriptor1 = blendStateDescriptor.blendDescriptor0;
-                blendStateDescriptor.blendDescriptor2 = blendStateDescriptor.blendDescriptor0;
-                blendStateDescriptor.blendDescriptor3 = blendStateDescriptor.blendDescriptor0;
-                blendStateDescriptor.blendDescriptor4 = blendStateDescriptor.blendDescriptor0;
-                blendStateDescriptor.blendDescriptor5 = blendStateDescriptor.blendDescriptor0;
-                blendStateDescriptor.blendDescriptor6 = blendStateDescriptor.blendDescriptor0;
-                blendStateDescriptor.blendDescriptor7 = blendStateDescriptor.blendDescriptor0;
+                blendStateDescriptor.AlphaToCoverage = false;
+                blendStateDescriptor.IndependentBlend = false;
+                blendStateDescriptor.BlendDescriptor0.BlendEnable = false;
+                blendStateDescriptor.BlendDescriptor0.BlendOpColor = EBlendOp.Add;
+                blendStateDescriptor.BlendDescriptor0.BlendOpAlpha = EBlendOp.Add;
+                blendStateDescriptor.BlendDescriptor0.ColorWriteChannel = EColorWriteChannel.All;
+                blendStateDescriptor.BlendDescriptor0.SrcBlendColor = EBlendMode.One;
+                blendStateDescriptor.BlendDescriptor0.SrcBlendAlpha = EBlendMode.One;
+                blendStateDescriptor.BlendDescriptor0.DstBlendColor = EBlendMode.Zero;
+                blendStateDescriptor.BlendDescriptor0.DstBlendAlpha = EBlendMode.Zero;
+                blendStateDescriptor.BlendDescriptor1 = blendStateDescriptor.BlendDescriptor0;
+                blendStateDescriptor.BlendDescriptor2 = blendStateDescriptor.BlendDescriptor0;
+                blendStateDescriptor.BlendDescriptor3 = blendStateDescriptor.BlendDescriptor0;
+                blendStateDescriptor.BlendDescriptor4 = blendStateDescriptor.BlendDescriptor0;
+                blendStateDescriptor.BlendDescriptor5 = blendStateDescriptor.BlendDescriptor0;
+                blendStateDescriptor.BlendDescriptor6 = blendStateDescriptor.BlendDescriptor0;
+                blendStateDescriptor.BlendDescriptor7 = blendStateDescriptor.BlendDescriptor0;
             }
 
             RHIRasterizerStateDescriptor rasterizerStateDescriptor;
             {
                 rasterizerStateDescriptor.CullMode = ECullMode.Back;
                 rasterizerStateDescriptor.FillMode = EFillMode.Solid;
-                rasterizerStateDescriptor.depthBias = 0;
-                rasterizerStateDescriptor.depthBiasClamp = 0;
-                rasterizerStateDescriptor.slopeScaledDepthBias = 0;
-                rasterizerStateDescriptor.depthClipEnable = true;
-                rasterizerStateDescriptor.conservativeRaster = false;
-                rasterizerStateDescriptor.antialiasedLineEnable = false;
-                rasterizerStateDescriptor.frontCounterClockwise = false;
+                rasterizerStateDescriptor.DepthBias = 0;
+                rasterizerStateDescriptor.DepthBiasClamp = 0;
+                rasterizerStateDescriptor.SlopeScaledDepthBias = 0;
+                rasterizerStateDescriptor.DepthClipEnable = true;
+                rasterizerStateDescriptor.ConservativeRaster = false;
+                rasterizerStateDescriptor.AntialiasedLineEnable = false;
+                rasterizerStateDescriptor.FrontCounterClockwise = false;
             }
 
             RHIDepthStencilStateDescriptor depthStencilStateDescriptor;
             {
-                depthStencilStateDescriptor.depthEnable = true;
-                depthStencilStateDescriptor.depthWriteMask = true;
-                depthStencilStateDescriptor.comparisonMode = EComparisonMode.LessEqual;
-                depthStencilStateDescriptor.stencilEnable = false;
-                depthStencilStateDescriptor.stencilReference = 5;
-                depthStencilStateDescriptor.stencilReadMask = 255;
-                depthStencilStateDescriptor.stencilWriteMask = 255;
-                depthStencilStateDescriptor.backFaceDescriptor.comparisonMode = EComparisonMode.Always;
-                depthStencilStateDescriptor.backFaceDescriptor.stencilPassOp = EStencilOp.Keep;
-                depthStencilStateDescriptor.backFaceDescriptor.stencilFailOp = EStencilOp.Keep;
-                depthStencilStateDescriptor.backFaceDescriptor.stencilDepthFailOp = EStencilOp.Keep;
-                depthStencilStateDescriptor.frontFaceDescriptor.comparisonMode = EComparisonMode.Always;
-                depthStencilStateDescriptor.frontFaceDescriptor.stencilPassOp = EStencilOp.Keep;
-                depthStencilStateDescriptor.frontFaceDescriptor.stencilFailOp = EStencilOp.Keep;
-                depthStencilStateDescriptor.frontFaceDescriptor.stencilDepthFailOp = EStencilOp.Keep;
+                depthStencilStateDescriptor.DepthEnable = true;
+                depthStencilStateDescriptor.DepthWriteMask = true;
+                depthStencilStateDescriptor.ComparisonMode = EComparisonMode.LessEqual;
+                depthStencilStateDescriptor.StencilEnable = false;
+                depthStencilStateDescriptor.StencilReference = 5;
+                depthStencilStateDescriptor.StencilReadMask = 255;
+                depthStencilStateDescriptor.StencilWriteMask = 255;
+                depthStencilStateDescriptor.BackFaceDescriptor.ComparisonMode = EComparisonMode.Always;
+                depthStencilStateDescriptor.BackFaceDescriptor.StencilPassOp = EStencilOp.Keep;
+                depthStencilStateDescriptor.BackFaceDescriptor.StencilFailOp = EStencilOp.Keep;
+                depthStencilStateDescriptor.BackFaceDescriptor.StencilDepthFailOp = EStencilOp.Keep;
+                depthStencilStateDescriptor.FrontFaceDescriptor.ComparisonMode = EComparisonMode.Always;
+                depthStencilStateDescriptor.FrontFaceDescriptor.StencilPassOp = EStencilOp.Keep;
+                depthStencilStateDescriptor.FrontFaceDescriptor.StencilFailOp = EStencilOp.Keep;
+                depthStencilStateDescriptor.FrontFaceDescriptor.StencilDepthFailOp = EStencilOp.Keep;
             }
 
             RHIRenderStateDescriptor renderStateDescriptor;
             {
-                renderStateDescriptor.sampleMask = null;
-                renderStateDescriptor.blendStateDescriptor = blendStateDescriptor;
-                renderStateDescriptor.rasterizerStateDescriptor = rasterizerStateDescriptor;
-                renderStateDescriptor.depthStencilStateDescriptor = depthStencilStateDescriptor;
+                renderStateDescriptor.SampleMask = null;
+                renderStateDescriptor.BlendStateDescriptor = blendStateDescriptor;
+                renderStateDescriptor.RasterizerStateDescriptor = rasterizerStateDescriptor;
+                renderStateDescriptor.DepthStencilStateDescriptor = depthStencilStateDescriptor;
             }
 
             // Create GraphicsBindGroupLayout
             RHIBindGroupLayoutElement[] graphicsBindGroupLayoutElements = new RHIBindGroupLayoutElement[2];
             {
-                graphicsBindGroupLayoutElements[0].slot = 0;
-                graphicsBindGroupLayoutElements[0].count = 1;
-                graphicsBindGroupLayoutElements[0].bindType = EBindType.Texture;
-                graphicsBindGroupLayoutElements[0].shaderStage = EShaderStage.Fragment;
+                graphicsBindGroupLayoutElements[0].Slot = 0;
+                graphicsBindGroupLayoutElements[0].Count = 1;
+                graphicsBindGroupLayoutElements[0].BindType = EBindType.Texture;
+                graphicsBindGroupLayoutElements[0].ShaderStage = EShaderStage.Fragment;
 
-                graphicsBindGroupLayoutElements[1].slot = 1;
-                graphicsBindGroupLayoutElements[1].count = 1;
-                graphicsBindGroupLayoutElements[1].bindType = EBindType.Sampler;
-                graphicsBindGroupLayoutElements[1].shaderStage = EShaderStage.Fragment;
+                graphicsBindGroupLayoutElements[1].Slot = 1;
+                graphicsBindGroupLayoutElements[1].Count = 1;
+                graphicsBindGroupLayoutElements[1].BindType = EBindType.Sampler;
+                graphicsBindGroupLayoutElements[1].ShaderStage = EShaderStage.Fragment;
             }
             RHIBindGroupLayoutDescriptor graphicsBindGroupLayoutDescriptor;
             {
-                graphicsBindGroupLayoutDescriptor.index = 0;
-                graphicsBindGroupLayoutDescriptor.elements = new Memory<RHIBindGroupLayoutElement>(graphicsBindGroupLayoutElements);
+                graphicsBindGroupLayoutDescriptor.Index = 0;
+                graphicsBindGroupLayoutDescriptor.Elements = new Memory<RHIBindGroupLayoutElement>(graphicsBindGroupLayoutElements);
             }
             m_GraphicsBindGroupLayout = renderContext.CreateBindGroupLayout(graphicsBindGroupLayoutDescriptor);
 
             // Create GraphicsBindGroup
             /*RHIBindGroupElement[] graphicsBindGroupElements = new RHIBindGroupElement[2];
             {
-                graphicsBindGroupElements[0].textureView = m_ComputeTextureView;
-                graphicsBindGroupElements[1].textureSampler = m_ComputeSampler;
+                graphicsBindGroupElements[0].TextureView = m_ComputeTextureView;
+                graphicsBindGroupElements[1].TextureSampler = m_ComputeSampler;
             }
             RHIBindGroupDescriptor graphicsBindGroupDescriptor = new RHIBindGroupDescriptor();
             {
-                graphicsBindGroupDescriptor.layout = m_GraphicsBindGroupLayout;
-                graphicsBindGroupDescriptor.elements = new Memory<RHIBindGroupElement>(graphicsBindGroupElements);           
+                graphicsBindGroupDescriptor.Layout = m_GraphicsBindGroupLayout;
+                graphicsBindGroupDescriptor.Elements = new Memory<RHIBindGroupElement>(graphicsBindGroupElements);           
             }
             RHIBindGroup m_GraphicsBindGroup = renderContext.CreateBindGroup(graphicsBindGroupDescriptor);*/
 
             // Create GraphicsPipeline
             RHIShaderDescriptor vertexShaderDescriptor;
             {
-                vertexShaderDescriptor.size = m_VertexBlob.BufferSize;
-                vertexShaderDescriptor.byteCode = m_VertexBlob.BufferPointer;
-                vertexShaderDescriptor.entryName = "Vertex";
-                vertexShaderDescriptor.shaderStage = EShaderStage.Vertex;
+                vertexShaderDescriptor.Size = m_VertexBlob.BufferSize;
+                vertexShaderDescriptor.ByteCode = m_VertexBlob.BufferPointer;
+                vertexShaderDescriptor.EntryName = "Vertex";
+                vertexShaderDescriptor.ShaderStage = EShaderStage.Vertex;
             }
             m_VertexShader = renderContext.CreateShader(vertexShaderDescriptor);
 
             RHIShaderDescriptor fragmentShaderDescriptor;
             {
-                fragmentShaderDescriptor.size = m_FragmentBlob.BufferSize;
-                fragmentShaderDescriptor.byteCode = m_FragmentBlob.BufferPointer;
-                fragmentShaderDescriptor.entryName = "Fragment";
-                fragmentShaderDescriptor.shaderStage = EShaderStage.Fragment;
+                fragmentShaderDescriptor.Size = m_FragmentBlob.BufferSize;
+                fragmentShaderDescriptor.ByteCode = m_FragmentBlob.BufferPointer;
+                fragmentShaderDescriptor.EntryName = "Fragment";
+                fragmentShaderDescriptor.ShaderStage = EShaderStage.Fragment;
             }
             m_FragmentShader = renderContext.CreateShader(fragmentShaderDescriptor);
 
             RHIGraphicsPipelineDescriptor graphicsPipelineDescriptor;
             {
-                graphicsPipelineDescriptor.vertexShader = m_VertexShader;
-                graphicsPipelineDescriptor.fragmentShader = m_FragmentShader;
-                graphicsPipelineDescriptor.bindGroupLayouts = new RHIBindGroupLayout[] { m_GraphicsBindGroupLayout };
-                graphicsPipelineDescriptor.outputStateDescriptor = outputStateDescriptor;
-                graphicsPipelineDescriptor.renderStateDescriptor = renderStateDescriptor;
-                graphicsPipelineDescriptor.vertexStateDescriptor = vertexStateDescriptor;
+                graphicsPipelineDescriptor.VertexShader = m_VertexShader;
+                graphicsPipelineDescriptor.FragmentShader = m_FragmentShader;
+                graphicsPipelineDescriptor.BindGroupLayouts = new RHIBindGroupLayout[] { m_GraphicsBindGroupLayout };
+                graphicsPipelineDescriptor.OutputStateDescriptor = outputStateDescriptor;
+                graphicsPipelineDescriptor.RenderStateDescriptor = renderStateDescriptor;
+                graphicsPipelineDescriptor.VertexStateDescriptor = vertexStateDescriptor;
             }
             m_GraphicsPipeline = renderContext.CreateGraphicsPipeline(graphicsPipelineDescriptor);
 
             m_ColorAttachmentDescriptors = new RHIColorAttachmentDescriptor[1];
             {
-                m_ColorAttachmentDescriptors[0].clearValue = new float4(0.5f, 0.5f, 1, 1);
-                m_ColorAttachmentDescriptors[0].loadOp = ELoadOp.Clear;
-                m_ColorAttachmentDescriptors[0].storeOp = EStoreOp.Store;
-                m_ColorAttachmentDescriptors[0].resolveTarget = null;
+                m_ColorAttachmentDescriptors[0].ClearValue = new float4(0.5f, 0.5f, 1, 1);
+                m_ColorAttachmentDescriptors[0].LoadOp = ELoadOp.Clear;
+                m_ColorAttachmentDescriptors[0].StoreOp = EStoreOp.Store;
+                m_ColorAttachmentDescriptors[0].ResolveTarget = null;
             }
         }
 
@@ -444,12 +444,12 @@ namespace Infinity.Rendering
                     computeEncoder.PopDebugGroup();
                 }
 
-                m_ColorAttachmentDescriptors[0].renderTarget = renderContext.BackBufferView;
+                m_ColorAttachmentDescriptors[0].RenderTarget = renderContext.BackBufferView;
                 RHIGraphicsPassDescriptor graphicsPassDescriptor = new RHIGraphicsPassDescriptor();
-                graphicsPassDescriptor.name = "GraphicsPass";
-                graphicsPassDescriptor.shadingRateDescriptor = new RHIShadingRateDescriptor(EShadingRate.Rate4x4);
-                graphicsPassDescriptor.colorAttachmentDescriptors = new Memory<RHIColorAttachmentDescriptor>(m_ColorAttachmentDescriptors);
-                graphicsPassDescriptor.depthStencilAttachmentDescriptor = null;
+                graphicsPassDescriptor.Name = "GraphicsPass";
+                graphicsPassDescriptor.ShadingRateDescriptor = new RHIShadingRateDescriptor(EShadingRate.Rate4x4);
+                graphicsPassDescriptor.ColorAttachmentDescriptors = new Memory<RHIColorAttachmentDescriptor>(m_ColorAttachmentDescriptors);
+                graphicsPassDescriptor.DepthStencilAttachmentDescriptor = null;
                 using (graphicsEncoder.BeginScopedPass(graphicsPassDescriptor))
                 {
                     graphicsEncoder.SetViewport(new Viewport(0, 0, (uint)renderContext.ScreenSize.x, (uint)renderContext.ScreenSize.y, 0, 1));

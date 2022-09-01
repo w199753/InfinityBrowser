@@ -4,14 +4,14 @@ namespace Infinity.Graphics
 {
     public struct RHITextureDescriptor
     {
-        public int mipCount;
-        public int3 extent;
-        public int2 samples;
-        public EPixelFormat format;
-        public ETextureDimension dimension;
-        public ETextureState state;
-        public ETextureUsage usage;
-        public EStorageMode storageMode;
+        public int MipCount;
+        public int3 Extent;
+        public int2 Samples;
+        public EPixelFormat Format;
+        public EStorageMode StorageMode;
+        public ETextureState State;
+        public ETextureUsage Usage;
+        public ETextureDimension Dimension;
     }
 
     public abstract class RHITexture : Disposal

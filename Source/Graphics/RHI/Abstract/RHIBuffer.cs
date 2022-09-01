@@ -4,10 +4,10 @@ namespace Infinity.Graphics
 {
     public struct RHIBufferDescriptor
     {
-        public int size;
-        public EBufferState state;
-        public EBufferUsage usage;
-        public EStorageMode storageMode;
+        public int Size;
+        public EBufferState State;
+        public EBufferUsage Usage;
+        public EStorageMode StorageMode;
     }
 
     public abstract class RHIBuffer : Disposal

@@ -70,21 +70,21 @@ namespace Infinity.Graphics
             D3D12_RESOURCE_STATES afterState;
             if (barrier.Type == EResourceType.Buffer)
             {
-                Dx12Buffer buffer = barrier.Buffer.handle as Dx12Buffer;
+                Dx12Buffer buffer = barrier.Buffer.Handle as Dx12Buffer;
                 Debug.Assert(buffer != null);
 
                 resource = buffer.NativeResource;
-                beforeState = Dx12Utility.ConvertToDx12BufferState(barrier.Buffer.before);
-                afterState = Dx12Utility.ConvertToDx12BufferState(barrier.Buffer.after);
+                beforeState = Dx12Utility.ConvertToDx12BufferState(barrier.Buffer.Before);
+                afterState = Dx12Utility.ConvertToDx12BufferState(barrier.Buffer.After);
             }
             else
             {
-                Dx12Texture texture = barrier.Texture.handle as Dx12Texture;
+                Dx12Texture texture = barrier.Texture.Handle as Dx12Texture;
                 Debug.Assert(texture != null);
 
                 resource = texture.NativeResource;
-                beforeState = Dx12Utility.ConvertToDx12TextureState(barrier.Texture.before);
-                afterState = Dx12Utility.ConvertToDx12TextureState(barrier.Texture.after);
+                beforeState = Dx12Utility.ConvertToDx12TextureState(barrier.Texture.Before);
+                afterState = Dx12Utility.ConvertToDx12TextureState(barrier.Texture.After);
             }
 
             D3D12_RESOURCE_BARRIER resourceBarrier = D3D12_RESOURCE_BARRIER.InitTransition(resource, beforeState, afterState);
@@ -104,21 +104,21 @@ namespace Infinity.Graphics
 
                 if (barrier.Type == EResourceType.Buffer)
                 {
-                    Dx12Buffer buffer = barrier.Buffer.handle as Dx12Buffer;
+                    Dx12Buffer buffer = barrier.Buffer.Handle as Dx12Buffer;
                     Debug.Assert(buffer != null);
 
                     resource = buffer.NativeResource;
-                    beforeState = Dx12Utility.ConvertToDx12BufferState(barrier.Buffer.before);
-                    afterState = Dx12Utility.ConvertToDx12BufferState(barrier.Buffer.after);
+                    beforeState = Dx12Utility.ConvertToDx12BufferState(barrier.Buffer.Before);
+                    afterState = Dx12Utility.ConvertToDx12BufferState(barrier.Buffer.After);
                 }
                 else
                 {
-                    Dx12Texture texture = barrier.Texture.handle as Dx12Texture;
+                    Dx12Texture texture = barrier.Texture.Handle as Dx12Texture;
                     Debug.Assert(texture != null);
 
                     resource = texture.NativeResource;
-                    beforeState = Dx12Utility.ConvertToDx12TextureState(barrier.Texture.before);
-                    afterState = Dx12Utility.ConvertToDx12TextureState(barrier.Texture.after);
+                    beforeState = Dx12Utility.ConvertToDx12TextureState(barrier.Texture.Before);
+                    afterState = Dx12Utility.ConvertToDx12TextureState(barrier.Texture.After);
                 }
 
                 resourceBarriers[i] = D3D12_RESOURCE_BARRIER.InitTransition(resource, beforeState, afterState);
@@ -201,11 +201,11 @@ namespace Infinity.Graphics
                 ref Dx12BindInfo bindInfo = ref bindGroupLayout.BindInfos[i];
                 ref Dx12BindGroupParameter bindParameter = ref dx12BindGroup.BindParameters[i];
 
-                Dx12BindTypeAndParameterSlot? parameter = pipelineLayout.QueryRootDescriptorParameterIndex(EShaderStage.Compute, bindGroupLayout.Index, bindInfo.slot, bindInfo.bindType);
+                Dx12BindTypeAndParameterSlot? parameter = pipelineLayout.QueryRootDescriptorParameterIndex(EShaderStage.Compute, bindGroupLayout.Index, bindInfo.Slot, bindInfo.BindType);
                 if (parameter.HasValue)
                 {
-                    Debug.Assert(parameter.Value.bindType == bindInfo.bindType);
-                    m_Dx12CommandBuffer.NativeCommandList->SetComputeRootDescriptorTable((uint)parameter.Value.slot, bindParameter.dx12GpuDescriptorHandle);
+                    Debug.Assert(parameter.Value.BindType == bindInfo.BindType);
+                    m_Dx12CommandBuffer.NativeCommandList->SetComputeRootDescriptorTable((uint)parameter.Value.Slot, bindParameter.Dx12GpuDescriptorHandle);
                 }
             }
         }
@@ -259,66 +259,66 @@ namespace Infinity.Graphics
 
         public override void BeginPass(in RHIGraphicsPassDescriptor descriptor)
         {
-            PushDebugGroup(descriptor.name);
+            PushDebugGroup(descriptor.Name);
 
             // set render targets
-            D3D12_CPU_DESCRIPTOR_HANDLE* rtvHandles = stackalloc D3D12_CPU_DESCRIPTOR_HANDLE[descriptor.colorAttachmentDescriptors.Length];
-            for (int i = 0; i < descriptor.colorAttachmentDescriptors.Length; ++i)
+            D3D12_CPU_DESCRIPTOR_HANDLE* rtvHandles = stackalloc D3D12_CPU_DESCRIPTOR_HANDLE[descriptor.ColorAttachmentDescriptors.Length];
+            for (int i = 0; i < descriptor.ColorAttachmentDescriptors.Length; ++i)
             {
-                Dx12TextureView textureView = descriptor.colorAttachmentDescriptors.Span[i].renderTarget as Dx12TextureView;
+                Dx12TextureView textureView = descriptor.ColorAttachmentDescriptors.Span[i].RenderTarget as Dx12TextureView;
                 Debug.Assert(textureView != null);
 
                 rtvHandles[i] = textureView.NativeCpuDescriptorHandle;
             }
 
             D3D12_CPU_DESCRIPTOR_HANDLE? dsvHandle = null;
-            if (descriptor.depthStencilAttachmentDescriptor != null)
+            if (descriptor.DepthStencilAttachmentDescriptor != null)
             {
-                Dx12TextureView textureView = descriptor.depthStencilAttachmentDescriptor?.depthStencilTarget as Dx12TextureView;
+                Dx12TextureView textureView = descriptor.DepthStencilAttachmentDescriptor?.DepthStencilTarget as Dx12TextureView;
                 Debug.Assert(textureView != null);
 
                 dsvHandle = textureView.NativeCpuDescriptorHandle;
             }
-            m_Dx12CommandBuffer.NativeCommandList->OMSetRenderTargets((uint)descriptor.colorAttachmentDescriptors.Length, rtvHandles, false, dsvHandle.HasValue ? (D3D12_CPU_DESCRIPTOR_HANDLE*)&dsvHandle : null);
+            m_Dx12CommandBuffer.NativeCommandList->OMSetRenderTargets((uint)descriptor.ColorAttachmentDescriptors.Length, rtvHandles, false, dsvHandle.HasValue ? (D3D12_CPU_DESCRIPTOR_HANDLE*)&dsvHandle : null);
 
             // clear render targets
-            for (int i = 0; i < descriptor.colorAttachmentDescriptors.Length; ++i)
+            for (int i = 0; i < descriptor.ColorAttachmentDescriptors.Length; ++i)
             {
-                ref RHIColorAttachmentDescriptor colorAttachmentDescriptor = ref descriptor.colorAttachmentDescriptors.Span[i];
+                ref RHIColorAttachmentDescriptor colorAttachmentDescriptor = ref descriptor.ColorAttachmentDescriptors.Span[i];
 
-                if (colorAttachmentDescriptor.loadOp != ELoadOp.Clear)
+                if (colorAttachmentDescriptor.LoadOp != ELoadOp.Clear)
                 {
                     continue;
                 }
 
-                float4 clearValue = colorAttachmentDescriptor.clearValue;
+                float4 clearValue = colorAttachmentDescriptor.ClearValue;
                 m_Dx12CommandBuffer.NativeCommandList->ClearRenderTargetView(rtvHandles[i], (float*)&clearValue, 0, null);
             }
             if (dsvHandle.HasValue)
             {
-                RHIDepthStencilAttachmentDescriptor? depthStencilAttachmentDescriptor = descriptor.depthStencilAttachmentDescriptor;
-                if (depthStencilAttachmentDescriptor?.depthLoadOp != ELoadOp.Clear && depthStencilAttachmentDescriptor?.stencilLoadOp != ELoadOp.Clear)
+                RHIDepthStencilAttachmentDescriptor? depthStencilAttachmentDescriptor = descriptor.DepthStencilAttachmentDescriptor;
+                if (depthStencilAttachmentDescriptor?.DepthLoadOp != ELoadOp.Clear && depthStencilAttachmentDescriptor?.StencilLoadOp != ELoadOp.Clear)
                 {
                     return;
                 }
 
-                m_Dx12CommandBuffer.NativeCommandList->ClearDepthStencilView(dsvHandle.Value, Dx12Utility.GetDx12ClearFlagByDSA(depthStencilAttachmentDescriptor.Value), depthStencilAttachmentDescriptor.Value.depthClearValue, Convert.ToByte(depthStencilAttachmentDescriptor.Value.stencilClearValue), 0, null);
+                m_Dx12CommandBuffer.NativeCommandList->ClearDepthStencilView(dsvHandle.Value, Dx12Utility.GetDx12ClearFlagByDSA(depthStencilAttachmentDescriptor.Value), depthStencilAttachmentDescriptor.Value.DepthClearValue, Convert.ToByte(depthStencilAttachmentDescriptor.Value.StencilClearValue), 0, null);
             }
             
-            if(descriptor.shadingRateDescriptor.HasValue)
+            if(descriptor.ShadingRateDescriptor.HasValue)
             {
-                if(descriptor.shadingRateDescriptor.Value.shadingRateTexture != null)
+                if(descriptor.ShadingRateDescriptor.Value.ShadingRateTexture != null)
                 {
-                    D3D12_SHADING_RATE_COMBINER shadingRateCombiner = Dx12Utility.ConvertToDx12ShadingRateCombiner(descriptor.shadingRateDescriptor.Value.shadingRateCombiner);
-                    Dx12Texture dx12Texture = descriptor.shadingRateDescriptor.Value.shadingRateTexture as Dx12Texture;
-                    m_Dx12CommandBuffer.NativeCommandList->RSSetShadingRate(Dx12Utility.ConvertToDx12ShadingRate(descriptor.shadingRateDescriptor.Value.shadingRate), &shadingRateCombiner);
+                    D3D12_SHADING_RATE_COMBINER shadingRateCombiner = Dx12Utility.ConvertToDx12ShadingRateCombiner(descriptor.ShadingRateDescriptor.Value.ShadingRateCombiner);
+                    Dx12Texture dx12Texture = descriptor.ShadingRateDescriptor.Value.ShadingRateTexture as Dx12Texture;
+                    m_Dx12CommandBuffer.NativeCommandList->RSSetShadingRate(Dx12Utility.ConvertToDx12ShadingRate(descriptor.ShadingRateDescriptor.Value.ShadingRate), &shadingRateCombiner);
                     m_Dx12CommandBuffer.NativeCommandList->RSSetShadingRateImage(dx12Texture.NativeResource);
                 }
                 else
                 {
                     //D3D12_SHADING_RATE_COMBINER* shadingRateCombiners = stackalloc D3D12_SHADING_RATE_COMBINER[2] { D3D12_SHADING_RATE_COMBINER.D3D12_SHADING_RATE_COMBINER_MAX, D3D12_SHADING_RATE_COMBINER.D3D12_SHADING_RATE_COMBINER_MAX };
-                    //m_Dx12CommandBuffer.NativeCommandList->RSSetShadingRate(Dx12Utility.ConvertToDx12ShadingRate(beginInfo.shadingRateInfo.Value.shadingRate), shadingRateCombiners);
-                    m_Dx12CommandBuffer.NativeCommandList->RSSetShadingRate(Dx12Utility.ConvertToDx12ShadingRate(descriptor.shadingRateDescriptor.Value.shadingRate), null);
+                    //m_Dx12CommandBuffer.NativeCommandList->RSSetShadingRate(Dx12Utility.ConvertToDx12ShadingRate(beginInfo.ShadingRateInfo.Value.ShadingRate), shadingRateCombiners);
+                    m_Dx12CommandBuffer.NativeCommandList->RSSetShadingRate(Dx12Utility.ConvertToDx12ShadingRate(descriptor.ShadingRateDescriptor.Value.ShadingRate), null);
                 }
             }
         }
@@ -391,18 +391,18 @@ namespace Infinity.Graphics
                 ref Dx12BindInfo bindInfo = ref bindGroupLayout.BindInfos[i];
                 ref Dx12BindGroupParameter bindParameter = ref dx12BindGroup.BindParameters[i];
 
-                parameter = pipelineLayout.QueryRootDescriptorParameterIndex(EShaderStage.Vertex, bindGroupLayout.Index, bindInfo.slot, bindInfo.bindType);
+                parameter = pipelineLayout.QueryRootDescriptorParameterIndex(EShaderStage.Vertex, bindGroupLayout.Index, bindInfo.Slot, bindInfo.BindType);
                 if (parameter.HasValue)
                 {
-                    Debug.Assert(parameter.Value.bindType == bindInfo.bindType);
-                    m_Dx12CommandBuffer.NativeCommandList->SetGraphicsRootDescriptorTable((uint)parameter.Value.slot, bindParameter.dx12GpuDescriptorHandle);
+                    Debug.Assert(parameter.Value.BindType == bindInfo.BindType);
+                    m_Dx12CommandBuffer.NativeCommandList->SetGraphicsRootDescriptorTable((uint)parameter.Value.Slot, bindParameter.Dx12GpuDescriptorHandle);
                 }
 
-                parameter = pipelineLayout.QueryRootDescriptorParameterIndex(EShaderStage.Fragment, bindGroupLayout.Index, bindInfo.slot, bindInfo.bindType);
+                parameter = pipelineLayout.QueryRootDescriptorParameterIndex(EShaderStage.Fragment, bindGroupLayout.Index, bindInfo.Slot, bindInfo.BindType);
                 if (parameter.HasValue)
                 {
-                    Debug.Assert(parameter.Value.bindType == bindInfo.bindType);
-                    m_Dx12CommandBuffer.NativeCommandList->SetGraphicsRootDescriptorTable((uint)parameter.Value.slot, bindParameter.dx12GpuDescriptorHandle);
+                    Debug.Assert(parameter.Value.BindType == bindInfo.BindType);
+                    m_Dx12CommandBuffer.NativeCommandList->SetGraphicsRootDescriptorTable((uint)parameter.Value.Slot, bindParameter.Dx12GpuDescriptorHandle);
                 }
             }
         }

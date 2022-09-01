@@ -32,9 +32,9 @@ namespace Infinity.Graphics
         public override RHIGpuProperty GetProperty()
         {
             RHIGpuProperty gpuProperty;
-            gpuProperty.deviceId = 0;
-            gpuProperty.vendorId = 0;
-            gpuProperty.type = EGpuType.Hardware;
+            gpuProperty.DeviceId = 0;
+            gpuProperty.VendorId = 0;
+            gpuProperty.Type = EGpuType.Hardware;
             return gpuProperty;
         }
 

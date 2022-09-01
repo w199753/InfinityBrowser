@@ -30,24 +30,24 @@ namespace Infinity.Graphics
             m_Dx12Device = device;
             m_Descriptor = descriptor;
 
-            D3D12_HEAP_PROPERTIES heapProperties = new D3D12_HEAP_PROPERTIES(Dx12Utility.ConvertToDx12ResourceFlagByUsage(descriptor.storageMode));
+            D3D12_HEAP_PROPERTIES heapProperties = new D3D12_HEAP_PROPERTIES(Dx12Utility.ConvertToDx12ResourceFlagByUsage(descriptor.StorageMode));
             D3D12_RESOURCE_DESC textureDesc = new D3D12_RESOURCE_DESC();
-            textureDesc.MipLevels = (ushort)descriptor.mipCount;
-            textureDesc.Format = /*Dx12Utility.GetNativeFormat(Descriptor->format)*/DXGI_FORMAT.DXGI_FORMAT_R8G8B8A8_TYPELESS;
-            textureDesc.Width = (ulong)descriptor.extent.x;
-            textureDesc.Height = (uint)descriptor.extent.y;
-            textureDesc.DepthOrArraySize = (ushort)descriptor.extent.z;
-            textureDesc.Flags = Dx12Utility.ConvertToDx12TextureFlag(descriptor.usage);
-            textureDesc.SampleDesc.Count = (uint)descriptor.samples.x;
-            textureDesc.SampleDesc.Quality = (uint)descriptor.samples.y;
-            textureDesc.Dimension = Dx12Utility.ConvertToDx12TextureDimension(descriptor.dimension);
+            textureDesc.MipLevels = (ushort)descriptor.MipCount;
+            textureDesc.Format = /*Dx12Utility.GetNativeFormat(Descriptor->Format)*/DXGI_FORMAT.DXGI_FORMAT_R8G8B8A8_TYPELESS;
+            textureDesc.Width = (ulong)descriptor.Extent.x;
+            textureDesc.Height = (uint)descriptor.Extent.y;
+            textureDesc.DepthOrArraySize = (ushort)descriptor.Extent.z;
+            textureDesc.Flags = Dx12Utility.ConvertToDx12TextureFlag(descriptor.Usage);
+            textureDesc.SampleDesc.Count = (uint)descriptor.Samples.x;
+            textureDesc.SampleDesc.Quality = (uint)descriptor.Samples.y;
+            textureDesc.Dimension = Dx12Utility.ConvertToDx12TextureDimension(descriptor.Dimension);
 
-            D3D12_RESOURCE_STATES initialState = Dx12Utility.ConvertToDx12TextureState(descriptor.state);
-            if (descriptor.storageMode == EStorageMode.Static || descriptor.storageMode == EStorageMode.Dynamic)
+            D3D12_RESOURCE_STATES initialState = Dx12Utility.ConvertToDx12TextureState(descriptor.State);
+            if (descriptor.StorageMode == EStorageMode.Static || descriptor.StorageMode == EStorageMode.Dynamic)
             {
                 initialState = D3D12_RESOURCE_STATES.D3D12_RESOURCE_STATE_GENERIC_READ;
             }
-            if (descriptor.storageMode == EStorageMode.Staging)
+            if (descriptor.StorageMode == EStorageMode.Staging)
             {
                 initialState = D3D12_RESOURCE_STATES.D3D12_RESOURCE_STATE_COPY_DEST;
             }

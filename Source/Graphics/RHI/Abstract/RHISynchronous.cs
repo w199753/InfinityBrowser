@@ -3,16 +3,16 @@
 #pragma warning disable CS0414
     public struct RHIBufferTransitionDescriptor
     {
-        public RHIBuffer handle;
-        public EBufferState before;
-        public EBufferState after;
+        public RHIBuffer Handle;
+        public EBufferState Before;
+        public EBufferState After;
     }
 
     public struct RHITextureTransitionDescriptor
     {
-        public RHITexture handle;
-        public ETextureState before;
-        public ETextureState after;
+        public RHITexture Handle;
+        public ETextureState Before;
+        public ETextureState After;
     }
 
     public struct RHIBarrier
@@ -29,9 +29,9 @@
         {
             RHIBarrier barrier = new RHIBarrier();
             barrier.m_Type = EResourceType.Buffer;
-            barrier.m_Buffer.handle = buffer;
-            barrier.m_Buffer.before = before;
-            barrier.m_Buffer.after = after;
+            barrier.m_Buffer.Handle = buffer;
+            barrier.m_Buffer.Before = before;
+            barrier.m_Buffer.After = after;
             return barrier;
         }
 
@@ -39,9 +39,9 @@
         {
             RHIBarrier barrier = new RHIBarrier();
             barrier.m_Type = EResourceType.Texture;
-            barrier.m_Texture.handle = texture;
-            barrier.m_Texture.before = before;
-            barrier.m_Texture.after = after;
+            barrier.m_Texture.Handle = texture;
+            barrier.m_Texture.Before = before;
+            barrier.m_Texture.After = after;
             return barrier;
         }
     }

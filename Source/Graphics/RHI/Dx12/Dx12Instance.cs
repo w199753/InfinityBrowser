@@ -32,7 +32,7 @@ namespace Infinity.Graphics
         {
             uint factoryFlags = 0;
 
-            if(descriptor.enableDebugLayer)
+            if(descriptor.EnableDebugLayer)
             {
                 ID3D12Debug* debug;
                 if (SUCCEEDED(DirectX.D3D12GetDebugInterface(__uuidof<ID3D12Debug>(), (void**)&debug)))
@@ -40,7 +40,7 @@ namespace Infinity.Graphics
                     debug->EnableDebugLayer();
                     factoryFlags |= DXGI.DXGI_CREATE_FACTORY_DEBUG;
 
-                    if (descriptor.enableGpuValidatior)
+                    if (descriptor.EnableGpuValidatior)
                     {
                         ID3D12Debug1* debug1;
                         if (SUCCEEDED(debug->QueryInterface(__uuidof<ID3D12Debug1>(), (void**)&debug1)))

@@ -8,10 +8,10 @@ namespace Infinity.Graphics
 #pragma warning disable CS8600, CS8602, CS8604, CS8618, CA1416
     internal struct Dx12BindGroupParameter
     {
-        //public int slot;
-        //public int count;
-        //public EBindType bindType;
-        public D3D12_GPU_DESCRIPTOR_HANDLE dx12GpuDescriptorHandle;
+        //public int Slot;
+        //public int Count;
+        //public EBindType BindType;
+        public D3D12_GPU_DESCRIPTOR_HANDLE Dx12GpuDescriptorHandle;
     }
 
     internal unsafe class Dx12BindGroup : RHIBindGroup
@@ -36,39 +36,39 @@ namespace Infinity.Graphics
 
         public Dx12BindGroup(in RHIBindGroupDescriptor descriptor)
         {
-            Dx12BindGroupLayout bindGroupLayout = descriptor.layout as Dx12BindGroupLayout;
+            Dx12BindGroupLayout bindGroupLayout = descriptor.Layout as Dx12BindGroupLayout;
             Debug.Assert(bindGroupLayout != null);
 
             m_BindGroupLayout = bindGroupLayout;
-            m_BindParameters = new Dx12BindGroupParameter[descriptor.elements.Length];
+            m_BindParameters = new Dx12BindGroupParameter[descriptor.Elements.Length];
 
-            for (int i = 0; i < descriptor.elements.Length; ++i)
+            for (int i = 0; i < descriptor.Elements.Length; ++i)
             {
                 ref Dx12BindInfo bindInfo = ref bindGroupLayout.BindInfos[i];
-                ref RHIBindGroupElement element = ref descriptor.elements.Span[i];
+                ref RHIBindGroupElement element = ref descriptor.Elements.Span[i];
 
                 ref Dx12BindGroupParameter bindParameter = ref m_BindParameters[i];
-                switch (bindInfo.bindType)
+                switch (bindInfo.BindType)
                 {
+                    case EBindType.Sampler:
+                        Dx12Sampler sampler = element.Sampler as Dx12Sampler;
+                        bindParameter.Dx12GpuDescriptorHandle = sampler.NativeGpuDescriptorHandle;
+                        break;
+
                     case EBindType.Buffer:
                     case EBindType.UniformBuffer:
                     case EBindType.StorageBuffer:
-                        Dx12BufferView bufferView = element.bufferView as Dx12BufferView;
-                        bindParameter.dx12GpuDescriptorHandle = bufferView.NativeGpuDescriptorHandle;
-                        break;
-
-                    case EBindType.Sampler:
-                        Dx12Sampler textureSampler = element.textureSampler as Dx12Sampler;
-                        bindParameter.dx12GpuDescriptorHandle = textureSampler.NativeGpuDescriptorHandle;
+                        Dx12BufferView bufferView = element.BufferView as Dx12BufferView;
+                        bindParameter.Dx12GpuDescriptorHandle = bufferView.NativeGpuDescriptorHandle;
                         break;
 
                     case EBindType.Texture:
                     case EBindType.StorageTexture:
-                        Dx12TextureView textureView = element.textureView as Dx12TextureView;
-                        bindParameter.dx12GpuDescriptorHandle = textureView.NativeGpuDescriptorHandle;
+                        Dx12TextureView textureView = element.TextureView as Dx12TextureView;
+                        bindParameter.Dx12GpuDescriptorHandle = textureView.NativeGpuDescriptorHandle;
                         break;
 
-                    case EBindType.ArrayTexture:
+                    case EBindType.Bindless:
                         //Todo Bindless
                         break;
                 }
@@ -81,25 +81,25 @@ namespace Infinity.Graphics
 
             switch (bindType)
             {
+                case EBindType.Sampler:
+                    Dx12Sampler sampler = element.Sampler as Dx12Sampler;
+                    bindParameter.Dx12GpuDescriptorHandle = sampler.NativeGpuDescriptorHandle;
+                    break;
+
                 case EBindType.Buffer:
                 case EBindType.UniformBuffer:
                 case EBindType.StorageBuffer:
-                    Dx12BufferView bufferView = element.bufferView as Dx12BufferView;
-                    bindParameter.dx12GpuDescriptorHandle = bufferView.NativeGpuDescriptorHandle;
-                    break;
-
-                case EBindType.Sampler:
-                    Dx12Sampler textureSampler = element.textureSampler as Dx12Sampler;
-                    bindParameter.dx12GpuDescriptorHandle = textureSampler.NativeGpuDescriptorHandle;
+                    Dx12BufferView bufferView = element.BufferView as Dx12BufferView;
+                    bindParameter.Dx12GpuDescriptorHandle = bufferView.NativeGpuDescriptorHandle;
                     break;
 
                 case EBindType.Texture:
                 case EBindType.StorageTexture:
-                    Dx12TextureView textureView = element.textureView as Dx12TextureView;
-                    bindParameter.dx12GpuDescriptorHandle = textureView.NativeGpuDescriptorHandle;
+                    Dx12TextureView textureView = element.TextureView as Dx12TextureView;
+                    bindParameter.Dx12GpuDescriptorHandle = textureView.NativeGpuDescriptorHandle;
                     break;
 
-                case EBindType.ArrayTexture:
+                case EBindType.Bindless:
                     //Todo Bindless
                     break;
             }

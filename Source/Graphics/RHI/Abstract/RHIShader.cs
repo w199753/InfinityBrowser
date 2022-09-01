@@ -4,10 +4,10 @@ namespace Infinity.Graphics
 {
     public struct RHIShaderDescriptor
     {
-        public int size;
-        public IntPtr byteCode;
-        public string entryName;
-        public EShaderStage shaderStage;
+        public int Size;
+        public IntPtr ByteCode;
+        public string EntryName;
+        public EShaderStage ShaderStage;
     }
 
     public abstract class RHIShader : Disposal
