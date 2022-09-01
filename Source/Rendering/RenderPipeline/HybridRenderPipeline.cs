@@ -54,11 +54,11 @@ namespace Infinity.Rendering
 
             string graphicsCode = new string(
             @"
-            [[vk::binding(0, 0)]]
-            Texture2D _DiffuseTexture : register(t0, space0);
-
             [[vk::binding(1, 0)]]
-            SamplerState _DiffuseSampler : register(s1, space0);
+            Texture2D _DiffuseTexture : register(t1, space0);
+
+            [[vk::binding(0, 0)]]
+            SamplerState _DiffuseSampler : register(s0, space0);
 
             struct Attributes
 	        {
@@ -352,12 +352,12 @@ namespace Infinity.Rendering
             {
                 graphicsBindGroupLayoutElements[0].Slot = 0;
                 graphicsBindGroupLayoutElements[0].Count = 1;
-                graphicsBindGroupLayoutElements[0].BindType = EBindType.Texture;
+                graphicsBindGroupLayoutElements[0].BindType = EBindType.Sampler;
                 graphicsBindGroupLayoutElements[0].ShaderStage = EShaderStage.Fragment;
 
                 graphicsBindGroupLayoutElements[1].Slot = 1;
                 graphicsBindGroupLayoutElements[1].Count = 1;
-                graphicsBindGroupLayoutElements[1].BindType = EBindType.Sampler;
+                graphicsBindGroupLayoutElements[1].BindType = EBindType.Texture;
                 graphicsBindGroupLayoutElements[1].ShaderStage = EShaderStage.Fragment;
             }
             RHIBindGroupLayoutDescriptor graphicsBindGroupLayoutDescriptor;
@@ -370,8 +370,8 @@ namespace Infinity.Rendering
             // Create GraphicsBindGroup
             /*RHIBindGroupElement[] graphicsBindGroupElements = new RHIBindGroupElement[2];
             {
-                graphicsBindGroupElements[0].TextureView = m_ComputeTextureView;
-                graphicsBindGroupElements[1].TextureSampler = m_ComputeSampler;
+                graphicsBindGroupElements[0].Sampler = m_ComputeSampler;
+                graphicsBindGroupElements[1].TextureView = m_ComputeTextureView;
             }
             RHIBindGroupDescriptor graphicsBindGroupDescriptor = new RHIBindGroupDescriptor();
             {
