@@ -54,11 +54,11 @@ namespace Infinity.Rendering
 
             string graphicsCode = new string(
             @"
-            [[vk::binding(1, 0)]]
-            Texture2D _DiffuseTexture : register(t1, space0);
-
             [[vk::binding(0, 0)]]
             SamplerState _DiffuseSampler : register(s0, space0);
+
+            [[vk::binding(1, 0)]]
+            Texture2D _DiffuseTexture : register(t1, space0);
 
             struct Attributes
 	        {
