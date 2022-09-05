@@ -7,9 +7,9 @@ namespace Infinity.Graphics
 #pragma warning disable CS8600, CS8602, CS8604, CS8618, CA1416
     internal struct Dx12BindInfo
     {
-        public int Slot;
-        public int Index;
         public int Count;
+        public int Index;
+        public int BindSlot;
         public EBindType BindType;
         public EShaderStage ShaderStage;
 
@@ -46,9 +46,9 @@ namespace Infinity.Graphics
             {
                 ref RHIBindGroupLayoutElement element = ref elements[i];
                 ref Dx12BindInfo bindInfo = ref m_BindInfos[i];
-                bindInfo.Slot = element.Slot;
-                bindInfo.Index = descriptor.Index;
                 bindInfo.Count = element.Count;
+                bindInfo.Index = descriptor.Index;
+                bindInfo.BindSlot = element.BindSlot;
                 bindInfo.BindType = element.BindType;
                 bindInfo.ShaderStage = element.ShaderStage;
             }

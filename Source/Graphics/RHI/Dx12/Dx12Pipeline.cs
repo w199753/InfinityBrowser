@@ -57,7 +57,7 @@ namespace Infinity.Graphics
                     ref Dx12BindInfo bindInfo = ref bindGroupLayout.BindInfos[j];
 
                     ref D3D12_DESCRIPTOR_RANGE1 rootDescriptorRange = ref rootDescriptorRangeViews[i + j];
-                    rootDescriptorRange.Init(Dx12Utility.ConvertToDx12BindType(bindInfo.BindType), bindInfo.IsBindless ? (uint)bindInfo.Count : 1, (uint)bindInfo.Slot, (uint)bindInfo.Index, Dx12Utility.GetDx12DescriptorRangeFalag(bindInfo.BindType));
+                    rootDescriptorRange.Init(Dx12Utility.ConvertToDx12BindType(bindInfo.BindType), bindInfo.IsBindless ? (uint)bindInfo.Count : 1, (uint)bindInfo.BindSlot, (uint)bindInfo.Index, Dx12Utility.GetDx12DescriptorRangeFalag(bindInfo.BindType));
 
                     ref D3D12_ROOT_PARAMETER1 rootParameterView = ref rootParameterViews[i + j];
                     rootParameterView.InitAsDescriptorTable(1, rootDescriptorRangePtr + (i + j), Dx12Utility.ConvertToDx12ShaderStage(bindInfo.ShaderStage));
@@ -68,17 +68,17 @@ namespace Infinity.Graphics
 
                     if ((bindInfo.ShaderStage & EShaderStage.Vertex) == EShaderStage.Vertex)
                     {
-                        m_VertexParameterMap.TryAdd(new int3(bindInfo.Index << 8, bindInfo.Slot, Dx12Utility.GetDx12BindKey(bindInfo.BindType)).GetHashCode(), parameter);
+                        m_VertexParameterMap.TryAdd(new int3(bindInfo.Index << 8, bindInfo.BindSlot, Dx12Utility.GetDx12BindKey(bindInfo.BindType)).GetHashCode(), parameter);
                     }
 
                     if ((bindInfo.ShaderStage & EShaderStage.Fragment) == EShaderStage.Fragment)
                     {
-                        m_FragmentParameterMap.TryAdd(new int3(bindInfo.Index << 8, bindInfo.Slot, Dx12Utility.GetDx12BindKey(bindInfo.BindType)).GetHashCode(), parameter);
+                        m_FragmentParameterMap.TryAdd(new int3(bindInfo.Index << 8, bindInfo.BindSlot, Dx12Utility.GetDx12BindKey(bindInfo.BindType)).GetHashCode(), parameter);
                     }
 
                     if ((bindInfo.ShaderStage & EShaderStage.Compute) == EShaderStage.Compute)
                     {
-                        m_ComputeParameterMap.TryAdd(new int3(bindInfo.Index << 8, bindInfo.Slot, Dx12Utility.GetDx12BindKey(bindInfo.BindType)).GetHashCode(), parameter);
+                        m_ComputeParameterMap.TryAdd(new int3(bindInfo.Index << 8, bindInfo.BindSlot, Dx12Utility.GetDx12BindKey(bindInfo.BindType)).GetHashCode(), parameter);
                     }
                 }
             }

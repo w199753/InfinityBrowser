@@ -201,7 +201,7 @@ namespace Infinity.Graphics
                 ref Dx12BindInfo bindInfo = ref bindGroupLayout.BindInfos[i];
                 ref Dx12BindGroupParameter bindParameter = ref dx12BindGroup.BindParameters[i];
 
-                Dx12BindTypeAndParameterSlot? parameter = pipelineLayout.QueryRootDescriptorParameterIndex(EShaderStage.Compute, bindGroupLayout.Index, bindInfo.Slot, bindInfo.BindType);
+                Dx12BindTypeAndParameterSlot? parameter = pipelineLayout.QueryRootDescriptorParameterIndex(EShaderStage.Compute, bindGroupLayout.Index, bindInfo.BindSlot, bindInfo.BindType);
                 if (parameter.HasValue)
                 {
                     Debug.Assert(parameter.Value.BindType == bindInfo.BindType);
@@ -391,14 +391,14 @@ namespace Infinity.Graphics
                 ref Dx12BindInfo bindInfo = ref bindGroupLayout.BindInfos[i];
                 ref Dx12BindGroupParameter bindParameter = ref dx12BindGroup.BindParameters[i];
 
-                parameter = pipelineLayout.QueryRootDescriptorParameterIndex(EShaderStage.Vertex, bindGroupLayout.Index, bindInfo.Slot, bindInfo.BindType);
+                parameter = pipelineLayout.QueryRootDescriptorParameterIndex(EShaderStage.Vertex, bindGroupLayout.Index, bindInfo.BindSlot, bindInfo.BindType);
                 if (parameter.HasValue)
                 {
                     Debug.Assert(parameter.Value.BindType == bindInfo.BindType);
                     m_Dx12CommandBuffer.NativeCommandList->SetGraphicsRootDescriptorTable((uint)parameter.Value.Slot, bindParameter.Dx12GpuDescriptorHandle);
                 }
 
-                parameter = pipelineLayout.QueryRootDescriptorParameterIndex(EShaderStage.Fragment, bindGroupLayout.Index, bindInfo.Slot, bindInfo.BindType);
+                parameter = pipelineLayout.QueryRootDescriptorParameterIndex(EShaderStage.Fragment, bindGroupLayout.Index, bindInfo.BindSlot, bindInfo.BindType);
                 if (parameter.HasValue)
                 {
                     Debug.Assert(parameter.Value.BindType == bindInfo.BindType);

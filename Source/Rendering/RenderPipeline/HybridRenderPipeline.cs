@@ -55,7 +55,7 @@ namespace Infinity.Rendering
             string graphicsCode = new string(
             @"
             [[vk::binding(1, 0)]]
-            Texture2D _DiffuseTexture : register(t1, space0);
+            Texture2D _DiffuseTexture[1] : register(t1, space0);
 
             [[vk::binding(0, 0)]]
             SamplerState _DiffuseSampler : register(s0, space0);
@@ -83,7 +83,7 @@ namespace Infinity.Rendering
             float4 PSMain(Varyings input) : SV_Target
             {
                 //return input.color;
-	            return input.color + _DiffuseTexture.Sample(_DiffuseSampler, float2(0, 0));
+	            return input.color + _DiffuseTexture[0].Sample(_DiffuseSampler, float2(0, 0));
             }");
 
             m_ComputeResult = Vortice.Dxc.DxcCompiler.Compile(Vortice.Dxc.DxcShaderStage.Compute, computeCode, "CSMain");
@@ -140,8 +140,8 @@ namespace Infinity.Rendering
             // Create ComputeBindGroupLayout
             RHIBindGroupLayoutElement[] computeBindGroupLayoutElements = new RHIBindGroupLayoutElement[1];
             {
-                computeBindGroupLayoutElements[0].Slot = 0;
-                computeBindGroupLayoutElements[0].Count = 1;
+                //computeBindGroupLayoutElements[0].Count = 1;
+                computeBindGroupLayoutElements[0].BindSlot = 0;
                 computeBindGroupLayoutElements[0].BindType = EBindType.StorageTexture;
                 computeBindGroupLayoutElements[0].ShaderStage = EShaderStage.Compute;
             }
@@ -350,13 +350,13 @@ namespace Infinity.Rendering
             // Create GraphicsBindGroupLayout
             RHIBindGroupLayoutElement[] graphicsBindGroupLayoutElements = new RHIBindGroupLayoutElement[2];
             {
-                graphicsBindGroupLayoutElements[0].Slot = 0;
-                graphicsBindGroupLayoutElements[0].Count = 1;
+                //graphicsBindGroupLayoutElements[0].Count = 1;
+                graphicsBindGroupLayoutElements[0].BindSlot = 0;
                 graphicsBindGroupLayoutElements[0].BindType = EBindType.Sampler;
                 graphicsBindGroupLayoutElements[0].ShaderStage = EShaderStage.Fragment;
 
-                graphicsBindGroupLayoutElements[1].Slot = 1;
-                graphicsBindGroupLayoutElements[1].Count = 1;
+                //graphicsBindGroupLayoutElements[1].Count = 1;
+                graphicsBindGroupLayoutElements[1].BindSlot = 1;
                 graphicsBindGroupLayoutElements[1].BindType = EBindType.Texture;
                 graphicsBindGroupLayoutElements[1].ShaderStage = EShaderStage.Fragment;
             }

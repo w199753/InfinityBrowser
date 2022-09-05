@@ -4,8 +4,8 @@ namespace Infinity.Graphics
 {
     public struct RHIBindGroupLayoutElement
     {
-        public int Slot;
         public int Count;
+        public int BindSlot;
         public EBindType BindType;
         public EShaderStage ShaderStage;
     }
