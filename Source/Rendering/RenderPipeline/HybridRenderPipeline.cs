@@ -52,13 +52,12 @@ namespace Infinity.Rendering
                 //_ResultTexture[id.xy] = float4(id.x & id.y, (id.x & 15) / 15, (id.y & 15) / 15, 0.25);
             }");
 
-            string graphicsCode = new string(
-            @"
-            [[vk::binding(1, 0)]]
-            Texture2D _DiffuseTexture[1] : register(t1, space0);
-
+            string graphicsCode = new string(@"
             [[vk::binding(0, 0)]]
             SamplerState _DiffuseSampler : register(s0, space0);
+
+            [[vk::binding(1, 0)]]
+            Texture2D _DiffuseTexture[1] : register(t1, space0);
 
             struct Attributes
 	        {
