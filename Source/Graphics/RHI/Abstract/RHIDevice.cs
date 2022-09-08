@@ -23,11 +23,10 @@ namespace Infinity.Graphics
         public abstract RHISwapChain CreateSwapChain(in RHISwapChainDescriptor descriptor);
         public abstract RHIBindGroupLayout CreateBindGroupLayout(in RHIBindGroupLayoutDescriptor descriptor);
         public abstract RHIBindGroup CreateBindGroup(in RHIBindGroupDescriptor descriptor);
+        public abstract RHIPipelineLayout CreatePipelineLayout(in RHIPipelineLayoutDescriptor descriptor);
         public abstract RHIComputePipeline CreateComputePipeline(in RHIComputePipelineDescriptor descriptor);
         public abstract RHIRaytracingPipeline CreateRaytracingPipeline(in RHIRaytracingPipelineDescriptor descriptor);
         public abstract RHIMeshletPipeline CreateMeshletPipeline(in RHIMeshletPipelineDescriptor descriptor);
         public abstract RHIGraphicsPipeline CreateGraphicsPipeline(in RHIGraphicsPipelineDescriptor descriptor);
-
-        internal abstract RHIPipelineLayout CreatePipelineLayout(in RHIPipelineLayoutDescriptor descriptor);
     }
 }

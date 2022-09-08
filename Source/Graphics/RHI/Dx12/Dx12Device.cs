@@ -237,6 +237,11 @@ namespace Infinity.Graphics
             return new Dx12BindGroup(descriptor);
         }
 
+        public override RHIPipelineLayout CreatePipelineLayout(in RHIPipelineLayoutDescriptor descriptor)
+        {
+            return new Dx12PipelineLayout(this, descriptor);
+        }
+
         public override RHIComputePipeline CreateComputePipeline(in RHIComputePipelineDescriptor descriptor)
         {
             return new Dx12ComputePipeline(this, descriptor);
@@ -255,11 +260,6 @@ namespace Infinity.Graphics
         public override RHIGraphicsPipeline CreateGraphicsPipeline(in RHIGraphicsPipelineDescriptor descriptor)
         {
             return new Dx12GraphicsPipeline(this, descriptor);
-        }
-
-        internal override RHIPipelineLayout CreatePipelineLayout(in RHIPipelineLayoutDescriptor descriptor)
-        {
-            return new Dx12PipelineLayout(this, descriptor);
         }
 
         public Dx12DescriptorInfo AllocateDsvDescriptor(in int count)

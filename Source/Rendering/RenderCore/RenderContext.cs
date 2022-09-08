@@ -293,6 +293,12 @@ namespace Infinity.Rendering
             return m_Device.CreateBindGroup(descriptor);
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public RHIPipelineLayout CreatePipelineLayout(in RHIPipelineLayoutDescriptor descriptor)
+        {
+            return m_Device.CreatePipelineLayout(descriptor);
+        }
+
         /*[MethodImpl(MethodImplOptions.AggressiveInlining)]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public RHIQuery GetQuery(in EQueryType queryType, string name)

@@ -164,6 +164,8 @@ namespace Infinity.Graphics
 
     public abstract class RHIBlitEncoder : Disposal
     {
+        protected RHICommandBuffer? m_CommandBuffer;
+
         public RHIBlitPassScoper BeginScopedPass(string name)
         {
             BeginPass(name);
@@ -186,6 +188,10 @@ namespace Infinity.Graphics
 
     public abstract class RHIComputeEncoder : Disposal
     {
+        protected RHICommandBuffer? m_CommandBuffer;
+        protected RHIPipelineLayout? m_PipelineLayout;
+        protected RHIComputePipeline? m_PipelineState;
+
         public RHIComputePassScoper BeginScopedPass(string name)
         {
             BeginPass(name);
@@ -193,7 +199,8 @@ namespace Infinity.Graphics
         }
 
         public abstract void BeginPass(string name);
-        public abstract void SetPipeline(RHIComputePipeline pipeline);
+        public abstract void SetPipelineLayout(RHIPipelineLayout pipelineLayout);
+        public abstract void SetPipelineState(RHIComputePipeline pipeline);
         public abstract void SetBindGroup(RHIBindGroup bindGroup);
         public abstract void Dispatch(in uint groupCountX, in uint groupCountY, in uint groupCountZ);
         public abstract void DispatchIndirect(RHIBuffer argsBuffer, in uint argsOffset);
@@ -204,6 +211,10 @@ namespace Infinity.Graphics
 
     public abstract class RHIGraphicsEncoder : Disposal
     {
+        protected RHICommandBuffer? m_CommandBuffer;
+        protected RHIPipelineLayout? m_PipelineLayout;
+        protected RHIGraphicsPipeline? m_PipelineState;
+
         public RHIGraphicsPassScoper BeginScopedPass(in RHIGraphicsPassDescriptor descriptor)
         {
             BeginPass(descriptor);
@@ -211,7 +222,8 @@ namespace Infinity.Graphics
         }
 
         public abstract void BeginPass(in RHIGraphicsPassDescriptor descriptor);
-        public abstract void SetPipeline(RHIGraphicsPipeline pipeline);
+        public abstract void SetPipelineLayout(RHIPipelineLayout pipelineLayout);
+        public abstract void SetPipelineState(RHIGraphicsPipeline pipeline);
         public abstract void SetViewport(in Viewport viewport);
         public abstract void SetViewport(in Memory<Viewport> viewports);
         public abstract void SetScissorRect(in Rect rect);

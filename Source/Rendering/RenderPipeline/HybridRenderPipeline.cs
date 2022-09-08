@@ -34,8 +34,10 @@ namespace Infinity.Rendering
         //RHIBindGroup m_GraphicsBindGroup;
         RHIBindGroupLayout m_ComputeBindGroupLayout;
         RHIBindGroupLayout m_GraphicsBindGroupLayout;
-        RHIComputePipeline m_ComputePipeline;
-        RHIGraphicsPipeline m_GraphicsPipeline;
+        RHIPipelineLayout m_ComputePipelineLayout;
+        RHIPipelineLayout m_GraphicsPipelineLayout;
+        RHIComputePipeline m_ComputePipelineState;
+        RHIGraphicsPipeline m_GraphicsPipelineState;
         RHIColorAttachmentDescriptor[] m_ColorAttachmentDescriptors;
 
         public HybridRenderPipeline(string pipelineName) : base(pipelineName) 
@@ -173,13 +175,19 @@ namespace Infinity.Rendering
             }
             m_ComputeShader = renderContext.CreateShader(computeShaderDescriptor);
 
+            RHIPipelineLayoutDescriptor computePipelienLayoutDescriptor;
+            {
+                computePipelienLayoutDescriptor.BindGroupLayouts = new RHIBindGroupLayout[] { m_ComputeBindGroupLayout };
+            }
+            m_ComputePipelineLayout = renderContext.CreatePipelineLayout(computePipelienLayoutDescriptor);
+
             RHIComputePipelineDescriptor computePipelineDescriptor;
             {
                 computePipelineDescriptor.ThreadSize = new uint3(8, 8, 1);
                 computePipelineDescriptor.ComputeShader = m_ComputeShader;
-                computePipelineDescriptor.BindGroupLayouts = new RHIBindGroupLayout[] { m_ComputeBindGroupLayout };
+                computePipelineDescriptor.PipelineLayout = m_ComputePipelineLayout;
             }
-            m_ComputePipeline = renderContext.CreateComputePipeline(computePipelineDescriptor);
+            m_ComputePipelineState = renderContext.CreateComputePipeline(computePipelineDescriptor);
 
             // Create Sampler
             //RHISamplerDescriptor samplerDescriptor;
@@ -398,16 +406,22 @@ namespace Infinity.Rendering
             }
             m_FragmentShader = renderContext.CreateShader(fragmentShaderDescriptor);
 
+            RHIPipelineLayoutDescriptor graphicsPipelienLayoutDescriptor;
+            {
+                graphicsPipelienLayoutDescriptor.BindGroupLayouts = new RHIBindGroupLayout[] { m_GraphicsBindGroupLayout };
+            }
+            m_GraphicsPipelineLayout = renderContext.CreatePipelineLayout(graphicsPipelienLayoutDescriptor);
+
             RHIGraphicsPipelineDescriptor graphicsPipelineDescriptor;
             {
                 graphicsPipelineDescriptor.VertexShader = m_VertexShader;
                 graphicsPipelineDescriptor.FragmentShader = m_FragmentShader;
-                graphicsPipelineDescriptor.BindGroupLayouts = new RHIBindGroupLayout[] { m_GraphicsBindGroupLayout };
+                graphicsPipelineDescriptor.PipelineLayout = m_GraphicsPipelineLayout;
                 graphicsPipelineDescriptor.OutputStateDescriptor = outputStateDescriptor;
                 graphicsPipelineDescriptor.RenderStateDescriptor = renderStateDescriptor;
                 graphicsPipelineDescriptor.VertexStateDescriptor = vertexStateDescriptor;
             }
-            m_GraphicsPipeline = renderContext.CreateGraphicsPipeline(graphicsPipelineDescriptor);
+            m_GraphicsPipelineState = renderContext.CreateGraphicsPipeline(graphicsPipelineDescriptor);
 
             m_ColorAttachmentDescriptors = new RHIColorAttachmentDescriptor[1];
             {
@@ -437,7 +451,8 @@ namespace Infinity.Rendering
                 using (computeEncoder.BeginScopedPass("ComputePass"))
                 {
                     computeEncoder.PushDebugGroup("GenereteUV");
-                    computeEncoder.SetPipeline(m_ComputePipeline);
+                    computeEncoder.SetPipelineLayout(m_ComputePipelineLayout);
+                    computeEncoder.SetPipelineState(m_ComputePipelineState);
                     computeEncoder.SetBindGroup(m_ComputeBindGroup);
                     computeEncoder.Dispatch((uint)math.ceil((float)renderContext.ScreenSize.x / 8), (uint)math.ceil((float)renderContext.ScreenSize.y / 8), 1);
                     computeEncoder.PopDebugGroup();
@@ -454,7 +469,8 @@ namespace Infinity.Rendering
                     graphicsEncoder.SetViewport(new Viewport(0, 0, (uint)renderContext.ScreenSize.x, (uint)renderContext.ScreenSize.y, 0, 1));
                     graphicsEncoder.SetScissorRect(new Rect(0, 0, (uint)renderContext.ScreenSize.x, (uint)renderContext.ScreenSize.y));
                     graphicsEncoder.PushDebugGroup("DrawTriange");
-                    graphicsEncoder.SetPipeline(m_GraphicsPipeline);
+                    graphicsEncoder.SetPipelineLayout(m_GraphicsPipelineLayout);
+                    graphicsEncoder.SetPipelineState(m_GraphicsPipelineState);
                     //graphicsEncoder.SetBindGroup(m_GraphicsBindGroup);
                     graphicsEncoder.SetVertexBuffer(m_VertexBuffer);
                     graphicsEncoder.SetIndexBuffer(m_IndexBuffer, EIndexFormat.UInt16);
@@ -483,19 +499,20 @@ namespace Infinity.Rendering
             m_ComputeResult.Dispose();
             m_IndexBuffer.Dispose();
             m_VertexBuffer.Dispose();
-            m_ComputeTextureView.Dispose();
-            m_ComputeTexture.Dispose();
             //m_ComputeSampler.Dispose();
-            //m_GraphicsUniformView.Dispose();
+            m_ComputeTexture.Dispose();
+            m_ComputeTextureView.Dispose();
+            m_ComputeShader.Dispose();
             m_VertexShader.Dispose();
             m_FragmentShader.Dispose();
-            m_ComputeShader.Dispose();
-            m_GraphicsPipeline.Dispose();
-            //m_GraphicsBindGroup.Dispose();
-            m_GraphicsBindGroupLayout.Dispose();
-            m_ComputePipeline.Dispose();
             m_ComputeBindGroup.Dispose();
             m_ComputeBindGroupLayout.Dispose();
+            m_ComputePipelineState.Dispose();
+            m_ComputePipelineLayout.Dispose();
+            //m_GraphicsBindGroup.Dispose();
+            m_GraphicsBindGroupLayout.Dispose();
+            m_GraphicsPipelineState.Dispose();
+            m_GraphicsPipelineLayout.Dispose();
             Console.WriteLine("Release RenderPipeline");
         }
     }

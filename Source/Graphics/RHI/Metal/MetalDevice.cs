@@ -104,6 +104,11 @@ namespace Infinity.Graphics
             throw new NotImplementedException();
         }
 
+        public override RHIPipelineLayout CreatePipelineLayout(in RHIPipelineLayoutDescriptor descriptor)
+        {
+            throw new NotImplementedException();
+        }
+
         public override RHIComputePipeline CreateComputePipeline(in RHIComputePipelineDescriptor descriptor)
         {
             throw new NotImplementedException();
@@ -120,11 +125,6 @@ namespace Infinity.Graphics
         }
 
         public override RHIGraphicsPipeline CreateGraphicsPipeline(in RHIGraphicsPipelineDescriptor descriptor)
-        {
-            throw new NotImplementedException();
-        }
-
-        internal override RHIPipelineLayout CreatePipelineLayout(in RHIPipelineLayoutDescriptor descriptor)
         {
             throw new NotImplementedException();
         }

@@ -128,7 +128,7 @@ namespace Infinity.Graphics
     {
         public uint3 ThreadSize;
         public RHIShader ComputeShader;
-        public RHIBindGroupLayout[] BindGroupLayouts;
+        public RHIPipelineLayout PipelineLayout;
     }
 
     public struct RHIRaytracingPipelineDescriptor
@@ -137,7 +137,7 @@ namespace Infinity.Graphics
         public uint AttributeSize;
         public uint RecursionDepth;
         public RHIShader GenerateShader;
-        public RHIBindGroupLayout[] BindGroupLayouts;
+        public RHIPipelineLayout PipelineLayout;
         public Memory<RHIHitGroupDescription> HitGroupDescriptors;
         public Memory<RHIRayGeneralDescription> RayGeneralDescriptors;
     }
@@ -147,7 +147,7 @@ namespace Infinity.Graphics
         public RHIShader TaskShader;
         public RHIShader MeshShader;
         public RHIShader FragmentShader;
-        public RHIBindGroupLayout[] BindGroupLayouts;
+        public RHIPipelineLayout PipelineLayout;
         public EPrimitiveTopology PrimitiveTopology;
         public RHIOutputStateDescriptor OutputStateDescriptor;
         public RHIRenderStateDescriptor RenderStateDescriptor;
@@ -157,19 +157,19 @@ namespace Infinity.Graphics
     {
         public RHIShader VertexShader;
         public RHIShader FragmentShader;
-        public RHIBindGroupLayout[] BindGroupLayouts;
+        public RHIPipelineLayout PipelineLayout;
         public RHIOutputStateDescriptor OutputStateDescriptor;
         public RHIRenderStateDescriptor RenderStateDescriptor;
         public RHIVertexStateDescriptor VertexStateDescriptor;
     }
 
-    internal struct RHIPipelineLayoutDescriptor
+    public struct RHIPipelineLayoutDescriptor
     {
         public RHIBindGroupLayout[] BindGroupLayouts;
         //public RHIPipelineConstantLayout[] PipelineConstantLayouts;
     };
 
-    internal abstract class RHIPipelineLayout : Disposal
+    public abstract class RHIPipelineLayout : Disposal
     {
 
     }

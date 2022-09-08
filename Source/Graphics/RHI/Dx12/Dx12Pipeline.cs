@@ -131,13 +131,13 @@ namespace Infinity.Graphics
 
     internal unsafe class Dx12ComputePipeline : RHIComputePipeline
     {
-        public Dx12PipelineLayout PipelineLayout
+        /*public Dx12PipelineLayout PipelineLayout
         {
             get
             {
                 return m_PipelineLayout;
             }
-        }
+        }*/
         public ID3D12PipelineState* NativePipelineState
         {
             get
@@ -146,23 +146,18 @@ namespace Infinity.Graphics
             }
         }
 
-        private Dx12PipelineLayout m_PipelineLayout;
+        //private Dx12PipelineLayout m_PipelineLayout;
         private ID3D12PipelineState* m_NativePipelineState;
 
         public Dx12ComputePipeline(Dx12Device device, in RHIComputePipelineDescriptor descriptor)
         {
-            RHIPipelineLayoutDescriptor pipelienLayoutDescriptor;
-            {
-                pipelienLayoutDescriptor.BindGroupLayouts = descriptor.BindGroupLayouts;
-            }
-            m_PipelineLayout = device.CreatePipelineLayout(pipelienLayoutDescriptor) as Dx12PipelineLayout;
-
             Dx12Shader computeShader = descriptor.ComputeShader as Dx12Shader;
+            Dx12PipelineLayout pipelineLayout = descriptor.PipelineLayout as Dx12PipelineLayout;
 
             D3D12_COMPUTE_PIPELINE_STATE_DESC description = new D3D12_COMPUTE_PIPELINE_STATE_DESC();
             description.CS.BytecodeLength = computeShader.NativeShaderBytecode.BytecodeLength;
             description.CS.pShaderBytecode = computeShader.NativeShaderBytecode.pShaderBytecode;
-            description.pRootSignature = m_PipelineLayout.NativeRootSignature;
+            description.pRootSignature = pipelineLayout.NativeRootSignature;
             description.Flags = D3D12_PIPELINE_STATE_FLAGS.D3D12_PIPELINE_STATE_FLAG_NONE;
 
             ID3D12PipelineState* pipelineState;
@@ -173,20 +168,19 @@ namespace Infinity.Graphics
 
         protected override void Release()
         {
-            m_PipelineLayout.Dispose();
             m_NativePipelineState->Release();
         }
     }
 
     internal unsafe class Dx12RaytracingPipeline : RHIRaytracingPipeline
     {
-        public Dx12PipelineLayout GlobalPipelineLayout
+        /*public Dx12PipelineLayout PipelineLayout
         {
             get
             {
-                return m_GlobalPipelineLayout;
+                return m_PipelineLayout;
             }
-        }
+        }*/
         public ID3D12PipelineState* NativePipelineState
         {
             get
@@ -195,9 +189,9 @@ namespace Infinity.Graphics
             }
         }
 
-        private Dx12PipelineLayout m_GlobalPipelineLayout;
+        //private Dx12PipelineLayout m_PipelineLayout;
         private ID3D12PipelineState* m_NativePipelineState;
-        private Dictionary<RHIBindGroupLayout, Dx12PipelineLayout> m_LocalPipelineLayoutMap;
+        //private Dictionary<RHIBindGroupLayout, Dx12PipelineLayout> m_LocalPipelineLayoutMap;
 
         public Dx12RaytracingPipeline(Dx12Device device, in RHIRaytracingPipelineDescriptor descriptor)
         {
@@ -206,13 +200,13 @@ namespace Infinity.Graphics
 
         protected override void Release()
         {
-            m_GlobalPipelineLayout.Dispose();
+            //m_PipelineLayout.Dispose();
             m_NativePipelineState->Release();
 
-            foreach (KeyValuePair<RHIBindGroupLayout, Dx12PipelineLayout> localPipelineLayout in m_LocalPipelineLayoutMap)
+            /*foreach (KeyValuePair<RHIBindGroupLayout, Dx12PipelineLayout> localPipelineLayout in m_LocalPipelineLayoutMap)
             {
                 localPipelineLayout.Value.Dispose();
-            }
+            }*/
         }
     }
 
@@ -225,13 +219,13 @@ namespace Infinity.Graphics
                 return m_StencilRef;
             }
         }
-        public Dx12PipelineLayout PipelineLayout
+        /*public Dx12PipelineLayout PipelineLayout
         {
             get
             {
                 return m_PipelineLayout;
             }
-        }
+        }*/
         public ID3D12PipelineState* NativePipelineState
         {
             get
@@ -248,7 +242,7 @@ namespace Infinity.Graphics
         }
 
         private int m_StencilRef;
-        private Dx12PipelineLayout m_PipelineLayout;
+        //private Dx12PipelineLayout m_PipelineLayout;
         private ID3D12PipelineState* m_NativePipelineState;
         private D3D_PRIMITIVE_TOPOLOGY m_PrimitiveTopology;
 
@@ -259,7 +253,7 @@ namespace Infinity.Graphics
 
         protected override void Release()
         {
-            m_PipelineLayout.Dispose();
+            //m_PipelineLayout.Dispose();
             m_NativePipelineState->Release();
         }
     }
@@ -280,13 +274,13 @@ namespace Infinity.Graphics
                 return m_VertexStrides;
             }
         }
-        public Dx12PipelineLayout PipelineLayout
+        /*public Dx12PipelineLayout PipelineLayout
         {
             get
             {
                 return m_PipelineLayout;
             }
-        }
+        }*/
         public ID3D12PipelineState* NativePipelineState
         {
             get
@@ -304,20 +298,16 @@ namespace Infinity.Graphics
 
         private int m_StencilRef;
         private int[] m_VertexStrides;
-        private Dx12PipelineLayout m_PipelineLayout;
+        //private Dx12PipelineLayout m_PipelineLayout;
         private ID3D12PipelineState* m_NativePipelineState;
         private D3D_PRIMITIVE_TOPOLOGY m_PrimitiveTopology;
 
         public Dx12GraphicsPipeline(Dx12Device device, in RHIGraphicsPipelineDescriptor descriptor)
         {
-            RHIPipelineLayoutDescriptor pipelienLayoutDescriptor;
-            {
-                pipelienLayoutDescriptor.BindGroupLayouts = descriptor.BindGroupLayouts;
-            }
-            m_PipelineLayout = device.CreatePipelineLayout(pipelienLayoutDescriptor) as Dx12PipelineLayout;
-
             Dx12Shader vertexShader = descriptor.VertexShader as Dx12Shader;
             Dx12Shader fragmentShader = descriptor.FragmentShader as Dx12Shader;
+            Dx12PipelineLayout pipelineLayout = descriptor.PipelineLayout as Dx12PipelineLayout;
+
             Span<RHIVertexLayoutDescriptor> vertexLayoutDescriptors = descriptor.VertexStateDescriptor.VertexLayoutDescriptors.Span;
 
             if ((vertexShader != null))
@@ -347,7 +337,7 @@ namespace Infinity.Graphics
             D3D12_GRAPHICS_PIPELINE_STATE_DESC description = new D3D12_GRAPHICS_PIPELINE_STATE_DESC
             {
                 InputLayout = outputLayout,
-                pRootSignature = m_PipelineLayout.NativeRootSignature,
+                pRootSignature = pipelineLayout.NativeRootSignature,
                 PrimitiveTopologyType = primitiveTopologyType,
 
                 SampleMask = descriptor.RenderStateDescriptor.SampleMask.HasValue ? ((uint)descriptor.RenderStateDescriptor.SampleMask.Value) : uint.MaxValue,
@@ -393,7 +383,6 @@ namespace Infinity.Graphics
 
         protected override void Release()
         {
-            m_PipelineLayout.Dispose();
             m_NativePipelineState->Release();
         }
     }
