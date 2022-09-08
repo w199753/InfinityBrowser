@@ -327,7 +327,7 @@ namespace Infinity.Graphics
             m_PipelineLayout = pipelineLayout;
             Dx12CommandBuffer dx12CommandBuffer = m_CommandBuffer as Dx12CommandBuffer;
             Dx12PipelineLayout dx12PipelineLayout = m_PipelineLayout as Dx12PipelineLayout;
-            dx12CommandBuffer.NativeCommandList->SetComputeRootSignature(dx12PipelineLayout.NativeRootSignature);
+            dx12CommandBuffer.NativeCommandList->SetGraphicsRootSignature(dx12PipelineLayout.NativeRootSignature);
         }
 
         public override void SetPipelineState(RHIGraphicsPipeline pipelineState)
@@ -335,8 +335,8 @@ namespace Infinity.Graphics
             m_PipelineState = pipelineState;
             Dx12CommandBuffer dx12CommandBuffer = m_CommandBuffer as Dx12CommandBuffer;
             Dx12GraphicsPipeline dx12PipelineState = pipelineState as Dx12GraphicsPipeline;
-            dx12CommandBuffer.NativeCommandList->SetPipelineState(dx12PipelineState.NativePipelineState);
             dx12CommandBuffer.NativeCommandList->OMSetStencilRef((uint)dx12PipelineState.StencilRef);
+            dx12CommandBuffer.NativeCommandList->SetPipelineState(dx12PipelineState.NativePipelineState);
             dx12CommandBuffer.NativeCommandList->IASetPrimitiveTopology(dx12PipelineState.PrimitiveTopology);
         }
 
