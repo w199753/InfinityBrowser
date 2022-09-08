@@ -53,7 +53,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Vortice.Dxc" Version="2.1.25-beta" />
+		<PackageReference Include="Vortice.Dxc" Version="2.1.31-beta" />
 	</ItemGroup>
 
 	<ItemGroup>
