@@ -44,22 +44,22 @@ namespace Infinity.Rendering
         {
             string computeCode = new string(@"
             [[vk::binding(0, 0)]]
-            RWTexture2D<float4> _ResultTexture : register(u0, space0);
+            RWTexture2D<float4> _ResultTexture[1] : register(u0, space0);
 
             [numthreads(8, 8, 1)]
             void CSMain (uint3 id : SV_DispatchThreadID)
             {
                 float2 UV = (id.xy + 0.5) / float2(1600, 900);
-                _ResultTexture[id.xy] = float4(UV, 0, 1);
-                //_ResultTexture[id.xy] = float4(id.x & id.y, (id.x & 15) / 15, (id.y & 15) / 15, 0.25);
+                float IDMod7 = saturate(((id.x & 7) / 7) + ((id.y & 7) / 7));
+                _ResultTexture[0][id.xy] = float4(id.x & id.y, IDMod7, UV);
             }");
 
             string graphicsCode = new string(@"
             [[vk::binding(0, 0)]]
-            SamplerState _DiffuseSampler : register(s0, space0);
+            Texture2D _DiffuseTexture[1] : register(t0, space0);
 
             [[vk::binding(1, 0)]]
-            Texture2D _DiffuseTexture[1] : register(t1, space0);
+            SamplerState _DiffuseSampler[1] : register(s1, space0);
 
             struct Attributes
 	        {
@@ -84,7 +84,7 @@ namespace Infinity.Rendering
             float4 PSMain(Varyings input) : SV_Target
             {
                 //return input.color;
-	            return input.color + _DiffuseTexture[0].Sample(_DiffuseSampler, float2(0, 0));
+	            return input.color + _DiffuseTexture[0].Sample(_DiffuseSampler[0], float2(0, 0));
             }");
 
             m_ComputeResult = Vortice.Dxc.DxcCompiler.Compile(Vortice.Dxc.DxcShaderStage.Compute, computeCode, "CSMain");
@@ -96,16 +96,17 @@ namespace Infinity.Rendering
             m_FragmentResult = Vortice.Dxc.DxcCompiler.Compile(Vortice.Dxc.DxcShaderStage.Pixel, graphicsCode, "PSMain");
             m_FragmentBlob = m_FragmentResult.GetOutput(Vortice.Dxc.DxcOutKind.Object);
 
-            string entryName = "PSMain";
-            string shaderCode = graphicsCode;
-            ShaderConductorWrapper.EShaderStage shaderStage = ShaderConductorWrapper.EShaderStage.Fragment;
-            string glsl = ShaderCompiler.HLSLTo(shaderCode, entryName, shaderStage, ShaderConductorWrapper.EShadingLanguage.Glsl);
-            string essl = ShaderCompiler.HLSLTo(shaderCode, entryName, shaderStage, ShaderConductorWrapper.EShadingLanguage.Essl);
-            string hlsl = ShaderCompiler.HLSLTo(shaderCode, entryName, shaderStage, ShaderConductorWrapper.EShadingLanguage.Hlsl);
-            string dxil = ShaderCompiler.HLSLTo(shaderCode, entryName, shaderStage, ShaderConductorWrapper.EShadingLanguage.Dxil);
-            string spirv = ShaderCompiler.HLSLTo(shaderCode, entryName, shaderStage, ShaderConductorWrapper.EShadingLanguage.SpirV);
-            string msl_ios = ShaderCompiler.HLSLTo(shaderCode, entryName, shaderStage, ShaderConductorWrapper.EShadingLanguage.Msl_iOS);
-            string msl_macOS = ShaderCompiler.HLSLTo(shaderCode, entryName, shaderStage, ShaderConductorWrapper.EShadingLanguage.Msl_macOS);
+            string mslCS = ShaderCompiler.HLSLTo(computeCode, "CSMain", ShaderConductorWrapper.EShaderStage.Compute, ShaderConductorWrapper.EShadingLanguage.Msl_macOS);
+            string dxilCS = ShaderCompiler.HLSLTo(computeCode, "CSMain", ShaderConductorWrapper.EShaderStage.Compute, ShaderConductorWrapper.EShadingLanguage.Dxil);
+            string spirvCS = ShaderCompiler.HLSLTo(computeCode, "CSMain", ShaderConductorWrapper.EShaderStage.Compute, ShaderConductorWrapper.EShadingLanguage.SpirV);
+
+            string mslVS = ShaderCompiler.HLSLTo(graphicsCode, "VSMain", ShaderConductorWrapper.EShaderStage.Vertex, ShaderConductorWrapper.EShadingLanguage.Msl_macOS);
+            string dxilVS = ShaderCompiler.HLSLTo(graphicsCode, "VSMain", ShaderConductorWrapper.EShaderStage.Vertex, ShaderConductorWrapper.EShadingLanguage.Dxil);
+            string spirvVS = ShaderCompiler.HLSLTo(graphicsCode, "VSMain", ShaderConductorWrapper.EShaderStage.Vertex, ShaderConductorWrapper.EShadingLanguage.SpirV);
+
+            string mslPS = ShaderCompiler.HLSLTo(graphicsCode, "PSMain", ShaderConductorWrapper.EShaderStage.Fragment, ShaderConductorWrapper.EShadingLanguage.Msl_macOS);
+            string dxilPS = ShaderCompiler.HLSLTo(graphicsCode, "PSMain", ShaderConductorWrapper.EShaderStage.Fragment, ShaderConductorWrapper.EShadingLanguage.Dxil);
+            string spirvPS = ShaderCompiler.HLSLTo(graphicsCode, "PSMain", ShaderConductorWrapper.EShaderStage.Fragment, ShaderConductorWrapper.EShadingLanguage.SpirV);
         }
 
         public override void Init(RenderContext renderContext)
@@ -359,12 +360,12 @@ namespace Infinity.Rendering
             {
                 //graphicsBindGroupLayoutElements[0].Count = 1;
                 graphicsBindGroupLayoutElements[0].BindSlot = 0;
-                graphicsBindGroupLayoutElements[0].BindType = EBindType.Sampler;
+                graphicsBindGroupLayoutElements[0].BindType = EBindType.Texture;
                 graphicsBindGroupLayoutElements[0].ShaderStage = EShaderStage.Fragment;
 
                 //graphicsBindGroupLayoutElements[1].Count = 1;
                 graphicsBindGroupLayoutElements[1].BindSlot = 1;
-                graphicsBindGroupLayoutElements[1].BindType = EBindType.Texture;
+                graphicsBindGroupLayoutElements[1].BindType = EBindType.Sampler;
                 graphicsBindGroupLayoutElements[1].ShaderStage = EShaderStage.Fragment;
             }
             RHIBindGroupLayoutDescriptor graphicsBindGroupLayoutDescriptor;

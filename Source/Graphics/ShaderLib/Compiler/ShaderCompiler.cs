@@ -24,7 +24,7 @@ namespace Infinity.Shaderlib
             return Marshal.PtrToStringAnsi(GetShaderConductorBlobData(desc2.target), GetShaderConductorBlobSize(desc2.target));
         }
 
-        public static string HLSLTo(string hlslSource, string entryPoint, in EShaderStage stage, in EShadingLanguage language, int version = 450, in bool keepDebugInfo = false, in bool disableOptimization = false)
+        public static string HLSLTo(string hlslSource, string entryPoint, in EShaderStage stage, in EShadingLanguage language, int version = 470, in bool keepDebugInfo = false, in bool disableOptimization = false)
         {
             ResultDesc desc4;
             string str2;
@@ -34,11 +34,11 @@ namespace Infinity.Shaderlib
                 entryPoint = entryPoint
             };
             OptionsDesc options = OptionsDesc.Default;
-            options.shaderModel = new ShaderModel(6, 3);
+            options.shaderModel = new ShaderModel(6, 6);
             options.enable16bitTypes = true;
             options.enableDebugInfo = keepDebugInfo;
-            options.disableOptimizations = disableOptimization;
             options.optimizationLevel = 3;
+            options.disableOptimizations = disableOptimization;
             options.packMatricesInRowMajor = true;
             if (language == EShadingLanguage.SpirV)
             {
