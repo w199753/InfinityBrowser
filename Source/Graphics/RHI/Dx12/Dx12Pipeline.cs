@@ -155,10 +155,10 @@ namespace Infinity.Graphics
             Dx12PipelineLayout pipelineLayout = descriptor.PipelineLayout as Dx12PipelineLayout;
 
             D3D12_COMPUTE_PIPELINE_STATE_DESC description = new D3D12_COMPUTE_PIPELINE_STATE_DESC();
-            description.CS.BytecodeLength = computeShader.NativeShaderBytecode.BytecodeLength;
-            description.CS.pShaderBytecode = computeShader.NativeShaderBytecode.pShaderBytecode;
             description.pRootSignature = pipelineLayout.NativeRootSignature;
             description.Flags = D3D12_PIPELINE_STATE_FLAGS.D3D12_PIPELINE_STATE_FLAG_NONE;
+            description.CS.BytecodeLength = computeShader.NativeShaderBytecode.BytecodeLength;
+            description.CS.pShaderBytecode = computeShader.NativeShaderBytecode.pShaderBytecode;
 
             ID3D12PipelineState* pipelineState;
             bool success = SUCCEEDED(device.NativeDevice->CreateComputePipelineState(&description, __uuidof<ID3D12PipelineState>(), (void**)&pipelineState));

@@ -1,4 +1,5 @@
 ﻿using System;
+using Infinity.Memory;
 using Infinity.Engine;
 using Infinity.Graphics;
 using Infinity.Rendering;
@@ -153,6 +154,16 @@ namespace Infinity.Editor
     {
         static void Main(string[] args)
         {
+            HeapBlock heapBlock = new HeapBlock(64);
+
+            int outIndex;
+            bool test = heapBlock.PullFreeSpaceIndex(5, out outIndex);
+            test = heapBlock.PullFreeSpaceIndex(3, out outIndex);
+            test = heapBlock.PullFreeSpaceIndex(6, out outIndex);
+            heapBlock.PushFreeSpaceIndex(outIndex, 6);
+            test = heapBlock.PullFreeSpaceIndex(2, out outIndex);
+            test = heapBlock.PullFreeSpaceIndex(16, out outIndex);
+
             Application editorApp = new Application(1600, 900, "Infinity Editor");
 
             GameScene persistentScene = new GameScene();

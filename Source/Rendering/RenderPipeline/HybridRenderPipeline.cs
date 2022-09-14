@@ -15,12 +15,9 @@ namespace Infinity.Rendering
 
     public unsafe class HybridRenderPipeline : RenderPipeline
     {
-        Vortice.Dxc.IDxcBlob m_VertexBlob;
-        Vortice.Dxc.IDxcBlob m_FragmentBlob;
-        Vortice.Dxc.IDxcBlob m_ComputeBlob;
-        Vortice.Dxc.IDxcResult m_VertexResult;
-        Vortice.Dxc.IDxcResult m_FragmentResult;
-        Vortice.Dxc.IDxcResult m_ComputeResult;
+        ShaderConductorBlob m_ComputeBlob;
+        ShaderConductorBlob m_VertexBlob;
+        ShaderConductorBlob m_FragmentBlob;
 
         RHIShader m_VertexShader;
         RHIShader m_FragmentShader;
@@ -40,7 +37,7 @@ namespace Infinity.Rendering
         RHIGraphicsPipeline m_GraphicsPipelineState;
         RHIColorAttachmentDescriptor[] m_ColorAttachmentDescriptors;
 
-        public HybridRenderPipeline(string pipelineName) : base(pipelineName) 
+        public HybridRenderPipeline(string pipelineName) : base(pipelineName)
         {
             string computeCode = new string(@"
             [[vk::binding(0, 0)]]
@@ -87,14 +84,25 @@ namespace Infinity.Rendering
 	            return input.color + _DiffuseTexture[0].Sample(_DiffuseSampler[0], float2(0, 0));
             }");
 
-            m_ComputeResult = Vortice.Dxc.DxcCompiler.Compile(Vortice.Dxc.DxcShaderStage.Compute, computeCode, "CSMain");
-            m_ComputeBlob = m_ComputeResult.GetOutput(Vortice.Dxc.DxcOutKind.Object);
+            /*Vortice.Dxc.DxcCompilerOptions dxcOption = new Vortice.Dxc.DxcCompilerOptions();
+            dxcOption.Enable16bitTypes = true;
+            dxcOption.ShaderModel = Vortice.Dxc.DxcShaderModel.Model6_2;
+            Vortice.Dxc.IDxcBlob computeBlob = Vortice.Dxc.DxcCompiler.Compile(Vortice.Dxc.DxcShaderStage.Compute, computeCode, "CSMain", dxcOption).GetOutput(Vortice.Dxc.DxcOutKind.Object);
+            ShaderConductorWrapper.ResultDesc desc8;
+            ShaderConductorWrapper.DisassembleDesc desc9 = new ShaderConductorWrapper.DisassembleDesc
+            {
+                language = ShaderConductorWrapper.EShadingLanguage.Dxil,
+                binary = computeBlob.BufferPointer,
+                binarySize = computeBlob.BufferSize
+            };
+            ShaderConductorWrapper.Disassemble(ref desc9, out desc8);
+            string str = Marshal.PtrToStringAnsi(ShaderConductorWrapper.GetShaderConductorBlobData(desc8.target), ShaderConductorWrapper.GetShaderConductorBlobSize(desc8.target));
+            ShaderConductorWrapper.DestroyShaderConductorBlob(desc8.target);
+            ShaderConductorWrapper.DestroyShaderConductorBlob(desc8.errorWarningMsg);*/
 
-            m_VertexResult = Vortice.Dxc.DxcCompiler.Compile(Vortice.Dxc.DxcShaderStage.Vertex, graphicsCode, "VSMain");
-            m_VertexBlob = m_VertexResult.GetOutput(Vortice.Dxc.DxcOutKind.Object);
-
-            m_FragmentResult = Vortice.Dxc.DxcCompiler.Compile(Vortice.Dxc.DxcShaderStage.Pixel, graphicsCode, "PSMain");
-            m_FragmentBlob = m_FragmentResult.GetOutput(Vortice.Dxc.DxcOutKind.Object);
+            m_ComputeBlob = ShaderCompiler.HLSLToNativeDxil(computeCode, "CSMain", ShaderConductorWrapper.EShaderStage.Compute);
+            m_VertexBlob = ShaderCompiler.HLSLToNativeDxil(graphicsCode, "VSMain", ShaderConductorWrapper.EShaderStage.Vertex);
+            m_FragmentBlob = ShaderCompiler.HLSLToNativeDxil(graphicsCode, "PSMain", ShaderConductorWrapper.EShaderStage.Fragment);
 
             string mslCS = ShaderCompiler.HLSLTo(computeCode, "CSMain", ShaderConductorWrapper.EShaderStage.Compute, ShaderConductorWrapper.EShadingLanguage.Msl_macOS);
             string dxilCS = ShaderCompiler.HLSLTo(computeCode, "CSMain", ShaderConductorWrapper.EShaderStage.Compute, ShaderConductorWrapper.EShadingLanguage.Dxil);
@@ -169,9 +177,9 @@ namespace Infinity.Rendering
             // Create ComputePipeline
             RHIShaderDescriptor computeShaderDescriptor;
             {
-                computeShaderDescriptor.Size = m_ComputeBlob.BufferSize;
-                computeShaderDescriptor.ByteCode = m_ComputeBlob.BufferPointer;
-                computeShaderDescriptor.EntryName = "Main";
+                computeShaderDescriptor.Size = m_ComputeBlob.Size;
+                computeShaderDescriptor.ByteCode = m_ComputeBlob.Data;
+                computeShaderDescriptor.EntryName = "CSMain";
                 computeShaderDescriptor.ShaderStage = EShaderStage.Compute;
             }
             m_ComputeShader = renderContext.CreateShader(computeShaderDescriptor);
@@ -391,18 +399,18 @@ namespace Infinity.Rendering
             // Create GraphicsPipeline
             RHIShaderDescriptor vertexShaderDescriptor;
             {
-                vertexShaderDescriptor.Size = m_VertexBlob.BufferSize;
-                vertexShaderDescriptor.ByteCode = m_VertexBlob.BufferPointer;
-                vertexShaderDescriptor.EntryName = "Vertex";
+                vertexShaderDescriptor.Size = m_VertexBlob.Size;
+                vertexShaderDescriptor.ByteCode = m_VertexBlob.Data;
+                vertexShaderDescriptor.EntryName = "VSMain";
                 vertexShaderDescriptor.ShaderStage = EShaderStage.Vertex;
             }
             m_VertexShader = renderContext.CreateShader(vertexShaderDescriptor);
 
             RHIShaderDescriptor fragmentShaderDescriptor;
             {
-                fragmentShaderDescriptor.Size = m_FragmentBlob.BufferSize;
-                fragmentShaderDescriptor.ByteCode = m_FragmentBlob.BufferPointer;
-                fragmentShaderDescriptor.EntryName = "Fragment";
+                fragmentShaderDescriptor.Size = m_FragmentBlob.Size;
+                fragmentShaderDescriptor.ByteCode = m_FragmentBlob.Data;
+                fragmentShaderDescriptor.EntryName = "PSMain";
                 fragmentShaderDescriptor.ShaderStage = EShaderStage.Fragment;
             }
             m_FragmentShader = renderContext.CreateShader(fragmentShaderDescriptor);
@@ -492,12 +500,9 @@ namespace Infinity.Rendering
 
         protected override void Release()
         {
+            m_ComputeBlob.Dispose();
             m_VertexBlob.Dispose();
             m_FragmentBlob.Dispose();
-            m_ComputeBlob.Dispose();
-            m_VertexResult.Dispose();
-            m_FragmentResult.Dispose();
-            m_ComputeResult.Dispose();
             m_IndexBuffer.Dispose();
             m_VertexBuffer.Dispose();
             //m_ComputeSampler.Dispose();
