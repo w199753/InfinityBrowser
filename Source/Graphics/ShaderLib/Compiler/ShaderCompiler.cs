@@ -50,13 +50,20 @@ namespace Infinity.Shaderlib
 
         private int m_Size;
         private IntPtr m_Data;
-        private ResultDesc m_Result;
+        private ResultDesc? m_Result;
 
         internal ShaderConductorBlob(in ResultDesc result)
         {
             m_Result = result;
             m_Size = GetShaderConductorBlobSize(result.target);
             m_Data = GetShaderConductorBlobData(result.target);
+        }
+
+        internal ShaderConductorBlob(in int size, in IntPtr data)
+        {
+            m_Size = size;
+            m_Data = data;
+            m_Result = default;
         }
 
         /*internal ShaderConductorBlob(in ResultDesc result)
@@ -84,8 +91,45 @@ namespace Infinity.Shaderlib
         public void Dispose()
         {
             //MemoryUtility.Free(m_Data.ToPointer());
-            DestroyShaderConductorBlob(m_Result.target);
-            DestroyShaderConductorBlob(m_Result.errorWarningMsg);
+            if(m_Result.HasValue)
+            {
+                DestroyShaderConductorBlob(m_Result.Value.target);
+                DestroyShaderConductorBlob(m_Result.Value.errorWarningMsg);
+            }
+        }
+    }
+
+    public class PendingShaderCompiler : IDisposable
+    {
+        string m_ShaderCode;
+        Vortice.Dxc.IDxcBlob m_CodeBlob;
+        Vortice.Dxc.IDxcResult m_DxcResult;
+
+        public PendingShaderCompiler()
+        {
+            m_ShaderCode = new string(@"
+            [[vk::binding(0, 0)]]
+            RWTexture2D<float4> _ResultTexture[1];
+
+            [numthreads(8, 8, 1)]
+            void Main (uint3 id : SV_DispatchThreadID)
+            {
+                float2 UV = (id.xy + 0.5) / float2(1600, 900);
+                float IDMod7 = saturate(((id.x & 7) / 7) + ((id.y & 7) / 7));
+                _ResultTexture[0][id.xy] = float4(id.x & id.y, IDMod7, UV);
+            }");
+
+            Vortice.Dxc.DxcCompilerOptions dxcOption = new Vortice.Dxc.DxcCompilerOptions();
+            dxcOption.Enable16bitTypes = true;
+            dxcOption.ShaderModel = Vortice.Dxc.DxcShaderModel.Model6_2;
+            m_DxcResult = Vortice.Dxc.DxcCompiler.Compile(Vortice.Dxc.DxcShaderStage.Compute, m_ShaderCode, "Main", dxcOption);
+            m_CodeBlob = m_DxcResult.GetOutput(Vortice.Dxc.DxcOutKind.Object);
+        }
+
+        public void Dispose()
+        {
+            m_CodeBlob.Dispose();
+            m_DxcResult.Dispose();
         }
     }
 
@@ -230,6 +274,15 @@ namespace Infinity.Shaderlib
             //DestroyShaderConductorBlob(desc4.errorWarningMsg);
             //return shaderBlob;
             return new ShaderConductorBlob(desc4);
+
+            /*Vortice.Dxc.DxcCompilerOptions dxcOption = new Vortice.Dxc.DxcCompilerOptions();
+            dxcOption.Enable16bitTypes = true;
+            dxcOption.EnableDebugInfo = keepDebugInfo;
+            dxcOption.OptimizationLevel = disableOptimization ? 0 : 3;
+            dxcOption.PackMatrixRowMajor = true;
+            dxcOption.ShaderModel = Vortice.Dxc.DxcShaderModel.Model6_2;
+            Vortice.Dxc.IDxcBlob dxcBlob = Vortice.Dxc.DxcCompiler.Compile(stage.ToSDxcShaderStage(), hlslSource, entryPoint, dxcOption).GetOutput(Vortice.Dxc.DxcOutKind.Object);
+            return new ShaderConductorBlob(dxcBlob.BufferSize, dxcBlob.BufferPointer);*/
         }
 
         public static byte[] HLSLToBinarySpirV(string hlslSource, string entryPoint, in EShaderStage stage, in bool keepDebugInfo = false, in bool disableOptimization = false)
@@ -325,6 +378,25 @@ namespace Infinity.Shaderlib
 
                 default:
                     return EShaderStage.Fragment;
+            }
+            throw new Exception($"Stage:{stage} not supported");
+        }
+
+        public static Vortice.Dxc.DxcShaderStage ToSDxcShaderStage(this EShaderStage stage)
+        {
+            switch (stage)
+            {
+                case EShaderStage.Vertex:
+                    return Vortice.Dxc.DxcShaderStage.Vertex;
+
+                case EShaderStage.Fragment:
+                    return Vortice.Dxc.DxcShaderStage.Pixel;
+
+                case EShaderStage.Compute:
+                    return Vortice.Dxc.DxcShaderStage.Compute;
+
+                default:
+                    return Vortice.Dxc.DxcShaderStage.Pixel;
             }
             throw new Exception($"Stage:{stage} not supported");
         }
