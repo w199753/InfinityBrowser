@@ -118,7 +118,7 @@ namespace Infinity.Shaderlib
                 entryPoint = entryPoint
             };
             OptionsDesc options = OptionsDesc.Default;
-            options.shaderModel = new ShaderModel(6, 6);
+            options.shaderModel = new ShaderModel(6, 2);
             options.enable16bitTypes = true;
             options.enableDebugInfo = keepDebugInfo;
             options.optimizationLevel = 3;
@@ -173,7 +173,7 @@ namespace Infinity.Shaderlib
                 entryPoint = entryPoint
             };
             OptionsDesc options = OptionsDesc.Default;
-            options.shaderModel = new ShaderModel(6, 6);
+            options.shaderModel = new ShaderModel(6, 2);
             options.enable16bitTypes = true;
             options.enableDebugInfo = keepDebugInfo;
             options.optimizationLevel = 3;
@@ -208,7 +208,7 @@ namespace Infinity.Shaderlib
                 entryPoint = entryPoint
             };
             OptionsDesc options = OptionsDesc.Default;
-            options.shaderModel = new ShaderModel(6, 6);
+            options.shaderModel = new ShaderModel(6, 2);
             options.enable16bitTypes = true;
             options.enableDebugInfo = keepDebugInfo;
             options.optimizationLevel = 3;
@@ -241,7 +241,7 @@ namespace Infinity.Shaderlib
                 entryPoint = entryPoint
             };
             OptionsDesc options = OptionsDesc.Default;
-            options.shaderModel = new ShaderModel(6, 6);
+            options.shaderModel = new ShaderModel(6, 2);
             options.enable16bitTypes = true;
             options.enableDebugInfo = keepDebugInfo;
             options.optimizationLevel = 3;
@@ -283,7 +283,7 @@ namespace Infinity.Shaderlib
                 entryPoint = entryPoint
             };
             OptionsDesc options = OptionsDesc.Default;
-            options.shaderModel = new ShaderModel(6, 6);
+            options.shaderModel = new ShaderModel(6, 2);
             options.enable16bitTypes = true;
             options.enableDebugInfo = keepDebugInfo;
             options.optimizationLevel = 3;
