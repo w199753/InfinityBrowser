@@ -16,7 +16,7 @@ namespace Infinity.Engine
         private Semaphore m_SemaphoreR2G;
         private RenderContext m_RenderContext;
         private SceneRenderer m_SceneRenderer;
-        private PendingShaderCompiler m_PendingShaderCompiler;
+
         public GraphicsModule(PlatformWindow window, Semaphore semaphoreG2R, Semaphore semaphoreR2G)
         {
             m_LoopExit = false;
@@ -24,7 +24,6 @@ namespace Infinity.Engine
             m_SemaphoreR2G = semaphoreR2G;
             m_RenderThread = new Thread(GraphicsFunc);
             m_RenderThread.Name = "RenderThread";
-            m_PendingShaderCompiler = new PendingShaderCompiler();
             m_RenderContext = new RenderContext(window.Width, window.Height, window.WindowPtr);
             m_SceneRenderer = new SceneRenderer(m_RenderContext);
         }
@@ -79,7 +78,6 @@ namespace Infinity.Engine
             ProcessGraphicsTasks();
             m_SceneRenderer.Dispose();
             m_RenderContext.Dispose();
-            m_PendingShaderCompiler.Dispose();
         }
     }
 }

@@ -84,37 +84,65 @@ namespace Infinity.Rendering
 	            return input.color + _DiffuseTexture[0].Sample(_DiffuseSampler[0], float2(0, 0));
             }");
 
-            /*Vortice.Dxc.DxcCompilerOptions dxcOption = new Vortice.Dxc.DxcCompilerOptions();
-            dxcOption.Enable16bitTypes = true;
-            dxcOption.ShaderModel = Vortice.Dxc.DxcShaderModel.Model6_2;
-            Vortice.Dxc.IDxcBlob computeBlob = Vortice.Dxc.DxcCompiler.Compile(Vortice.Dxc.DxcShaderStage.Compute, computeCode, "CSMain", dxcOption).GetOutput(Vortice.Dxc.DxcOutKind.Object);
-            ShaderConductorWrapper.ResultDesc desc8;
-            ShaderConductorWrapper.DisassembleDesc desc9 = new ShaderConductorWrapper.DisassembleDesc
-            {
-                language = ShaderConductorWrapper.EShadingLanguage.Dxil,
-                binary = computeBlob.BufferPointer,
-                binarySize = computeBlob.BufferSize
-            };
-            ShaderConductorWrapper.Disassemble(ref desc9, out desc8);
-            string str = Marshal.PtrToStringAnsi(ShaderConductorWrapper.GetShaderConductorBlobData(desc8.target), ShaderConductorWrapper.GetShaderConductorBlobSize(desc8.target));
-            ShaderConductorWrapper.DestroyShaderConductorBlob(desc8.target);
-            ShaderConductorWrapper.DestroyShaderConductorBlob(desc8.errorWarningMsg);*/
-
             m_ComputeBlob = ShaderCompiler.HLSLToNativeDxil(computeCode, "CSMain", ShaderConductorWrapper.EShaderStage.Compute);
             m_VertexBlob = ShaderCompiler.HLSLToNativeDxil(graphicsCode, "VSMain", ShaderConductorWrapper.EShaderStage.Vertex);
             m_FragmentBlob = ShaderCompiler.HLSLToNativeDxil(graphicsCode, "PSMain", ShaderConductorWrapper.EShaderStage.Fragment);
 
+            //**************************************************************************************************************************************************************************
             string mslCS = ShaderCompiler.HLSLTo(computeCode, "CSMain", ShaderConductorWrapper.EShaderStage.Compute, ShaderConductorWrapper.EShadingLanguage.Msl_macOS);
             string dxilCS = ShaderCompiler.HLSLTo(computeCode, "CSMain", ShaderConductorWrapper.EShaderStage.Compute, ShaderConductorWrapper.EShadingLanguage.Dxil);
             string spirvCS = ShaderCompiler.HLSLTo(computeCode, "CSMain", ShaderConductorWrapper.EShaderStage.Compute, ShaderConductorWrapper.EShadingLanguage.SpirV);
+            Console.WriteLine("*************************\n" +
+                              "**  Compute_MSL :      **\n" +
+                              "*************************\n");
+            Console.WriteLine(mslCS);
+            Console.WriteLine("*************************\n" +
+                              "**  Compute_Dxil :     **\n" +
+                              "*************************\n");
+            Console.WriteLine(dxilCS);
+            Console.WriteLine("*************************\n" +
+                              "**  Compute_SpirV :    **\n" +
+                              "*************************\n");
+            Console.WriteLine(spirvCS);
 
+            //**************************************************************************************************************************************************************************
             string mslVS = ShaderCompiler.HLSLTo(graphicsCode, "VSMain", ShaderConductorWrapper.EShaderStage.Vertex, ShaderConductorWrapper.EShadingLanguage.Msl_macOS);
             string dxilVS = ShaderCompiler.HLSLTo(graphicsCode, "VSMain", ShaderConductorWrapper.EShaderStage.Vertex, ShaderConductorWrapper.EShadingLanguage.Dxil);
             string spirvVS = ShaderCompiler.HLSLTo(graphicsCode, "VSMain", ShaderConductorWrapper.EShaderStage.Vertex, ShaderConductorWrapper.EShadingLanguage.SpirV);
+            Console.WriteLine("*************************\n" +
+                              "**  Vertex_MSL :       **\n" +
+                              "*************************\n");
+            Console.WriteLine(mslVS);
+            Console.WriteLine("*************************\n" +
+                              "**  Vertex_Dxil :      **\n" +
+                              "*************************\n");
+            Console.WriteLine(dxilVS);
+            Console.WriteLine("*************************\n" +
+                              "**  Vertex_SpirV :     **\n" +
+                              "*************************\n");
+            Console.WriteLine(spirvVS);
 
+            //**************************************************************************************************************************************************************************
             string mslPS = ShaderCompiler.HLSLTo(graphicsCode, "PSMain", ShaderConductorWrapper.EShaderStage.Fragment, ShaderConductorWrapper.EShadingLanguage.Msl_macOS);
             string dxilPS = ShaderCompiler.HLSLTo(graphicsCode, "PSMain", ShaderConductorWrapper.EShaderStage.Fragment, ShaderConductorWrapper.EShadingLanguage.Dxil);
             string spirvPS = ShaderCompiler.HLSLTo(graphicsCode, "PSMain", ShaderConductorWrapper.EShaderStage.Fragment, ShaderConductorWrapper.EShadingLanguage.SpirV);
+            Console.WriteLine("*************************\n" +
+                              "**  Fragment_MSL :     **\n" +
+                              "*************************\n");
+            Console.WriteLine(mslPS);
+            Console.WriteLine("*************************\n" +
+                              "**  Fragment_Dxil :    **\n" +
+                              "*************************\n");
+            Console.WriteLine(dxilPS);
+            Console.WriteLine("*************************\n" +
+                              "**  Fragment_SpirV :   **\n" +
+                              "*************************\n");
+            Console.WriteLine(spirvPS);
+
+            //**************************************************************************************************************************************************************************
+            Console.WriteLine("*************************\n" +
+                              "**  ShaderCompile End  **\n" +
+                              "*************************\n");
         }
 
         public override void Init(RenderContext renderContext)

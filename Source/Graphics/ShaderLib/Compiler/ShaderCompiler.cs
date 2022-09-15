@@ -99,13 +99,13 @@ namespace Infinity.Shaderlib
         }
     }
 
-    public class PendingShaderCompiler : IDisposable
+    public class ShaderCompilerLibraryLoader : IDisposable
     {
         string m_ShaderCode;
         Vortice.Dxc.IDxcBlob m_CodeBlob;
         Vortice.Dxc.IDxcResult m_DxcResult;
 
-        public PendingShaderCompiler()
+        public ShaderCompilerLibraryLoader()
         {
             m_ShaderCode = new string(@"
             [[vk::binding(0, 0)]]
