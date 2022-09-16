@@ -53,15 +53,11 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Vortice.Dxc" Version="2.1.31-beta" />
-	</ItemGroup>
-
-	<ItemGroup>
 		<ProjectReference Include="..\RHI\Infinity.RHI.csproj" />
 		<ProjectReference Include="..\..\Core\Infinity.Core.csproj" />
 		<ProjectReference Include="..\..\ThirdParty\Antlr4\Antlr4.csproj" />
 		<Content Include="build\net461\Infinity.Shaderlib.props" PackagePath="build\net461\Infinity.Shaderlib.props" />
-    	<Content Include="runtimes\**" PackagePath="runtimes" Pack="true" CopyToOutputDirectory="PreserveNewest" />
+		<Content Include="runtimes\**" PackagePath="runtimes" Pack="true" CopyToOutputDirectory="PreserveNewest" />
 	</ItemGroup>
 
 </Project>

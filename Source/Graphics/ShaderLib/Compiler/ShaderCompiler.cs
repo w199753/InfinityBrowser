@@ -102,8 +102,8 @@ namespace Infinity.Shaderlib
     public class ShaderCompilerLibraryLoader : IDisposable
     {
         string m_ShaderCode;
-        Vortice.Dxc.IDxcBlob m_CodeBlob;
-        Vortice.Dxc.IDxcResult m_DxcResult;
+        //Vortice.Dxc.IDxcBlob m_CodeBlob;
+        //Vortice.Dxc.IDxcResult m_DxcResult;
 
         public ShaderCompilerLibraryLoader()
         {
@@ -119,17 +119,17 @@ namespace Infinity.Shaderlib
                 _ResultTexture[0][id.xy] = float4(id.x & id.y, IDMod7, UV);
             }");
 
-            Vortice.Dxc.DxcCompilerOptions dxcOption = new Vortice.Dxc.DxcCompilerOptions();
+            /*Vortice.Dxc.DxcCompilerOptions dxcOption = new Vortice.Dxc.DxcCompilerOptions();
             dxcOption.Enable16bitTypes = true;
             dxcOption.ShaderModel = Vortice.Dxc.DxcShaderModel.Model6_2;
             m_DxcResult = Vortice.Dxc.DxcCompiler.Compile(Vortice.Dxc.DxcShaderStage.Compute, m_ShaderCode, "Main", dxcOption);
-            m_CodeBlob = m_DxcResult.GetOutput(Vortice.Dxc.DxcOutKind.Object);
+            m_CodeBlob = m_DxcResult.GetOutput(Vortice.Dxc.DxcOutKind.Object);*/
         }
 
         public void Dispose()
         {
-            m_CodeBlob.Dispose();
-            m_DxcResult.Dispose();
+            //m_CodeBlob.Dispose();
+            //m_DxcResult.Dispose();
         }
     }
 
@@ -382,7 +382,7 @@ namespace Infinity.Shaderlib
             throw new Exception($"Stage:{stage} not supported");
         }
 
-        public static Vortice.Dxc.DxcShaderStage ToSDxcShaderStage(this EShaderStage stage)
+        /*public static Vortice.Dxc.DxcShaderStage ToSDxcShaderStage(this EShaderStage stage)
         {
             switch (stage)
             {
@@ -399,7 +399,7 @@ namespace Infinity.Shaderlib
                     return Vortice.Dxc.DxcShaderStage.Pixel;
             }
             throw new Exception($"Stage:{stage} not supported");
-        }
+        }*/
 
         private static string TranslationFixes(EShadingLanguage language, EShaderStage stage, int version, string translation)
         {
