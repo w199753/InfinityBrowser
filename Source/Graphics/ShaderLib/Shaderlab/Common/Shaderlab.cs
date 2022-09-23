@@ -1,19 +1,21 @@
-﻿using System;
+﻿using Infinity.Mathmatics;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace Infinity.Shaderlib
 {
-    enum ECullMode : byte
+    public enum EShaderlabCullMode : byte
     {
         Front       = 0,
         Back        = 1,
         None        = 2
     };
 
-    enum EComparator : byte
+    public enum EShaderlabComparator : byte
     {
         Less        = 0,
         Greater     = 1,
@@ -24,13 +26,13 @@ namespace Infinity.Shaderlib
         Never       = 6
     };
 
-    enum EZWriteMode : byte
+    public enum EShaderlabZWriteMode : byte
     {
         On          = 0,
         Off         = 1
     };
 
-    enum EChannel : byte
+    public enum EShaderlabChannel : byte
     {
         Off         = 0,
         R           = 1,
@@ -39,7 +41,7 @@ namespace Infinity.Shaderlib
         A           = 8,
     };
 
-    enum EStateType : byte
+    public enum EShaderlabStateType : byte
     {
         CullMode    = 0,
         ZTest       = 1,
@@ -47,45 +49,60 @@ namespace Infinity.Shaderlib
         ColorMask   = 3
     };
 
-    /*struct Property
+    public enum EShaderlabPropertyType
     {
-        std::string name;
-        std::string displayName;
-        std::vector<std::string> metas;
-        std::pair<float, float> range;
-        std::variant<int, float, Vec4, std::string>; value;
-    };*/
+        Int = 0,
+        Float = 1,
+        Vector = 2,
+    };
 
-    struct CommonState
+    public struct PropertyValue
     {
-        ECullMode cullMode;
-        EComparator zTestMode;
-        EZWriteMode zWriteMode;
-        EChannel colorMaskChannel;
+        string Name;
+        int IntParam;
+        float FloatParam;
+        float4 VectorParam;
+    };
+
+    public struct Property
+    {
+        float2 Range;
+        PropertyValue Value;
+        string ParamName;
+        string DisplayName;
+        List<string> Metas;
+    };
+
+    public struct CommonState
+    {
+        EShaderlabCullMode CullMode;
+        EShaderlabComparator ZTestMode;
+        EShaderlabZWriteMode ZWriteMode;
+        EShaderlabChannel ColorMaskChannel;
     };
 
     // Same as Pass in unity
-    struct Kernel
+    public struct Kernel
     {
-        string hlsl;
-        CommonState commonState;
-        Dictionary<string, string> tags;
+        string HlslCode;
+        CommonState CommonState;
+        Dictionary<string, string> Tags;
     };
 
     // Same as SubShader in unity, we assusme there is always only one category in one shader file
-    struct Category
+    public struct Category
     {
-        List<Kernel> kernels;
-        Dictionary<string, string> tags;
+        List<Kernel> Kernels;
+        Dictionary<string, string> Tags;
     };
 
     // ShaderLab is designed like unity shaderlab
-    struct ShaderLab
+    public struct ShaderLab
     {
-        string name;
-        Category category;
-        uint propertyCapacity;
-        List<uint> offsets;
-        //List<Property> properties;
+        string Name;
+        Category Category;
+        uint PropertyCapacity;
+        List<uint> Offsets;
+        List<Property> Properties;
     };
 }

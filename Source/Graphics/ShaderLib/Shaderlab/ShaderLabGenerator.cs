@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Infinity.Container;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,8 +7,8 @@ using System.Threading.Tasks;
 
 namespace Infinity.Shaderlib
 {
-    /*internal class ShaderLabGenerator : ShaderLabBaseVisitor<Any>
+    public class ShaderLabGenerator : ShaderLabBaseVisitor<TAny>
     {
 
-    }*/
+    }
 }
