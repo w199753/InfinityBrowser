@@ -531,22 +531,22 @@ namespace Infinity.Rendering
             m_ComputeBlob.Dispose();
             m_VertexBlob.Dispose();
             m_FragmentBlob.Dispose();
-            m_IndexBuffer.Dispose();
-            m_VertexBuffer.Dispose();
-            //m_ComputeSampler.Dispose();
-            m_ComputeTexture.Dispose();
-            m_ComputeTextureView.Dispose();
-            m_ComputeShader.Dispose();
-            m_VertexShader.Dispose();
-            m_FragmentShader.Dispose();
-            m_ComputeBindGroup.Dispose();
-            m_ComputeBindGroupLayout.Dispose();
-            m_ComputePipelineState.Dispose();
-            m_ComputePipelineLayout.Dispose();
-            //m_GraphicsBindGroup.Dispose();
-            m_GraphicsBindGroupLayout.Dispose();
-            m_GraphicsPipelineState.Dispose();
-            m_GraphicsPipelineLayout.Dispose();
+            m_IndexBuffer?.Dispose();
+            m_VertexBuffer?.Dispose();
+            //m_ComputeSampler?.Dispose();
+            m_ComputeTexture?.Dispose();
+            m_ComputeTextureView?.Dispose();
+            m_ComputeShader?.Dispose();
+            m_VertexShader?.Dispose();
+            m_FragmentShader?.Dispose();
+            m_ComputeBindGroup?.Dispose();
+            m_ComputeBindGroupLayout?.Dispose();
+            m_ComputePipelineState?.Dispose();
+            m_ComputePipelineLayout?.Dispose();
+            //m_GraphicsBindGroup?.Dispose();
+            m_GraphicsBindGroupLayout?.Dispose();
+            m_GraphicsPipelineState?.Dispose();
+            m_GraphicsPipelineLayout?.Dispose();
             Console.WriteLine("Release RenderPipeline");
         }
     }

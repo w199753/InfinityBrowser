@@ -3,6 +3,10 @@ using Infinity.Threading;
 using Infinity.Windowing;
 using System.Runtime.InteropServices;
 using System.Runtime.CompilerServices;
+using Silk.NET.Input;
+using Silk.NET.Maths;
+using System.Numerics;
+using Infinity.Rendering;
 
 namespace Infinity.Engine
 {
@@ -42,7 +46,7 @@ namespace Infinity.Engine
 
         public Application(in int width, in int height, string name)
         {
-            m_Window = new PlatformWindow(width, height, name);
+            m_Window = new PlatformWindow(width, height, name, OnResize, OnFocus, OnMouseUp, OnMouseDown, OnMouseMove, OnMouseClick, OnMouseDoubleClick, OnMouseScroll, OnKeyUp, OnKeyDown, OnKeyChar);
 
             m_GameWorld = new GameWorld();
 
@@ -67,6 +71,80 @@ namespace Infinity.Engine
         protected void End()
         {
             m_GameWorld.EndWorld();
+        }
+
+        protected void OnFocus(bool state)
+        {
+            if (state)
+            {
+                //Console.WriteLine("GetFocus");
+            }
+            else
+            {
+                //Console.WriteLine("LossFocus");
+            }
+        }
+
+        protected void OnResize(Vector2D<int> size)
+        {
+            GraphicsUtility.AddTask((RenderContext renderContext) =>
+            {
+                Console.WriteLine("Resize Window");
+                renderContext.ResizeWindow(new Mathmatics.int2(size.X, size.Y));
+            });
+        }
+
+        protected void OnKeyUp(IKeyboard keyboar, Key key, int arg3)
+        {
+
+        }
+
+        protected void OnKeyDown(IKeyboard keyboar, Key key, int arg3)
+        {
+            if (key == Key.Escape)
+            {
+                m_Window.Close();
+            }
+
+            if (keyboar.IsKeyPressed(Key.Number1) && keyboar.IsKeyPressed(Key.Number2))
+            {
+                Console.WriteLine("Fuck");
+            }
+        }
+
+        protected void OnKeyChar(IKeyboard keyboar, char character)
+        {
+
+        }
+
+        protected void OnMouseUp(IMouse mouse, MouseButton button)
+        {
+
+        }
+
+        protected void OnMouseDown(IMouse mouse, MouseButton button)
+        {
+
+        }
+
+        protected void OnMouseMove(IMouse mouse, Vector2 pos)
+        {
+
+        }
+
+        protected void OnMouseClick(IMouse mouse, MouseButton button, Vector2 pos)
+        {
+
+        }
+
+        protected void OnMouseDoubleClick(IMouse mouse, MouseButton button, Vector2 pos)
+        {
+
+        }
+
+        protected void OnMouseScroll(IMouse mouse, ScrollWheel wheel)
+        {
+
         }
 
         public void Run()

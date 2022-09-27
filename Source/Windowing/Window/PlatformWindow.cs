@@ -27,7 +27,7 @@ namespace Infinity.Windowing
 		public string Title => m_Title;
 		public IntPtr WindowPtr => m_Window.Native.Win32.Value.Hwnd;
 
-		public PlatformWindow(in int width, in int height, string title)
+		public PlatformWindow(in int width, in int height, string title, Action<Vector2D<int>> OnResize, Action<bool> OnFocus, Action<IMouse, MouseButton> OnMouseUp, Action<IMouse, MouseButton> OnMouseDown, Action<IMouse, Vector2> OnMouseMove, Action<IMouse, MouseButton, Vector2> OnMouseClick, Action<IMouse, MouseButton, Vector2> OnMouseDoubleClick, Action<IMouse, ScrollWheel> OnMouseScroll, Action<IKeyboard, Key, int> OnKeyUp, Action<IKeyboard, Key, int> OnKeyDown, Action<IKeyboard, char> OnKeyChar)
 		{
 			m_Title = title;
 			m_Width = width;
@@ -62,72 +62,10 @@ namespace Infinity.Windowing
             m_Window.DoEvents();
 		}
 
-		void OnFocus(bool state)
+       
+        public void Close()
         {
-            if (state)
-            {
-                //Console.WriteLine("GetFocus");
-            } else {
-                //Console.WriteLine("LossFocus");
-            }
-        }
-
-        void OnResize(Vector2D<int> size)
-        {
-
-        }
-
-        void OnKeyUp(IKeyboard keyboar, Key key, int arg3)
-        {
-
-        }
-
-        void OnKeyDown(IKeyboard keyboar, Key key, int arg3)
-        {
-            if (key == Key.Escape)
-            {
-                m_Window.Close();
-            }
-
-            if (keyboar.IsKeyPressed(Key.Number1) && keyboar.IsKeyPressed(Key.Number2))
-            {
-                Console.WriteLine("Fuck");
-            }
-        }
-
-        void OnKeyChar(IKeyboard keyboar, char character)
-        {
-
-        }
-
-        void OnMouseUp(IMouse mouse, MouseButton button)
-        {
-
-        }
-
-        void OnMouseDown(IMouse mouse, MouseButton button)
-        {
-
-        }
-
-        void OnMouseMove(IMouse mouse, Vector2 pos)
-        {
-
-        }
-
-        void OnMouseClick(IMouse mouse, MouseButton button, Vector2 pos)
-        {
-
-        }
-
-        void OnMouseDoubleClick(IMouse mouse, MouseButton button, Vector2 pos)
-        {
-
-        }
-
-        void OnMouseScroll(IMouse mouse, ScrollWheel wheel)
-        {
-
+            m_Window.Close();
         }
 
         protected override void Release()
