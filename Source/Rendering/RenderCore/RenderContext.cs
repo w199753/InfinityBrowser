@@ -87,8 +87,8 @@ namespace Infinity.Rendering
             {
                 descriptor.Backend = ERHIBackend.DirectX12;
                 //descriptor.Backend = RHIInstance.GetPlatformBackend(false);
-                descriptor.EnableDebugLayer = true;
-                descriptor.EnableGpuValidatior = true;
+                descriptor.EnableDebugLayer = false;
+                descriptor.EnableGpuValidatior = false;
             }
             m_Instance = RHIInstance.Create(descriptor);
 
@@ -123,7 +123,7 @@ namespace Infinity.Rendering
             swapChainDescriptor.Format = EPixelFormat.RGBA8_UNorm;
             swapChainDescriptor.Surface = surface;
             swapChainDescriptor.PresentQueue = m_Queues[(int)EQueueType.Graphics];
-            swapChainDescriptor.FrameBufferOnly = false;
+            swapChainDescriptor.FrameBufferOnly = true;
             m_SwapChain = m_Device.CreateSwapChain(swapChainDescriptor);
 
             // Create FrameFence

@@ -8,6 +8,7 @@
 		<AllowUnsafeBlocks>True</AllowUnsafeBlocks>
 		<IntermediateOutputPath>../../../Intermediate/Graphics/Shaderlib/</IntermediateOutputPath>
 		<BaseOutputPath>$(ProjectDir)../../../Binaries/Graphics/Shaderlib/</BaseOutputPath>
+		<Nullable>enable</Nullable>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">

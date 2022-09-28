@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Text;
+using Infinity.Shaderlib;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 
@@ -15,7 +16,7 @@ namespace Infinity.Shaderlib
             m_ShaderLabGenerator = new ShaderLabGenerator();
         }
 
-        public void Compile(in ShaderLab shaderLab, string filePath)
+        public void Compile(in Shaderlab shaderLab, string filePath)
         {
 
         }
