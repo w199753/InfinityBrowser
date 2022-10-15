@@ -135,6 +135,9 @@ namespace Infinity.Shaderlib
 
     public static class ShaderCompiler
     {
+        internal static bool GUseHalfType = false;
+        internal static ShaderModel GShaderModel = new ShaderModel(6, 0);
+
         public static string DisassemblySPIRV(byte[] bytecode)
         {
             ResultDesc desc2;
@@ -162,8 +165,8 @@ namespace Infinity.Shaderlib
                 entryPoint = entryPoint
             };
             OptionsDesc options = OptionsDesc.Default;
-            options.shaderModel = new ShaderModel(6, 2);
-            options.enable16bitTypes = true;
+            options.shaderModel = GShaderModel;
+            options.enable16bitTypes = GUseHalfType;
             options.enableDebugInfo = keepDebugInfo;
             options.optimizationLevel = 3;
             options.disableOptimizations = disableOptimization;
@@ -217,8 +220,8 @@ namespace Infinity.Shaderlib
                 entryPoint = entryPoint
             };
             OptionsDesc options = OptionsDesc.Default;
-            options.shaderModel = new ShaderModel(6, 2);
-            options.enable16bitTypes = true;
+            options.shaderModel = GShaderModel;
+            options.enable16bitTypes = GUseHalfType;
             options.enableDebugInfo = keepDebugInfo;
             options.optimizationLevel = 3;
             options.disableOptimizations = disableOptimization;
@@ -252,8 +255,8 @@ namespace Infinity.Shaderlib
                 entryPoint = entryPoint
             };
             OptionsDesc options = OptionsDesc.Default;
-            options.shaderModel = new ShaderModel(6, 2);
-            options.enable16bitTypes = true;
+            options.shaderModel = GShaderModel;
+            options.enable16bitTypes = GUseHalfType;
             options.enableDebugInfo = keepDebugInfo;
             options.optimizationLevel = 3;
             options.disableOptimizations = disableOptimization;
@@ -294,8 +297,8 @@ namespace Infinity.Shaderlib
                 entryPoint = entryPoint
             };
             OptionsDesc options = OptionsDesc.Default;
-            options.shaderModel = new ShaderModel(6, 2);
-            options.enable16bitTypes = true;
+            options.shaderModel = GShaderModel;
+            options.enable16bitTypes = GUseHalfType;
             options.enableDebugInfo = keepDebugInfo;
             options.optimizationLevel = 3;
             options.disableOptimizations = disableOptimization;
@@ -336,8 +339,8 @@ namespace Infinity.Shaderlib
                 entryPoint = entryPoint
             };
             OptionsDesc options = OptionsDesc.Default;
-            options.shaderModel = new ShaderModel(6, 2);
-            options.enable16bitTypes = true;
+            options.shaderModel = GShaderModel;
+            options.enable16bitTypes = GUseHalfType;
             options.enableDebugInfo = keepDebugInfo;
             options.optimizationLevel = 3;
             options.disableOptimizations = disableOptimization;
