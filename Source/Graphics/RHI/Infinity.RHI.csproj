@@ -66,8 +66,8 @@
 		<PackageReference Include="Silk.NET.Vulkan.Extensions.KHR" Version="2.16.0" />
 		<PackageReference Include="Silk.NET.Vulkan.Extensions.MVK" Version="2.16.0" />
 		<PackageReference Include="Silk.NET.Vulkan.Extensions.NV" Version="2.16.0" />
-		<PackageReference Include="TerraFX.Interop.D3D12MemoryAllocator" Version="2.0.0-beta3" />
-		<PackageReference Include="Vortice.Vulkan" Version="1.5.19" />
+		<PackageReference Include="TerraFX.Interop.D3D12MemoryAllocator" Version="2.0.1.1" />
+		<PackageReference Include="Vortice.Vulkan" Version="1.5.20" />
 	</ItemGroup>
 
 	<ItemGroup>
