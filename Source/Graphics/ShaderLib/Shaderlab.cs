@@ -552,12 +552,12 @@ namespace Infinity.Shaderlab
 
         internal static ShaderlabCategory ParseShaderlabCategory(string source)
         {
-            throw new NotImplementedException();
+            throw new NotImplementedException("Shaderlab Category is illegal");
         }
 
         internal static List<ShaderlabProperties> ParseShaderlabProperties(string source)
         {
-            throw new NotImplementedException();
+            throw new NotImplementedException("Shaderlab Properties is illegal");
         }
     }
 }
