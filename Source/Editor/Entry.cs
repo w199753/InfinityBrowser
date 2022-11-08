@@ -1,8 +1,10 @@
 ﻿using System;
+using System.IO;
 using Infinity.Memory;
 using Infinity.Engine;
 using Infinity.Graphics;
 using Infinity.Rendering;
+using Infinity.Shaderlab;
 using Infinity.Analytics;
 using Infinity.Threading;
 using System.Collections;
@@ -154,8 +156,9 @@ namespace Infinity.Editor
     {
         static void Main(string[] args)
         {
-            HeapBlock heapBlock = new HeapBlock(64);
+            ShaderlabUtility.ParseShaderlabFromFile("C:\\CGFile\\Engines\\Infinity\\Shader\\InfinityLit.shader");
 
+            HeapBlock heapBlock = new HeapBlock(64);
             int outIndex;
             bool test = heapBlock.PullFreeSpaceIndex(5, out outIndex);
             test = heapBlock.PullFreeSpaceIndex(3, out outIndex);
