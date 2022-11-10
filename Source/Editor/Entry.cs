@@ -156,7 +156,7 @@ namespace Infinity.Editor
     {
         static void Main(string[] args)
         {
-            ShaderlabUtility.ParseShaderlabFromFile("C:\\CGFile\\Engines\\Infinity\\Shader\\InfinityLit.shader");
+            //ShaderlabUtility.ParseShaderlabFromFile("C:\\CGFile\\Engines\\Infinity\\Shader\\InfinityLit.shader");
 
             HeapBlock heapBlock = new HeapBlock(64);
             int outIndex;
