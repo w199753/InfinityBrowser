@@ -111,23 +111,23 @@ namespace Infinity.Graphics
     {
         public string Name;
         public EHitGroupType Type;
-        public RHIShader AnyHitShader;
-        public RHIShader CloseHitShader;
-        public RHIShader IntersectShader;
+        public RHIFunction AnyHitFunction;
+        public RHIFunction CloseHitFunction;
+        public RHIFunction IntersectFunction;
         public RHIBindGroupLayout BindGroupLayout;
     }
 
     public struct RHIRayGeneralDescription
     {
         public string Name;
-        public RHIShader GeneralShader;
+        public RHIFunction GeneralFunction;
         public RHIBindGroupLayout BindGroupLayout;
     }
 
     public struct RHIComputePipelineDescriptor
     {
         public uint3 ThreadSize;
-        public RHIShader ComputeShader;
+        public RHIFunction ComputeFunction;
         public RHIPipelineLayout PipelineLayout;
     }
 
@@ -136,7 +136,7 @@ namespace Infinity.Graphics
         public uint PayloadSize;
         public uint AttributeSize;
         public uint RecursionDepth;
-        public RHIShader GenerateShader;
+        public RHIFunction GenerateFunction;
         public RHIPipelineLayout PipelineLayout;
         public Memory<RHIHitGroupDescription> HitGroupDescriptors;
         public Memory<RHIRayGeneralDescription> RayGeneralDescriptors;
@@ -144,9 +144,9 @@ namespace Infinity.Graphics
 
     public struct RHIMeshletPipelineDescriptor
     {
-        public RHIShader TaskShader;
-        public RHIShader MeshShader;
-        public RHIShader FragmentShader;
+        public RHIFunction TaskFunction;
+        public RHIFunction MeshFunction;
+        public RHIFunction FragmentFunction;
         public RHIPipelineLayout PipelineLayout;
         public EPrimitiveTopology PrimitiveTopology;
         public RHIOutputStateDescriptor OutputStateDescriptor;
@@ -155,8 +155,8 @@ namespace Infinity.Graphics
 
     public struct RHIGraphicsPipelineDescriptor
     {
-        public RHIShader VertexShader;
-        public RHIShader FragmentShader;
+        public RHIFunction VertexFunction;
+        public RHIFunction FragmentFunction;
         public RHIPipelineLayout PipelineLayout;
         public RHIOutputStateDescriptor OutputStateDescriptor;
         public RHIRenderStateDescriptor RenderStateDescriptor;

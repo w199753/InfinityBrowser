@@ -19,9 +19,9 @@ namespace Infinity.Rendering
         ShaderConductorBlob m_VertexBlob;
         ShaderConductorBlob m_FragmentBlob;
 
-        RHIShader m_VertexShader;
-        RHIShader m_FragmentShader;
-        RHIShader m_ComputeShader;
+        RHIFunction m_VertexFunction;
+        RHIFunction m_FragmentFunction;
+        RHIFunction m_ComputeFunction;
         RHIBuffer m_IndexBuffer;
         RHIBuffer m_VertexBuffer;
         RHITexture m_ComputeTexture;
@@ -84,14 +84,14 @@ namespace Infinity.Rendering
 	            return input.color + _DiffuseTexture[0].Sample(_DiffuseSampler[0], float2(0, 0));
             }");
 
-            m_ComputeBlob = ShaderCompiler.HLSLToNativeDxil(computeCode, "CSMain", ShaderConductorWrapper.EShaderStage.Compute);
-            m_VertexBlob = ShaderCompiler.HLSLToNativeDxil(graphicsCode, "VSMain", ShaderConductorWrapper.EShaderStage.Vertex);
-            m_FragmentBlob = ShaderCompiler.HLSLToNativeDxil(graphicsCode, "PSMain", ShaderConductorWrapper.EShaderStage.Fragment);
+            m_ComputeBlob = ShaderCompiler.HLSLToNativeDxil(computeCode, "CSMain", ShaderConductorWrapper.EFunctionStage.Compute);
+            m_VertexBlob = ShaderCompiler.HLSLToNativeDxil(graphicsCode, "VSMain", ShaderConductorWrapper.EFunctionStage.Vertex);
+            m_FragmentBlob = ShaderCompiler.HLSLToNativeDxil(graphicsCode, "PSMain", ShaderConductorWrapper.EFunctionStage.Fragment);
 
             //**************************************************************************************************************************************************************************
-            string mslCS = ShaderCompiler.HLSLTo(computeCode, "CSMain", ShaderConductorWrapper.EShaderStage.Compute, ShaderConductorWrapper.EShadingLanguage.Msl_macOS);
-            string dxilCS = ShaderCompiler.HLSLTo(computeCode, "CSMain", ShaderConductorWrapper.EShaderStage.Compute, ShaderConductorWrapper.EShadingLanguage.Dxil);
-            string spirvCS = ShaderCompiler.HLSLTo(computeCode, "CSMain", ShaderConductorWrapper.EShaderStage.Compute, ShaderConductorWrapper.EShadingLanguage.SpirV);
+            string mslCS = ShaderCompiler.HLSLTo(computeCode, "CSMain", ShaderConductorWrapper.EFunctionStage.Compute, ShaderConductorWrapper.EShadingLanguage.Msl_macOS);
+            string dxilCS = ShaderCompiler.HLSLTo(computeCode, "CSMain", ShaderConductorWrapper.EFunctionStage.Compute, ShaderConductorWrapper.EShadingLanguage.Dxil);
+            string spirvCS = ShaderCompiler.HLSLTo(computeCode, "CSMain", ShaderConductorWrapper.EFunctionStage.Compute, ShaderConductorWrapper.EShadingLanguage.SpirV);
             Console.WriteLine("*************************\n" +
                               "**  Compute_MSL :      **\n" +
                               "*************************\n");
@@ -106,9 +106,9 @@ namespace Infinity.Rendering
             Console.WriteLine(spirvCS);
 
             //**************************************************************************************************************************************************************************
-            string mslVS = ShaderCompiler.HLSLTo(graphicsCode, "VSMain", ShaderConductorWrapper.EShaderStage.Vertex, ShaderConductorWrapper.EShadingLanguage.Msl_macOS);
-            string dxilVS = ShaderCompiler.HLSLTo(graphicsCode, "VSMain", ShaderConductorWrapper.EShaderStage.Vertex, ShaderConductorWrapper.EShadingLanguage.Dxil);
-            string spirvVS = ShaderCompiler.HLSLTo(graphicsCode, "VSMain", ShaderConductorWrapper.EShaderStage.Vertex, ShaderConductorWrapper.EShadingLanguage.SpirV);
+            string mslVS = ShaderCompiler.HLSLTo(graphicsCode, "VSMain", ShaderConductorWrapper.EFunctionStage.Vertex, ShaderConductorWrapper.EShadingLanguage.Msl_macOS);
+            string dxilVS = ShaderCompiler.HLSLTo(graphicsCode, "VSMain", ShaderConductorWrapper.EFunctionStage.Vertex, ShaderConductorWrapper.EShadingLanguage.Dxil);
+            string spirvVS = ShaderCompiler.HLSLTo(graphicsCode, "VSMain", ShaderConductorWrapper.EFunctionStage.Vertex, ShaderConductorWrapper.EShadingLanguage.SpirV);
             Console.WriteLine("*************************\n" +
                               "**  Vertex_MSL :       **\n" +
                               "*************************\n");
@@ -123,9 +123,9 @@ namespace Infinity.Rendering
             Console.WriteLine(spirvVS);
 
             //**************************************************************************************************************************************************************************
-            string mslPS = ShaderCompiler.HLSLTo(graphicsCode, "PSMain", ShaderConductorWrapper.EShaderStage.Fragment, ShaderConductorWrapper.EShadingLanguage.Msl_macOS);
-            string dxilPS = ShaderCompiler.HLSLTo(graphicsCode, "PSMain", ShaderConductorWrapper.EShaderStage.Fragment, ShaderConductorWrapper.EShadingLanguage.Dxil);
-            string spirvPS = ShaderCompiler.HLSLTo(graphicsCode, "PSMain", ShaderConductorWrapper.EShaderStage.Fragment, ShaderConductorWrapper.EShadingLanguage.SpirV);
+            string mslPS = ShaderCompiler.HLSLTo(graphicsCode, "PSMain", ShaderConductorWrapper.EFunctionStage.Fragment, ShaderConductorWrapper.EShadingLanguage.Msl_macOS);
+            string dxilPS = ShaderCompiler.HLSLTo(graphicsCode, "PSMain", ShaderConductorWrapper.EFunctionStage.Fragment, ShaderConductorWrapper.EShadingLanguage.Dxil);
+            string spirvPS = ShaderCompiler.HLSLTo(graphicsCode, "PSMain", ShaderConductorWrapper.EFunctionStage.Fragment, ShaderConductorWrapper.EShadingLanguage.SpirV);
             Console.WriteLine("*************************\n" +
                               "**  Fragment_MSL :     **\n" +
                               "*************************\n");
@@ -181,7 +181,7 @@ namespace Infinity.Rendering
                 //computeBindGroupLayoutElements[0].Count = 1;
                 computeBindGroupLayoutElements[0].BindSlot = 0;
                 computeBindGroupLayoutElements[0].BindType = EBindType.StorageTexture;
-                computeBindGroupLayoutElements[0].ShaderStage = EShaderStage.Compute;
+                computeBindGroupLayoutElements[0].FunctionStage = EFunctionStage.Compute;
             }
             RHIBindGroupLayoutDescriptor computeBindGroupLayoutDescriptor;
             {
@@ -203,14 +203,14 @@ namespace Infinity.Rendering
             m_ComputeBindGroup = renderContext.CreateBindGroup(computeBindGroupDescriptor);
 
             // Create ComputePipeline
-            RHIShaderDescriptor computeShaderDescriptor;
+            RHIFunctionDescriptor computeFunctionDescriptor;
             {
-                computeShaderDescriptor.Size = m_ComputeBlob.Size;
-                computeShaderDescriptor.ByteCode = m_ComputeBlob.Data;
-                computeShaderDescriptor.EntryName = "CSMain";
-                computeShaderDescriptor.ShaderStage = EShaderStage.Compute;
+                computeFunctionDescriptor.Size = m_ComputeBlob.Size;
+                computeFunctionDescriptor.ByteCode = m_ComputeBlob.Data;
+                computeFunctionDescriptor.EntryName = "CSMain";
+                computeFunctionDescriptor.FunctionStage = EFunctionStage.Compute;
             }
-            m_ComputeShader = renderContext.CreateShader(computeShaderDescriptor);
+            m_ComputeFunction = renderContext.CreateFunction(computeFunctionDescriptor);
 
             RHIPipelineLayoutDescriptor computePipelienLayoutDescriptor;
             {
@@ -221,7 +221,7 @@ namespace Infinity.Rendering
             RHIComputePipelineDescriptor computePipelineDescriptor;
             {
                 computePipelineDescriptor.ThreadSize = new uint3(8, 8, 1);
-                computePipelineDescriptor.ComputeShader = m_ComputeShader;
+                computePipelineDescriptor.ComputeFunction = m_ComputeFunction;
                 computePipelineDescriptor.PipelineLayout = m_ComputePipelineLayout;
             }
             m_ComputePipelineState = renderContext.CreateComputePipeline(computePipelineDescriptor);
@@ -397,12 +397,12 @@ namespace Infinity.Rendering
                 //graphicsBindGroupLayoutElements[0].Count = 1;
                 graphicsBindGroupLayoutElements[0].BindSlot = 0;
                 graphicsBindGroupLayoutElements[0].BindType = EBindType.Texture;
-                graphicsBindGroupLayoutElements[0].ShaderStage = EShaderStage.Fragment;
+                graphicsBindGroupLayoutElements[0].FunctionStage = EFunctionStage.Fragment;
 
                 //graphicsBindGroupLayoutElements[1].Count = 1;
                 graphicsBindGroupLayoutElements[1].BindSlot = 1;
                 graphicsBindGroupLayoutElements[1].BindType = EBindType.Sampler;
-                graphicsBindGroupLayoutElements[1].ShaderStage = EShaderStage.Fragment;
+                graphicsBindGroupLayoutElements[1].FunctionStage = EFunctionStage.Fragment;
             }
             RHIBindGroupLayoutDescriptor graphicsBindGroupLayoutDescriptor;
             {
@@ -425,23 +425,23 @@ namespace Infinity.Rendering
             RHIBindGroup m_GraphicsBindGroup = renderContext.CreateBindGroup(graphicsBindGroupDescriptor);*/
 
             // Create GraphicsPipeline
-            RHIShaderDescriptor vertexShaderDescriptor;
+            RHIFunctionDescriptor vertexFunctionDescriptor;
             {
-                vertexShaderDescriptor.Size = m_VertexBlob.Size;
-                vertexShaderDescriptor.ByteCode = m_VertexBlob.Data;
-                vertexShaderDescriptor.EntryName = "VSMain";
-                vertexShaderDescriptor.ShaderStage = EShaderStage.Vertex;
+                vertexFunctionDescriptor.Size = m_VertexBlob.Size;
+                vertexFunctionDescriptor.ByteCode = m_VertexBlob.Data;
+                vertexFunctionDescriptor.EntryName = "VSMain";
+                vertexFunctionDescriptor.FunctionStage = EFunctionStage.Vertex;
             }
-            m_VertexShader = renderContext.CreateShader(vertexShaderDescriptor);
+            m_VertexFunction = renderContext.CreateFunction(vertexFunctionDescriptor);
 
-            RHIShaderDescriptor fragmentShaderDescriptor;
+            RHIFunctionDescriptor fragmentFunctionDescriptor;
             {
-                fragmentShaderDescriptor.Size = m_FragmentBlob.Size;
-                fragmentShaderDescriptor.ByteCode = m_FragmentBlob.Data;
-                fragmentShaderDescriptor.EntryName = "PSMain";
-                fragmentShaderDescriptor.ShaderStage = EShaderStage.Fragment;
+                fragmentFunctionDescriptor.Size = m_FragmentBlob.Size;
+                fragmentFunctionDescriptor.ByteCode = m_FragmentBlob.Data;
+                fragmentFunctionDescriptor.EntryName = "PSMain";
+                fragmentFunctionDescriptor.FunctionStage = EFunctionStage.Fragment;
             }
-            m_FragmentShader = renderContext.CreateShader(fragmentShaderDescriptor);
+            m_FragmentFunction = renderContext.CreateFunction(fragmentFunctionDescriptor);
 
             RHIPipelineLayoutDescriptor graphicsPipelienLayoutDescriptor;
             {
@@ -451,8 +451,8 @@ namespace Infinity.Rendering
 
             RHIGraphicsPipelineDescriptor graphicsPipelineDescriptor;
             {
-                graphicsPipelineDescriptor.VertexShader = m_VertexShader;
-                graphicsPipelineDescriptor.FragmentShader = m_FragmentShader;
+                graphicsPipelineDescriptor.VertexFunction = m_VertexFunction;
+                graphicsPipelineDescriptor.FragmentFunction = m_FragmentFunction;
                 graphicsPipelineDescriptor.PipelineLayout = m_GraphicsPipelineLayout;
                 graphicsPipelineDescriptor.OutputStateDescriptor = outputStateDescriptor;
                 graphicsPipelineDescriptor.RenderStateDescriptor = renderStateDescriptor;
@@ -536,9 +536,9 @@ namespace Infinity.Rendering
             //m_ComputeSampler?.Dispose();
             m_ComputeTexture?.Dispose();
             m_ComputeTextureView?.Dispose();
-            m_ComputeShader?.Dispose();
-            m_VertexShader?.Dispose();
-            m_FragmentShader?.Dispose();
+            m_ComputeFunction?.Dispose();
+            m_VertexFunction?.Dispose();
+            m_FragmentFunction?.Dispose();
             m_ComputeBindGroup?.Dispose();
             m_ComputeBindGroupLayout?.Dispose();
             m_ComputePipelineState?.Dispose();

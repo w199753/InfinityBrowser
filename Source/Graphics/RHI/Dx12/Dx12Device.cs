@@ -217,9 +217,9 @@ namespace Infinity.Graphics
             return new Dx12Sampler(this, descriptor);
         }
 
-        public override RHIShader CreateShader(in RHIShaderDescriptor descriptor)
+        public override RHIFunction CreateFunction(in RHIFunctionDescriptor descriptor)
         {
-            return new Dx12Shader(descriptor);
+            return new Dx12Function(descriptor);
         }
 
         public override RHISwapChain CreateSwapChain(in RHISwapChainDescriptor descriptor)

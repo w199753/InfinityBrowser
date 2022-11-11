@@ -425,7 +425,7 @@
         UnorderedAccess,
     }
 
-    public enum EShaderStage
+    public enum EFunctionStage
     {
         Vertex = 0x1,
         Fragment = 0x2,

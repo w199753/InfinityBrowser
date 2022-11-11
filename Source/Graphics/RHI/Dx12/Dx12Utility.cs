@@ -746,14 +746,14 @@ namespace Infinity.Graphics
             }
         }
 
-        internal static D3D12_SHADER_VISIBILITY ConvertToDx12ShaderStage(in EShaderStage shaderStage)
+        internal static D3D12_SHADER_VISIBILITY ConvertToDx12ShaderStage(in EFunctionStage shaderStage)
         {
             switch (shaderStage)
             {
-                case EShaderStage.Vertex:
+                case EFunctionStage.Vertex:
                     return D3D12_SHADER_VISIBILITY.D3D12_SHADER_VISIBILITY_VERTEX;
 
-                case EShaderStage.Fragment:
+                case EFunctionStage.Fragment:
                     return D3D12_SHADER_VISIBILITY.D3D12_SHADER_VISIBILITY_PIXEL;
 
                 default:

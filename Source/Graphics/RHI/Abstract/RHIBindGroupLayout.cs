@@ -7,7 +7,7 @@ namespace Infinity.Graphics
         public int Count;
         public int BindSlot;
         public EBindType BindType;
-        public EShaderStage ShaderStage;
+        public EFunctionStage FunctionStage;
     }
     
     public struct RHIBindGroupLayoutDescriptor

@@ -84,7 +84,7 @@ namespace Infinity.Graphics
             throw new NotImplementedException();
         }
 
-        public override RHIShader CreateShader(in RHIShaderDescriptor descriptor)
+        public override RHIFunction CreateFunction(in RHIFunctionDescriptor descriptor)
         {
             throw new NotImplementedException();
         }

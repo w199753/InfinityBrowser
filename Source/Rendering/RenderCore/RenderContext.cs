@@ -269,9 +269,9 @@ namespace Infinity.Rendering
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public RHIShader CreateShader(in RHIShaderDescriptor descriptor)
+        public RHIFunction CreateFunction(in RHIFunctionDescriptor descriptor)
         {
-            return m_Device.CreateShader(descriptor);
+            return m_Device.CreateFunction(descriptor);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]

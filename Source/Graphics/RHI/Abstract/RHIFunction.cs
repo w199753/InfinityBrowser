@@ -2,17 +2,17 @@
 
 namespace Infinity.Graphics
 {
-    public struct RHIShaderDescriptor
+    public struct RHIFunctionDescriptor
     {
         public int Size;
         public IntPtr ByteCode;
         public string EntryName;
-        public EShaderStage ShaderStage;
+        public EFunctionStage FunctionStage;
     }
 
-    public abstract class RHIShader : Disposal
+    public abstract class RHIFunction : Disposal
     {
-        public RHIShaderDescriptor Descriptor
+        public RHIFunctionDescriptor Descriptor
         {
             get
             {
@@ -20,6 +20,6 @@ namespace Infinity.Graphics
             }
         }
 
-        protected RHIShaderDescriptor m_Descriptor;
+        protected RHIFunctionDescriptor m_Descriptor;
     }
 }

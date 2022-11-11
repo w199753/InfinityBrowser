@@ -48,7 +48,7 @@ namespace Infinity.Shaderlib
         [DllImport("ShaderConductorWrapper.dll", CharSet = CharSet.Ansi, CallingConvention = CallingConvention.Cdecl)]
         public static extern int GetShaderConductorBlobSize(IntPtr blob);
 
-        public enum EShaderStage
+        public enum EFunctionStage
         {
             Vertex = 0,
             Fragment = 1,
@@ -81,7 +81,7 @@ namespace Infinity.Shaderlib
         {
             public string source;
             public string entryPoint;
-            public EShaderStage stage;
+            public EFunctionStage stage;
         }
 
         [StructLayout(LayoutKind.Sequential)]

@@ -155,7 +155,7 @@ namespace Infinity.Shaderlib
             return Marshal.PtrToStringAnsi(GetShaderConductorBlobData(desc2.target), GetShaderConductorBlobSize(desc2.target));
         }
 
-        public static string HLSLTo(string hlslSource, string entryPoint, in EShaderStage stage, in EShadingLanguage language, in bool keepDebugInfo = false, in bool disableOptimization = false)
+        public static string HLSLTo(string hlslSource, string entryPoint, in EFunctionStage stage, in EShadingLanguage language, in bool keepDebugInfo = false, in bool disableOptimization = false)
         {
             string str2;
             ResultDesc desc4;
@@ -210,7 +210,7 @@ namespace Infinity.Shaderlib
             return str2;
         }
 
-        public static byte[] HLSLToBinaryDxil(string hlslSource, string entryPoint, in EShaderStage stage, in bool keepDebugInfo = false, in bool disableOptimization = false)
+        public static byte[] HLSLToBinaryDxil(string hlslSource, string entryPoint, in EFunctionStage stage, in bool keepDebugInfo = false, in bool disableOptimization = false)
         {
             ResultDesc desc4;
             SourceDesc source = new SourceDesc
@@ -245,7 +245,7 @@ namespace Infinity.Shaderlib
             return destination;
         }
 
-        public static ShaderConductorBlob HLSLToNativeDxil(string hlslSource, string entryPoint, in EShaderStage stage, in bool keepDebugInfo = false, in bool disableOptimization = true)
+        public static ShaderConductorBlob HLSLToNativeDxil(string hlslSource, string entryPoint, in EFunctionStage stage, in bool keepDebugInfo = false, in bool disableOptimization = true)
         {
             ResultDesc desc4;
             SourceDesc source = new SourceDesc
@@ -288,7 +288,7 @@ namespace Infinity.Shaderlib
             return new ShaderConductorBlob(dxcBlob.BufferSize, dxcBlob.BufferPointer);*/
         }
 
-        public static byte[] HLSLToBinarySpirV(string hlslSource, string entryPoint, in EShaderStage stage, in bool keepDebugInfo = false, in bool disableOptimization = false)
+        public static byte[] HLSLToBinarySpirV(string hlslSource, string entryPoint, in EFunctionStage stage, in bool keepDebugInfo = false, in bool disableOptimization = false)
         {
             ResultDesc desc4;
             SourceDesc source = new SourceDesc {
@@ -329,7 +329,7 @@ namespace Infinity.Shaderlib
             return destination;
         }
 
-        public static ShaderConductorBlob HLSLToNativeSpirV(string hlslSource, string entryPoint, in EShaderStage stage, in bool keepDebugInfo = false, in bool disableOptimization = false)
+        public static ShaderConductorBlob HLSLToNativeSpirV(string hlslSource, string entryPoint, in EFunctionStage stage, in bool keepDebugInfo = false, in bool disableOptimization = false)
         {
             ResultDesc desc4;
             SourceDesc source = new SourceDesc
@@ -366,56 +366,56 @@ namespace Infinity.Shaderlib
             return new ShaderConductorBlob(desc4);
         }
 
-        public static EShaderStage ToShaderConductorStage(this Graphics.EShaderStage stage)
+        public static EFunctionStage ToShaderConductorStage(this Graphics.EFunctionStage functionStage)
         {
-            switch (stage)
+            switch (functionStage)
             {
-                case Graphics.EShaderStage.Vertex:
-                    return EShaderStage.Vertex;
+                case Graphics.EFunctionStage.Vertex:
+                    return EFunctionStage.Vertex;
 
-                case Graphics.EShaderStage.Fragment:
-                    return EShaderStage.Fragment;
+                case Graphics.EFunctionStage.Fragment:
+                    return EFunctionStage.Fragment;
 
-                case Graphics.EShaderStage.Compute:
-                    return EShaderStage.Compute;
+                case Graphics.EFunctionStage.Compute:
+                    return EFunctionStage.Compute;
 
                 default:
-                    return EShaderStage.Fragment;
+                    return EFunctionStage.Fragment;
             }
-            throw new Exception($"Stage:{stage} not supported");
+            throw new Exception($"Stage:{functionStage} not supported");
         }
 
-        /*public static Vortice.Dxc.DxcShaderStage ToSDxcShaderStage(this EShaderStage stage)
+        /*public static Vortice.Dxc.DxcShaderStage ToSDxcShaderStage(this EFunctionStage functionStage)
         {
-            switch (stage)
+            switch (functionStage)
             {
-                case EShaderStage.Vertex:
+                case EFunctionStage.Vertex:
                     return Vortice.Dxc.DxcShaderStage.Vertex;
 
-                case EShaderStage.Fragment:
+                case EFunctionStage.Fragment:
                     return Vortice.Dxc.DxcShaderStage.Pixel;
 
-                case EShaderStage.Compute:
+                case EFunctionStage.Compute:
                     return Vortice.Dxc.DxcShaderStage.Compute;
 
                 default:
                     return Vortice.Dxc.DxcShaderStage.Pixel;
             }
-            throw new Exception($"Stage:{stage} not supported");
+            throw new Exception($"Stage:{functionStage} not supported");
         }*/
 
-        private static string TranslationFixes(EShadingLanguage language, EShaderStage stage, int version, string translation)
+        private static string TranslationFixes(EShadingLanguage language, EFunctionStage functionStage, int version, string translation)
         {
             string input = translation;
             if (language == EShadingLanguage.Essl)
             {
                 if (version < 310)
                 {
-                    if (stage == EShaderStage.Vertex)
+                    if (functionStage == EFunctionStage.Vertex)
                     {
                         input = input.Replace("out_var_", "var_");
                     }
-                    if (stage == EShaderStage.Fragment)
+                    if (functionStage == EFunctionStage.Fragment)
                     {
                         input = input.Replace("in_var_", "var_");
                     }

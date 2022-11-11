@@ -11,7 +11,7 @@ namespace Infinity.Graphics
         public int Index;
         public int BindSlot;
         public EBindType BindType;
-        public EShaderStage ShaderStage;
+        public EFunctionStage FunctionStage;
 
         internal bool IsBindless => BindType == EBindType.Bindless;
     }
@@ -50,7 +50,7 @@ namespace Infinity.Graphics
                 bindInfo.Index = descriptor.Index;
                 bindInfo.BindSlot = element.BindSlot;
                 bindInfo.BindType = element.BindType;
-                bindInfo.ShaderStage = element.ShaderStage;
+                bindInfo.FunctionStage = element.FunctionStage;
             }
         }
 
