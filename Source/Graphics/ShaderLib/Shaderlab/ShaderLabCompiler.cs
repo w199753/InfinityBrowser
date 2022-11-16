@@ -7,13 +7,13 @@ using System.Collections.Generic;
 
 namespace Infinity.Shaderlib
 {
-    public class ShaderLabCompiler
+    public class ShaderlabCompiler
     {
-        private ShaderLabGenerator m_ShaderLabGenerator;
+        private ShaderlabGenerator m_ShaderLabGenerator;
 
-        public ShaderLabCompiler()
+        public ShaderlabCompiler()
         {
-            m_ShaderLabGenerator = new ShaderLabGenerator();
+            m_ShaderLabGenerator = new ShaderlabGenerator();
         }
 
         public void Compile(in Shaderlab shaderLab, string filePath)

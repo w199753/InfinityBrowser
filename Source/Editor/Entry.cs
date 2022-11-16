@@ -1,11 +1,7 @@
 ﻿using System;
-using System.IO;
 using Infinity.Memory;
 using Infinity.Engine;
-using Infinity.Graphics;
-using Infinity.Rendering;
-using Infinity.Shaderlab;
-using Infinity.Analytics;
+using Infinity.Shaderlib;
 using Infinity.Threading;
 using System.Collections;
 
@@ -156,7 +152,7 @@ namespace Infinity.Editor
     {
         static void Main(string[] args)
         {
-            //ShaderlabUtility.ParseShaderlabFromFile("C:\\CGFile\\Engines\\Infinity\\Shader\\InfinityLit.shader");
+            Shaderlab shaderLab = ShaderlabUtility.ParseShaderlabFromFile("C:\\CGFile\\Engines\\Infinity\\Shader\\InfinityLit.shader");
 
             HeapBlock heapBlock = new HeapBlock(64);
             int outIndex;

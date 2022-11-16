@@ -7,222 +7,222 @@ using System.Collections.Generic;
 
 namespace Infinity.Shaderlib
 {
-    public struct ShaderLabVisitorResult
+    public struct ShaderlabVisitorResult
     {
-        public string StringParam;
+        public string Name;
         public int IntParam;
         public float FloatParam;
         public float2 RangeParam;
         public float4 VectorParam;
-        public Shaderlab ShaderlabParam;
-        public ShaderlabKernel KernelParam;
-        public ShaderlabCategory CategoryParam;
-        public List<ShaderlabProperty> PropertyParam;
-        public Dictionary<string, string> HashmapParam;
+        public Shaderlab Shaderlab;
+        public ShaderlabPass Pass;
+        public ShaderlabCategory Category;
+        public List<ShaderlabProperties> Properties;
+        public Dictionary<string, string> Tags;
     };
 
-    public class ShaderLabGenerator : ShaderLabBaseVisitor<ShaderLabVisitorResult>
+    public class ShaderlabGenerator : ShaderLabBaseVisitor<ShaderlabVisitorResult>
     {
-        public override ShaderLabVisitorResult VisitChildren(IRuleNode node)
+        public override ShaderlabVisitorResult VisitChildren(IRuleNode node)
         {
-            ShaderLabVisitorResult result = DefaultResult;
+            ShaderlabVisitorResult result = DefaultResult;
             int n = node.ChildCount;
             for (int i = 0; i < n; ++i)
             {
                 if (!ShouldVisitNextChild(node, result))
                     break;
                 IParseTree c = node.GetChild(i);
-                ShaderLabVisitorResult childResult = c.Accept(this);
+                ShaderlabVisitorResult childResult = c.Accept(this);
                 result = childResult;
             }
             return result;
         }
 
-        public override ShaderLabVisitorResult VisitShader([NotNull] ShaderLabParser.ShaderContext context)
+        public override ShaderlabVisitorResult VisitShader([NotNull] ShaderLabParser.ShaderContext context)
         {
             Shaderlab shaderLab = new Shaderlab();
-            shaderLab.Name = VisitShader_name(context.shader_name()).StringParam;
+            shaderLab.Name = VisitShader_name(context.shader_name()).Name;
 
             if (context.properties() != null)
             {
-                shaderLab.Properties = VisitProperties(context.properties()).PropertyParam;
+                shaderLab.Properties = VisitProperties(context.properties()).Properties;
             }
             if (context.category() != null)
             {
-                shaderLab.Category = VisitCategory(context.category()).CategoryParam;
+                shaderLab.Category = VisitCategory(context.category()).Category;
             }
 
-            ShaderLabVisitorResult result = new ShaderLabVisitorResult();
-            result.ShaderlabParam = shaderLab;
+            ShaderlabVisitorResult result = new ShaderlabVisitorResult();
+            result.Shaderlab = shaderLab;
             return result;
         }
 
-        public override ShaderLabVisitorResult VisitProperties([NotNull] ShaderLabParser.PropertiesContext context)
+        public override ShaderlabVisitorResult VisitProperties([NotNull] ShaderLabParser.PropertiesContext context)
         {
             throw new NotImplementedException();
         }
 
-        public override ShaderLabVisitorResult VisitProperty([NotNull] ShaderLabParser.PropertyContext context)
+        public override ShaderlabVisitorResult VisitProperty([NotNull] ShaderLabParser.PropertyContext context)
         {
             throw new NotImplementedException();
         }
 
-        public override ShaderLabVisitorResult VisitProperty_int([NotNull] ShaderLabParser.Property_intContext context)
+        public override ShaderlabVisitorResult VisitProperty_int([NotNull] ShaderLabParser.Property_intContext context)
         {
             throw new NotImplementedException();
         }
 
-        public override ShaderLabVisitorResult VisitProperty_float([NotNull] ShaderLabParser.Property_floatContext context)
+        public override ShaderlabVisitorResult VisitProperty_float([NotNull] ShaderLabParser.Property_floatContext context)
         {
             throw new NotImplementedException();
         }
 
-        public override ShaderLabVisitorResult VisitProperty_range([NotNull] ShaderLabParser.Property_rangeContext context)
+        public override ShaderlabVisitorResult VisitProperty_range([NotNull] ShaderLabParser.Property_rangeContext context)
         {
             throw new NotImplementedException();
         }
 
-        public override ShaderLabVisitorResult VisitProperty_color([NotNull] ShaderLabParser.Property_colorContext context)
+        public override ShaderlabVisitorResult VisitProperty_color([NotNull] ShaderLabParser.Property_colorContext context)
         {
             throw new NotImplementedException();
         }
 
-        public override ShaderLabVisitorResult VisitProperty_vector([NotNull] ShaderLabParser.Property_vectorContext context)
+        public override ShaderlabVisitorResult VisitProperty_vector([NotNull] ShaderLabParser.Property_vectorContext context)
         {
             throw new NotImplementedException();
         }
 
-        public override ShaderLabVisitorResult VisitProperty_2d([NotNull] ShaderLabParser.Property_2dContext context)
+        public override ShaderlabVisitorResult VisitProperty_2d([NotNull] ShaderLabParser.Property_2dContext context)
         {
             throw new NotImplementedException();
         }
 
-        public override ShaderLabVisitorResult VisitProperty_cube([NotNull] ShaderLabParser.Property_cubeContext context)
+        public override ShaderlabVisitorResult VisitProperty_cube([NotNull] ShaderLabParser.Property_cubeContext context)
         {
             throw new NotImplementedException();
         }
 
-        public override ShaderLabVisitorResult VisitProperty_3d([NotNull] ShaderLabParser.Property_3dContext context)
+        public override ShaderlabVisitorResult VisitProperty_3d([NotNull] ShaderLabParser.Property_3dContext context)
         {
             throw new NotImplementedException();
         }
 
-        public override ShaderLabVisitorResult VisitCategory([NotNull] ShaderLabParser.CategoryContext context)
+        public override ShaderlabVisitorResult VisitCategory([NotNull] ShaderLabParser.CategoryContext context)
         {
             throw new NotImplementedException();
         }
 
-        public override ShaderLabVisitorResult VisitKernel([NotNull] ShaderLabParser.KernelContext context)
+        public override ShaderlabVisitorResult VisitKernel([NotNull] ShaderLabParser.KernelContext context)
         {
             throw new NotImplementedException();
         }
 
-        public override ShaderLabVisitorResult VisitHlsl_block([NotNull] ShaderLabParser.Hlsl_blockContext context)
+        public override ShaderlabVisitorResult VisitHlsl_block([NotNull] ShaderLabParser.Hlsl_blockContext context)
         {
             throw new NotImplementedException();
         }
 
-        public override ShaderLabVisitorResult VisitTags([NotNull] ShaderLabParser.TagsContext context)
+        public override ShaderlabVisitorResult VisitTags([NotNull] ShaderLabParser.TagsContext context)
         {
             throw new NotImplementedException();
         }
 
-        public override ShaderLabVisitorResult VisitTag([NotNull] ShaderLabParser.TagContext context)
+        public override ShaderlabVisitorResult VisitTag([NotNull] ShaderLabParser.TagContext context)
         {
             throw new NotImplementedException();
         }
 
-        public override ShaderLabVisitorResult VisitCommon_state([NotNull] ShaderLabParser.Common_stateContext context)
+        public override ShaderlabVisitorResult VisitCommon_state([NotNull] ShaderLabParser.Common_stateContext context)
         {
             throw new NotImplementedException();
         }
 
-        public override ShaderLabVisitorResult VisitCull([NotNull] ShaderLabParser.CullContext context)
+        public override ShaderlabVisitorResult VisitCull([NotNull] ShaderLabParser.CullContext context)
         {
             throw new NotImplementedException();
         }
 
-        public override ShaderLabVisitorResult VisitZtest([NotNull] ShaderLabParser.ZtestContext context)
+        public override ShaderlabVisitorResult VisitZtest([NotNull] ShaderLabParser.ZtestContext context)
         {
             throw new NotImplementedException();
         }
 
-        public override ShaderLabVisitorResult VisitZwrite([NotNull] ShaderLabParser.ZwriteContext context)
+        public override ShaderlabVisitorResult VisitZwrite([NotNull] ShaderLabParser.ZwriteContext context)
         {
             throw new NotImplementedException();
         }
 
-        public override ShaderLabVisitorResult VisitColor_mask([NotNull] ShaderLabParser.Color_maskContext context)
+        public override ShaderlabVisitorResult VisitColor_mask([NotNull] ShaderLabParser.Color_maskContext context)
         {
             throw new NotImplementedException();
         }
 
-        public override ShaderLabVisitorResult VisitMeta([NotNull] ShaderLabParser.MetaContext context)
+        public override ShaderlabVisitorResult VisitMeta([NotNull] ShaderLabParser.MetaContext context)
         {
             throw new NotImplementedException();
         }
 
-        public override ShaderLabVisitorResult VisitRange([NotNull] ShaderLabParser.RangeContext context)
+        public override ShaderlabVisitorResult VisitRange([NotNull] ShaderLabParser.RangeContext context)
         {
             throw new NotImplementedException();
         }
 
-        public override ShaderLabVisitorResult VisitTag_key([NotNull] ShaderLabParser.Tag_keyContext context)
+        public override ShaderlabVisitorResult VisitTag_key([NotNull] ShaderLabParser.Tag_keyContext context)
         {
             throw new NotImplementedException();
         }
 
-        public override ShaderLabVisitorResult VisitTag_val([NotNull] ShaderLabParser.Tag_valContext context)
+        public override ShaderlabVisitorResult VisitTag_val([NotNull] ShaderLabParser.Tag_valContext context)
         {
             throw new NotImplementedException();
         }
 
-        public override ShaderLabVisitorResult VisitShader_name([NotNull] ShaderLabParser.Shader_nameContext context)
+        public override ShaderlabVisitorResult VisitShader_name([NotNull] ShaderLabParser.Shader_nameContext context)
         {
             throw new NotImplementedException();
         }
 
-        public override ShaderLabVisitorResult VisitDisplay_name([NotNull] ShaderLabParser.Display_nameContext context)
+        public override ShaderlabVisitorResult VisitDisplay_name([NotNull] ShaderLabParser.Display_nameContext context)
         {
             throw new NotImplementedException();
         }
 
-        public override ShaderLabVisitorResult VisitTexture_name([NotNull] ShaderLabParser.Texture_nameContext context)
+        public override ShaderlabVisitorResult VisitTexture_name([NotNull] ShaderLabParser.Texture_nameContext context)
         {
             throw new NotImplementedException();
         }
 
-        public override ShaderLabVisitorResult VisitProperty_identifier([NotNull] ShaderLabParser.Property_identifierContext context)
+        public override ShaderlabVisitorResult VisitProperty_identifier([NotNull] ShaderLabParser.Property_identifierContext context)
         {
             throw new NotImplementedException();
         }
 
-        public override ShaderLabVisitorResult VisitVal_int([NotNull] ShaderLabParser.Val_intContext context)
+        public override ShaderlabVisitorResult VisitVal_int([NotNull] ShaderLabParser.Val_intContext context)
         {
             throw new NotImplementedException();
         }
 
-        public override ShaderLabVisitorResult VisitVal_float([NotNull] ShaderLabParser.Val_floatContext context)
+        public override ShaderlabVisitorResult VisitVal_float([NotNull] ShaderLabParser.Val_floatContext context)
         {
             throw new NotImplementedException();
         }
 
-        public override ShaderLabVisitorResult VisitVal_min([NotNull] ShaderLabParser.Val_minContext context)
+        public override ShaderlabVisitorResult VisitVal_min([NotNull] ShaderLabParser.Val_minContext context)
         {
             throw new NotImplementedException();
         }
 
-        public override ShaderLabVisitorResult VisitVal_max([NotNull] ShaderLabParser.Val_maxContext context)
+        public override ShaderlabVisitorResult VisitVal_max([NotNull] ShaderLabParser.Val_maxContext context)
         {
             throw new NotImplementedException();
         }
 
-        public override ShaderLabVisitorResult VisitVal_vec4([NotNull] ShaderLabParser.Val_vec4Context context)
+        public override ShaderlabVisitorResult VisitVal_vec4([NotNull] ShaderLabParser.Val_vec4Context context)
         {
             throw new NotImplementedException();
         }
 
-        public override ShaderLabVisitorResult VisitChannel([NotNull] ShaderLabParser.ChannelContext context) 
+        public override ShaderlabVisitorResult VisitChannel([NotNull] ShaderLabParser.ChannelContext context) 
         {
             throw new NotImplementedException();
         }

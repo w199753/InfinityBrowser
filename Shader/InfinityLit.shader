@@ -2,12 +2,21 @@
 {
 	Properties
 	{
-        [Header (Microface)]
-        _AlbedoTex ("albedo Map", 2D) = "white" {}
+        //[Header(Albedo)]
+        _AlbedoMap ("AlbedoMap", 2D) = "white" {}
+        _AlbedoColor("AlbedoColor", Color) = (1, 0.25, 0.2, 1)
+
+		//[Header(Microface)]
+		_IntValue("IntValue", Int) = 233
+		_SpecularValue("SpecularValue", Range(0, 1)) = 0.5
+		_MetallicValue("MetallicValue", Range(0, 1)) = 1
+        _RoughnessValue("RoughnessValue", Range(0, 1)) = 0.66
 	}
 
 	Category
 	{
+		Tags{"Queue" = "Geometry" "RenderType" = "Opaque" "RenderPipeline" = "InfinityRenderPipeline"}
+
 		Pass
 		{
 			Tags {"Name" = "Depth", "Type" = "Graphics"}
@@ -17,6 +26,8 @@
 			HLSLPROGRAM
 			#pragma vertex Vert
 			#pragma fragment Frag
+
+			#include "../Private/Common.hlsl"
 
 			struct Attributes
 			{
@@ -30,17 +41,25 @@
 				float4 vertexCS : SV_POSITION;
 			};
 
-			cbuffer PerCamera
+			cbuffer PerCamera : register(b0, space0);
 			{
 				float4x4 matrix_VP;
 			};
-			cbuffer PerObject
+			cbuffer PerObject : register(b1, space0);
 			{
 				float4x4 matrix_World;
 				float4x4 matrix_Object;
 			};
-
-			#include "../Private/Common.hlsl"
+			cbuffer PerMaterial : register(b2, space0);
+			{
+				int _IntValue;
+				float _SpecularValue;
+				float _MetallicValue;
+				float _RoughnessValue;
+				float4 _AlbedoColor;
+			};	
+			Texture2D _AlbedoMap : register(t0, space0); 
+			SamplerState sampler_AlbedoMap : register(s0, space0);
 
 			Varyings Vert(Attributes In)
 			{
@@ -68,6 +87,8 @@
 			#pragma vertex Vert
 			#pragma fragment Frag
 
+			#include "../Private/Common.hlsl"
+
 			struct Attributes
 			{
 				float2 uv0 : TEXCOORD0;
@@ -83,25 +104,26 @@
 				float4 vertexCS : SV_POSITION;
 			};
 
-			cbuffer PerCamera
+			cbuffer PerCamera : register(b0, space0);
 			{
 				float4x4 matrix_VP;
 			};
-			cbuffer PerObject
+			cbuffer PerObject : register(b1, space0);
 			{
 				float4x4 matrix_World;
 				float4x4 matrix_Object;
 			};
-			cbuffer PerMaterial
+			cbuffer PerMaterial : register(b2, space0);
 			{
-				float _Specular;
+				int _IntValue;
+				float _SpecularValue;
+				float _MetallicValue;
+				float _RoughnessValue;
 				float4 _AlbedoColor;
 			};	
-			Texture2D _AlbedoTex; 
-			SamplerState sampler_AlbedoTex;
+			Texture2D _AlbedoMap : register(t0, space0); 
+			SamplerState sampler_AlbedoMap : register(s0, space0);
 
-			#include "../Private/Common.hlsl"
-			
 			Varyings Vert(Attributes In)
 			{
 				Varyings Out = (Varyings)0;
@@ -115,7 +137,7 @@
 			
 			void Frag(Varyings In, out float4 GBufferA : SV_Target0, out float4 GBufferB : SV_Target1)
 			{
-				float3 albedo = _AlbedoTex.Sample(sampler_AlbedoTex, In.uv0).rgb;
+				float3 albedo = _AlbedoMap.Sample(sampler_AlbedoMap, In.uv0).rgb;
 
 				GBufferA = float4(albedo, 1);
 				GBufferB = float4((In.normalWS * 0.5 + 0.5), 1);
@@ -132,6 +154,8 @@
 			#pragma vertex Vert
 			#pragma fragment Frag
 
+			#include "../Private/Common.hlsl"
+
 			struct Attributes
 			{
 				float2 uv0 : TEXCOORD0;
@@ -147,25 +171,26 @@
 				float4 vertexCS : SV_POSITION;
 			};
 
-			cbuffer PerCamera
+			cbuffer PerCamera : register(b0, space0);
 			{
 				float4x4 matrix_VP;
 			};
-			cbuffer PerObject
+			cbuffer PerObject : register(b1, space0);
 			{
 				float4x4 matrix_World;
 				float4x4 matrix_Object;
 			};
-			cbuffer PerMaterial
+			cbuffer PerMaterial : register(b2, space0);
 			{
-				float _Specular;
+				int _IntValue;
+				float _SpecularValue;
+				float _MetallicValue;
+				float _RoughnessValue;
 				float4 _AlbedoColor;
 			};	
-			Texture2D _AlbedoTex; 
-			SamplerState sampler_AlbedoTex;
+			Texture2D _AlbedoMap : register(t0, space0); 
+			SamplerState sampler_AlbedoMap : register(s0, space0);
 
-			#include "../Private/Common.hlsl"
-			
 			Varyings Vert(Attributes In)
 			{
 				Varyings Out = (Varyings)0;
@@ -180,7 +205,7 @@
 			void Frag(Varyings In, out float4 Diffuse : SV_Target0, out float4 Specular : SV_Target1)
 			{
 				float3 worldPos = In.vertexWS.xyz;
-				float3 albedo = _AlbedoTex.Sample(sampler_AlbedoTex, In.uv).rgb;
+				float3 albedo = _AlbedoMap.Sample(sampler_AlbedoMap, In.uv).rgb;
 
 				Diffuse = float4(albedo, 1);
 				Specular = float4(albedo, 1);
@@ -190,18 +215,18 @@
 
 		Pass
 		{
-			Tags {"Name" = "Blur", "Type" = "Compute"}
+			Tags {"Name" = "IndexWrite", "Type" = "Compute"}
 
 			HLSLPROGRAM
 			#pragma compute Main
 
-			cbuffer PerDispatch
+			#include "../Private/Common.hlsl"
+
+			cbuffer PerDispatch : register(b0, space0);
 			{
 				float4 Resolution;
 			};	
-			RWTexture2D<float4> UAV_Output;
-
-			#include "../Private/Common.hlsl"
+			RWTexture2D<float4> UAV_Output : register(u0, space0);
 
 			[numthreads(8, 8, 1)]
 			void Main(uint3 id : SV_DispatchThreadID)
@@ -213,13 +238,17 @@
 
 		Pass
 		{
-			Tags {"Name" = "RTAO", "Type" = "RayTracing"}
+			Tags {"Name" = "RTAORayGen", "Type" = "RayTracing"}
 
 			HLSLPROGRAM
-			#pragma miss Miss
-			#pragma anyHit AnyHit
-			#pragma closeHit ClosestHit
-			#pragma rayGeneration RayGeneration
+			#pragma raygeneration RayGeneration
+
+			#include "../Private/Common.hlsl"
+
+			struct AORayPayload
+			{
+				float HitDistance;
+			};
 
 			struct AOAttributeData
 			{
@@ -227,26 +256,65 @@
 				float2 barycentrics;
 			};
 
-			struct AORayPayload
-			{
-				float HitDistance;
-			};
-
-			cbuffer PerMaterial
+			cbuffer PerMaterial : register(b0, space0);
 			{
 				float _Specular;
 				float4 _AlbedoColor;
-			};	
+			};
+			cbuffer PerDispatch : register(b1, space0);
+			{
+				float4 Resolution;
+			};
 			RWTexture2D<float4> UAV_Output;
-
-			#include "../Private/Common.hlsl"
 
 			[shader("raygeneration")]
 			void RayGeneration()
 			{
 				uint2 dispatchIdx = DispatchRaysIndex().xy;
-				UAV_Output[dispatchIdx] = float4(dispatchIdx.x & dispatchIdx.y, (dispatchIdx.x & 15) / 15, (dispatchIdx.y & 15) / 15, 0);
+				uint2 launchDim   = DispatchRaysDimensions().xy;
+				float2 uv = dispatchIdx * Resolution.zw;
+
+				RayDesc rayDescriptor;
+				rayDescriptor.TMin      = 0;
+				rayDescriptor.TMax      = RTAO_Radius;
+				rayDescriptor.Origin    = float3(0, 0, 0);
+				rayDescriptor.Direction = float3(0, 0, 0);
+
+        		AORayPayload rayPayLoad;
+        		TraceRay(_RaytracingSceneStruct, RAY_FLAG_CULL_BACK_FACING_TRIANGLES, 0xFF, 0, 1, 0, rayDescriptor, rayPayLoad);
+
+				UAV_Output[dispatchIdx] = RayIntersectionAO.HitDistance < 0 ? 1 : 0;
 			}
+			ENDHLSL
+		}
+
+		Pass
+		{
+			Tags {"Name" = "RTAOHitGroup", "Type" = "RayTracing"}
+
+			HLSLPROGRAM
+			#pragma miss Miss
+			#pragma anyHit AnyHit
+			#pragma closestHit ClosestHit
+
+			#include "../Private/Common.hlsl"
+
+			struct AORayPayload
+			{
+				float HitDistance;
+			};
+
+			struct AOAttributeData
+			{
+				// Barycentric value of the intersection
+				float2 barycentrics;
+			};
+
+			cbuffer PerMaterial : register(b0, space0);
+			{
+				float _Specular;
+				float4 _AlbedoColor;
+			};	
 
 			[shader("miss")]
 			void Miss(inout AORayPayload rayPayload : SV_RayPayload)
@@ -264,7 +332,7 @@
 			void ClosestHit(inout AORayPayload rayPayload : SV_RayPayload, AOAttributeData attributeData : SV_IntersectionAttributes)
 			{
 				rayPayload.HitDistance = RayTCurrent();
-				//Calculate_VertexData(FragInput);
+				//CalculateVertexData(FragInput);
 			}
 			ENDHLSL
 		}
