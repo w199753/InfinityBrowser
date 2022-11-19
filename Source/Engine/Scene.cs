@@ -6,55 +6,60 @@ namespace Infinity.Engine
     [Serializable]
     public sealed class GameScene : Object
     {
-        public TArray<Entity> Entitys
+        public TArray<GameLevel> Levels
         {
             get
             {
-                return m_Entitys;
+                return m_Levels;
             }
         }
 
-        private TArray<Entity> m_Entitys;
+        private TArray<GameLevel> m_Levels;
 
         public GameScene()
         {
-            m_Entitys = new TArray<Entity>(64);
+            m_Levels = new TArray<GameLevel>(64);
         }
 
-        public void AddEntity(Entity entity)
+        public GameScene(string name) : base(name)
         {
-            m_Entitys.Add(entity);
+            m_Levels = new TArray<GameLevel>(64);
         }
 
-        public void RemoveEntity(Entity entity)
+        public void AddLevel(GameLevel level)
         {
-            m_Entitys.RemoveSwap(entity);
+            m_Levels.Add(level);
         }
 
-        internal void StartScene()
+        public void RemoveLevel(GameLevel level)
         {
-            for (int i = 0; i < m_Entitys.length; ++i)
+            m_Levels.RemoveSwap(level);
+        }
+
+        internal void OnEnable()
+        {
+            for (int i = 0; i < m_Levels.length; ++i)
             {
-                Entity entity = m_Entitys[i];
-                entity.OnEnable();
+                GameLevel level = m_Levels[i];
+                level.OnEnable();
             }
         }
 
-        internal void TickScene(in float deltaTime)
+        internal void OnUpdate(in float deltaTime)
         {
-            for (int i = 0; i < m_Entitys.length; ++i)
+            for (int i = 0; i < m_Levels.length; ++i)
             {
-                Entity entity = m_Entitys[i];
-                entity.OnUpdate(deltaTime);
+                GameLevel level = m_Levels[i];
+                level.OnUpdate(deltaTime);
             }
         }
 
-        internal void EndScene()
+        internal void OnDisable()
         {
-            for (int i = 0; i < m_Entitys.length; ++i)
+            for (int i = 0; i < m_Levels.length; ++i)
             {
-                Entity entity = m_Entitys[i];
-                entity.OnDisable();
+                GameLevel level = m_Levels[i];
+                level.OnDisable();
             }
         }
 

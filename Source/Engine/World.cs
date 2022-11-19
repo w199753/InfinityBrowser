@@ -14,59 +14,30 @@ namespace Infinity.Engine
         }
 
         private GameScene m_PersistentScene;
-        private TArray<GameScene> m_Scenes;
 
         internal GameWorld()
         {
-            m_Scenes = new TArray<GameScene>(5);
+
         }
 
-        public void AddScene(GameScene scene)
-        {
-            m_Scenes.Add(scene);
-        }
-
-        public void RemoveScene(GameScene scene)
-        {
-            m_Scenes.RemoveSwap(scene);
-        }
-
-        public void SetPersistentScene(GameScene scene)
+        public void SetScene(GameScene scene)
         {
             m_PersistentScene = scene;
         }
 
-        internal void StartWorld()
+        internal void OnEnable()
         {
-            m_PersistentScene.StartScene();
-
-            for (int i = 0; i < m_Scenes.length; ++i)
-            {
-                GameScene scene = m_Scenes[i];
-                scene.StartScene();
-            }
+            m_PersistentScene.OnEnable();
         }
 
-        internal void TickWorld(in float deltaTime)
+        internal void OnUpdate(in float deltaTime)
         {
-            m_PersistentScene.TickScene(deltaTime);
-
-            for (int i = 0; i < m_Scenes.length; ++i)
-            {
-                GameScene scene = m_Scenes[i];
-                scene.TickScene(deltaTime);
-            }
+            m_PersistentScene.OnUpdate(deltaTime);
         }
 
-        internal void EndWorld()
+        internal void OnDisable()
         {
-            m_PersistentScene.EndScene();
-
-            for (int i = 0; i < m_Scenes.length; ++i)
-            {
-                GameScene scene = m_Scenes[i];
-                scene.EndScene();
-            }
+            m_PersistentScene.OnDisable();
         }
 
         protected override void Release()

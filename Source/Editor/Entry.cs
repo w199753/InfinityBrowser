@@ -165,13 +165,18 @@ namespace Infinity.Editor
 
             Application editorApp = new Application(1600, 900, "Infinity Editor");
 
-            GameScene persistentScene = new GameScene();
-            editorApp.GameWorld.SetPersistentScene(persistentScene);
-
             TestEntity testEntity = new TestEntity("TestEntity");
-            editorApp.GameWorld.PersistentScene.AddEntity(testEntity);
 
+            GameLevel testLevel = new GameLevel("TestLevel");
+            testLevel.AddEntity(testEntity);
+
+            GameScene testScene = new GameScene("TestScene");
+            testScene.AddLevel(testLevel);
+
+            editorApp.GameWorld.SetScene(testScene);
             editorApp.Run();
+
+            editorApp.Dispose();
 
             /*Console.WriteLine("Fuck you");
             Console.ReadKey();*/

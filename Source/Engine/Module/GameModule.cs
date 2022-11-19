@@ -60,8 +60,8 @@ namespace Infinity.Engine
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         void WaitForTargetFPS()
         {
-            long elapsed = 0;
-            int deltaTimeSmoothing = 2;
+            long elapsed;
+            const int deltaTimeSmoothing = 2;
 
             if (Application.GTargetFrameRate > 0)
             {

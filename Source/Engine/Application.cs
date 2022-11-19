@@ -60,17 +60,17 @@ namespace Infinity.Engine
 
         protected void Play()
         {
-            m_GameWorld.StartWorld();
+            m_GameWorld.OnEnable();
         }
 
         protected void Tick()
         {
-            m_GameWorld.TickWorld(Timer.DeltaTime);
+            m_GameWorld.OnUpdate(Timer.DeltaTime);
         }
 
         protected void End()
         {
-            m_GameWorld.EndWorld();
+            m_GameWorld.OnDisable();
         }
 
         protected void OnFocus(bool state)
@@ -149,13 +149,6 @@ namespace Infinity.Engine
 
         public void Run()
         {
-            Loop();
-            Exit();
-            Dispose();
-        }
-
-        private void Loop()
-        {
             m_GameModule.Start();
             //m_PhysicsModule.Start();
             m_GraphicsModule.Start();
@@ -165,10 +158,7 @@ namespace Infinity.Engine
                 m_Window.Update();
                 m_GameModule.Update();
             }
-        }
 
-        private void Exit()
-        {
             m_GameModule.Exit();
             //m_PhysicsModule.Exit();
             m_GraphicsModule.Exit();

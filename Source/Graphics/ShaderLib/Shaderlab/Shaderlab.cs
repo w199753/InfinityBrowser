@@ -253,7 +253,7 @@ namespace Infinity.Shaderlib
         Max
     };
 
-    public struct Shaderlab : IDisposable
+    public class Shaderlab : IDisposable
     {
         public string Name
         {
