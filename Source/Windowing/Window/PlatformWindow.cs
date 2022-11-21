@@ -57,7 +57,7 @@ namespace Infinity.Windowing
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public void Update()
+		public void Update(in float deltaTime)
 		{
             m_Window.DoEvents();
 		}

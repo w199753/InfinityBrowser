@@ -25,17 +25,17 @@ namespace Infinity.Engine
             m_PersistentScene = scene;
         }
 
-        internal void OnEnable()
+        internal void Start()
         {
             m_PersistentScene.OnEnable();
         }
 
-        internal void OnUpdate(in float deltaTime)
+        internal void Update(in float deltaTime)
         {
             m_PersistentScene.OnUpdate(deltaTime);
         }
 
-        internal void OnDisable()
+        internal void Exit()
         {
             m_PersistentScene.OnDisable();
         }
