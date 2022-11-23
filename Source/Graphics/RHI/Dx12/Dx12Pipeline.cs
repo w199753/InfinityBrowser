@@ -198,6 +198,11 @@ namespace Infinity.Graphics
 
         }
 
+        public override RHIFunctionTable CreateFunctionTable()
+        {
+            throw new NotImplementedException("ToDo.....");
+        }
+
         protected override void Release()
         {
             //m_PipelineLayout.Dispose();
@@ -308,7 +313,7 @@ namespace Infinity.Graphics
             Dx12Function fragmentFunction = descriptor.FragmentFunction as Dx12Function;
             Dx12PipelineLayout pipelineLayout = descriptor.PipelineLayout as Dx12PipelineLayout;
 
-            Span<RHIVertexLayoutDescriptor> vertexLayoutDescriptors = descriptor.VertexStateDescriptor.VertexLayoutDescriptors.Span;
+            Span<RHIVertexLayoutDescriptor> vertexLayoutDescriptors = descriptor.VertexLayoutDescriptors.Span;
 
             if ((vertexFunction != null))
             {
@@ -320,9 +325,9 @@ namespace Infinity.Graphics
             }
 
             m_StencilRef = descriptor.RenderStateDescriptor.DepthStencilStateDescriptor.StencilReference;
-            m_PrimitiveTopology = Dx12Utility.ConvertToDx12PrimitiveTopology(descriptor.VertexStateDescriptor.PrimitiveTopology);
+            m_PrimitiveTopology = Dx12Utility.ConvertToDx12PrimitiveTopology(descriptor.PrimitiveTopology);
 
-            D3D12_PRIMITIVE_TOPOLOGY_TYPE primitiveTopologyType = Dx12Utility.ConvertToDx12PrimitiveTopologyType(descriptor.VertexStateDescriptor.PrimitiveTopology);
+            D3D12_PRIMITIVE_TOPOLOGY_TYPE primitiveTopologyType = Dx12Utility.ConvertToDx12PrimitiveTopologyType(descriptor.PrimitiveTopology);
 
             int inputElementCount = Dx12Utility.GetDx12VertexLayoutCount(vertexLayoutDescriptors);
             D3D12_INPUT_ELEMENT_DESC* inputElementsPtr = stackalloc D3D12_INPUT_ELEMENT_DESC[inputElementCount];

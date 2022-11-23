@@ -324,12 +324,6 @@ namespace Infinity.Rendering
                 vertexLayoutDescriptors[0].VertexElementDescriptors = new Memory<RHIVertexElementDescriptor>(vertexElementDescriptors);
             }
 
-            RHIVertexStateDescriptor vertexStateDescriptor;
-            {
-                vertexStateDescriptor.PrimitiveTopology = EPrimitiveTopology.TriangleList;
-                vertexStateDescriptor.VertexLayoutDescriptors = new Memory<RHIVertexLayoutDescriptor>(vertexLayoutDescriptors);
-            }
-
             RHIBlendStateDescriptor blendStateDescriptor;
             {
                 blendStateDescriptor.AlphaToCoverage = false;
@@ -454,9 +448,10 @@ namespace Infinity.Rendering
                 graphicsPipelineDescriptor.VertexFunction = m_VertexFunction;
                 graphicsPipelineDescriptor.FragmentFunction = m_FragmentFunction;
                 graphicsPipelineDescriptor.PipelineLayout = m_GraphicsPipelineLayout;
+                graphicsPipelineDescriptor.PrimitiveTopology = EPrimitiveTopology.TriangleList;
                 graphicsPipelineDescriptor.OutputStateDescriptor = outputStateDescriptor;
                 graphicsPipelineDescriptor.RenderStateDescriptor = renderStateDescriptor;
-                graphicsPipelineDescriptor.VertexStateDescriptor = vertexStateDescriptor;
+                graphicsPipelineDescriptor.VertexLayoutDescriptors = new Memory<RHIVertexLayoutDescriptor>(vertexLayoutDescriptors);
             }
             m_GraphicsPipelineState = renderContext.CreateGraphicsPipeline(graphicsPipelineDescriptor);
 

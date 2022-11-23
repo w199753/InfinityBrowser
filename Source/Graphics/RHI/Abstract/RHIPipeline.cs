@@ -33,12 +33,6 @@ namespace Infinity.Graphics
         public Memory<RHIVertexElementDescriptor> VertexElementDescriptors;
     }
 
-    public struct RHIVertexStateDescriptor
-    {
-        public EPrimitiveTopology PrimitiveTopology;
-        public Memory<RHIVertexLayoutDescriptor> VertexLayoutDescriptors;
-    }
-
     public struct RHIBlendDescriptor
     {
         public bool BlendEnable;
@@ -112,8 +106,8 @@ namespace Infinity.Graphics
         public string Name;
         public EHitGroupType Type;
         public RHIFunction AnyHitFunction;
-        public RHIFunction CloseHitFunction;
         public RHIFunction IntersectFunction;
+        public RHIFunction ClosestHitFunction;
         public RHIBindGroupLayout BindGroupLayout;
     }
 
@@ -133,10 +127,9 @@ namespace Infinity.Graphics
 
     public struct RHIRaytracingPipelineDescriptor
     {
-        public uint PayloadSize;
-        public uint AttributeSize;
-        public uint RecursionDepth;
-        public RHIFunction GenerateFunction;
+        public uint MaxPayloadSize;
+        public uint MaxAttributeSize;
+        public uint MaxRecursionDepth;
         public RHIPipelineLayout PipelineLayout;
         public Memory<RHIHitGroupDescription> HitGroupDescriptors;
         public Memory<RHIRayGeneralDescription> RayGeneralDescriptors;
@@ -158,9 +151,10 @@ namespace Infinity.Graphics
         public RHIFunction VertexFunction;
         public RHIFunction FragmentFunction;
         public RHIPipelineLayout PipelineLayout;
+        public EPrimitiveTopology PrimitiveTopology;
         public RHIOutputStateDescriptor OutputStateDescriptor;
         public RHIRenderStateDescriptor RenderStateDescriptor;
-        public RHIVertexStateDescriptor VertexStateDescriptor;
+        public Memory<RHIVertexLayoutDescriptor> VertexLayoutDescriptors;
     }
 
     public struct RHIPipelineLayoutDescriptor
@@ -181,7 +175,7 @@ namespace Infinity.Graphics
 
     public abstract class RHIRaytracingPipeline : Disposal
     {
-
+        public abstract RHIFunctionTable CreateFunctionTable();
     }
 
     public abstract class RHIMeshletPipeline : Disposal
