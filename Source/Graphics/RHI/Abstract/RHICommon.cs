@@ -5,12 +5,14 @@
         Metal,
         Vulkan,
         DirectX12,
+        Pending
     }
 
     public enum EGpuType : byte
     {
         Hardware,
         Software,
+        Pending
     }
 
     public enum EQueueType : byte
@@ -18,6 +20,7 @@
         Blit,
         Compute,
         Graphics,
+        Pending
     }
 
     public enum EQueryType : byte
@@ -25,6 +28,7 @@
         Timestamp,
         Occlusion,
         BinaryOcclusion,
+        Pending
     }
 
     public enum EPixelFormat : byte
@@ -74,7 +78,44 @@
         D16_UNorm,
         D24_UNorm_S8_UInt,
         D32_Float,
-        // TODO features / bc / etc / astc
+        // Block-Compressed
+        RGBA_DXT1_SRGB,
+        RGB_DXT1_UNorm,
+        RGBA_DXT1_UNorm,
+        RGBA_DXT3_SRGB,
+        RGBA_DXT3_UNorm,
+        RGBA_DXT5_SRGB,
+        RGBA_DXT5_UNorm,
+        R_BC4_UNorm,
+        R_BC4_SNorm,
+        RG_BC5_UNorm,
+        RG_BC5_SNorm,
+        RGB_BC6H_UFloat,
+        RGB_BC6H_SFloat,
+        RGBA_BC7_SRGB,
+        RGBA_BC7_UNorm,
+        // AdaptiveScalable-Compressed
+        RGBA_ASTC4X4_SRGB,
+        RGBA_ASTC4X4_UNorm,
+        RGBA_ASTC4X4_UFloat,
+        RGBA_ASTC5X5_SRGB,
+        RGBA_ASTC5X5_UNorm,
+        RGBA_ASTC5X5_UFloat,
+        RGBA_ASTC6X6_SRGB,
+        RGBA_ASTC6X6_UNorm,
+        RGBA_ASTC6X6_UFloat,
+        RGBA_ASTC8X8_SRGB,
+        RGBA_ASTC8X8_UNorm,
+        RGBA_ASTC8X8_UFloat,
+        RGBA_ASTC10X10_SRGB,
+        RGBA_ASTC10X10_UNorm,
+        RGBA_ASTC10X10_UFloat,
+        RGBA_ASTC12X12_SRGB,
+        RGBA_ASTC12X12_UNorm,
+        RGBA_ASTC12X12_UFloat,
+        // YUV 4:2:2 Video resource format.
+        YUV2,
+        Pending
     }
 
     public enum ESemanticFormat : byte
@@ -127,6 +168,7 @@
         Int2,
         Int3,
         Int4,
+        Pending
     }
 
     public enum ESemanticType : byte
@@ -139,6 +181,8 @@
         Color = 5,
         BlendIndices = 6,
         BlendWeight = 7,
+        ShadingRate = 8,
+        Pending
     }
 
     public enum EShadingRate : byte
@@ -149,7 +193,8 @@
         Rate2x2 = 5,
         Rate2x4 = 6,
         Rate4x2 = 9,
-        Rate4x4 = 10
+        Rate4x4 = 10,
+        Pending
     }
 
     public enum EShadingRateCombiner : byte
@@ -158,13 +203,15 @@
         Max = 1,
         Sum = 2,
         Override = 3,
-        Passthrough = 4
+        Passthrough = 4,
+        Pending
     }
 
     public enum ETextureDimension : byte
     {
         Texture2D,
         Texture3D,
+        Pending
     }
 
     public enum ETextureViewDimension : byte
@@ -174,6 +221,7 @@
         TextureCube,
         TextureCubeArray,
         Texture3D,
+        Pending
     }
 
     public enum EAddressMode : byte
@@ -181,6 +229,7 @@
         Repeat,
         ClampToEdge,
         MirrorRepeat,
+        Pending
     }
 
     public enum EFilterMode : byte
@@ -188,6 +237,7 @@
         Point,
         Linear,
         Anisotropic,
+        Pending
     }
 
     public enum EBindType : byte
@@ -198,13 +248,16 @@
         Bindless,
         UniformBuffer,
         StorageBuffer,
-        StorageTexture
+        StorageTexture,
+        AccelerationStructure,
+        Pending
     }
 
     public enum EVertexStepMode : byte
     {
         PerVertex,
         PerInstance,
+        Pending
     }
 
     public enum EPrimitiveTopology : byte
@@ -218,6 +271,7 @@
         LineStripAdj,
         TriangleListAdj,
         TriangleStripAdj,
+        Pending
     }
 
     public enum EPrimitiveTopologyType : byte
@@ -225,12 +279,14 @@
         Point,
         Line,
         Triangle,
+        Pending
     }
 
     public enum EIndexFormat : byte
     {
         UInt16,
         UInt32,
+        Pending
     }
 
     public enum ESampleCount : byte
@@ -239,6 +295,7 @@
         Count2 = 2,
         Count4 = 4,
         Count8 = 8,
+        Pending
     }
 
     public enum EBlendMode : byte
@@ -259,7 +316,8 @@
         SecondarySourceColor = 0x10,
         InverseSecondarySourceColor = 0x11,
         SecondarySourceAlpha = 0x12,
-        InverseSecondarySourceAlpha = 0x13
+        InverseSecondarySourceAlpha = 0x13,
+        Pending
     }
 
     public enum EBlendOp : byte
@@ -268,7 +326,8 @@
         Substract = 2,
         ReverseSubstract = 3,
         Min = 4,
-        Max = 5
+        Max = 5,
+        Pending
     }
 
     public enum EColorWriteChannel : byte
@@ -278,7 +337,8 @@
         Green = 2,
         Blue = 4,
         Alpha = 8,
-        All = 15
+        All = 15,
+        Pending
     }
 
     public enum EComparisonMode : byte
@@ -290,7 +350,8 @@
         Greater = 4,
         NotEqual = 5,
         GreaterEqual = 6,
-        Always = 7
+        Always = 7,
+        Pending
     }
 
     public enum EStencilOp : byte
@@ -302,20 +363,23 @@
         DecrementSaturation = 5,
         Invert = 6,
         Increment = 7,
-        Decrement = 8
+        Decrement = 8,
+        Pending
     }
 
     public enum EFillMode : byte
     {
         Solid = 3,
-        Wireframe = 2
+        Wireframe = 2,
+        Pending
     }
 
     public enum ECullMode : byte
     {
         None = 1,
         Back = 3,
-        Front = 2
+        Front = 2,
+        Pending
     }
 
     public enum ELoadOp : byte
@@ -323,6 +387,7 @@
         Load,
         Clear,
         DontCare,
+        Pending
     }
 
     public enum EStoreOp : byte
@@ -331,6 +396,7 @@
         Resolve,
         StoreAndResolve,
         DontCare,
+        Pending
     }
 
     public enum EPresentMode : byte
@@ -340,12 +406,14 @@
         // 2. Vulkan VkPresentModeKHR #see https://www.khronos.org/registry/vulkan/specs/1.3-extensions/man/html/VkPresentModeKHR.html
         VSync,
         Immediately,
+        Pending
     }
 
     public enum EResourceType : byte
     {
         Buffer,
         Texture,
+        Pending
     }
 
     public enum EStorageMode : byte
@@ -353,7 +421,8 @@
         Default = 0,
         Static = 1,
         Dynamic = 2,
-        Staging = 3
+        Staging = 3,
+        Pending
     }
 
     public enum EBufferState
@@ -372,6 +441,7 @@
         AccelStructWrite = 0x00000800,
         AccelStructBuildInput = 0x00001000,
         AccelStructBuildBlast = 0x00002000,
+        Pending
     }
 
     public enum ETextureState
@@ -389,6 +459,7 @@
         ShaderResource = 0x00000200,
         UnorderedAccess = 0x00000400,
         ShadingRateSurface = 0x00000800,
+        Pending
     }
 
     public enum EBufferUsage
@@ -400,6 +471,7 @@
         ShaderResource = 0x10,
         UnorderedAccess = 0x20,
         AccelerationStructure = 0x400,
+        Pending
     }
 
     public enum EBufferViewType : byte
@@ -407,6 +479,7 @@
         UniformBuffer,
         ShaderResource,
         UnorderedAccess,
+        Pending
     }
 
     public enum ETextureUsage
@@ -415,6 +488,7 @@
         RenderTarget = 0x2,
         ShaderResource = 0x4,
         UnorderedAccess = 0x8,
+        Pending
     }
 
     public enum ETextureViewType : byte
@@ -423,6 +497,7 @@
         RenderTarget,
         ShaderResource,
         UnorderedAccess,
+        Pending
     }
 
     public enum EFunctionStage
@@ -436,11 +511,13 @@
         CloseHit = 0x80,
         Intersect = 0x100,
         RayGenerate = 0x200,
+        Pending
     }
 
     public enum EHitGroupType : byte
     {
         Triangles,
-        Procedural
+        Procedural,
+        Pending
     }
 }
