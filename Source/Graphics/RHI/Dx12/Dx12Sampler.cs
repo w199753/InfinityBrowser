@@ -2,7 +2,8 @@
 
 namespace Infinity.Graphics
 {
-    internal unsafe class Dx12Sampler : RHISampler
+#pragma warning disable CA1416 
+    internal unsafe class Dx12SamplerState : RHISamplerState
     {
         public ID3D12DescriptorHeap* NativeDescriptorHeap
         {
@@ -32,19 +33,19 @@ namespace Infinity.Graphics
         private D3D12_CPU_DESCRIPTOR_HANDLE m_NativeCpuDescriptorHandle;
         private D3D12_GPU_DESCRIPTOR_HANDLE m_NativeGpuDescriptorHandle;
 
-        public Dx12Sampler(Dx12Device device, in RHISamplerDescriptor descriptor)
+        public Dx12SamplerState(Dx12Device device, in RHISamplerStateDescriptor descriptor)
         {
             m_Dx12Device = device;
 
             D3D12_SAMPLER_DESC desc = new D3D12_SAMPLER_DESC();
+            desc.MinLOD = descriptor.LodMinClamp;
+            desc.MaxLOD = descriptor.LodMaxClamp;
+            desc.Filter = Dx12Utility.ConvertToDx12Filter(descriptor);
             desc.AddressU = /*Dx12Utility.GetNativeAddressMode(Descriptor->AddressModeU)*/D3D12_TEXTURE_ADDRESS_MODE.D3D12_TEXTURE_ADDRESS_MODE_WRAP;
             desc.AddressV = /*Dx12Utility.GetNativeAddressMode(Descriptor->AddressModeV)*/D3D12_TEXTURE_ADDRESS_MODE.D3D12_TEXTURE_ADDRESS_MODE_WRAP;
             desc.AddressW = /*Dx12Utility.GetNativeAddressMode(Descriptor->AddressModeW)*/D3D12_TEXTURE_ADDRESS_MODE.D3D12_TEXTURE_ADDRESS_MODE_WRAP;
-            desc.Filter = Dx12Utility.ConvertToDx12Filter(descriptor);
-            desc.MinLOD = descriptor.LodMinClamp;
-            desc.MaxLOD = descriptor.LodMaxClamp;
-            desc.ComparisonFunc = /*Dx12Utility.GetNativeComparisonFunc(Descriptor->ComparisonFunc)*/D3D12_COMPARISON_FUNC.D3D12_COMPARISON_FUNC_ALWAYS;
             desc.MaxAnisotropy = (uint)descriptor.Anisotropy;
+            desc.ComparisonFunc = /*Dx12Utility.GetNativeComparisonFunc(Descriptor->ComparisonFunc)*/D3D12_COMPARISON_FUNC.D3D12_COMPARISON_FUNC_NEVER;
 
             Dx12DescriptorInfo allocation = device.AllocateSamplerDescriptor(1);
             m_HeapIndex = allocation.Index;
@@ -59,4 +60,5 @@ namespace Infinity.Graphics
             m_Dx12Device.FreeSamplerDescriptor(m_HeapIndex);
         }
     }
+#pragma warning restore CA1416
 }

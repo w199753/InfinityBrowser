@@ -50,11 +50,6 @@ namespace Infinity.Graphics
                 ref Dx12BindGroupParameter bindParameter = ref m_BindParameters[i];
                 switch (bindInfo.BindType)
                 {
-                    case EBindType.Sampler:
-                        Dx12Sampler sampler = element.Sampler as Dx12Sampler;
-                        bindParameter.Dx12GpuDescriptorHandle = sampler.NativeGpuDescriptorHandle;
-                        break;
-
                     case EBindType.Buffer:
                     case EBindType.UniformBuffer:
                     case EBindType.StorageBuffer:
@@ -66,6 +61,11 @@ namespace Infinity.Graphics
                     case EBindType.StorageTexture:
                         Dx12TextureView textureView = element.TextureView as Dx12TextureView;
                         bindParameter.Dx12GpuDescriptorHandle = textureView.NativeGpuDescriptorHandle;
+                        break;
+
+                    case EBindType.SamplerState:
+                        Dx12SamplerState samplerState = element.SamplerState as Dx12SamplerState;
+                        bindParameter.Dx12GpuDescriptorHandle = samplerState.NativeGpuDescriptorHandle;
                         break;
 
                     case EBindType.Bindless:
@@ -81,11 +81,6 @@ namespace Infinity.Graphics
 
             switch (bindType)
             {
-                case EBindType.Sampler:
-                    Dx12Sampler sampler = element.Sampler as Dx12Sampler;
-                    bindParameter.Dx12GpuDescriptorHandle = sampler.NativeGpuDescriptorHandle;
-                    break;
-
                 case EBindType.Buffer:
                 case EBindType.UniformBuffer:
                 case EBindType.StorageBuffer:
@@ -97,6 +92,11 @@ namespace Infinity.Graphics
                 case EBindType.StorageTexture:
                     Dx12TextureView textureView = element.TextureView as Dx12TextureView;
                     bindParameter.Dx12GpuDescriptorHandle = textureView.NativeGpuDescriptorHandle;
+                    break;
+
+                case EBindType.SamplerState:
+                    Dx12SamplerState samplerState = element.SamplerState as Dx12SamplerState;
+                    bindParameter.Dx12GpuDescriptorHandle = samplerState.NativeGpuDescriptorHandle;
                     break;
 
                 case EBindType.Bindless:

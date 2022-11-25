@@ -212,9 +212,9 @@ namespace Infinity.Graphics
             return new Dx12Texture(this, descriptor);
         }
 
-        public override RHISampler CreateSampler(in RHISamplerDescriptor descriptor)
+        public override RHISamplerState CreateSamplerState(in RHISamplerStateDescriptor descriptor)
         {
-            return new Dx12Sampler(this, descriptor);
+            return new Dx12SamplerState(this, descriptor);
         }
 
         public override RHIFunction CreateFunction(in RHIFunctionDescriptor descriptor)

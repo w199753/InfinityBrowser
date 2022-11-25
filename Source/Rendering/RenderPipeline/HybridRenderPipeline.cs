@@ -25,10 +25,10 @@ namespace Infinity.Rendering
         RHIBuffer m_IndexBuffer;
         RHIBuffer m_VertexBuffer;
         RHITexture m_ComputeTexture;
-        //RHISampler m_ComputeSampler;
         RHITextureView m_ComputeTextureView;
+        RHISamplerState m_ComputeSamplerState;
         RHIBindGroup m_ComputeBindGroup;
-        //RHIBindGroup m_GraphicsBindGroup;
+        RHIBindGroup m_GraphicsBindGroup;
         RHIBindGroupLayout m_ComputeBindGroupLayout;
         RHIBindGroupLayout m_GraphicsBindGroupLayout;
         RHIPipelineLayout m_ComputePipelineLayout;
@@ -66,6 +66,7 @@ namespace Infinity.Rendering
 
             struct Varyings
             {
+                float2 uv0 : TEXCOORD0;
 	            float4 color : COLOR1;
 	            float4 vertexCS : SV_POSITION;
             };
@@ -73,6 +74,7 @@ namespace Infinity.Rendering
             Varyings VSMain(Attributes input)
             {
 	            Varyings output = (Varyings)0;
+                output.uv0 = input.vertexOS.xy;
 	            output.color = input.color;
 	            output.vertexCS = input.vertexOS;
 	            return output;
@@ -80,8 +82,7 @@ namespace Infinity.Rendering
 
             float4 PSMain(Varyings input) : SV_Target
             {
-                //return input.color;
-	            return input.color + _DiffuseTexture[0].Sample(_DiffuseSampler[0], float2(0, 0));
+	            return input.color * _DiffuseTexture[0].Sample(_DiffuseSampler[0], input.uv0);
             }");
 
             m_ComputeBlob = ShaderCompiler.HLSLToNativeDxil(computeCode, "CSMain", ShaderConductorWrapper.EFunctionStage.Compute);
@@ -227,8 +228,20 @@ namespace Infinity.Rendering
             m_ComputePipelineState = renderContext.CreateComputePipeline(computePipelineDescriptor);
 
             // Create Sampler
-            //RHISamplerDescriptor samplerDescriptor;
-            //m_ComputeSampler = renderContext.CreateSampler(samplerDescriptor);
+            RHISamplerStateDescriptor samplerStateDescriptor;
+            {
+                samplerStateDescriptor.Anisotropy = 8;
+                samplerStateDescriptor.LodMinClamp = -1000;
+                samplerStateDescriptor.LodMaxClamp = 1000;
+                samplerStateDescriptor.MinFilter = EFilterMode.Linear;
+                samplerStateDescriptor.MagFilter = EFilterMode.Linear;
+                samplerStateDescriptor.MipFilter = EFilterMode.Linear;
+                samplerStateDescriptor.AddressModeU = EAddressMode.Repeat;
+                samplerStateDescriptor.AddressModeV = EAddressMode.Repeat;
+                samplerStateDescriptor.AddressModeW = EAddressMode.Repeat;
+                samplerStateDescriptor.ComparisonMode = EComparisonMode.Never;
+            }
+            m_ComputeSamplerState = renderContext.CreateSamplerState(samplerStateDescriptor);
 
             // Create UniformBuffer
             /*RHIBufferViewDescriptor bufferViewDescriptor = new RHIBufferViewDescriptor();
@@ -395,7 +408,7 @@ namespace Infinity.Rendering
 
                 //graphicsBindGroupLayoutElements[1].Count = 1;
                 graphicsBindGroupLayoutElements[1].BindSlot = 1;
-                graphicsBindGroupLayoutElements[1].BindType = EBindType.Sampler;
+                graphicsBindGroupLayoutElements[1].BindType = EBindType.SamplerState;
                 graphicsBindGroupLayoutElements[1].FunctionStage = EFunctionStage.Fragment;
             }
             RHIBindGroupLayoutDescriptor graphicsBindGroupLayoutDescriptor;
@@ -406,17 +419,17 @@ namespace Infinity.Rendering
             m_GraphicsBindGroupLayout = renderContext.CreateBindGroupLayout(graphicsBindGroupLayoutDescriptor);
 
             // Create GraphicsBindGroup
-            /*RHIBindGroupElement[] graphicsBindGroupElements = new RHIBindGroupElement[2];
+            RHIBindGroupElement[] graphicsBindGroupElements = new RHIBindGroupElement[2];
             {
-                graphicsBindGroupElements[0].Sampler = m_ComputeSampler;
-                graphicsBindGroupElements[1].TextureView = m_ComputeTextureView;
+                graphicsBindGroupElements[0].TextureView = m_ComputeTextureView;
+                graphicsBindGroupElements[1].SamplerState = m_ComputeSamplerState;
             }
             RHIBindGroupDescriptor graphicsBindGroupDescriptor = new RHIBindGroupDescriptor();
             {
                 graphicsBindGroupDescriptor.Layout = m_GraphicsBindGroupLayout;
                 graphicsBindGroupDescriptor.Elements = new Memory<RHIBindGroupElement>(graphicsBindGroupElements);           
             }
-            RHIBindGroup m_GraphicsBindGroup = renderContext.CreateBindGroup(graphicsBindGroupDescriptor);*/
+            m_GraphicsBindGroup = renderContext.CreateBindGroup(graphicsBindGroupDescriptor);
 
             // Create GraphicsPipeline
             RHIFunctionDescriptor vertexFunctionDescriptor;
@@ -482,7 +495,7 @@ namespace Infinity.Rendering
 
                 using (computeEncoder.BeginScopedPass("ComputePass"))
                 {
-                    computeEncoder.PushDebugGroup("GenereteUV");
+                    computeEncoder.PushDebugGroup("GenereteIndex");
                     computeEncoder.SetPipelineLayout(m_ComputePipelineLayout);
                     computeEncoder.SetPipelineState(m_ComputePipelineState);
                     computeEncoder.SetBindGroup(m_ComputeBindGroup);
@@ -503,7 +516,7 @@ namespace Infinity.Rendering
                     graphicsEncoder.PushDebugGroup("DrawTriange");
                     graphicsEncoder.SetPipelineLayout(m_GraphicsPipelineLayout);
                     graphicsEncoder.SetPipelineState(m_GraphicsPipelineState);
-                    //graphicsEncoder.SetBindGroup(m_GraphicsBindGroup);
+                    graphicsEncoder.SetBindGroup(m_GraphicsBindGroup);
                     graphicsEncoder.SetVertexBuffer(m_VertexBuffer);
                     graphicsEncoder.SetIndexBuffer(m_IndexBuffer, EIndexFormat.UInt16);
                     graphicsEncoder.SetBlendFactor(1);
@@ -528,9 +541,9 @@ namespace Infinity.Rendering
             m_FragmentBlob.Dispose();
             m_IndexBuffer?.Dispose();
             m_VertexBuffer?.Dispose();
-            //m_ComputeSampler?.Dispose();
             m_ComputeTexture?.Dispose();
             m_ComputeTextureView?.Dispose();
+            m_ComputeSamplerState?.Dispose();
             m_ComputeFunction?.Dispose();
             m_VertexFunction?.Dispose();
             m_FragmentFunction?.Dispose();
@@ -538,7 +551,7 @@ namespace Infinity.Rendering
             m_ComputeBindGroupLayout?.Dispose();
             m_ComputePipelineState?.Dispose();
             m_ComputePipelineLayout?.Dispose();
-            //m_GraphicsBindGroup?.Dispose();
+            m_GraphicsBindGroup?.Dispose();
             m_GraphicsBindGroupLayout?.Dispose();
             m_GraphicsPipelineState?.Dispose();
             m_GraphicsPipelineLayout?.Dispose();

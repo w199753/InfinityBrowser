@@ -38,7 +38,7 @@ namespace Infinity.Graphics
             return (uint)(presentMode == EPresentMode.VSync ? 1 : 0);
         }
 
-        internal static D3D12_FILTER ConvertToDx12Filter(in RHISamplerDescriptor descriptor)
+        internal static D3D12_FILTER ConvertToDx12Filter(in RHISamplerStateDescriptor descriptor)
         {
             EFilterMode minFilter = descriptor.MinFilter;
             EFilterMode magFilter = descriptor.MagFilter;
@@ -46,13 +46,13 @@ namespace Infinity.Graphics
 
             if (minFilter == EFilterMode.Point && magFilter == EFilterMode.Point && mipFilter == EFilterMode.Point) { return D3D12_FILTER.D3D12_FILTER_MIN_MAG_MIP_POINT; }
             if (minFilter == EFilterMode.Point && magFilter == EFilterMode.Point && mipFilter == EFilterMode.Linear)  { return D3D12_FILTER.D3D12_FILTER_MIN_MAG_POINT_MIP_LINEAR; }
-            if (minFilter == EFilterMode.Point && magFilter == EFilterMode.Linear  && mipFilter == EFilterMode.Point) { return D3D12_FILTER.D3D12_FILTER_MIN_POINT_MAG_LINEAR_MIP_POINT; }
-            if (minFilter == EFilterMode.Point && magFilter == EFilterMode.Linear  && mipFilter == EFilterMode.Linear)  { return D3D12_FILTER.D3D12_FILTER_MIN_POINT_MAG_MIP_LINEAR; }
-            if (minFilter == EFilterMode.Linear  && magFilter == EFilterMode.Point && mipFilter == EFilterMode.Point) { return D3D12_FILTER.D3D12_FILTER_MIN_LINEAR_MAG_MIP_POINT; }
-            if (minFilter == EFilterMode.Linear  && magFilter == EFilterMode.Point && mipFilter == EFilterMode.Linear)  { return D3D12_FILTER.D3D12_FILTER_MIN_LINEAR_MAG_POINT_MIP_LINEAR; }
-            if (minFilter == EFilterMode.Linear  && magFilter == EFilterMode.Linear  && mipFilter == EFilterMode.Point) { return D3D12_FILTER.D3D12_FILTER_MIN_MAG_LINEAR_MIP_POINT; }
-            if (minFilter == EFilterMode.Linear  && magFilter == EFilterMode.Linear  && mipFilter == EFilterMode.Linear)  { return D3D12_FILTER.D3D12_FILTER_MIN_MAG_MIP_LINEAR; }
-            if (minFilter == EFilterMode.Anisotropic) { return D3D12_FILTER.D3D12_FILTER_ANISOTROPIC; }
+            if (minFilter == EFilterMode.Point && magFilter == EFilterMode.Linear && mipFilter == EFilterMode.Point) { return D3D12_FILTER.D3D12_FILTER_MIN_POINT_MAG_LINEAR_MIP_POINT; }
+            if (minFilter == EFilterMode.Point && magFilter == EFilterMode.Linear && mipFilter == EFilterMode.Linear)  { return D3D12_FILTER.D3D12_FILTER_MIN_POINT_MAG_MIP_LINEAR; }
+            if (minFilter == EFilterMode.Linear && magFilter == EFilterMode.Point && mipFilter == EFilterMode.Point) { return D3D12_FILTER.D3D12_FILTER_MIN_LINEAR_MAG_MIP_POINT; }
+            if (minFilter == EFilterMode.Linear && magFilter == EFilterMode.Point && mipFilter == EFilterMode.Linear)  { return D3D12_FILTER.D3D12_FILTER_MIN_LINEAR_MAG_POINT_MIP_LINEAR; }
+            if (minFilter == EFilterMode.Linear && magFilter == EFilterMode.Linear && mipFilter == EFilterMode.Point) { return D3D12_FILTER.D3D12_FILTER_MIN_MAG_LINEAR_MIP_POINT; }
+            if (minFilter == EFilterMode.Linear && magFilter == EFilterMode.Linear && mipFilter == EFilterMode.Linear)  { return D3D12_FILTER.D3D12_FILTER_MIN_MAG_MIP_LINEAR; }
+            if (minFilter == EFilterMode.Anisotropic || magFilter == EFilterMode.Anisotropic || mipFilter == EFilterMode.Anisotropic) { return D3D12_FILTER.D3D12_FILTER_ANISOTROPIC; }
             return D3D12_FILTER.D3D12_FILTER_MIN_MAG_MIP_POINT;
         }
 
@@ -685,7 +685,7 @@ namespace Infinity.Graphics
                 case EBindType.Texture:
                     return D3D12_DESCRIPTOR_RANGE_TYPE.D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
 
-                case EBindType.Sampler:
+                case EBindType.SamplerState:
                     return D3D12_DESCRIPTOR_RANGE_TYPE.D3D12_DESCRIPTOR_RANGE_TYPE_SAMPLER;
 
                 case EBindType.UniformBuffer:
@@ -708,7 +708,7 @@ namespace Infinity.Graphics
                 case EBindType.Texture:
                     return 64;
 
-                case EBindType.Sampler:
+                case EBindType.SamplerState:
                     return 128;
 
                 case EBindType.UniformBuffer:
@@ -731,7 +731,7 @@ namespace Infinity.Graphics
                 case EBindType.Texture:
                     return D3D12_DESCRIPTOR_RANGE_FLAGS.D3D12_DESCRIPTOR_RANGE_FLAG_DESCRIPTORS_VOLATILE | D3D12_DESCRIPTOR_RANGE_FLAGS.D3D12_DESCRIPTOR_RANGE_FLAG_DATA_STATIC_WHILE_SET_AT_EXECUTE;
 
-                case EBindType.Sampler:
+                case EBindType.SamplerState:
                     return D3D12_DESCRIPTOR_RANGE_FLAGS.D3D12_DESCRIPTOR_RANGE_FLAG_DESCRIPTORS_VOLATILE;
 
                 case EBindType.UniformBuffer:
@@ -750,6 +750,12 @@ namespace Infinity.Graphics
         {
             switch (shaderStage)
             {
+                case EFunctionStage.Task:
+                    return D3D12_SHADER_VISIBILITY.D3D12_SHADER_VISIBILITY_AMPLIFICATION;
+
+                case EFunctionStage.Mesh:
+                    return D3D12_SHADER_VISIBILITY.D3D12_SHADER_VISIBILITY_MESH;
+
                 case EFunctionStage.Vertex:
                     return D3D12_SHADER_VISIBILITY.D3D12_SHADER_VISIBILITY_VERTEX;
 

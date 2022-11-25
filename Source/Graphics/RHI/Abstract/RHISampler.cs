@@ -1,6 +1,6 @@
 ﻿namespace Infinity.Graphics
 {
-    public struct RHISamplerDescriptor
+    public struct RHISamplerStateDescriptor
     {
         public int Anisotropy;
         public float LodMinClamp;
@@ -14,7 +14,7 @@
         public EComparisonMode ComparisonMode;
     }
 
-    public abstract class RHISampler : Disposal
+    public abstract class RHISamplerState : Disposal
     {
 
     }

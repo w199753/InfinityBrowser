@@ -244,8 +244,8 @@
     {
         Buffer,
         Texture,
-        Sampler,
         Bindless,
+        SamplerState,
         UniformBuffer,
         StorageBuffer,
         StorageTexture,
@@ -464,13 +464,13 @@
 
     public enum EBufferUsage
     {
-        IndexBuffer = 0x1,
-        VertexBuffer = 0x2,
-        UniformBuffer = 0x4,
-        IndirectBuffer = 0x8,
-        ShaderResource = 0x10,
-        UnorderedAccess = 0x20,
-        AccelerationStructure = 0x400,
+        IndexBuffer = 0x0020,
+        VertexBuffer = 0x0001,
+        UniformBuffer = 0x0002,
+        IndirectBuffer = 0x0004,
+        ShaderResource = 0x0008,
+        UnorderedAccess = 0x0010,
+        AccelerationStructure = 0x0040,
         Undefined
     }
 
@@ -484,10 +484,10 @@
 
     public enum ETextureUsage
     {
-        DepthStencil = 0x1,
-        RenderTarget = 0x2,
-        ShaderResource = 0x4,
-        UnorderedAccess = 0x8,
+        DepthStencil = 0x0020,
+        RenderTarget = 0x0001,
+        ShaderResource = 0x0002,
+        UnorderedAccess = 0x0004,
         Undefined
     }
 
@@ -502,16 +502,20 @@
 
     public enum EFunctionStage
     {
-        Vertex = 0x1,
-        Fragment = 0x2,
-        Compute = 0x4,
-        Task = 0x10,
-        Mesh = 0x20,
-        Miss = 0x40,
-        AnyHit = 0x80,
-        ClosestHit = 0x100,
-        Intersection = 0x200,
-        RayGeneration = 0x400,
+        Compute = 0x0020,
+        Vertex = 0x0001,
+        Fragment = 0x0002,
+        Task = 0x0004,
+        Mesh = 0x0008,
+        AllGraphics = Vertex | Fragment | Task | Mesh,
+        Miss = 0x0040,
+        AnyHit = 0x0080,
+        Callable = 0x00FE,
+        ClosestHit = 0x0100,
+        Intersection = 0x0200,
+        RayGeneration = 0x0400,
+        AllRayTracing = Miss | AnyHit | Callable | ClosestHit | Intersection | RayGeneration,
+        All = Compute | AllGraphics | AllRayTracing,
         Undefined
     }
 

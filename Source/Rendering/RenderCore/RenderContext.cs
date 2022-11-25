@@ -263,9 +263,9 @@ namespace Infinity.Rendering
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public RHISampler CreateSampler(in RHISamplerDescriptor descriptor)
+        public RHISamplerState CreateSamplerState(in RHISamplerStateDescriptor descriptor)
         {
-            return m_Device.CreateSampler(descriptor);
+            return m_Device.CreateSamplerState(descriptor);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
