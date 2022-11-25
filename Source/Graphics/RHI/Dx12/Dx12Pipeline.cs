@@ -31,9 +31,9 @@ namespace Infinity.Graphics
 
         public Dx12PipelineLayout(Dx12Device device, in RHIPipelineLayoutDescriptor descriptor)
         {
-            m_VertexParameterMap = new Dictionary<int, Dx12BindTypeAndParameterSlot>(8);
-            m_FragmentParameterMap = new Dictionary<int, Dx12BindTypeAndParameterSlot>(8);
-            m_ComputeParameterMap = new Dictionary<int, Dx12BindTypeAndParameterSlot>(8);
+            m_VertexParameterMap = new Dictionary<int, Dx12BindTypeAndParameterSlot>(5);
+            m_FragmentParameterMap = new Dictionary<int, Dx12BindTypeAndParameterSlot>(5);
+            m_ComputeParameterMap = new Dictionary<int, Dx12BindTypeAndParameterSlot>(5);
 
             int parameterCount = 0;
             for (int i = 0; i < descriptor.BindGroupLayouts.Length; ++i)
