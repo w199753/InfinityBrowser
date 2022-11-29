@@ -506,7 +506,7 @@ namespace Infinity.Rendering
                 m_ColorAttachmentDescriptors[0].RenderTarget = renderContext.BackBufferView;
                 RHIGraphicsPassDescriptor graphicsPassDescriptor = new RHIGraphicsPassDescriptor();
                 graphicsPassDescriptor.Name = "GraphicsPass";
-                graphicsPassDescriptor.ShadingRateDescriptor = new RHIShadingRateDescriptor(EShadingRate.Rate4x4);
+                graphicsPassDescriptor.ShadingRateDescriptor = new RHIShadingRateDescriptor(EShadingRate.Rate2x2);
                 graphicsPassDescriptor.ColorAttachmentDescriptors = new Memory<RHIColorAttachmentDescriptor>(m_ColorAttachmentDescriptors);
                 graphicsPassDescriptor.DepthStencilAttachmentDescriptor = null;
                 using (graphicsEncoder.BeginScopedPass(graphicsPassDescriptor))

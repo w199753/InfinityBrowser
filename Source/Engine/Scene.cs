@@ -4,9 +4,9 @@ using Infinity.Container;
 namespace Infinity.Engine
 {
     [Serializable]
-    public sealed class GameScene : Object
+    public sealed class Scene : Object
     {
-        public TArray<GameLevel> Levels
+        public TArray<Level> Levels
         {
             get
             {
@@ -14,24 +14,24 @@ namespace Infinity.Engine
             }
         }
 
-        private TArray<GameLevel> m_Levels;
+        private TArray<Level> m_Levels;
 
-        public GameScene()
+        public Scene()
         {
-            m_Levels = new TArray<GameLevel>(64);
+            m_Levels = new TArray<Level>(64);
         }
 
-        public GameScene(string name) : base(name)
+        public Scene(string name) : base(name)
         {
-            m_Levels = new TArray<GameLevel>(64);
+            m_Levels = new TArray<Level>(64);
         }
 
-        public void AddLevel(GameLevel level)
+        public void AddLevel(Level level)
         {
             m_Levels.Add(level);
         }
 
-        public void RemoveLevel(GameLevel level)
+        public void RemoveLevel(Level level)
         {
             m_Levels.RemoveSwap(level);
         }
@@ -40,7 +40,7 @@ namespace Infinity.Engine
         {
             for (int i = 0; i < m_Levels.length; ++i)
             {
-                GameLevel level = m_Levels[i];
+                Level level = m_Levels[i];
                 level.OnEnable();
             }
         }
@@ -49,7 +49,7 @@ namespace Infinity.Engine
         {
             for (int i = 0; i < m_Levels.length; ++i)
             {
-                GameLevel level = m_Levels[i];
+                Level level = m_Levels[i];
                 level.OnUpdate(deltaTime);
             }
         }
@@ -58,7 +58,7 @@ namespace Infinity.Engine
         {
             for (int i = 0; i < m_Levels.length; ++i)
             {
-                GameLevel level = m_Levels[i];
+                Level level = m_Levels[i];
                 level.OnDisable();
             }
         }

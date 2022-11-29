@@ -17,7 +17,7 @@ namespace Infinity
         static int m_FrameIndex = 0;
         public static int FrameIndex { get { return m_FrameIndex; } }
 
-        public static void Tick(in float deltaTime)
+        public static void Update(in float deltaTime)
         {
             ++m_FrameIndex;
             m_DeltaTime = deltaTime;

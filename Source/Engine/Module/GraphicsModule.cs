@@ -13,7 +13,7 @@ namespace Infinity.Engine
         private RenderContext m_RenderContext;
         private SceneRenderer m_SceneRenderer;
 
-        public GraphicsModule(PlatformWindow window)
+        public GraphicsModule(CrossWindow window)
         {
             m_RenderContext = new RenderContext(window.Width, window.Height, window.WindowPtr);
             m_SceneRenderer = new SceneRenderer(m_RenderContext);
@@ -22,7 +22,7 @@ namespace Infinity.Engine
         public void Start()
         {
             m_RenderContext.BeginInit();
-            ProcessGraphicsTasks();
+            ProcessingGraphicsTasks();
             m_SceneRenderer.Init();
             m_RenderContext.EndInit();
         }
@@ -31,7 +31,7 @@ namespace Infinity.Engine
         public void Update(in float deltaTime)
         {
             m_RenderContext.BeginFrame();
-            ProcessGraphicsTasks();
+            ProcessingGraphicsTasks();
             m_SceneRenderer.Render();
             m_RenderContext.EndFrame();
         }
@@ -42,7 +42,7 @@ namespace Infinity.Engine
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public void ProcessGraphicsTasks()
+        public void ProcessingGraphicsTasks()
         {
             if (GraphicsUtility.GraphicsTasks.length == 0) { return; }
 
@@ -55,7 +55,7 @@ namespace Infinity.Engine
 
         protected override void Release()
         {
-            ProcessGraphicsTasks();
+            ProcessingGraphicsTasks();
             m_SceneRenderer.Dispose();
             m_RenderContext.Dispose();
         }

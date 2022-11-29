@@ -89,21 +89,24 @@ namespace Infinity.Editor
     public class TestEntity : Entity
     {
         //FTaskHandle m_AsynTaskRef;
-        private TestComponent m_Component;
+        private TestComponent m_TestComponent;
 
         public TestEntity() : base()
         {
-            m_Component = new TestComponent();
+            m_TestComponent = new TestComponent();
+            AddComponent(m_TestComponent);
         }
 
         public TestEntity(string name) : base(name)
         {
-            m_Component = new TestComponent();
+            m_TestComponent = new TestComponent();
+            AddComponent(m_TestComponent);
         }
 
         public TestEntity(string name, Entity parent) : base(name, parent)
         {
-            m_Component = new TestComponent();
+            m_TestComponent = new TestComponent();
+            AddComponent(m_TestComponent);
         }
 
         IEnumerator TestWaitSeconds()
@@ -118,7 +121,6 @@ namespace Infinity.Editor
         public override void OnEnable()
         {
             base.OnEnable();
-            AddComponent(m_Component);
             StartCoroutine(TestWaitSeconds());
             Console.WriteLine("Enable Actor");
         }
@@ -143,7 +145,7 @@ namespace Infinity.Editor
         public override void OnDisable()
         {
             base.OnDisable();
-            RemoveComponent(m_Component);
+            RemoveComponent(m_TestComponent);
             Console.WriteLine("Disable Actor");
         }
     }
@@ -167,10 +169,10 @@ namespace Infinity.Editor
 
             TestEntity testEntity = new TestEntity("TestEntity");
 
-            GameLevel testLevel = new GameLevel("TestLevel");
+            Level testLevel = new Level("TestLevel");
             testLevel.AddEntity(testEntity);
 
-            GameScene testScene = new GameScene("TestScene");
+            Scene testScene = new Scene("TestScene");
             testScene.AddLevel(testLevel);
 
             editorApp.GameWorld.SetScene(testScene);

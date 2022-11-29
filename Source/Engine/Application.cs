@@ -10,6 +10,70 @@ using System.Collections.Generic;
 
 namespace Infinity.Engine
 {
+    internal class SystemTimer
+    {
+        public float DeltaTime
+        {
+            get
+            {
+                return m_DeltaTime;
+            }
+            set
+            {
+                m_DeltaTime = value;
+            }
+        }
+        public List<float> LastDeltaTimes
+        {
+            get
+            {
+                return m_LastDeltaTimes;
+            }
+            set
+            {
+                m_LastDeltaTimes = value;
+            }
+        }
+        public TimeProfiler TimeCounter
+        {
+            get
+            {
+                return m_TimeCounter;
+            }
+            set
+            {
+                m_TimeCounter = value;
+            }
+        }
+
+        private float m_DeltaTime;
+        private List<float> m_LastDeltaTimes;
+        private TimeProfiler m_TimeCounter;
+
+        public SystemTimer()
+        {
+            m_TimeCounter = new TimeProfiler();
+            m_LastDeltaTimes = new List<float>(32);
+        }
+
+        internal void StartCoutner()
+        {
+            m_TimeCounter.Reset();
+            m_TimeCounter.Begin();
+        }
+
+        internal void TickCounter()
+        {
+            m_TimeCounter.Start();
+            Timer.Update(m_DeltaTime);
+        }
+
+        internal void Exit()
+        {
+            m_TimeCounter.Stop();
+        }
+    }
+
     public partial class Application : Disposal
     {
         public static uint GTargetFrameRate = 60;
@@ -18,7 +82,7 @@ namespace Infinity.Engine
         { 
             get 
             { 
-                return m_Window.IsRunning; 
+                return m_CrossWindow.IsRunning; 
             } 
         }
         public GameWorld GameWorld
@@ -29,34 +93,31 @@ namespace Infinity.Engine
             }
         }
         
-        private PlatformWindow m_Window;
+        private SystemTimer m_SystemTimer;
+        private CrossWindow m_CrossWindow;
         private GameWorld m_GameWorld;
-        private float m_DeltaTime;
-        private TimeProfiler m_TimeCounter;
-        private List<float> m_LastDeltaTimes;
         private PhysicsModule m_PhysicsModule;
         private GraphicsModule m_GraphicsModule;
 
         public Application(in int width, in int height, string name)
         {
             Thread.CurrentThread.Name = "GameThread";
-            m_Window = new PlatformWindow(width, height, name, OnResize, OnFocus, OnMouseUp, OnMouseDown, OnMouseMove, OnMouseClick, OnMouseDoubleClick, OnMouseScroll, OnKeyUp, OnKeyDown, OnKeyChar);
+            m_CrossWindow = new CrossWindow(width, height, name, OnResize, OnFocus, OnMouseUp, OnMouseDown, OnMouseMove, OnMouseClick, OnMouseDoubleClick, OnMouseScroll, OnKeyUp, OnKeyDown, OnKeyChar);
+            m_SystemTimer = new SystemTimer();
             m_GameWorld = new GameWorld();
-            m_TimeCounter = new TimeProfiler();
-            m_LastDeltaTimes = new List<float>(64);
             m_PhysicsModule = new PhysicsModule();
-            m_GraphicsModule = new GraphicsModule(m_Window);
+            m_GraphicsModule = new GraphicsModule(m_CrossWindow);
         }
 
         protected void OnFocus(bool state)
         {
             if (state)
             {
-                //Console.WriteLine("GetFocus");
+                Console.WriteLine("GetFocus");
             }
             else
             {
-                //Console.WriteLine("LossFocus");
+                Console.WriteLine("LossFocus");
             }
         }
 
@@ -78,7 +139,7 @@ namespace Infinity.Engine
         {
             if (key == Key.Escape)
             {
-                m_Window.Close();
+                m_CrossWindow.Close();
             }
 
             if (keyboar.IsKeyPressed(Key.Number1) && keyboar.IsKeyPressed(Key.Number2))
@@ -124,34 +185,30 @@ namespace Infinity.Engine
 
         public void Run()
         {
-            m_TimeCounter.Reset();
-            m_TimeCounter.Begin();
-
+            m_SystemTimer.StartCoutner();
             m_GameWorld.Start();
             m_PhysicsModule.Start();
             m_GraphicsModule.Start();
 
             while (IsRunning)
             {
-                m_TimeCounter.Start();
-                Timer.Tick(m_DeltaTime);
-
-                m_Window.Update(m_DeltaTime);
-                m_GameWorld.Update(m_DeltaTime);
-                m_PhysicsModule.Update(m_DeltaTime);
-                m_GraphicsModule.Update(m_DeltaTime);
+                m_SystemTimer.TickCounter();
+                m_CrossWindow.Update(Timer.DeltaTime);
+                m_GameWorld.Update(Timer.DeltaTime);
+                m_PhysicsModule.Update(Timer.DeltaTime);
+                m_GraphicsModule.Update(Timer.DeltaTime);
                 WaitForTargetFPS();
             }
 
-            m_TimeCounter.Stop();
             m_GameWorld.Exit();
             m_PhysicsModule.Exit();
             m_GraphicsModule.Exit();
+            m_SystemTimer.Exit();
         }
 
         protected override void Release()
         {
-            m_Window.Dispose();
+            m_CrossWindow.Dispose();
             m_PhysicsModule.Dispose();
             m_GraphicsModule.Dispose();
         }
@@ -167,7 +224,7 @@ namespace Infinity.Engine
 
                 while (true)
                 {
-                    elapsed = m_TimeCounter.microseconds;
+                    elapsed = m_SystemTimer.TimeCounter.microseconds;
                     if (elapsed >= targetMax)
                         break;
 
@@ -180,26 +237,26 @@ namespace Infinity.Engine
                 }
             }
 
-            elapsed = m_TimeCounter.microseconds;
-            m_TimeCounter.Start();
+            elapsed = m_SystemTimer.TimeCounter.microseconds;
+            m_SystemTimer.TimeCounter.Start();
 
             // Perform timestep smoothing
-            m_DeltaTime = 0.0f;
-            m_LastDeltaTimes.Add(elapsed / 1000000.0f);
+            m_SystemTimer.DeltaTime = 0.0f;
+            m_SystemTimer.LastDeltaTimes.Add(elapsed / 1000000.0f);
 
-            if (m_LastDeltaTimes.Count > deltaTimeSmoothing)
+            if (m_SystemTimer.LastDeltaTimes.Count > deltaTimeSmoothing)
             {
                 // If the smoothing configuration was changed, ensure correct amount of samples
-                m_LastDeltaTimes.RemoveRange(0, m_LastDeltaTimes.Count - deltaTimeSmoothing);
-                for (int i = 0; i < m_LastDeltaTimes.Count; ++i)
+                m_SystemTimer.LastDeltaTimes.RemoveRange(0, m_SystemTimer.LastDeltaTimes.Count - deltaTimeSmoothing);
+                for (int i = 0; i < m_SystemTimer.LastDeltaTimes.Count; ++i)
                 {
-                    m_DeltaTime += m_LastDeltaTimes[i];
+                    m_SystemTimer.DeltaTime += m_SystemTimer.LastDeltaTimes[i];
                 }
-                m_DeltaTime /= m_LastDeltaTimes.Count;
+                m_SystemTimer.DeltaTime /= m_SystemTimer.LastDeltaTimes.Count;
             }
             else
             {
-                m_DeltaTime = m_LastDeltaTimes[m_LastDeltaTimes.Count - 1];
+                m_SystemTimer.DeltaTime = m_SystemTimer.LastDeltaTimes[m_SystemTimer.LastDeltaTimes.Count - 1];
             }
         }
     }

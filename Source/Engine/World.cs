@@ -5,7 +5,7 @@ namespace Infinity.Engine
 {
     public sealed class GameWorld : Object
     {
-        public GameScene PersistentScene
+        public Scene PersistentScene
         {
             get
             {
@@ -13,14 +13,14 @@ namespace Infinity.Engine
             }
         }
 
-        private GameScene m_PersistentScene;
+        private Scene m_PersistentScene;
 
         internal GameWorld()
         {
 
         }
 
-        public void SetScene(GameScene scene)
+        public void SetScene(Scene scene)
         {
             m_PersistentScene = scene;
         }

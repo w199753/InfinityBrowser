@@ -8,7 +8,7 @@ using MouseButton = Silk.NET.Input.MouseButton;
 
 namespace Infinity.Windowing
 {
-	public sealed class PlatformWindow : Disposal
+	public sealed class CrossWindow : Disposal
 	{
 		int m_Width;
 		int m_Height;
@@ -27,7 +27,7 @@ namespace Infinity.Windowing
 		public string Title => m_Title;
 		public IntPtr WindowPtr => m_Window.Native.Win32.Value.Hwnd;
 
-		public PlatformWindow(in int width, in int height, string title, Action<Vector2D<int>> OnResize, Action<bool> OnFocus, Action<IMouse, MouseButton> OnMouseUp, Action<IMouse, MouseButton> OnMouseDown, Action<IMouse, Vector2> OnMouseMove, Action<IMouse, MouseButton, Vector2> OnMouseClick, Action<IMouse, MouseButton, Vector2> OnMouseDoubleClick, Action<IMouse, ScrollWheel> OnMouseScroll, Action<IKeyboard, Key, int> OnKeyUp, Action<IKeyboard, Key, int> OnKeyDown, Action<IKeyboard, char> OnKeyChar)
+		public CrossWindow(in int width, in int height, string title, Action<Vector2D<int>> OnResize, Action<bool> OnFocus, Action<IMouse, MouseButton> OnMouseUp, Action<IMouse, MouseButton> OnMouseDown, Action<IMouse, Vector2> OnMouseMove, Action<IMouse, MouseButton, Vector2> OnMouseClick, Action<IMouse, MouseButton, Vector2> OnMouseDoubleClick, Action<IMouse, ScrollWheel> OnMouseScroll, Action<IKeyboard, Key, int> OnKeyUp, Action<IKeyboard, Key, int> OnKeyDown, Action<IKeyboard, char> OnKeyChar)
 		{
 			m_Title = title;
 			m_Width = width;
@@ -62,7 +62,6 @@ namespace Infinity.Windowing
             m_Window.DoEvents();
 		}
 
-       
         public void Close()
         {
             m_Window.Close();

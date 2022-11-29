@@ -4,7 +4,7 @@ using Infinity.Container;
 namespace Infinity.Engine
 {
     [Serializable]
-    public sealed class GameLevel : Object
+    public sealed class Level : Object
     {
         public TArray<Entity> Entitys
         {
@@ -16,12 +16,12 @@ namespace Infinity.Engine
 
         private TArray<Entity> m_Entitys;
 
-        public GameLevel()
+        public Level()
         {
             m_Entitys = new TArray<Entity>(64);
         }
 
-        public GameLevel(string name) : base(name)
+        public Level(string name) : base(name)
         {
             m_Entitys = new TArray<Entity>(64);
         }
