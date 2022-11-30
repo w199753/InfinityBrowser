@@ -216,6 +216,7 @@ namespace Infinity.Rendering
             RHIPipelineLayoutDescriptor computePipelienLayoutDescriptor;
             {
                 computePipelienLayoutDescriptor.BindGroupLayouts = new RHIBindGroupLayout[] { m_ComputeBindGroupLayout };
+                computePipelienLayoutDescriptor.StaticSamplerStates = null;
             }
             m_ComputePipelineLayout = renderContext.CreatePipelineLayout(computePipelienLayoutDescriptor);
 
@@ -332,7 +333,7 @@ namespace Infinity.Rendering
 
             RHIVertexLayoutDescriptor[] vertexLayoutDescriptors = new RHIVertexLayoutDescriptor[1];
             {
-                vertexLayoutDescriptors[0].Stride = MemoryUtility.SizeOf<Vertex>();
+                vertexLayoutDescriptors[0].Stride = (uint)MemoryUtility.SizeOf<Vertex>();
                 vertexLayoutDescriptors[0].StepMode = EVertexStepMode.PerVertex;
                 vertexLayoutDescriptors[0].VertexElementDescriptors = new Memory<RHIVertexElementDescriptor>(vertexElementDescriptors);
             }
@@ -453,6 +454,7 @@ namespace Infinity.Rendering
             RHIPipelineLayoutDescriptor graphicsPipelienLayoutDescriptor;
             {
                 graphicsPipelienLayoutDescriptor.BindGroupLayouts = new RHIBindGroupLayout[] { m_GraphicsBindGroupLayout };
+                graphicsPipelienLayoutDescriptor.StaticSamplerStates = null;
             }
             m_GraphicsPipelineLayout = renderContext.CreatePipelineLayout(graphicsPipelienLayoutDescriptor);
 
@@ -504,9 +506,9 @@ namespace Infinity.Rendering
                 }
 
                 m_ColorAttachmentDescriptors[0].RenderTarget = renderContext.BackBufferView;
-                RHIGraphicsPassDescriptor graphicsPassDescriptor = new RHIGraphicsPassDescriptor();
+                RHIGraphicsPassDescriptor graphicsPassDescriptor;
                 graphicsPassDescriptor.Name = "GraphicsPass";
-                graphicsPassDescriptor.ShadingRateDescriptor = new RHIShadingRateDescriptor(EShadingRate.Rate2x2);
+                graphicsPassDescriptor.ShadingRateDescriptor = new RHIShadingRateDescriptor(EShadingRate.Rate1x1);
                 graphicsPassDescriptor.ColorAttachmentDescriptors = new Memory<RHIColorAttachmentDescriptor>(m_ColorAttachmentDescriptors);
                 graphicsPassDescriptor.DepthStencilAttachmentDescriptor = null;
                 using (graphicsEncoder.BeginScopedPass(graphicsPassDescriptor))

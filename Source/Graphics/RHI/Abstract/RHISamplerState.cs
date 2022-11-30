@@ -1,8 +1,10 @@
-﻿namespace Infinity.Graphics
+﻿using System;
+
+namespace Infinity.Graphics
 {
     public struct RHISamplerStateDescriptor
     {
-        public int Anisotropy;
+        public uint Anisotropy;
         public float LodMinClamp;
         public float LodMaxClamp;
         public EFilterMode MagFilter;
@@ -12,6 +14,18 @@
         public EAddressMode AddressModeV;
         public EAddressMode AddressModeW;
         public EComparisonMode ComparisonMode;
+    }
+
+    public struct RHIStaticSamplerStateElement
+    {
+        public uint BindSlot;
+        public RHISamplerStateDescriptor SamplerStateDescriptor;
+    }
+
+    public struct RHIStaticSamplerStateDescriptor
+    {
+        public uint Index;
+        public Memory<RHIStaticSamplerStateElement> Elements;
     }
 
     public abstract class RHISamplerState : Disposal

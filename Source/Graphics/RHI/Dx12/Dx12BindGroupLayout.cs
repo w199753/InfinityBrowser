@@ -7,9 +7,9 @@ namespace Infinity.Graphics
 #pragma warning disable CS8600, CS8602, CS8604, CS8618, CA1416
     internal struct Dx12BindInfo
     {
-        public int Count;
-        public int Index;
-        public int BindSlot;
+        public uint Count;
+        public uint Index;
+        public uint BindSlot;
         public EBindType BindType;
         public EFunctionStage FunctionStage;
 
@@ -18,7 +18,7 @@ namespace Infinity.Graphics
 
     internal unsafe class Dx12BindGroupLayout : RHIBindGroupLayout
     {
-        public int Index
+        public uint Index
         {
             get
             {
@@ -33,7 +33,7 @@ namespace Infinity.Graphics
             }
         }
 
-        private int m_Index;
+        private uint m_Index;
         private Dx12BindInfo[] m_BindInfos;
 
         public Dx12BindGroupLayout(in RHIBindGroupLayoutDescriptor descriptor)

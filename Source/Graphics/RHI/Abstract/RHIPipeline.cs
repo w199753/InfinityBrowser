@@ -19,7 +19,7 @@ namespace Infinity.Graphics
 
     public struct RHIVertexElementDescriptor
     {
-        public int Offset;
+        public uint Offset;
         public uint Index;
         public ESemanticType Type;
         public ESemanticFormat Format;
@@ -27,8 +27,8 @@ namespace Infinity.Graphics
 
     public struct RHIVertexLayoutDescriptor
     {
-        public int Stride;
-        public int StepRate;
+        public uint Stride;
+        public uint StepRate;
         public EVertexStepMode StepMode;
         public Memory<RHIVertexElementDescriptor> VertexElementDescriptors;
     }
@@ -67,7 +67,7 @@ namespace Infinity.Graphics
         public bool ConservativeRaster;
         public bool AntialiasedLineEnable;
         public bool FrontCounterClockwise;
-        public int DepthBias;
+        public uint DepthBias;
         public float DepthBiasClamp;
         public float SlopeScaledDepthBias;
     }
@@ -95,7 +95,7 @@ namespace Infinity.Graphics
 
     public struct RHIRenderStateDescriptor
     {
-        public int? SampleMask;
+        public uint? SampleMask;
         public RHIBlendStateDescriptor BlendStateDescriptor;
         public RHIRasterizerStateDescriptor RasterizerStateDescriptor;
         public RHIDepthStencilStateDescriptor DepthStencilStateDescriptor;
@@ -161,6 +161,7 @@ namespace Infinity.Graphics
     {
         public RHIBindGroupLayout[] BindGroupLayouts;
         //public RHIPipelineConstantLayout[] PipelineConstantLayouts;
+        public Memory<RHIStaticSamplerStateDescriptor>? StaticSamplerStates;
     };
 
     public abstract class RHIPipelineLayout : Disposal

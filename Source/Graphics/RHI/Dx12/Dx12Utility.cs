@@ -353,7 +353,7 @@ namespace Infinity.Graphics
             rasterDescription.CullMode = (D3D12_CULL_MODE)description.CullMode;
             rasterDescription.ForcedSampleCount = 0;
             rasterDescription.MultisampleEnable = bMultisample;
-            rasterDescription.DepthBias = description.DepthBias;
+            rasterDescription.DepthBias = (int)description.DepthBias;
             rasterDescription.DepthBiasClamp = description.DepthBiasClamp;
             rasterDescription.DepthClipEnable = description.DepthClipEnable;
             rasterDescription.SlopeScaledDepthBias = description.SlopeScaledDepthBias;
@@ -700,7 +700,7 @@ namespace Infinity.Graphics
             }
         }
 
-        internal static int GetDx12BindKey(in EBindType bindType)
+        internal static uint GetDx12BindKey(in EBindType bindType)
         {
             switch (bindType)
             {

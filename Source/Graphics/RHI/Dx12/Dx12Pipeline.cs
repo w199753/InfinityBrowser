@@ -25,12 +25,14 @@ namespace Infinity.Graphics
         }
 
         private ID3D12RootSignature* m_NativeRootSignature;
+        private Dictionary<int, Dx12BindTypeAndParameterSlot> m_AllParameterMap;
         private Dictionary<int, Dx12BindTypeAndParameterSlot> m_VertexParameterMap;
         private Dictionary<int, Dx12BindTypeAndParameterSlot> m_FragmentParameterMap;
         private Dictionary<int, Dx12BindTypeAndParameterSlot> m_ComputeParameterMap;
 
         public Dx12PipelineLayout(Dx12Device device, in RHIPipelineLayoutDescriptor descriptor)
         {
+            m_AllParameterMap = new Dictionary<int, Dx12BindTypeAndParameterSlot>(5);
             m_VertexParameterMap = new Dictionary<int, Dx12BindTypeAndParameterSlot>(5);
             m_FragmentParameterMap = new Dictionary<int, Dx12BindTypeAndParameterSlot>(5);
             m_ComputeParameterMap = new Dictionary<int, Dx12BindTypeAndParameterSlot>(5);
@@ -66,19 +68,24 @@ namespace Infinity.Graphics
                     parameter.Slot = i + j;
                     parameter.BindType = bindInfo.BindType;
 
+                    if ((bindInfo.FunctionStage & EFunctionStage.All) == EFunctionStage.All)
+                    {
+                        m_AllParameterMap.TryAdd(new uint3(bindInfo.Index << 8, bindInfo.BindSlot, Dx12Utility.GetDx12BindKey(bindInfo.BindType)).GetHashCode(), parameter);
+                    }
+
                     if ((bindInfo.FunctionStage & EFunctionStage.Vertex) == EFunctionStage.Vertex)
                     {
-                        m_VertexParameterMap.TryAdd(new int3(bindInfo.Index << 8, bindInfo.BindSlot, Dx12Utility.GetDx12BindKey(bindInfo.BindType)).GetHashCode(), parameter);
+                        m_VertexParameterMap.TryAdd(new uint3(bindInfo.Index << 8, bindInfo.BindSlot, Dx12Utility.GetDx12BindKey(bindInfo.BindType)).GetHashCode(), parameter);
                     }
 
                     if ((bindInfo.FunctionStage & EFunctionStage.Fragment) == EFunctionStage.Fragment)
                     {
-                        m_FragmentParameterMap.TryAdd(new int3(bindInfo.Index << 8, bindInfo.BindSlot, Dx12Utility.GetDx12BindKey(bindInfo.BindType)).GetHashCode(), parameter);
+                        m_FragmentParameterMap.TryAdd(new uint3(bindInfo.Index << 8, bindInfo.BindSlot, Dx12Utility.GetDx12BindKey(bindInfo.BindType)).GetHashCode(), parameter);
                     }
 
                     if ((bindInfo.FunctionStage & EFunctionStage.Compute) == EFunctionStage.Compute)
                     {
-                        m_ComputeParameterMap.TryAdd(new int3(bindInfo.Index << 8, bindInfo.BindSlot, Dx12Utility.GetDx12BindKey(bindInfo.BindType)).GetHashCode(), parameter);
+                        m_ComputeParameterMap.TryAdd(new uint3(bindInfo.Index << 8, bindInfo.BindSlot, Dx12Utility.GetDx12BindKey(bindInfo.BindType)).GetHashCode(), parameter);
                     }
                 }
             }
@@ -94,29 +101,35 @@ namespace Infinity.Graphics
             m_NativeRootSignature = rootSignature;
         }
 
-        public Dx12BindTypeAndParameterSlot? QueryRootDescriptorParameterIndex(in EFunctionStage shaderStage, in int layoutIndex, in int slot, in EBindType bindType)
+        public Dx12BindTypeAndParameterSlot? QueryRootDescriptorParameterIndex(in EFunctionStage shaderStage, in uint layoutIndex, in uint slot, in EBindType bindType)
         {
             bool hasValue = false;
             Dx12BindTypeAndParameterSlot? outParameter = null;
 
+            if ((shaderStage & EFunctionStage.All) == EFunctionStage.All)
+            {
+                hasValue = m_AllParameterMap.TryGetValue(new uint3(layoutIndex << 8, slot, Dx12Utility.GetDx12BindKey(bindType)).GetHashCode(), out Dx12BindTypeAndParameterSlot parameter);
+                outParameter = parameter;
+            }
+
             if ((shaderStage & EFunctionStage.Vertex) == EFunctionStage.Vertex)
             {
                 //hasValue = m_VertexParameterMap.TryGetValue(new int2(slot, Dx12Utility.GetDx12BindKey(bindType)).GetHashCode(), out Dx12BindTypeAndParameterSlot parameter);
-                hasValue = m_VertexParameterMap.TryGetValue(new int3(layoutIndex << 8, slot, Dx12Utility.GetDx12BindKey(bindType)).GetHashCode(), out Dx12BindTypeAndParameterSlot parameter);
+                hasValue = m_VertexParameterMap.TryGetValue(new uint3(layoutIndex << 8, slot, Dx12Utility.GetDx12BindKey(bindType)).GetHashCode(), out Dx12BindTypeAndParameterSlot parameter);
                 outParameter = parameter;
             }
 
             if ((shaderStage & EFunctionStage.Fragment) == EFunctionStage.Fragment)
             {
                 //hasValue = m_FragmentParameterMap.TryGetValue(new int2(slot, Dx12Utility.GetDx12BindKey(bindType)).GetHashCode(), out Dx12BindTypeAndParameterSlot parameter);
-                hasValue = m_FragmentParameterMap.TryGetValue(new int3(layoutIndex << 8, slot, Dx12Utility.GetDx12BindKey(bindType)).GetHashCode(), out Dx12BindTypeAndParameterSlot parameter);
+                hasValue = m_FragmentParameterMap.TryGetValue(new uint3(layoutIndex << 8, slot, Dx12Utility.GetDx12BindKey(bindType)).GetHashCode(), out Dx12BindTypeAndParameterSlot parameter);
                 outParameter = parameter;
             }
 
             if ((shaderStage & EFunctionStage.Compute) == EFunctionStage.Compute)
             {
                 //hasValue = m_ComputeParameterMap.TryGetValue(new int2(slot, Dx12Utility.GetDx12BindKey(bindType)).GetHashCode(), out Dx12BindTypeAndParameterSlot parameter);
-                hasValue = m_ComputeParameterMap.TryGetValue(new int3(layoutIndex << 8, slot, Dx12Utility.GetDx12BindKey(bindType)).GetHashCode(), out Dx12BindTypeAndParameterSlot parameter);
+                hasValue = m_ComputeParameterMap.TryGetValue(new uint3(layoutIndex << 8, slot, Dx12Utility.GetDx12BindKey(bindType)).GetHashCode(), out Dx12BindTypeAndParameterSlot parameter);
                 outParameter = parameter;
             }
 
@@ -265,14 +278,14 @@ namespace Infinity.Graphics
 
     internal unsafe class Dx12GraphicsPipeline : RHIGraphicsPipeline
     {
-        public int StencilRef
+        public uint StencilRef
         {
             get
             {
                 return m_StencilRef;
             }
         }
-        public int[] VertexStrides
+        public uint[] VertexStrides
         {
             get
             {
@@ -301,8 +314,8 @@ namespace Infinity.Graphics
             }
         }
 
-        private int m_StencilRef;
-        private int[] m_VertexStrides;
+        private uint m_StencilRef;
+        private uint[] m_VertexStrides;
         //private Dx12PipelineLayout m_PipelineLayout;
         private ID3D12PipelineState* m_NativePipelineState;
         private D3D_PRIMITIVE_TOPOLOGY m_PrimitiveTopology;
@@ -317,7 +330,7 @@ namespace Infinity.Graphics
 
             if ((vertexFunction != null))
             {
-                m_VertexStrides = new int[vertexLayoutDescriptors.Length];
+                m_VertexStrides = new uint[vertexLayoutDescriptors.Length];
                 for (int j = 0; j < vertexLayoutDescriptors.Length; ++j)
                 {
                     m_VertexStrides[j] = vertexLayoutDescriptors[j].Stride;

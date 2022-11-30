@@ -186,15 +186,25 @@ namespace Infinity.Graphics
         public override void SetBindGroup(RHIBindGroup bindGroup)
         {
             Dx12BindGroup dx12BindGroup = bindGroup as Dx12BindGroup;
-            Dx12BindGroupLayout bindGroupLayout = dx12BindGroup.BindGroupLayout;
+            Dx12BindGroupLayout dx12BindGroupLayout = dx12BindGroup.BindGroupLayout;
 
             for (int i = 0; i < dx12BindGroup.BindParameters.Length; ++i) 
             {
-                Dx12PipelineLayout pipelineLayout = m_PipelineLayout as Dx12PipelineLayout;
-                ref Dx12BindInfo bindInfo = ref bindGroupLayout.BindInfos[i];
+                Dx12PipelineLayout dx12PipelineLayout = m_PipelineLayout as Dx12PipelineLayout;
+
+                Dx12BindTypeAndParameterSlot? parameter = null;
+                ref Dx12BindInfo bindInfo = ref dx12BindGroupLayout.BindInfos[i];
                 ref Dx12BindGroupParameter bindParameter = ref dx12BindGroup.BindParameters[i];
 
-                Dx12BindTypeAndParameterSlot? parameter = pipelineLayout.QueryRootDescriptorParameterIndex(EFunctionStage.Compute, bindGroupLayout.Index, bindInfo.BindSlot, bindInfo.BindType);
+                parameter = dx12PipelineLayout.QueryRootDescriptorParameterIndex(EFunctionStage.All, dx12BindGroupLayout.Index, bindInfo.BindSlot, bindInfo.BindType);
+                if (parameter.HasValue)
+                {
+                    Debug.Assert(parameter.Value.BindType == bindInfo.BindType);
+                    Dx12CommandBuffer dx12CommandBuffer = m_CommandBuffer as Dx12CommandBuffer;
+                    dx12CommandBuffer.NativeCommandList->SetComputeRootDescriptorTable((uint)parameter.Value.Slot, bindParameter.Dx12GpuDescriptorHandle);
+                }
+
+                parameter = dx12PipelineLayout.QueryRootDescriptorParameterIndex(EFunctionStage.Compute, dx12BindGroupLayout.Index, bindInfo.BindSlot, bindInfo.BindType);
                 if (parameter.HasValue)
                 {
                     Debug.Assert(parameter.Value.BindType == bindInfo.BindType);
@@ -375,24 +385,31 @@ namespace Infinity.Graphics
         {
             Dx12BindGroup dx12BindGroup = bindGroup as Dx12BindGroup;
             Dx12CommandBuffer dx12CommandBuffer = m_CommandBuffer as Dx12CommandBuffer;
-            Dx12BindGroupLayout bindGroupLayout = dx12BindGroup.BindGroupLayout;
+            Dx12BindGroupLayout dx12BindGroupLayout = dx12BindGroup.BindGroupLayout;
 
             for (int i = 0; i < dx12BindGroup.BindParameters.Length; ++i)
             {
                 Dx12PipelineLayout dx12PipelineLayout = m_PipelineLayout as Dx12PipelineLayout;
 
                 Dx12BindTypeAndParameterSlot? parameter = null;
-                ref Dx12BindInfo bindInfo = ref bindGroupLayout.BindInfos[i];
+                ref Dx12BindInfo bindInfo = ref dx12BindGroupLayout.BindInfos[i];
                 ref Dx12BindGroupParameter bindParameter = ref dx12BindGroup.BindParameters[i];
 
-                parameter = dx12PipelineLayout.QueryRootDescriptorParameterIndex(EFunctionStage.Vertex, bindGroupLayout.Index, bindInfo.BindSlot, bindInfo.BindType);
+                parameter = dx12PipelineLayout.QueryRootDescriptorParameterIndex(EFunctionStage.All, dx12BindGroupLayout.Index, bindInfo.BindSlot, bindInfo.BindType);
                 if (parameter.HasValue)
                 {
                     Debug.Assert(parameter.Value.BindType == bindInfo.BindType);
                     dx12CommandBuffer.NativeCommandList->SetGraphicsRootDescriptorTable((uint)parameter.Value.Slot, bindParameter.Dx12GpuDescriptorHandle);
                 }
 
-                parameter = dx12PipelineLayout.QueryRootDescriptorParameterIndex(EFunctionStage.Fragment, bindGroupLayout.Index, bindInfo.BindSlot, bindInfo.BindType);
+                parameter = dx12PipelineLayout.QueryRootDescriptorParameterIndex(EFunctionStage.Vertex, dx12BindGroupLayout.Index, bindInfo.BindSlot, bindInfo.BindType);
+                if (parameter.HasValue)
+                {
+                    Debug.Assert(parameter.Value.BindType == bindInfo.BindType);
+                    dx12CommandBuffer.NativeCommandList->SetGraphicsRootDescriptorTable((uint)parameter.Value.Slot, bindParameter.Dx12GpuDescriptorHandle);
+                }
+
+                parameter = dx12PipelineLayout.QueryRootDescriptorParameterIndex(EFunctionStage.Fragment, dx12BindGroupLayout.Index, bindInfo.BindSlot, bindInfo.BindType);
                 if (parameter.HasValue)
                 {
                     Debug.Assert(parameter.Value.BindType == bindInfo.BindType);

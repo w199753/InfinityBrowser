@@ -507,15 +507,15 @@
         Fragment = 0x0002,
         Task = 0x0004,
         Mesh = 0x0008,
-        AllGraphics = Vertex | Fragment | Task | Mesh,
+        //AllGraphics = 0x0010,
         Miss = 0x0040,
         AnyHit = 0x0080,
         Callable = 0x00FE,
         ClosestHit = 0x0100,
         Intersection = 0x0200,
         RayGeneration = 0x0400,
-        AllRayTracing = Miss | AnyHit | Callable | ClosestHit | Intersection | RayGeneration,
-        All = Compute | AllGraphics | AllRayTracing,
+        //AllRayTracing = 0x0800,
+        All = 0x1000,
         Undefined
     }
 
