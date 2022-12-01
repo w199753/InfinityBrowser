@@ -101,13 +101,13 @@ namespace Infinity.Shaderlib
 
     public class ShaderCompilerLibraryLoader : IDisposable
     {
-        string m_ShaderCode;
+        //string m_ShaderCode;
         //Vortice.Dxc.IDxcBlob m_CodeBlob;
         //Vortice.Dxc.IDxcResult m_DxcResult;
 
         public ShaderCompilerLibraryLoader()
         {
-            m_ShaderCode = new string(@"
+            /*m_ShaderCode = new string(@"
             [[vk::binding(0, 0)]]
             RWTexture2D<float4> _ResultTexture[1];
 
@@ -119,7 +119,7 @@ namespace Infinity.Shaderlib
                 _ResultTexture[0][id.xy] = float4(id.x & id.y, IDMod7, UV);
             }");
 
-            /*Vortice.Dxc.DxcCompilerOptions dxcOption = new Vortice.Dxc.DxcCompilerOptions();
+            Vortice.Dxc.DxcCompilerOptions dxcOption = new Vortice.Dxc.DxcCompilerOptions();
             dxcOption.Enable16bitTypes = true;
             dxcOption.ShaderModel = Vortice.Dxc.DxcShaderModel.Model6_2;
             m_DxcResult = Vortice.Dxc.DxcCompiler.Compile(Vortice.Dxc.DxcShaderStage.Compute, m_ShaderCode, "Main", dxcOption);
@@ -135,8 +135,10 @@ namespace Infinity.Shaderlib
 
     public static class ShaderCompiler
     {
-        internal static bool GUseHalfType = false;
-        internal static ShaderModel GShaderModel = new ShaderModel(6, 0);
+        internal static bool GUseHalfType = true;
+        internal static string GGLSLVersion = "200";
+        internal static int GGLSLVersionID = 200;
+        internal static ShaderModel GShaderModel = new ShaderModel(6, 2);
 
         public static string DisassemblySPIRV(byte[] bytecode)
         {
@@ -178,7 +180,7 @@ namespace Infinity.Shaderlib
                 options.shiftAllTexturesBindings = 60;
             }
             TargetDesc target = new TargetDesc {
-                version = "450",
+                version = GGLSLVersion,
                 language = language
             };
             Compile(ref source, ref options, ref target, out desc4);
@@ -190,7 +192,7 @@ namespace Infinity.Shaderlib
             if (desc4.isText)
             {
                 str2 = Marshal.PtrToStringAnsi(GetShaderConductorBlobData(desc4.target), GetShaderConductorBlobSize(desc4.target));
-                str2 = TranslationFixes(language, stage, 450, str2);
+                str2 = TranslationFixes(language, stage, GGLSLVersionID, str2);
             }
             else
             {
@@ -228,7 +230,7 @@ namespace Infinity.Shaderlib
             options.packMatricesInRowMajor = true;
             TargetDesc target = new TargetDesc
             {
-                version = "450",
+                version = GGLSLVersion,
                 language = EShadingLanguage.Dxil
             };
             Compile(ref source, ref options, ref target, out desc4);
@@ -263,7 +265,7 @@ namespace Infinity.Shaderlib
             options.packMatricesInRowMajor = true;
             TargetDesc target = new TargetDesc
             {
-                version = "450",
+                version = GGLSLVersion,
                 language = EShadingLanguage.Dxil
             };
             Compile(ref source, ref options, ref target, out desc4);
@@ -307,7 +309,7 @@ namespace Infinity.Shaderlib
             options.shiftAllSamplersBindings = 40;
             options.shiftAllTexturesBindings = 60;
             TargetDesc target = new TargetDesc {
-                version = "450",
+                version = GGLSLVersion,
                 language = EShadingLanguage.SpirV
             };
             Compile(ref source, ref options, ref target, out desc4);
@@ -350,7 +352,7 @@ namespace Infinity.Shaderlib
             options.shiftAllTexturesBindings = 60;
             TargetDesc target = new TargetDesc
             {
-                version = "450",
+                version = GGLSLVersion,
                 language = EShadingLanguage.SpirV
             };
             Compile(ref source, ref options, ref target, out desc4);

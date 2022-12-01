@@ -144,6 +144,36 @@ namespace Infinity.Rendering
             Console.WriteLine("*************************\n" +
                               "**  ShaderCompile End  **\n" +
                               "*************************\n");
+
+            string cubeShaderCode = new string(@"
+            struct Attribute
+            {
+	            float4 a_color0 : COLOR;
+                float4 a_position : Position;
+            };
+
+            struct Varying
+            {
+	            float4 v_color0 : COLOR;
+                float4 v_position : SV_POSITION;
+            };
+
+            float4x4 u_modelViewProj;
+
+            Varying VSMain(Attribute input)
+            {
+                Varying output;
+                output.v_color0 = input.a_color0;
+                output.v_position = mul(input.a_position, u_modelViewProj);
+	            return output;
+            }
+
+            float4 PSMain(Varying input) : SV_TARGET
+            {
+	            return input.v_color0;
+            }");
+            string cubeVS = ShaderCompiler.HLSLTo(cubeShaderCode, "VSMain", ShaderConductorWrapper.EFunctionStage.Vertex, ShaderConductorWrapper.EShadingLanguage.Essl);
+            string cubeFS = ShaderCompiler.HLSLTo(cubeShaderCode, "PSMain", ShaderConductorWrapper.EFunctionStage.Fragment, ShaderConductorWrapper.EShadingLanguage.Essl);
         }
 
         public override void Init(RenderContext renderContext)
