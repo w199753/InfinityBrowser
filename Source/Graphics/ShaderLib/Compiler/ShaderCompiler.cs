@@ -135,9 +135,8 @@ namespace Infinity.Shaderlib
 
     public static class ShaderCompiler
     {
+        internal static int GOGLVersion = 320;
         internal static bool GUseHalfType = true;
-        internal static string GGLSLVersion = "200";
-        internal static int GGLSLVersionID = 200;
         internal static ShaderModel GShaderModel = new ShaderModel(6, 2);
 
         public static string DisassemblySPIRV(byte[] bytecode)
@@ -180,7 +179,7 @@ namespace Infinity.Shaderlib
                 options.shiftAllTexturesBindings = 60;
             }
             TargetDesc target = new TargetDesc {
-                version = GGLSLVersion,
+                version = GOGLVersion.ToString(),
                 language = language
             };
             Compile(ref source, ref options, ref target, out desc4);
@@ -192,7 +191,7 @@ namespace Infinity.Shaderlib
             if (desc4.isText)
             {
                 str2 = Marshal.PtrToStringAnsi(GetShaderConductorBlobData(desc4.target), GetShaderConductorBlobSize(desc4.target));
-                str2 = TranslationFixes(language, stage, GGLSLVersionID, str2);
+                str2 = TranslationFixes(language, stage, GOGLVersion, str2);
             }
             else
             {
@@ -230,7 +229,7 @@ namespace Infinity.Shaderlib
             options.packMatricesInRowMajor = true;
             TargetDesc target = new TargetDesc
             {
-                version = GGLSLVersion,
+                version = GOGLVersion.ToString(),
                 language = EShadingLanguage.Dxil
             };
             Compile(ref source, ref options, ref target, out desc4);
@@ -265,7 +264,7 @@ namespace Infinity.Shaderlib
             options.packMatricesInRowMajor = true;
             TargetDesc target = new TargetDesc
             {
-                version = GGLSLVersion,
+                version = GOGLVersion.ToString(),
                 language = EShadingLanguage.Dxil
             };
             Compile(ref source, ref options, ref target, out desc4);
@@ -309,7 +308,7 @@ namespace Infinity.Shaderlib
             options.shiftAllSamplersBindings = 40;
             options.shiftAllTexturesBindings = 60;
             TargetDesc target = new TargetDesc {
-                version = GGLSLVersion,
+                version = GOGLVersion.ToString(),
                 language = EShadingLanguage.SpirV
             };
             Compile(ref source, ref options, ref target, out desc4);
@@ -352,7 +351,7 @@ namespace Infinity.Shaderlib
             options.shiftAllTexturesBindings = 60;
             TargetDesc target = new TargetDesc
             {
-                version = GGLSLVersion,
+                version = GOGLVersion.ToString(),
                 language = EShadingLanguage.SpirV
             };
             Compile(ref source, ref options, ref target, out desc4);
