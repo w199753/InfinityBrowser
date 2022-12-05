@@ -148,29 +148,41 @@ namespace Infinity.Rendering
             string cubeShaderCode = new string(@"
             struct Attribute
             {
-	            float4 a_color0 : COLOR;
-                float4 a_position : Position;
+                float3 a_position : POSITION;
+                float4 a_color0 : COLOR0;
             };
 
             struct Varying
             {
-	            float4 v_color0 : COLOR;
+                float4 v_color0 : COLOR0;
                 float4 v_position : SV_POSITION;
             };
 
+            float4 u_viewRect;
+            float4 u_viewTexel;
+            float4x4 u_view;
+            float4x4 u_invView;
+            float4x4 u_proj;
+            float4x4 u_invProj;
+            float4x4 u_viewProj;
+            float4x4 u_invViewProj;
+            float4x4 u_model[32];
+            float4x4 u_modelView;
             float4x4 u_modelViewProj;
+            float4x4 u_modelInvTrans;
+            float4 u_alphaRef4;
 
             Varying VSMain(Attribute input)
             {
                 Varying output;
                 output.v_color0 = input.a_color0;
-                output.v_position = mul(input.a_position, u_modelViewProj);
-	            return output;
+                output.v_position = mul(u_modelViewProj, float4(input.a_position, 1.0));
+                return output;
             }
 
             float4 PSMain(Varying input) : SV_TARGET
             {
-	            return input.v_color0;
+                return input.v_color0 + (float4(1, 0, 0, 1) * 0.25);
             }");
             string cubeVS = ShaderCompiler.HLSLTo(cubeShaderCode, "VSMain", ShaderConductorWrapper.EFunctionStage.Vertex, ShaderConductorWrapper.EShadingLanguage.Essl);
             string cubeFS = ShaderCompiler.HLSLTo(cubeShaderCode, "PSMain", ShaderConductorWrapper.EFunctionStage.Fragment, ShaderConductorWrapper.EShadingLanguage.Essl);
