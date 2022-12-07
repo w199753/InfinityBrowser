@@ -85,8 +85,8 @@ namespace Infinity.Rendering
             // Create Instance
             RHIInstanceDescriptor descriptor;
             {
-                descriptor.Backend = ERHIBackend.DirectX12;
-                //descriptor.Backend = RHIInstance.GetPlatformBackend(false);
+                //descriptor.Backend = ERHIBackend.DirectX12;
+                descriptor.Backend = RHIInstance.GetBackendByPlatform(false);
                 descriptor.EnableDebugLayer = false;
                 descriptor.EnableGpuValidatior = false;
             }

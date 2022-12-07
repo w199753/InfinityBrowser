@@ -136,8 +136,8 @@ namespace Infinity.Shaderlib
     public static class ShaderCompiler
     {
         internal static int GOGLVersion = 320;
-        internal static bool GUseHalfType = true;
-        internal static ShaderModel GShaderModel = new ShaderModel(6, 2);
+        internal static bool GEnableHalfPrecision = true;
+        internal static ShaderModel GShaderModelLevel = new ShaderModel(6, 2);
 
         public static string DisassemblySPIRV(byte[] bytecode)
         {
@@ -166,8 +166,8 @@ namespace Infinity.Shaderlib
                 entryPoint = entryPoint
             };
             OptionsDesc options = OptionsDesc.Default;
-            options.shaderModel = GShaderModel;
-            options.enable16bitTypes = GUseHalfType;
+            options.shaderModel = GShaderModelLevel;
+            options.enable16bitTypes = GEnableHalfPrecision;
             options.enableDebugInfo = keepDebugInfo;
             options.optimizationLevel = 3;
             options.disableOptimizations = disableOptimization;
@@ -221,8 +221,8 @@ namespace Infinity.Shaderlib
                 entryPoint = entryPoint
             };
             OptionsDesc options = OptionsDesc.Default;
-            options.shaderModel = GShaderModel;
-            options.enable16bitTypes = GUseHalfType;
+            options.shaderModel = GShaderModelLevel;
+            options.enable16bitTypes = GEnableHalfPrecision;
             options.enableDebugInfo = keepDebugInfo;
             options.optimizationLevel = 3;
             options.disableOptimizations = disableOptimization;
@@ -256,8 +256,8 @@ namespace Infinity.Shaderlib
                 entryPoint = entryPoint
             };
             OptionsDesc options = OptionsDesc.Default;
-            options.shaderModel = GShaderModel;
-            options.enable16bitTypes = GUseHalfType;
+            options.shaderModel = GShaderModelLevel;
+            options.enable16bitTypes = GEnableHalfPrecision;
             options.enableDebugInfo = keepDebugInfo;
             options.optimizationLevel = 3;
             options.disableOptimizations = disableOptimization;
@@ -298,8 +298,8 @@ namespace Infinity.Shaderlib
                 entryPoint = entryPoint
             };
             OptionsDesc options = OptionsDesc.Default;
-            options.shaderModel = GShaderModel;
-            options.enable16bitTypes = GUseHalfType;
+            options.shaderModel = GShaderModelLevel;
+            options.enable16bitTypes = GEnableHalfPrecision;
             options.enableDebugInfo = keepDebugInfo;
             options.optimizationLevel = 3;
             options.disableOptimizations = disableOptimization;
@@ -340,8 +340,8 @@ namespace Infinity.Shaderlib
                 entryPoint = entryPoint
             };
             OptionsDesc options = OptionsDesc.Default;
-            options.shaderModel = GShaderModel;
-            options.enable16bitTypes = GUseHalfType;
+            options.shaderModel = GShaderModelLevel;
+            options.enable16bitTypes = GEnableHalfPrecision;
             options.enableDebugInfo = keepDebugInfo;
             options.optimizationLevel = 3;
             options.disableOptimizations = disableOptimization;
