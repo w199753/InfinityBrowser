@@ -1,4 +1,5 @@
-﻿using System.Runtime.CompilerServices;
+﻿using Infinity.Core;
+using System.Runtime.CompilerServices;
 
 namespace Infinity.Engine
 {

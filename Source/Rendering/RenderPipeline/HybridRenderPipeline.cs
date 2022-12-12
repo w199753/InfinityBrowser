@@ -1,8 +1,8 @@
 ﻿using System;
-using Infinity.Memory;
 using Infinity.Graphics;
 using Infinity.Shaderlib;
 using Infinity.Mathmatics;
+using Infinity.Collections.LowLevel;
 using System.Runtime.InteropServices;
 
 namespace Infinity.Rendering
@@ -145,7 +145,7 @@ namespace Infinity.Rendering
                               "**  ShaderCompile End  **\n" +
                               "*************************\n");
 
-            string cubeShaderCode = new string(@"
+            string glesShaderCode = new string(@"
             struct Attribute
             {
                 float3 a_position : POSITION;
@@ -184,8 +184,8 @@ namespace Infinity.Rendering
             {
                 return input.v_color0 + (float4(1, 0, 0, 1) * 0.25);
             }");
-            string cubeVS = ShaderCompiler.HLSLTo(cubeShaderCode, "VSMain", ShaderConductorWrapper.EFunctionStage.Vertex, ShaderConductorWrapper.EShadingLanguage.Essl);
-            string cubeFS = ShaderCompiler.HLSLTo(cubeShaderCode, "PSMain", ShaderConductorWrapper.EFunctionStage.Fragment, ShaderConductorWrapper.EShadingLanguage.Essl);
+            string glesVS = ShaderCompiler.HLSLTo(glesShaderCode, "VSMain", ShaderConductorWrapper.EFunctionStage.Vertex, ShaderConductorWrapper.EShadingLanguage.Essl);
+            string glesFS = ShaderCompiler.HLSLTo(glesShaderCode, "PSMain", ShaderConductorWrapper.EFunctionStage.Fragment, ShaderConductorWrapper.EShadingLanguage.Essl);
         }
 
         public override void Init(RenderContext renderContext)

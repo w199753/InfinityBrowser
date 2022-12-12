@@ -1,4 +1,5 @@
 ﻿using System;
+using Infinity.Core;
 
 namespace Infinity.Graphics
 {

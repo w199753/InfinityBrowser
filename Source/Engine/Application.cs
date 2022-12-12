@@ -1,8 +1,10 @@
 ﻿using System;
+using Infinity.Core;
 using Silk.NET.Input;
 using Silk.NET.Maths;
 using System.Numerics;
 using System.Threading;
+using Infinity.Utility;
 using Infinity.Windowing;
 using Infinity.Rendering;
 using Infinity.Analytics;
@@ -65,7 +67,7 @@ namespace Infinity.Engine
         internal void TickCounter()
         {
             m_TimeCounter.Start();
-            Timer.Update(m_DeltaTime);
+            GTime.Update(m_DeltaTime);
         }
 
         internal void Exit()
@@ -193,10 +195,10 @@ namespace Infinity.Engine
             while (IsRunning)
             {
                 m_SystemTimer.TickCounter();
-                m_CrossWindow.Update(Timer.DeltaTime);
-                m_GameWorld.Update(Timer.DeltaTime);
-                m_PhysicsModule.Update(Timer.DeltaTime);
-                m_GraphicsModule.Update(Timer.DeltaTime);
+                m_CrossWindow.Update(GTime.DeltaTime);
+                m_GameWorld.Update(GTime.DeltaTime);
+                m_PhysicsModule.Update(GTime.DeltaTime);
+                m_GraphicsModule.Update(GTime.DeltaTime);
                 WaitForTargetFPS();
             }
 

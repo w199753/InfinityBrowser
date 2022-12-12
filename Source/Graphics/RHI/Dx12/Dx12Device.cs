@@ -1,6 +1,7 @@
 ﻿using System;
+using Infinity.Core;
 using System.Diagnostics;
-using Infinity.Container;
+using Infinity.Collections;
 using TerraFX.Interop.Windows;
 using TerraFX.Interop.DirectX;
 using System.Collections.Generic;

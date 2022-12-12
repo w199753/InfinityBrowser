@@ -2,7 +2,7 @@
 using TerraFX.Interop;
 using System.Runtime.CompilerServices;
 
-namespace Infinity.Memory
+namespace Infinity.Collections.LowLevel
 {
     public unsafe static class MemoryUtility
     {

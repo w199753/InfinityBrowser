@@ -1,7 +1,5 @@
 ﻿using System.Diagnostics;
 using TerraFX.Interop.DirectX;
-using System.Collections.Generic;
-using TerraFX.Interop.Windows;
 
 namespace Infinity.Graphics
 {

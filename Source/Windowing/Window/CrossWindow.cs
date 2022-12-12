@@ -1,4 +1,5 @@
 ﻿using System;
+using Infinity.Core;
 using Silk.NET.Input;
 using Silk.NET.Maths;
 using System.Numerics;

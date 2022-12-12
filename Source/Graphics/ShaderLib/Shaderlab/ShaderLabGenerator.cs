@@ -1,8 +1,7 @@
 ﻿using System;
-using Infinity.Container;
-using Infinity.Mathmatics;
 using Antlr4.Runtime.Misc;
 using Antlr4.Runtime.Tree;
+using Infinity.Mathmatics;
 using System.Collections.Generic;
 
 namespace Infinity.Shaderlib

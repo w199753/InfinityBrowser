@@ -1,4 +1,6 @@
-﻿namespace Infinity.Graphics
+﻿using Infinity.Core;
+
+namespace Infinity.Graphics
 {
 #pragma warning disable CS0414
     public struct RHIBufferTransitionDescriptor

@@ -1,4 +1,4 @@
-﻿using Infinity.Container;
+﻿using Infinity.Collections;
 using System.Runtime.CompilerServices;
 
 namespace Infinity.Rendering

@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Diagnostics;
-using Infinity.Memory;
 using System.Collections.Generic;
+using Infinity.Collections.LowLevel;
 
-namespace Infinity.Container
+namespace Infinity.Collections
 {
     public class TArray<T>
     {

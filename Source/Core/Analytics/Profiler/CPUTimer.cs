@@ -1,4 +1,5 @@
 ﻿using System;
+using Infinity.Utility;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 
@@ -13,7 +14,7 @@ namespace Infinity.Analytics
             m_Stopwatch = new Stopwatch();
         }
 
-        public long microseconds { get { return (long)(m_Stopwatch.ElapsedTicks * Timer.MicroSecsPerTick); } }
+        public long microseconds { get { return (long)(m_Stopwatch.ElapsedTicks * GTime.MicroSecsPerTick); } }
         public long milliseconds { get { return m_Stopwatch.ElapsedMilliseconds; } }
         public float seconds { get { return m_Stopwatch.ElapsedMilliseconds / 1000.0f; } }
         public void Reset() => m_Stopwatch.Reset();

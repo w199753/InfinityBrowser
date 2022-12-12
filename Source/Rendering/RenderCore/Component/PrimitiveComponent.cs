@@ -1,4 +1,6 @@
-﻿namespace Infinity.Rendering
+﻿using Infinity.Core;
+
+namespace Infinity.Rendering
 {
     public class PrimitiveRenderProxy : Disposal
     {

@@ -1,10 +1,7 @@
-﻿using System.Threading;
-using Infinity.Graphics;
-using Infinity.Shaderlib;
+﻿using Infinity.Core;
 using Infinity.Rendering;
 using Infinity.Windowing;
 using System.Runtime.CompilerServices;
-using Semaphore = Infinity.Threading.Semaphore;
 
 namespace Infinity.Engine
 {

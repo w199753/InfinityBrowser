@@ -1,5 +1,6 @@
 ﻿using System;
-using Infinity.Container;
+using Infinity.Collections;
+using Object = Infinity.Core.Object;
 
 namespace Infinity.Engine
 {

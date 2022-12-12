@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Infinity
+namespace Infinity.Core
 {
     [Serializable]
     public class Component : Object

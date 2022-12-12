@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Infinity.Memory
+namespace Infinity.Collections.LowLevel
 {
     public class HeapBlock
     {

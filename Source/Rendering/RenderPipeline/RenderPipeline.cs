@@ -1,4 +1,5 @@
-﻿using Infinity.Graphics;
+﻿using Infinity.Core;
+using Infinity.Graphics;
 
 namespace Infinity.Rendering
 {

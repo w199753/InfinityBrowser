@@ -1,4 +1,6 @@
-﻿namespace Infinity.Graphics
+﻿using Infinity.Core;
+
+namespace Infinity.Graphics
 {
     public struct RHITextureViewDescriptor
     {

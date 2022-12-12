@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Infinity.Container
+namespace Infinity.Collections
 {
     public struct TAny : IDisposable
     {

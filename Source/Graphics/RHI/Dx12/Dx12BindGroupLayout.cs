@@ -1,6 +1,4 @@
 ﻿using System;
-using TerraFX.Interop.DirectX;
-using System.Collections.Generic;
 
 namespace Infinity.Graphics
 {

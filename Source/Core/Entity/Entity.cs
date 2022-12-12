@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections;
-using Infinity.Container;
 using Infinity.Threading;
 using Infinity.Mathmatics;
+using Infinity.Collections;
 using System.Runtime.CompilerServices;
 
-namespace Infinity
+namespace Infinity.Core
 {
     [Serializable]
     public class Entity : Object, IComparable<Entity>, IEquatable<Entity>

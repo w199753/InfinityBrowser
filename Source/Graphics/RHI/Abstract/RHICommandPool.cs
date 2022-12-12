@@ -1,4 +1,6 @@
-﻿namespace Infinity.Graphics
+﻿using Infinity.Core;
+
+namespace Infinity.Graphics
 {
 #pragma warning disable CS8618
     public abstract class RHICommandPool : Disposal
