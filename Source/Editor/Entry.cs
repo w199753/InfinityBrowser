@@ -1,10 +1,14 @@
 ﻿using System;
+using System.IO;
 using Infinity.Core;
+using YamlDotNet.Core;
 using Infinity.Engine;
 using Infinity.Threading;
 using Infinity.Shaderlib;
 using System.Collections;
 using Infinity.Collections.LowLevel;
+using YamlDotNet.Serialization;
+using YamlDotNet.Core.Events;
 
 namespace Infinity.Editor
 {
@@ -110,6 +114,18 @@ namespace Infinity.Editor
             AddComponent(m_TestComponent);
         }
 
+        protected override void Serialized()
+        {
+            base.Serialized();
+            Console.WriteLine("Serialized Actor");
+        }
+
+        protected override void Deserialized()
+        {
+            base.Deserialized();
+            Console.WriteLine("Deserialized Actor");
+        }
+
         IEnumerator TestWaitSeconds()
         {
             Console.WriteLine("Start WaitSeconds");
@@ -175,6 +191,14 @@ namespace Infinity.Editor
 
             Scene testScene = new Scene("TestScene");
             testScene.AddLevel(testLevel);
+
+            StringWriter stringWriter = new StringWriter();
+            Emitter emitter = new Emitter(stringWriter);
+            emitter.Emit(new StreamStart());
+            emitter.Emit(new DocumentStart());
+            emitter.Emit(new DocumentEnd(isImplicit: true));
+            emitter.Emit(new StreamEnd());
+            string data = stringWriter.ToString();
 
             editorApp.GameWorld.SetScene(testScene);
             editorApp.Run();

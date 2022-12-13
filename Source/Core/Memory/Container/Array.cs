@@ -5,6 +5,7 @@ using Infinity.Collections.LowLevel;
 
 namespace Infinity.Collections
 {
+    [Serializable]
     public class TArray<T>
     {
         public int length;
