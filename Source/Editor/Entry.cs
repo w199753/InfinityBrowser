@@ -114,16 +114,10 @@ namespace Infinity.Editor
             AddComponent(m_TestComponent);
         }
 
-        protected override void Serialized()
+        protected override void Serialize(in EArchiveMode archMode)
         {
-            base.Serialized();
+            base.Serialize(archMode);
             Console.WriteLine("Serialized Actor");
-        }
-
-        protected override void Deserialized()
-        {
-            base.Deserialized();
-            Console.WriteLine("Deserialized Actor");
         }
 
         IEnumerator TestWaitSeconds()
@@ -191,14 +185,6 @@ namespace Infinity.Editor
 
             Scene testScene = new Scene("TestScene");
             testScene.AddLevel(testLevel);
-
-            StringWriter stringWriter = new StringWriter();
-            Emitter emitter = new Emitter(stringWriter);
-            emitter.Emit(new StreamStart());
-            emitter.Emit(new DocumentStart());
-            emitter.Emit(new DocumentEnd(isImplicit: true));
-            emitter.Emit(new StreamEnd());
-            string data = stringWriter.ToString();
 
             editorApp.GameWorld.SetScene(testScene);
             editorApp.Run();

@@ -43,7 +43,6 @@ namespace Infinity.Graphics
             Dx12CommandPool dx12CommandPool = m_CommandPool as Dx12CommandPool;
             Dx12Queue queue = m_CommandPool.Queue as Dx12Queue;
 
-            m_NativeCommandList->Close();
             m_NativeCommandList->Reset(dx12CommandPool.NativeCommandAllocator, null);
 
             IntPtr namePtr = Marshal.StringToHGlobalUni(name);

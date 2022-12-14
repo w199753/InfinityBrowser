@@ -198,9 +198,9 @@ namespace Infinity.Rendering
                 textureDescriptor.Extent = new int3(renderContext.ScreenSize.xy, 1);
                 textureDescriptor.Samples = 1;
                 textureDescriptor.MipCount = 1;
-                textureDescriptor.Format = EPixelFormat.RGBA8_UNorm;
                 textureDescriptor.State = ETextureState.Common;
                 textureDescriptor.Usage = ETextureUsage.RenderTarget | ETextureUsage.UnorderedAccess;
+                textureDescriptor.Format = EPixelFormat.RGBA8_UNorm;
                 textureDescriptor.Dimension = ETextureDimension.Texture2D;
                 textureDescriptor.StorageMode = EStorageMode.Default;
             }

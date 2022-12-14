@@ -4,10 +4,10 @@ using System.Runtime.CompilerServices;
 
 namespace Infinity.Core
 {
-    public enum ESerializationType: byte
+    public enum EArchiveMode : byte
     {
         Serialize,
-        Deserialize,
+        Deserializes,
     }
 
     [Serializable]
@@ -32,14 +32,7 @@ namespace Infinity.Core
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        protected virtual void Serialized()
-        {
-
-        }
-
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        protected virtual void Deserialized()
+        protected virtual void Serialize(in EArchiveMode archMode)
         {
 
         }
