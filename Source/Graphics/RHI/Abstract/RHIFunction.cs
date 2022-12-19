@@ -5,10 +5,10 @@ namespace Infinity.Graphics
 {
     public struct RHIFunctionDescriptor
     {
-        public int Size;
+        public uint ByteSize;
         public IntPtr ByteCode;
         public string EntryName;
-        public EFunctionStage FunctionStage;
+        public EFunctionType Type;
     }
 
     public abstract class RHIFunction : Disposal

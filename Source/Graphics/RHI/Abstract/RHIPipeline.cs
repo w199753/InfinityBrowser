@@ -102,21 +102,21 @@ namespace Infinity.Graphics
         public RHIDepthStencilStateDescriptor DepthStencilStateDescriptor;
     }
 
-    public struct RHIHitGroupDescription
+    public struct RHIRayHitGroupDescriptor
     {
         public string Name;
         public EHitGroupType Type;
-        public RHIFunction AnyHitFunction;
-        public RHIFunction IntersectFunction;
-        public RHIFunction ClosestHitFunction;
-        public RHIBindGroupLayout BindGroupLayout;
+        public RHIPipelineLayout LocalPipelineLayout;
+        public RHIFunctionDescriptor? AnyHitDescriptor;
+        public RHIFunctionDescriptor? IntersectDescriptor;
+        public RHIFunctionDescriptor? ClosestHitDescriptor;
     }
 
-    public struct RHIRayGeneralDescription
+    public struct RHIRayGeneralGroupDescriptor
     {
         public string Name;
-        public RHIFunction GeneralFunction;
-        public RHIBindGroupLayout BindGroupLayout;
+        public RHIPipelineLayout LocalPipelineLayout;
+        public RHIFunctionDescriptor GeneralDescriptor;
     }
 
     public struct RHIComputePipelineDescriptor
@@ -131,9 +131,11 @@ namespace Infinity.Graphics
         public uint MaxPayloadSize;
         public uint MaxAttributeSize;
         public uint MaxRecursionDepth;
-        public RHIPipelineLayout PipelineLayout;
-        public Memory<RHIHitGroupDescription> HitGroupDescriptors;
-        public Memory<RHIRayGeneralDescription> RayGeneralDescriptors;
+        public RHIFunction FunctionLibrary;
+        public RHIPipelineLayout GlobalPipelineLayout;
+        public RHIRayGeneralGroupDescriptor RayGenerationDescriptor;
+        public Memory<RHIRayHitGroupDescriptor> RayHitGroupDescriptors;
+        public Memory<RHIRayGeneralGroupDescriptor> RayMissGroupDescriptors;
     }
 
     public struct RHIMeshletPipelineDescriptor
@@ -160,6 +162,8 @@ namespace Infinity.Graphics
 
     public struct RHIPipelineLayoutDescriptor
     {
+        public bool IsLocalSignature;
+        public bool AllowVertexLayout;
         public RHIBindGroupLayout[] BindGroupLayouts;
         //public RHIPipelineConstantLayout[] PipelineConstantLayouts;
         public Memory<RHIStaticSamplerStateDescriptor>? StaticSamplerStates;

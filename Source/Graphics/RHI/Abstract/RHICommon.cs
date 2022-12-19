@@ -500,6 +500,17 @@
         Undefined
     }
 
+    public enum EFunctionType
+    {
+        Compute = 0x0020,
+        Vertex = 0x0001,
+        Fragment = 0x0002,
+        Task = 0x0004,
+        Mesh = 0x0008,
+        RayTracing = 0x0010,
+        Undefined
+    }
+
     public enum EFunctionStage
     {
         Compute = 0x0020,

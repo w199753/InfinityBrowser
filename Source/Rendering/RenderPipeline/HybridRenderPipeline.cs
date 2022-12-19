@@ -248,15 +248,17 @@ namespace Infinity.Rendering
             // Create ComputePipeline
             RHIFunctionDescriptor computeFunctionDescriptor;
             {
-                computeFunctionDescriptor.Size = m_ComputeBlob.Size;
+                computeFunctionDescriptor.Type = EFunctionType.Compute;
+                computeFunctionDescriptor.ByteSize = m_ComputeBlob.Size;
                 computeFunctionDescriptor.ByteCode = m_ComputeBlob.Data;
                 computeFunctionDescriptor.EntryName = "CSMain";
-                computeFunctionDescriptor.FunctionStage = EFunctionStage.Compute;
             }
             m_ComputeFunction = renderContext.CreateFunction(computeFunctionDescriptor);
 
             RHIPipelineLayoutDescriptor computePipelienLayoutDescriptor;
             {
+                computePipelienLayoutDescriptor.IsLocalSignature = false;
+                computePipelienLayoutDescriptor.AllowVertexLayout = false;
                 computePipelienLayoutDescriptor.BindGroupLayouts = new RHIBindGroupLayout[] { m_ComputeBindGroupLayout };
                 computePipelienLayoutDescriptor.StaticSamplerStates = null;
             }
@@ -477,24 +479,26 @@ namespace Infinity.Rendering
             // Create GraphicsPipeline
             RHIFunctionDescriptor vertexFunctionDescriptor;
             {
-                vertexFunctionDescriptor.Size = m_VertexBlob.Size;
+                vertexFunctionDescriptor.Type = EFunctionType.Vertex;
+                vertexFunctionDescriptor.ByteSize = m_VertexBlob.Size;
                 vertexFunctionDescriptor.ByteCode = m_VertexBlob.Data;
                 vertexFunctionDescriptor.EntryName = "VSMain";
-                vertexFunctionDescriptor.FunctionStage = EFunctionStage.Vertex;
             }
             m_VertexFunction = renderContext.CreateFunction(vertexFunctionDescriptor);
 
             RHIFunctionDescriptor fragmentFunctionDescriptor;
             {
-                fragmentFunctionDescriptor.Size = m_FragmentBlob.Size;
+                fragmentFunctionDescriptor.Type = EFunctionType.Fragment;
+                fragmentFunctionDescriptor.ByteSize = m_FragmentBlob.Size;
                 fragmentFunctionDescriptor.ByteCode = m_FragmentBlob.Data;
                 fragmentFunctionDescriptor.EntryName = "PSMain";
-                fragmentFunctionDescriptor.FunctionStage = EFunctionStage.Fragment;
             }
             m_FragmentFunction = renderContext.CreateFunction(fragmentFunctionDescriptor);
 
             RHIPipelineLayoutDescriptor graphicsPipelienLayoutDescriptor;
             {
+                graphicsPipelienLayoutDescriptor.IsLocalSignature = false;
+                graphicsPipelienLayoutDescriptor.AllowVertexLayout = true;
                 graphicsPipelienLayoutDescriptor.BindGroupLayouts = new RHIBindGroupLayout[] { m_GraphicsBindGroupLayout };
                 graphicsPipelienLayoutDescriptor.StaticSamplerStates = null;
             }

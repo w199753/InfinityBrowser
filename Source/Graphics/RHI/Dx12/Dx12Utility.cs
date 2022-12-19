@@ -1,11 +1,11 @@
 ﻿using System;
+using System.Text;
 using NUnit.Framework;
 using TerraFX.Interop.DirectX;
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
 using System.Runtime.CompilerServices;
 using static TerraFX.Interop.Windows.Windows;
-using System.Text;
-using System.Runtime.InteropServices;
 
 namespace Infinity.Graphics
 {
@@ -781,6 +781,18 @@ namespace Infinity.Graphics
                 result |= D3D12_CLEAR_FLAGS.D3D12_CLEAR_FLAG_STENCIL;
             }
             return result;
+        }
+
+        internal static D3D12_HIT_GROUP_TYPE ConverteToDx12HitGroupType(in EHitGroupType type)
+        {
+            switch (type)
+            {
+                case EHitGroupType.Procedural:
+                    return D3D12_HIT_GROUP_TYPE.D3D12_HIT_GROUP_TYPE_PROCEDURAL_PRIMITIVE;
+
+                default:
+                    return D3D12_HIT_GROUP_TYPE.D3D12_HIT_GROUP_TYPE_TRIANGLES;
+            }
         }
 
         internal static bool IsIndexBuffer(in EBufferUsage bufferflag)

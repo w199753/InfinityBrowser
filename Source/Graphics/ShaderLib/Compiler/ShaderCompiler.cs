@@ -16,7 +16,7 @@ namespace Infinity.Shaderlib
             m_Target = target;
         }
 
-        public int Size
+        public uint Size
         {
             get
             {
@@ -43,21 +43,21 @@ namespace Infinity.Shaderlib
     [DebuggerTypeProxy(typeof(ShaderConductorDebugger))]
     public unsafe struct ShaderConductorBlob : IDisposable
     {
-        public int Size => m_Size;
+        public uint Size => m_Size;
         public IntPtr Data => m_Data;
 
-        private int m_Size;
+        private uint m_Size;
         private IntPtr m_Data;
         private ResultDesc? m_Result;
 
         internal ShaderConductorBlob(in ResultDesc result)
         {
             m_Result = result;
-            m_Size = GetShaderConductorBlobSize(result.target);
+            m_Size = (uint)GetShaderConductorBlobSize(result.target);
             m_Data = GetShaderConductorBlobData(result.target);
         }
 
-        internal ShaderConductorBlob(in int size, in IntPtr data)
+        internal ShaderConductorBlob(in uint size, in IntPtr data)
         {
             m_Size = size;
             m_Data = data;
