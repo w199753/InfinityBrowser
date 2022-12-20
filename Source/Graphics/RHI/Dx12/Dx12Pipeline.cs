@@ -220,9 +220,11 @@ namespace Infinity.Graphics
 
             int exportCount = 0;
             ref D3D12_EXPORT_DESC rayGenerationExport = ref exports[exportCount];
-            rayGenerationExport.Name = (ushort*)Marshal.StringToHGlobalUni(descriptor.RayGenerationDescriptor.GeneralDescriptor.EntryName).ToPointer();
-            rayGenerationExport.Flags = D3D12_EXPORT_FLAGS.D3D12_EXPORT_FLAG_NONE;
-            rayGenerationExport.ExportToRename = null;
+            {
+                rayGenerationExport.Name = (ushort*)Marshal.StringToHGlobalUni(descriptor.RayGenerationDescriptor.GeneralDescriptor.EntryName).ToPointer();
+                rayGenerationExport.Flags = D3D12_EXPORT_FLAGS.D3D12_EXPORT_FLAG_NONE;
+                rayGenerationExport.ExportToRename = null;
+            }
 
             for (int i = 0; i < descriptor.RayMissGroupDescriptors.Length; ++i) 
             {

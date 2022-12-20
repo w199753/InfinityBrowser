@@ -519,8 +519,8 @@ namespace Infinity.Rendering
             m_ColorAttachmentDescriptors = new RHIColorAttachmentDescriptor[1];
             {
                 m_ColorAttachmentDescriptors[0].ClearValue = new float4(0.5f, 0.5f, 1, 1);
-                m_ColorAttachmentDescriptors[0].LoadOp = ELoadOp.Clear;
-                m_ColorAttachmentDescriptors[0].StoreOp = EStoreOp.Store;
+                m_ColorAttachmentDescriptors[0].LoadAction = ELoadAction.Clear;
+                m_ColorAttachmentDescriptors[0].StoreOp = EStoreAction.Store;
                 m_ColorAttachmentDescriptors[0].ResolveTarget = null;
             }
         }

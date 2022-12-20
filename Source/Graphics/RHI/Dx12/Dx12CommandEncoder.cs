@@ -293,7 +293,7 @@ namespace Infinity.Graphics
             {
                 ref RHIColorAttachmentDescriptor colorAttachmentDescriptor = ref descriptor.ColorAttachmentDescriptors.Span[i];
 
-                if (colorAttachmentDescriptor.LoadOp != ELoadOp.Clear)
+                if (colorAttachmentDescriptor.LoadAction != ELoadAction.Clear)
                 {
                     continue;
                 }
@@ -304,7 +304,7 @@ namespace Infinity.Graphics
             if (dsvHandle.HasValue)
             {
                 RHIDepthStencilAttachmentDescriptor? depthStencilAttachmentDescriptor = descriptor.DepthStencilAttachmentDescriptor;
-                if (depthStencilAttachmentDescriptor?.DepthLoadOp != ELoadOp.Clear && depthStencilAttachmentDescriptor?.StencilLoadOp != ELoadOp.Clear)
+                if (depthStencilAttachmentDescriptor?.DepthLoadAction != ELoadAction.Clear && depthStencilAttachmentDescriptor?.StencilLoadAction != ELoadAction.Clear)
                 {
                     return;
                 }

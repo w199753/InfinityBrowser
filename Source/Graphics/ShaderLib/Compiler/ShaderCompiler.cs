@@ -420,6 +420,10 @@ namespace Infinity.Shaderlib
                     }
                 }
                 input = Regex.Replace(input, @"(findLSB\(.*\))", "uint($1)");
+            } 
+            else if(language == EShadingLanguage.Hlsl)
+            {
+                input = input.Replace("_Globals_", "");
             }
             return input;
         }

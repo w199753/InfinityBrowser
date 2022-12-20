@@ -34,40 +34,29 @@ namespace Infinity.Graphics
 
         }
 
-        public override void SetRayGenerationShader(string exportName, RHIBindGroup bindGroup)
+        public override void SetRayGenerationProgram(string exportName, params RHIBindGroup[] bindGroup)
         {
 
         }
 
-        public override void AddMissShader(string exportName, RHIBindGroup bindGroup)
+        public override void AddMissProgram(string exportName, params RHIBindGroup[] bindGroup)
         {
 
         }
 
-        public override void AddHitGroup(string exportName, RHIBindGroup bindGroup)
+        public override void AddHitGroupProgram(string exportName, params RHIBindGroup[] bindGroup)
         {
 
         }
 
-        public override void AddCallableShader(string exportName, RHIBindGroup bindGroup)
+        public override void ClearMissPrograms()
         {
 
         }
 
-        public override void ClearMissShaders()
+        public override void ClearHitGroupPrograms()
         {
 
         }
-
-        public override void ClearHitShaders()
-        {
-
-        }
-
-        public override void ClearCallableShaders()
-        {
-
-        }
-
     }
 }

@@ -382,7 +382,7 @@
         Undefined
     }
 
-    public enum ELoadOp : byte
+    public enum ELoadAction : byte
     {
         Load,
         Clear,
@@ -390,7 +390,7 @@
         Undefined
     }
 
-    public enum EStoreOp : byte
+    public enum EStoreAction : byte
     {
         Store,
         Resolve,
