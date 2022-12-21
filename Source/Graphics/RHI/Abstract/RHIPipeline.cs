@@ -181,7 +181,7 @@ namespace Infinity.Graphics
 
     public abstract class RHIRaytracingPipeline : Disposal
     {
-        public abstract RHIFunctionTable CreateFunctionTable();
+
     }
 
     public abstract class RHIMeshletPipeline : Disposal

@@ -22,8 +22,10 @@ namespace Infinity.Rendering
         RHIFunction m_VertexFunction;
         RHIFunction m_FragmentFunction;
         RHIFunction m_ComputeFunction;
-        RHIBuffer m_IndexBuffer;
-        RHIBuffer m_VertexBuffer;
+        RHIBuffer m_IndexBufferCPU;
+        RHIBuffer m_VertexBufferCPU;
+        RHIBuffer m_IndexBufferGPU;
+        RHIBuffer m_VertexBufferGPU;
         RHITexture m_ComputeTexture;
         RHITextureView m_ComputeTextureView;
         RHISamplerState m_ComputeSamplerState;
@@ -306,13 +308,17 @@ namespace Infinity.Rendering
             RHIBufferDescriptor indexBufferDescriptor;
             {
                 indexBufferDescriptor.Size = indexs.Length * MemoryUtility.SizeOf<ushort>();
-                indexBufferDescriptor.State = EBufferState.Common;
+                indexBufferDescriptor.State = EBufferState.GenericRead;
                 indexBufferDescriptor.Usage = EBufferUsage.IndexBuffer;
                 indexBufferDescriptor.StorageMode = EStorageMode.Dynamic;
             }
-            m_IndexBuffer = renderContext.CreateBuffer(indexBufferDescriptor);
+            m_IndexBufferCPU = renderContext.CreateBuffer(indexBufferDescriptor);
 
-            IntPtr indexData = m_IndexBuffer.Map(indexBufferDescriptor.Size, 0);
+            indexBufferDescriptor.State = EBufferState.Common;
+            indexBufferDescriptor.StorageMode = EStorageMode.Default;
+            m_IndexBufferGPU = renderContext.CreateBuffer(indexBufferDescriptor);
+
+            IntPtr indexData = m_IndexBufferCPU.Map(indexBufferDescriptor.Size, 0);
             GCHandle indexsHandle = GCHandle.Alloc(indexs, GCHandleType.Pinned);
             IntPtr indexsPtr = indexsHandle.AddrOfPinnedObject();
             MemoryUtility.MemCpy(indexsPtr.ToPointer(), indexData.ToPointer(), indexBufferDescriptor.Size);
@@ -331,13 +337,17 @@ namespace Infinity.Rendering
             RHIBufferDescriptor vertexBufferDescriptor;
             {
                 vertexBufferDescriptor.Size = vertices.Length * MemoryUtility.SizeOf<Vertex>();
-                vertexBufferDescriptor.State = EBufferState.Common;
+                vertexBufferDescriptor.State = EBufferState.GenericRead;
                 vertexBufferDescriptor.Usage = EBufferUsage.VertexBuffer;
                 vertexBufferDescriptor.StorageMode = EStorageMode.Dynamic;
             }
-            m_VertexBuffer = renderContext.CreateBuffer(vertexBufferDescriptor);
+            m_VertexBufferCPU = renderContext.CreateBuffer(vertexBufferDescriptor);
 
-            IntPtr vertexData = m_VertexBuffer.Map(vertexBufferDescriptor.Size, 0);
+            vertexBufferDescriptor.State = EBufferState.Common;
+            vertexBufferDescriptor.StorageMode = EStorageMode.Default;
+            m_VertexBufferGPU = renderContext.CreateBuffer(vertexBufferDescriptor);
+
+            IntPtr vertexData = m_VertexBufferCPU.Map(vertexBufferDescriptor.Size, 0);
             GCHandle verticesHandle = GCHandle.Alloc(vertices, GCHandleType.Pinned);
             IntPtr verticesPtr = verticesHandle.AddrOfPinnedObject();
             MemoryUtility.MemCpy(verticesPtr.ToPointer(), vertexData.ToPointer(), vertexBufferDescriptor.Size);
@@ -523,8 +533,29 @@ namespace Infinity.Rendering
                 m_ColorAttachmentDescriptors[0].StoreOp = EStoreAction.Store;
                 m_ColorAttachmentDescriptors[0].ResolveTarget = null;
             }
-        }
 
+            RHICommandBuffer cmdBuffer = renderContext.GetCommandBuffer(ECommandType.Graphics);
+
+            using (cmdBuffer.BeginScoped("FrameInit"))
+            {
+                RHIBlitEncoder blitEncoder = cmdBuffer.GetBlitEncoder();
+
+                using (blitEncoder.BeginScopedPass("Upload"))
+                {
+                    blitEncoder.ResourceBarrier(RHIBarrier.Transition(m_IndexBufferGPU, EBufferState.Common, EBufferState.CopyDest));
+                    blitEncoder.ResourceBarrier(RHIBarrier.Transition(m_VertexBufferGPU, EBufferState.Common, EBufferState.CopyDest));
+
+                    blitEncoder.CopyBufferToBuffer(m_IndexBufferCPU, 0, m_IndexBufferGPU, 0, (int)m_IndexBufferGPU.SizeInBytes);
+                    blitEncoder.CopyBufferToBuffer(m_VertexBufferCPU, 0, m_VertexBufferGPU, 0, (int)m_VertexBufferCPU.SizeInBytes);
+
+                    blitEncoder.ResourceBarrier(RHIBarrier.Transition(m_IndexBufferGPU, EBufferState.CopyDest, EBufferState.Common));
+                    blitEncoder.ResourceBarrier(RHIBarrier.Transition(m_VertexBufferGPU, EBufferState.CopyDest, EBufferState.Common));
+                }
+            }
+
+            renderContext.ExecuteCommandBuffer(cmdBuffer);
+        }
+         
         public override void Render(RenderContext renderContext)
         {
             RHICommandBuffer cmdBuffer = renderContext.GetCommandBuffer(ECommandType.Graphics);
@@ -565,8 +596,8 @@ namespace Infinity.Rendering
                     graphicsEncoder.SetPipelineLayout(m_GraphicsPipelineLayout);
                     graphicsEncoder.SetPipelineState(m_GraphicsPipelineState);
                     graphicsEncoder.SetBindGroup(m_GraphicsBindGroup);
-                    graphicsEncoder.SetVertexBuffer(m_VertexBuffer);
-                    graphicsEncoder.SetIndexBuffer(m_IndexBuffer, EIndexFormat.UInt16);
+                    graphicsEncoder.SetVertexBuffer(m_VertexBufferGPU);
+                    graphicsEncoder.SetIndexBuffer(m_IndexBufferGPU, EIndexFormat.UInt16);
                     graphicsEncoder.SetBlendFactor(1);
                     graphicsEncoder.DrawIndexed(3, 1, 0, 0, 0);
                     graphicsEncoder.PopDebugGroup();
@@ -587,8 +618,10 @@ namespace Infinity.Rendering
             m_ComputeBlob.Dispose();
             m_VertexBlob.Dispose();
             m_FragmentBlob.Dispose();
-            m_IndexBuffer?.Dispose();
-            m_VertexBuffer?.Dispose();
+            m_IndexBufferCPU?.Dispose();
+            m_VertexBufferCPU?.Dispose();
+            m_IndexBufferGPU?.Dispose();
+            m_VertexBufferGPU?.Dispose();
             m_ComputeTexture?.Dispose();
             m_ComputeTextureView?.Dispose();
             m_ComputeSamplerState?.Dispose();

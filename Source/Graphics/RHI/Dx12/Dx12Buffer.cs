@@ -34,18 +34,8 @@ namespace Infinity.Graphics
             D3D12_RESOURCE_DESC resourceDesc = D3D12_RESOURCE_DESC.Buffer((ulong)descriptor.Size, Dx12Utility.ConvertToDx12BufferFlag(descriptor.Usage));
             D3D12_HEAP_PROPERTIES heapProperties = new D3D12_HEAP_PROPERTIES(Dx12Utility.ConvertToDx12ResourceFlagByUsage(descriptor.StorageMode));
 
-            D3D12_RESOURCE_STATES initialState = Dx12Utility.ConvertToDx12BufferState(descriptor.State);
-            if (descriptor.StorageMode == EStorageMode.Static || descriptor.StorageMode == EStorageMode.Dynamic)
-            {
-                initialState = D3D12_RESOURCE_STATES.D3D12_RESOURCE_STATE_GENERIC_READ;
-            }
-            if (descriptor.StorageMode == EStorageMode.Staging)
-            {
-                initialState = D3D12_RESOURCE_STATES.D3D12_RESOURCE_STATE_COPY_DEST;
-            }
-
             ID3D12Resource* dx12Resource;
-            bool success = SUCCEEDED(m_Dx12Device.NativeDevice->CreateCommittedResource(&heapProperties, D3D12_HEAP_FLAGS.D3D12_HEAP_FLAG_NONE, &resourceDesc, initialState, null, __uuidof<ID3D12Resource>(), (void**)&dx12Resource));
+            bool success = SUCCEEDED(m_Dx12Device.NativeDevice->CreateCommittedResource(&heapProperties, D3D12_HEAP_FLAGS.D3D12_HEAP_FLAG_NONE, &resourceDesc, Dx12Utility.ConvertToDx12BufferState(descriptor.State), null, __uuidof<ID3D12Resource>(), (void**)&dx12Resource));
             Debug.Assert(success);
             m_NativeResource = dx12Resource;
         }

@@ -427,8 +427,9 @@
 
     public enum EBufferState
     {
-        Common = 0x00000001,
-        StreamOut = 0x00000002,
+        Common = 0,
+        StreamOut = 0x00000001,
+        GenericRead = 0x00000002,
         CopyDest = 0x00000004,
         CopySource = 0x00000008,
         IndexBuffer = 0x00000010,
@@ -446,9 +447,9 @@
 
     public enum ETextureState
     {
-        Unknown = 0,
-        Common = 0x00000001,
-        Present = 0x00000002,
+        Common = 0,
+        Present = 0x00000001,
+        GenericRead = 0x00000002,
         CopyDest = 0x00000004,
         CopySource = 0x00000008,
         ResolveDest = 0x00000010,

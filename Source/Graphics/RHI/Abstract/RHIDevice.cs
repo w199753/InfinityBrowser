@@ -21,6 +21,7 @@ namespace Infinity.Graphics
         public abstract RHITexture CreateTexture(in RHITextureDescriptor descriptor);
         public abstract RHISamplerState CreateSamplerState(in RHISamplerStateDescriptor descriptor);
         public abstract RHIFunction CreateFunction(in RHIFunctionDescriptor descriptor);
+        public abstract RHIFunctionTable CreateFunctionTable();
         public abstract RHISwapChain CreateSwapChain(in RHISwapChainDescriptor descriptor);
         public abstract RHIBindGroupLayout CreateBindGroupLayout(in RHIBindGroupLayoutDescriptor descriptor);
         public abstract RHIBindGroup CreateBindGroup(in RHIBindGroupDescriptor descriptor);

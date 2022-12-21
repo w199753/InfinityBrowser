@@ -42,18 +42,8 @@ namespace Infinity.Graphics
             textureDesc.SampleDesc.Quality = (uint)descriptor.Samples.y;
             textureDesc.Dimension = Dx12Utility.ConvertToDx12TextureDimension(descriptor.Dimension);
 
-            D3D12_RESOURCE_STATES initialState = Dx12Utility.ConvertToDx12TextureState(descriptor.State);
-            if (descriptor.StorageMode == EStorageMode.Static || descriptor.StorageMode == EStorageMode.Dynamic)
-            {
-                initialState = D3D12_RESOURCE_STATES.D3D12_RESOURCE_STATE_GENERIC_READ;
-            }
-            if (descriptor.StorageMode == EStorageMode.Staging)
-            {
-                initialState = D3D12_RESOURCE_STATES.D3D12_RESOURCE_STATE_COPY_DEST;
-            }
-
             ID3D12Resource* dx12Resource;
-            bool success = SUCCEEDED(m_Dx12Device.NativeDevice->CreateCommittedResource(&heapProperties, D3D12_HEAP_FLAGS.D3D12_HEAP_FLAG_NONE, &textureDesc, initialState, null, __uuidof<ID3D12Resource>(), (void**)&dx12Resource)); ;
+            bool success = SUCCEEDED(m_Dx12Device.NativeDevice->CreateCommittedResource(&heapProperties, D3D12_HEAP_FLAGS.D3D12_HEAP_FLAG_NONE, &textureDesc, Dx12Utility.ConvertToDx12TextureState(descriptor.State), null, __uuidof<ID3D12Resource>(), (void**)&dx12Resource)); ;
             Debug.Assert(success);
             m_NativeResource = dx12Resource;
         }

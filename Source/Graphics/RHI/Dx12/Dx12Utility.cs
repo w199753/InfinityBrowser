@@ -226,6 +226,7 @@ namespace Infinity.Graphics
             D3D12_RESOURCE_STATES result = D3D12_RESOURCE_STATES.D3D12_RESOURCE_STATE_COMMON; // also 0
 
             if ((state & EBufferState.StreamOut) != 0) result |= D3D12_RESOURCE_STATES.D3D12_RESOURCE_STATE_STREAM_OUT;
+            if ((state & EBufferState.GenericRead) != 0) result |= D3D12_RESOURCE_STATES.D3D12_RESOURCE_STATE_GENERIC_READ;
             if ((state & EBufferState.CopyDest) != 0) result |= D3D12_RESOURCE_STATES.D3D12_RESOURCE_STATE_COPY_DEST;
             if ((state & EBufferState.CopySource) != 0) result |= D3D12_RESOURCE_STATES.D3D12_RESOURCE_STATE_COPY_SOURCE;
             if ((state & EBufferState.IndexBuffer) != 0) result |= D3D12_RESOURCE_STATES.D3D12_RESOURCE_STATE_INDEX_BUFFER;
@@ -250,6 +251,7 @@ namespace Infinity.Graphics
             D3D12_RESOURCE_STATES result = D3D12_RESOURCE_STATES.D3D12_RESOURCE_STATE_COMMON; // also 0
 
             if ((state & ETextureState.Present) != 0) result |= D3D12_RESOURCE_STATES.D3D12_RESOURCE_STATE_PRESENT;
+            if ((state & ETextureState.GenericRead) != 0) result |= D3D12_RESOURCE_STATES.D3D12_RESOURCE_STATE_GENERIC_READ;
             if ((state & ETextureState.CopyDest) != 0) result |= D3D12_RESOURCE_STATES.D3D12_RESOURCE_STATE_COPY_DEST;
             if ((state & ETextureState.CopySource) != 0) result |= D3D12_RESOURCE_STATES.D3D12_RESOURCE_STATE_COPY_SOURCE;
             if ((state & ETextureState.ResolveDest) != 0) result |= D3D12_RESOURCE_STATES.D3D12_RESOURCE_STATE_RESOLVE_DEST;

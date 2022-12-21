@@ -17,6 +17,13 @@ namespace Infinity.Graphics
 
     internal unsafe class Dx12PipelineLayout : RHIPipelineLayout
     {
+        public int ParameterCount
+        {
+            get
+            {
+                return m_ParameterCount;
+            }
+        }
         public ID3D12RootSignature* NativeRootSignature
         {
             get
@@ -25,6 +32,7 @@ namespace Infinity.Graphics
             }
         }
 
+        private int m_ParameterCount;
         private ID3D12RootSignature* m_NativeRootSignature;
         private Dictionary<int, Dx12BindTypeAndParameterSlot> m_AllParameterMap;
         private Dictionary<int, Dx12BindTypeAndParameterSlot> m_VertexParameterMap;
@@ -33,23 +41,23 @@ namespace Infinity.Graphics
 
         public Dx12PipelineLayout(Dx12Device device, in RHIPipelineLayoutDescriptor descriptor)
         {
+            m_ParameterCount = 0;
             m_AllParameterMap = new Dictionary<int, Dx12BindTypeAndParameterSlot>(5);
             m_VertexParameterMap = new Dictionary<int, Dx12BindTypeAndParameterSlot>(5);
             m_FragmentParameterMap = new Dictionary<int, Dx12BindTypeAndParameterSlot>(5);
             m_ComputeParameterMap = new Dictionary<int, Dx12BindTypeAndParameterSlot>(5);
 
-            int parameterCount = 0;
             for (int i = 0; i < descriptor.BindGroupLayouts.Length; ++i)
             {
                 Dx12BindGroupLayout bindGroupLayout = descriptor.BindGroupLayouts[i] as Dx12BindGroupLayout;
-                parameterCount += bindGroupLayout.BindInfos.Length;
+                m_ParameterCount += bindGroupLayout.BindInfos.Length;
             }
 
-            D3D12_DESCRIPTOR_RANGE1* rootDescriptorRangePtr = stackalloc D3D12_DESCRIPTOR_RANGE1[parameterCount];
-            Span<D3D12_DESCRIPTOR_RANGE1> rootDescriptorRangeViews = new Span<D3D12_DESCRIPTOR_RANGE1>(rootDescriptorRangePtr, parameterCount);
+            D3D12_DESCRIPTOR_RANGE1* rootDescriptorRangePtr = stackalloc D3D12_DESCRIPTOR_RANGE1[m_ParameterCount];
+            Span<D3D12_DESCRIPTOR_RANGE1> rootDescriptorRangeViews = new Span<D3D12_DESCRIPTOR_RANGE1>(rootDescriptorRangePtr, m_ParameterCount);
 
-            D3D12_ROOT_PARAMETER1* rootParameterPtr = stackalloc D3D12_ROOT_PARAMETER1[parameterCount];
-            Span<D3D12_ROOT_PARAMETER1> rootParameterViews = new Span<D3D12_ROOT_PARAMETER1>(rootParameterPtr, parameterCount);
+            D3D12_ROOT_PARAMETER1* rootParameterPtr = stackalloc D3D12_ROOT_PARAMETER1[m_ParameterCount];
+            Span<D3D12_ROOT_PARAMETER1> rootParameterViews = new Span<D3D12_ROOT_PARAMETER1>(rootParameterPtr, m_ParameterCount);
 
             for (int i = 0; i < descriptor.BindGroupLayouts.Length; ++i)
             {
@@ -103,7 +111,7 @@ namespace Infinity.Graphics
                 rootSignatureFlag |= D3D12_ROOT_SIGNATURE_FLAGS.D3D12_ROOT_SIGNATURE_FLAG_ALLOW_INPUT_ASSEMBLER_INPUT_LAYOUT;
             }
             D3D12_VERSIONED_ROOT_SIGNATURE_DESC rootSignatureDesc = new D3D12_VERSIONED_ROOT_SIGNATURE_DESC();
-            rootSignatureDesc.Init_1_1((uint)parameterCount, rootParameterPtr, 0, null, rootSignatureFlag);
+            rootSignatureDesc.Init_1_1((uint)m_ParameterCount, rootParameterPtr, 0, null, rootSignatureFlag);
 
             ID3DBlob* signature;
             Dx12Utility.CHECK_HR(DirectX.D3D12SerializeVersionedRootSignature(&rootSignatureDesc, D3D_ROOT_SIGNATURE_VERSION.D3D_ROOT_SIGNATURE_VERSION_1_1, &signature, null));
@@ -156,13 +164,6 @@ namespace Infinity.Graphics
 
     internal unsafe class Dx12ComputePipeline : RHIComputePipeline
     {
-        /*public Dx12PipelineLayout PipelineLayout
-        {
-            get
-            {
-                return m_PipelineLayout;
-            }
-        }*/
         public ID3D12PipelineState* NativePipelineState
         {
             get
@@ -171,7 +172,6 @@ namespace Infinity.Graphics
             }
         }
 
-        //private Dx12PipelineLayout m_PipelineLayout;
         private ID3D12PipelineState* m_NativePipelineState;
 
         public Dx12ComputePipeline(Dx12Device device, in RHIComputePipelineDescriptor descriptor)
@@ -199,6 +199,13 @@ namespace Infinity.Graphics
 
     internal unsafe class Dx12RaytracingPipeline : RHIRaytracingPipeline
     {
+        public uint MaxLocalRootParameters
+        {
+            get
+            {
+                return m_MaxLocalRootParameters;
+            }
+        }
         public ID3D12StateObject* NativePipelineState
         {
             get
@@ -207,10 +214,12 @@ namespace Infinity.Graphics
             }
         }
 
+        private uint m_MaxLocalRootParameters;
         private ID3D12StateObject* m_NativePipelineState;
 
         public Dx12RaytracingPipeline(Dx12Device device, in RHIRaytracingPipelineDescriptor descriptor)
         {
+            m_MaxLocalRootParameters = 0;
             Span<RHIRayHitGroupDescriptor> rayHitGroupSpan = descriptor.RayHitGroupDescriptors.Span;
             Span<RHIRayGeneralGroupDescriptor> rayMissGroupSpan = descriptor.RayMissGroupDescriptors.Span;
             D3D12_STATE_SUBOBJECT* stateSubObjects = stackalloc D3D12_STATE_SUBOBJECT[descriptor.RayMissGroupDescriptors.Length * 2 + descriptor.RayHitGroupDescriptors.Length * 2 + 6];
@@ -306,6 +315,8 @@ namespace Infinity.Graphics
                 ref D3D12_STATE_SUBOBJECT rayGenGroupInfo = ref stateSubObjects[stateSubObjectCount];
                 rayGenGroupInfo.Type = D3D12_STATE_SUBOBJECT_TYPE.D3D12_STATE_SUBOBJECT_TYPE_SUBOBJECT_TO_EXPORTS_ASSOCIATION;
                 rayGenGroupInfo.pDesc = &rayGenGroupDescriptor;
+
+                m_MaxLocalRootParameters = math.max(m_MaxLocalRootParameters, (uint)rayGenPipelineLayout.ParameterCount); 
             }
             else
             {
@@ -348,6 +359,8 @@ namespace Infinity.Graphics
                     ref D3D12_STATE_SUBOBJECT missGroupInfo = ref stateSubObjects[stateSubObjectCount];
                     missGroupInfo.Type = D3D12_STATE_SUBOBJECT_TYPE.D3D12_STATE_SUBOBJECT_TYPE_SUBOBJECT_TO_EXPORTS_ASSOCIATION;
                     missGroupInfo.pDesc = &missGroupDescriptor;
+
+                    m_MaxLocalRootParameters = math.max(m_MaxLocalRootParameters, (uint)rayGenPipelineLayout.ParameterCount);
                 }
                 else
                 {
@@ -392,6 +405,8 @@ namespace Infinity.Graphics
                     ref D3D12_STATE_SUBOBJECT missGroupInfo = ref stateSubObjects[stateSubObjectCount];
                     missGroupInfo.Type = D3D12_STATE_SUBOBJECT_TYPE.D3D12_STATE_SUBOBJECT_TYPE_SUBOBJECT_TO_EXPORTS_ASSOCIATION;
                     missGroupInfo.pDesc = &hitGroupRootDescriptor;
+
+                    m_MaxLocalRootParameters = math.max(m_MaxLocalRootParameters, (uint)rayGenPipelineLayout.ParameterCount);
                 } 
                 else
                 {
@@ -476,11 +491,6 @@ namespace Infinity.Graphics
             #endregion PipelineState
         }
 
-        public override RHIFunctionTable CreateFunctionTable()
-        {
-            return new Dx12FunctionTable(this);
-        }
-
         protected override void Release()
         {
             m_NativePipelineState->Release();
@@ -542,13 +552,6 @@ namespace Infinity.Graphics
                 return m_VertexStrides;
             }
         }
-        /*public Dx12PipelineLayout PipelineLayout
-        {
-            get
-            {
-                return m_PipelineLayout;
-            }
-        }*/
         public ID3D12PipelineState* NativePipelineState
         {
             get
@@ -566,7 +569,6 @@ namespace Infinity.Graphics
 
         private uint m_StencilRef;
         private uint[] m_VertexStrides;
-        //private Dx12PipelineLayout m_PipelineLayout;
         private ID3D12PipelineState* m_NativePipelineState;
         private D3D_PRIMITIVE_TOPOLOGY m_PrimitiveTopology;
 
