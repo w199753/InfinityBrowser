@@ -320,6 +320,7 @@ namespace Infinity.Graphics
         public abstract void SetPipelineLayout(RHIPipelineLayout pipelineLayout);
         public abstract void SetPipelineState(RHIRaytracingPipeline pipeline);
         public abstract void SetBindGroup(RHIBindGroup bindGroup);
+        public abstract void SetFunctionTable(RHIFunctionTable functionTable);
         public abstract RHITopLevelAccelerationStructure BuildRaytracingAccelerationStructure(RHITopLevelAccelerationStructureDescriptor descriptor);
         public abstract RHIBottomLevelAccelerationStructure BuildRaytracingAccelerationStructure(RHIBottomLevelAccelerationStructureDescriptor descriptor);
         public abstract void UpdateRaytracingAccelerationStructure(RHITopLevelAccelerationStructure tlas, RHITopLevelAccelerationStructureDescriptor descriptor);
