@@ -5,7 +5,7 @@ using System.Runtime.InteropServices;
 
 namespace Infinity.Graphics
 {
-    public enum EAccelerationStructureFlags : byte
+    public enum EAccelStructFlags : byte
     {
         None,
         AllowUpdate,
@@ -16,14 +16,14 @@ namespace Infinity.Graphics
         AllowCompactation
     }
 
-    public enum EAccelerationStructureGeometryFlags : byte
+    public enum EAccelStructGeometryFlags : byte
     {
         None,
         Opaque,
         NoDuplicateAnyhitInverseOcation
     }
 
-    public enum EAccelerationStructureInstanceFlags : byte
+    public enum EAccelStructInstanceFlags : byte
     {
         None,
         ForceOpaque,
@@ -32,26 +32,26 @@ namespace Infinity.Graphics
         TriangleFrontCounterclockwise
     }
 
-    public interface RHIAccelerationStructureGeometry
+    public interface RHIAccelStructGeometry
     {
-        public EAccelerationStructureGeometryFlags GetGeometryFlags();
+        public EAccelStructGeometryFlags GetGeometryFlags();
     }
 
-    public class RHIAccelerationStructureAABBs : RHIAccelerationStructureGeometry
+    public class RHIAccelStructAABBs : RHIAccelStructGeometry
     {
         public uint Stride;
         public uint Offset;
         public ulong Count;
         public RHIBuffer? AABBs;
-        public EAccelerationStructureGeometryFlags GeometryFlags;
+        public EAccelStructGeometryFlags GeometryFlags;
 
-        public EAccelerationStructureGeometryFlags GetGeometryFlags()
+        public EAccelStructGeometryFlags GetGeometryFlags()
         { 
             return GeometryFlags; 
         }
     }
 
-    public class RHIAccelerationStructureTriangles : RHIAccelerationStructureGeometry
+    public class RHIAccelStructTriangles : RHIAccelStructGeometry
     {
         public uint IndexCount;
         public uint IndexOffset;
@@ -62,54 +62,54 @@ namespace Infinity.Graphics
         public uint VertexOffset;
         public RHIBuffer? VertexBuffer;
         public EPixelFormat VertexFormat;
-        public EAccelerationStructureGeometryFlags GeometryFlags;
+        public EAccelStructGeometryFlags GeometryFlags;
 
-        public EAccelerationStructureGeometryFlags GetGeometryFlags()
+        public EAccelStructGeometryFlags GetGeometryFlags()
         {
             return GeometryFlags;
         }
     }
 
     [StructLayout(LayoutKind.Sequential)]
-    public struct RHIAccelerationStructureInstance
+    public struct RHIAccelStructInstance
     {
-        public EAccelerationStructureInstanceFlags Flags;
+        public EAccelStructInstanceFlags Flags;
         public float4x4 TransformMatrix;
         public uint InstanceID;
         public byte InstanceMask;
         public uint InstanceContributionToHitGroupIndex;
-        public RHIBottomLevelAccelerationStructure BottonLevelAccelerationStructure;
+        public RHIBottomLevelAccelStruct BottonLevelAccelStruct;
     }
 
     [StructLayout(LayoutKind.Sequential)]
-    public struct RHITopLevelAccelerationStructureDescriptor
+    public struct RHITopLevelAccelStructDescriptor
     {
         public uint Offset;
-        public EAccelerationStructureFlags Flags;
-        public Memory<RHIAccelerationStructureInstance> Instances;
+        public EAccelStructFlags Flags;
+        public Memory<RHIAccelStructInstance> Instances;
     }
 
     [StructLayout(LayoutKind.Sequential)]
-    public struct RHIBottomLevelAccelerationStructureDescriptor
+    public struct RHIBottomLevelAccelStructDescriptor
     {
-        public Memory<RHIAccelerationStructureGeometry> Geometries;
+        public Memory<RHIAccelStructGeometry> Geometries;
     }
 
-    public abstract class RHITopLevelAccelerationStructure : Disposal
+    public abstract class RHITopLevelAccelStruct : Disposal
     {
-        public RHITopLevelAccelerationStructureDescriptor Descriptor;
+        public RHITopLevelAccelStructDescriptor Descriptor;
 
-        protected RHITopLevelAccelerationStructure(RHIDevice device, in RHITopLevelAccelerationStructureDescriptor descriptor)
+        protected RHITopLevelAccelStruct(RHIDevice device, in RHITopLevelAccelStructDescriptor descriptor)
         {
             Descriptor = descriptor;
         }
     }
 
-    public abstract class RHIBottomLevelAccelerationStructure : Disposal
+    public abstract class RHIBottomLevelAccelStruct : Disposal
     {
-        public RHIBottomLevelAccelerationStructureDescriptor Descriptor;
+        public RHIBottomLevelAccelStructDescriptor Descriptor;
 
-        protected RHIBottomLevelAccelerationStructure(RHIDevice device, in RHIBottomLevelAccelerationStructureDescriptor descriptor)
+        protected RHIBottomLevelAccelStruct(RHIDevice device, in RHIBottomLevelAccelStructDescriptor descriptor)
         {
             Descriptor = descriptor;
         }
