@@ -306,7 +306,7 @@ namespace Infinity.Graphics
                 rayGenSignatureInfo.pDesc = &rayGenRootSiganture;
 
                 ++stateSubObjectCount;
-                D3D12_SUBOBJECT_TO_EXPORTS_ASSOCIATION rayGenGroupDescriptor;//descriptor
+                D3D12_SUBOBJECT_TO_EXPORTS_ASSOCIATION rayGenGroupDescriptor;
                 {
                     rayGenGroupDescriptor.NumExports = 1;
                     rayGenGroupDescriptor.pExports = (ushort**)Marshal.StringToHGlobalUni(descriptor.RayGenerationDescriptor.GeneralDescriptor.EntryName).ToPointer();
