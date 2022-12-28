@@ -15,7 +15,8 @@ namespace Infinity.Graphics
     public struct RHITextureCopyDescriptor
     {
         public uint MipLevel;
-        public uint ArrayLayer;
+        public uint SliceBase;
+        public uint SliceCount;
         public uint3 Origin;
         public RHITexture Texture;
     }
@@ -88,9 +89,9 @@ namespace Infinity.Graphics
 
     public struct RHIColorAttachmentDescriptor
     {
-        public ELoadAction LoadAction;
-        public EStoreAction StoreOp;
         public float4 ClearValue;
+        public ELoadAction LoadAction;
+        public EStoreAction StoreAction;
         public RHITextureView RenderTarget;
         public RHITextureView ResolveTarget;
     }
@@ -148,6 +149,21 @@ namespace Infinity.Graphics
         }
     }
 
+    public struct RHIMeshletPassScoper : IDisposable
+    {
+        RHIMeshletEncoder m_MeshletEncoder;
+
+        internal RHIMeshletPassScoper(RHIMeshletEncoder meshletEncoder)
+        {
+            m_MeshletEncoder = meshletEncoder;
+        }
+
+        public void Dispose()
+        {
+            m_MeshletEncoder.EndPass();
+        }
+    }
+
     public struct RHIGraphicsPassScoper : IDisposable
     {
         RHIGraphicsEncoder m_GraphicsEncoder;
@@ -160,6 +176,21 @@ namespace Infinity.Graphics
         public void Dispose()
         {
             m_GraphicsEncoder.EndPass();
+        }
+    }
+
+    public struct RHIRaytracingPassScoper : IDisposable
+    {
+        RHIRaytracingEncoder m_RaytracingEncoder;
+
+        internal RHIRaytracingPassScoper(RHIRaytracingEncoder raytracingEncoder)
+        {
+            m_RaytracingEncoder = raytracingEncoder;
+        }
+
+        public void Dispose()
+        {
+            m_RaytracingEncoder.EndPass();
         }
     }
 
@@ -205,6 +236,36 @@ namespace Infinity.Graphics
         public abstract void SetBindGroup(RHIBindGroup bindGroup);
         public abstract void Dispatch(in uint groupCountX, in uint groupCountY, in uint groupCountZ);
         public abstract void DispatchIndirect(RHIBuffer argsBuffer, in uint argsOffset);
+        //public abstract void ExecuteBundles(RHIIndirectCommandBuffer indirectCommandBuffer);
+        public abstract void PushDebugGroup(string name);
+        public abstract void PopDebugGroup();
+        public abstract void EndPass();
+    }
+
+    public abstract class RHIMeshletEncoder : Disposal
+    {
+        protected RHICommandBuffer? m_CommandBuffer;
+        protected RHIPipelineLayout? m_PipelineLayout;
+        protected RHIMeshletPipeline? m_PipelineState;
+
+        public RHIMeshletPassScoper BeginScopedPass(in RHIGraphicsPassDescriptor descriptor)
+        {
+            BeginPass(descriptor);
+            return new RHIMeshletPassScoper(this);
+        }
+
+        public abstract void BeginPass(in RHIGraphicsPassDescriptor descriptor);
+        public abstract void SetPipelineLayout(RHIPipelineLayout pipelineLayout);
+        public abstract void SetPipelineState(RHIMeshletPipeline pipeline);
+        public abstract void SetViewport(in Viewport viewport);
+        public abstract void SetViewport(in Memory<Viewport> viewports);
+        public abstract void SetScissorRect(in Rect rect);
+        public abstract void SetScissorRect(in Memory<Rect> rects);
+        public abstract void SetBlendFactor(in float4 value);
+        public abstract void SetBindGroup(RHIBindGroup bindGroup);
+        public abstract void Dispatch(in uint groupCountX, in uint groupCountY, in uint groupCountZ);
+        public abstract void DispatchIndirect(RHIBuffer argsBuffer, in uint argsOffset);
+        //public abstract void ExecuteBundles(RHIIndirectCommandBuffer indirectCommandBuffer);
         public abstract void PushDebugGroup(string name);
         public abstract void PopDebugGroup();
         public abstract void EndPass();
@@ -237,6 +298,33 @@ namespace Infinity.Graphics
         public abstract void DrawIndexed(in uint indexCount, in uint instanceCount, in uint firstIndex, in uint baseVertex, in uint firstInstance);
         public abstract void DrawIndirect(RHIBuffer argsBuffer, in uint offset);
         public abstract void DrawIndexedIndirect(RHIBuffer argsBuffer, in uint offset);
+        //public abstract void ExecuteBundles(RHIIndirectCommandBuffer indirectCommandBuffer);
+        public abstract void PushDebugGroup(string name);
+        public abstract void PopDebugGroup();
+        public abstract void EndPass();
+    }
+
+    public abstract class RHIRaytracingEncoder : Disposal
+    {
+        protected RHICommandBuffer? m_CommandBuffer;
+        protected RHIPipelineLayout? m_PipelineLayout;
+        protected RHIRaytracingPipeline? m_PipelineState;
+
+        public RHIRaytracingPassScoper BeginScopedPass(string name)
+        {
+            BeginPass(name);
+            return new RHIRaytracingPassScoper(this);
+        }
+
+        public abstract void BeginPass(string name);
+        public abstract void SetPipelineLayout(RHIPipelineLayout pipelineLayout);
+        public abstract void SetPipelineState(RHIRaytracingPipeline pipeline);
+        public abstract void SetBindGroup(RHIBindGroup bindGroup);
+        public abstract RHITopLevelAccelerationStructure BuildRaytracingAccelerationStructure(RHITopLevelAccelerationStructureDescriptor descriptor);
+        public abstract RHIBottomLevelAccelerationStructure BuildRaytracingAccelerationStructure(RHIBottomLevelAccelerationStructureDescriptor descriptor);
+        public abstract void UpdateRaytracingAccelerationStructure(RHITopLevelAccelerationStructure tlas, RHITopLevelAccelerationStructureDescriptor descriptor);
+        public abstract void Dispatch(in uint width, in uint height, in uint depth);
+        public abstract void DispatchIndirect(RHIBuffer argsBuffer, in uint argsOffset);
         //public abstract void ExecuteBundles(RHIIndirectCommandBuffer indirectCommandBuffer);
         public abstract void PushDebugGroup(string name);
         public abstract void PopDebugGroup();

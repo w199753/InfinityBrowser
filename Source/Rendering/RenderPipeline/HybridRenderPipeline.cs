@@ -530,7 +530,7 @@ namespace Infinity.Rendering
             {
                 m_ColorAttachmentDescriptors[0].ClearValue = new float4(0.5f, 0.5f, 1, 1);
                 m_ColorAttachmentDescriptors[0].LoadAction = ELoadAction.Clear;
-                m_ColorAttachmentDescriptors[0].StoreOp = EStoreAction.Store;
+                m_ColorAttachmentDescriptors[0].StoreAction = EStoreAction.Store;
                 m_ColorAttachmentDescriptors[0].ResolveTarget = null;
             }
 
@@ -548,14 +548,14 @@ namespace Infinity.Rendering
                     blitEncoder.CopyBufferToBuffer(m_IndexBufferCPU, 0, m_IndexBufferGPU, 0, (int)m_IndexBufferGPU.SizeInBytes);
                     blitEncoder.CopyBufferToBuffer(m_VertexBufferCPU, 0, m_VertexBufferGPU, 0, (int)m_VertexBufferCPU.SizeInBytes);
 
-                    blitEncoder.ResourceBarrier(RHIBarrier.Transition(m_IndexBufferGPU, EBufferState.CopyDest, EBufferState.Common));
-                    blitEncoder.ResourceBarrier(RHIBarrier.Transition(m_VertexBufferGPU, EBufferState.CopyDest, EBufferState.Common));
+                    blitEncoder.ResourceBarrier(RHIBarrier.Transition(m_IndexBufferGPU, EBufferState.CopyDest, EBufferState.IndexBuffer));
+                    blitEncoder.ResourceBarrier(RHIBarrier.Transition(m_VertexBufferGPU, EBufferState.CopyDest, EBufferState.VertexBuffer));
                 }
             }
 
             renderContext.ExecuteCommandBuffer(cmdBuffer);
         }
-         
+
         public override void Render(RenderContext renderContext)
         {
             RHICommandBuffer cmdBuffer = renderContext.GetCommandBuffer(ECommandType.Graphics);
@@ -569,7 +569,6 @@ namespace Infinity.Rendering
                 using (blitEncoder.BeginScopedPass("ResourceBarrier"))
                 {
                     blitEncoder.ResourceBarrier(RHIBarrier.Transition(m_ComputeTexture, ETextureState.Common, ETextureState.UnorderedAccess));
-                    blitEncoder.ResourceBarrier(RHIBarrier.Transition(renderContext.BackBuffer, ETextureState.Present, ETextureState.RenderTarget));
                 }
 
                 using (computeEncoder.BeginScopedPass("ComputePass"))
@@ -580,6 +579,12 @@ namespace Infinity.Rendering
                     computeEncoder.SetBindGroup(m_ComputeBindGroup);
                     computeEncoder.Dispatch((uint)math.ceil((float)renderContext.ScreenSize.x / 8), (uint)math.ceil((float)renderContext.ScreenSize.y / 8), 1);
                     computeEncoder.PopDebugGroup();
+                }
+
+                using (blitEncoder.BeginScopedPass("ResourceBarrier"))
+                {
+                    blitEncoder.ResourceBarrier(RHIBarrier.Transition(m_ComputeTexture, ETextureState.UnorderedAccess, ETextureState.ShaderResource));
+                    blitEncoder.ResourceBarrier(RHIBarrier.Transition(renderContext.BackBuffer, ETextureState.Present, ETextureState.RenderTarget));
                 }
 
                 m_ColorAttachmentDescriptors[0].RenderTarget = renderContext.BackBufferView;
@@ -605,7 +610,7 @@ namespace Infinity.Rendering
 
                 using (blitEncoder.BeginScopedPass("ResourceBarrier"))
                 {
-                    blitEncoder.ResourceBarrier(RHIBarrier.Transition(m_ComputeTexture, ETextureState.UnorderedAccess, ETextureState.Common));
+                    blitEncoder.ResourceBarrier(RHIBarrier.Transition(m_ComputeTexture, ETextureState.ShaderResource, ETextureState.Common));
                     blitEncoder.ResourceBarrier(RHIBarrier.Transition(renderContext.BackBuffer, ETextureState.RenderTarget, ETextureState.Present));
                 }
             }

@@ -428,20 +428,19 @@
     public enum EBufferState
     {
         Common = 0,
-        StreamOut = 0x00000001,
-        GenericRead = 0x00000002,
-        CopyDest = 0x00000004,
-        CopySource = 0x00000008,
-        IndexBuffer = 0x00000010,
-        VertexBuffer = 0x00000020,
-        ConstantBuffer = 0x00000040,
-        IndirectArgument = 0x00000080,
-        ShaderResource = 0x00000100,
-        UnorderedAccess = 0x00000200,
-        AccelStructRead = 0x00000400,
-        AccelStructWrite = 0x00000800,
-        AccelStructBuildInput = 0x00001000,
-        AccelStructBuildBlast = 0x00002000,
+        GenericRead = 0x00000001,
+        CopyDest = 0x00000002,
+        CopySource = 0x00000004,
+        IndexBuffer = 0x00000008,
+        VertexBuffer = 0x00000010,
+        ConstantBuffer = 0x00000020,
+        IndirectArgument = 0x00000040,
+        ShaderResource = 0x00000080,
+        UnorderedAccess = 0x00000100,
+        AccelStructRead = 0x00000200,
+        AccelStructWrite = 0x00000400,
+        AccelStructBuildInput = 0x00000800,
+        AccelStructBuildBlast = 0x00001000,
         Undefined
     }
 
