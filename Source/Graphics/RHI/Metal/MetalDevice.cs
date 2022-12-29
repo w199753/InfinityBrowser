@@ -59,7 +59,7 @@ namespace Infinity.Graphics
             throw new NotImplementedException();
         }
 
-        public override RHIQuery CreateQuery(in RHIQueryDescription descriptor)
+        public override RHIQuery CreateQuery(in RHIQueryDescriptor descriptor)
         {
             throw new NotImplementedException();
         }

@@ -193,9 +193,9 @@ namespace Infinity.Graphics
             throw new NotImplementedException();
         }
 
-        public override RHIQuery CreateQuery(in RHIQueryDescription descriptor)
+        public override RHIQuery CreateQuery(in RHIQueryDescriptor descriptor)
         {
-            throw new NotImplementedException();
+            return new Dx12Query(this, descriptor);
         }
 
         public override RHIHeap CreateHeap(in RHIHeapDescription descriptor)
@@ -367,7 +367,7 @@ namespace Infinity.Graphics
 
                 D3D12_COMMAND_QUEUE_DESC queueDesc = new D3D12_COMMAND_QUEUE_DESC();
                 queueDesc.Flags = D3D12_COMMAND_QUEUE_FLAGS.D3D12_COMMAND_QUEUE_FLAG_NONE;
-                queueDesc.Type = Dx12Utility.ConvertToNativeQueueType(iter.Key);
+                queueDesc.Type = Dx12Utility.ConvertToDx12QueueType(iter.Key);
                 for (int i = 0; i < iter.Value; ++i)
                 {
                     ID3D12CommandQueue* commandQueue;

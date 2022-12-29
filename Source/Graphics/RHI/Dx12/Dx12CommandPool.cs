@@ -22,7 +22,7 @@ namespace Infinity.Graphics
             m_Queue = queue;
 
             ID3D12CommandAllocator* commandAllocator;
-            bool success = SUCCEEDED(queue.Dx12Device.NativeDevice->CreateCommandAllocator(Dx12Utility.ConvertToNativeQueueType(queue.Type), __uuidof<ID3D12CommandAllocator>(), (void**)&commandAllocator));
+            bool success = SUCCEEDED(queue.Dx12Device.NativeDevice->CreateCommandAllocator(Dx12Utility.ConvertToDx12QueueType(queue.Type), __uuidof<ID3D12CommandAllocator>(), (void**)&commandAllocator));
             Debug.Assert(success);
             m_NativeCommandAllocator = commandAllocator;
         }

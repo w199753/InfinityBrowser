@@ -4,6 +4,7 @@ using Infinity.Mathmatics;
 using TerraFX.Interop.Windows;
 using TerraFX.Interop.DirectX;
 using System.Runtime.InteropServices;
+using Viewport = Infinity.Mathmatics.Viewport;
 
 namespace Infinity.Graphics
 {
@@ -130,6 +131,54 @@ namespace Infinity.Graphics
             dx12CommandBuffer.NativeCommandList->ResourceBarrier((uint)barriers.Length, resourceBarriers);
         }
 
+        public override void BeginQuery(RHIQuery query, in uint index)
+        {
+            uint num = index * 8;
+            Dx12Query dx12Query = query as Dx12Query;
+            Dx12CommandBuffer dx12CommandBuffer = m_CommandBuffer as Dx12CommandBuffer;
+
+            switch (query.QueryDescriptor.Type)
+            {
+                case EQueryType.Occlusion:
+                    dx12CommandBuffer.NativeCommandList->BeginQuery(dx12Query.QueryHeap, D3D12_QUERY_TYPE.D3D12_QUERY_TYPE_OCCLUSION, index);
+                    break;
+
+                case EQueryType.BinaryOcclusion:
+                    dx12CommandBuffer.NativeCommandList->BeginQuery(dx12Query.QueryHeap, D3D12_QUERY_TYPE.D3D12_QUERY_TYPE_BINARY_OCCLUSION, index);
+                    break;
+
+                default:
+                    dx12CommandBuffer.NativeCommandList->EndQuery(dx12Query.QueryHeap, D3D12_QUERY_TYPE.D3D12_QUERY_TYPE_TIMESTAMP, index);
+                    dx12CommandBuffer.NativeCommandList->ResolveQueryData(dx12Query.QueryHeap, D3D12_QUERY_TYPE.D3D12_QUERY_TYPE_TIMESTAMP, index, 1, dx12Query.QueryResult, num);
+                    break;
+            }
+        }
+
+        public override void EndQuery(RHIQuery query, in uint index)
+        {
+            uint num = index * 8;
+            Dx12Query dx12Query = query as Dx12Query;
+            Dx12CommandBuffer dx12CommandBuffer = m_CommandBuffer as Dx12CommandBuffer;
+
+            switch (query.QueryDescriptor.Type)
+            {
+                case EQueryType.Occlusion:
+                    dx12CommandBuffer.NativeCommandList->EndQuery(dx12Query.QueryHeap, D3D12_QUERY_TYPE.D3D12_QUERY_TYPE_OCCLUSION, index);
+                    dx12CommandBuffer.NativeCommandList->ResolveQueryData(dx12Query.QueryHeap, D3D12_QUERY_TYPE.D3D12_QUERY_TYPE_OCCLUSION, index, 1, dx12Query.QueryResult, num);
+                    break;
+
+                case EQueryType.BinaryOcclusion:
+                    dx12CommandBuffer.NativeCommandList->EndQuery(dx12Query.QueryHeap, D3D12_QUERY_TYPE.D3D12_QUERY_TYPE_BINARY_OCCLUSION, index);
+                    dx12CommandBuffer.NativeCommandList->ResolveQueryData(dx12Query.QueryHeap, D3D12_QUERY_TYPE.D3D12_QUERY_TYPE_BINARY_OCCLUSION, index, 1, dx12Query.QueryResult, num);
+                    break;
+
+                default:
+                    dx12CommandBuffer.NativeCommandList->EndQuery(dx12Query.QueryHeap, D3D12_QUERY_TYPE.D3D12_QUERY_TYPE_TIMESTAMP, index);
+                    dx12CommandBuffer.NativeCommandList->ResolveQueryData(dx12Query.QueryHeap, D3D12_QUERY_TYPE.D3D12_QUERY_TYPE_TIMESTAMP, index, 1, dx12Query.QueryResult, num);
+                    break;
+            }
+        }
+
         public override void PushDebugGroup(string name)
         {
             IntPtr namePtr = Marshal.StringToHGlobalUni(name);
@@ -225,6 +274,49 @@ namespace Infinity.Graphics
             Dx12Device dx12Device = ((Dx12Queue)m_CommandBuffer.CommandPool.Queue).Dx12Device;
             Dx12CommandBuffer dx12CommandBuffer = m_CommandBuffer as Dx12CommandBuffer;
             dx12CommandBuffer.NativeCommandList->ExecuteIndirect(dx12Device.DispatchIndirectSignature, 1, dx12Buffer.NativeResource, argsOffset, null, 0);
+        }
+
+        public override void BeginQuery(RHIQuery query, in uint index)
+        {
+            Dx12Query dx12Query = query as Dx12Query;
+            Dx12CommandBuffer dx12CommandBuffer = m_CommandBuffer as Dx12CommandBuffer;
+
+            switch (query.QueryDescriptor.Type)
+            {
+                case EQueryType.Occlusion:
+                    dx12CommandBuffer.NativeCommandList->BeginQuery(dx12Query.QueryHeap, D3D12_QUERY_TYPE.D3D12_QUERY_TYPE_OCCLUSION, index);
+                    break;
+
+                case EQueryType.BinaryOcclusion:
+                    dx12CommandBuffer.NativeCommandList->BeginQuery(dx12Query.QueryHeap, D3D12_QUERY_TYPE.D3D12_QUERY_TYPE_BINARY_OCCLUSION, index);
+                    break;
+
+                default:
+                    return;
+            }
+        }
+
+        public override void EndQuery(RHIQuery query, in uint index)
+        {
+            uint num = index * 8;
+            Dx12Query dx12Query = query as Dx12Query;
+            Dx12CommandBuffer dx12CommandBuffer = m_CommandBuffer as Dx12CommandBuffer;
+
+            switch (query.QueryDescriptor.Type)
+            {
+                case EQueryType.Occlusion:
+                    dx12CommandBuffer.NativeCommandList->EndQuery(dx12Query.QueryHeap, D3D12_QUERY_TYPE.D3D12_QUERY_TYPE_OCCLUSION, index);
+                    dx12CommandBuffer.NativeCommandList->ResolveQueryData(dx12Query.QueryHeap, D3D12_QUERY_TYPE.D3D12_QUERY_TYPE_OCCLUSION, index, 1, dx12Query.QueryResult, num);
+                    break;
+
+                case EQueryType.BinaryOcclusion:
+                    dx12CommandBuffer.NativeCommandList->EndQuery(dx12Query.QueryHeap, D3D12_QUERY_TYPE.D3D12_QUERY_TYPE_BINARY_OCCLUSION, index);
+                    dx12CommandBuffer.NativeCommandList->ResolveQueryData(dx12Query.QueryHeap, D3D12_QUERY_TYPE.D3D12_QUERY_TYPE_BINARY_OCCLUSION, index, 1, dx12Query.QueryResult, num);
+                    break;
+
+                default:
+                    return;
+            }
         }
 
         public override void PushDebugGroup(string name)
@@ -477,6 +569,49 @@ namespace Infinity.Graphics
             //Dx12IndirectCommandBuffer dx12IndirectCommandBuffer = indirectCommandBuffer as Dx12IndirectCommandBuffer;
             //dx12CommandBuffer.NativeCommandList->ExecuteIndirect(null, indirectCommandBuffer.Count, dx12IndirectCommandBuffer.NativeResource, indirectCommandBuffer.Offset, null, 0);
         }*/
+
+        public override void BeginQuery(RHIQuery query, in uint index)
+        {
+            Dx12Query dx12Query = query as Dx12Query;
+            Dx12CommandBuffer dx12CommandBuffer = m_CommandBuffer as Dx12CommandBuffer;
+
+            switch (query.QueryDescriptor.Type)
+            {
+                case EQueryType.Occlusion:
+                    dx12CommandBuffer.NativeCommandList->BeginQuery(dx12Query.QueryHeap, D3D12_QUERY_TYPE.D3D12_QUERY_TYPE_OCCLUSION, index);
+                    break;
+
+                case EQueryType.BinaryOcclusion:
+                    dx12CommandBuffer.NativeCommandList->BeginQuery(dx12Query.QueryHeap, D3D12_QUERY_TYPE.D3D12_QUERY_TYPE_BINARY_OCCLUSION, index);
+                    break;
+
+                default:
+                    return;
+            }
+        }
+
+        public override void EndQuery(RHIQuery query, in uint index)
+        {
+            uint num = index * 8;
+            Dx12Query dx12Query = query as Dx12Query;
+            Dx12CommandBuffer dx12CommandBuffer = m_CommandBuffer as Dx12CommandBuffer;
+
+            switch (query.QueryDescriptor.Type)
+            {
+                case EQueryType.Occlusion:
+                    dx12CommandBuffer.NativeCommandList->EndQuery(dx12Query.QueryHeap, D3D12_QUERY_TYPE.D3D12_QUERY_TYPE_OCCLUSION, index);
+                    dx12CommandBuffer.NativeCommandList->ResolveQueryData(dx12Query.QueryHeap, D3D12_QUERY_TYPE.D3D12_QUERY_TYPE_OCCLUSION, index, 1, dx12Query.QueryResult, num);
+                    break;
+
+                case EQueryType.BinaryOcclusion:
+                    dx12CommandBuffer.NativeCommandList->EndQuery(dx12Query.QueryHeap, D3D12_QUERY_TYPE.D3D12_QUERY_TYPE_BINARY_OCCLUSION, index);
+                    dx12CommandBuffer.NativeCommandList->ResolveQueryData(dx12Query.QueryHeap, D3D12_QUERY_TYPE.D3D12_QUERY_TYPE_BINARY_OCCLUSION, index, 1, dx12Query.QueryResult, num);
+                    break;
+
+                default:
+                    return;
+            }
+        }
 
         public override void PushDebugGroup(string name)
         {

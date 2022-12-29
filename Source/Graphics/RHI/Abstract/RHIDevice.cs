@@ -15,7 +15,7 @@ namespace Infinity.Graphics
         public abstract RHIQueue GetQueue(in EQueueType type, in int index);
         public abstract RHIFence CreateFence();
         public abstract RHISemaphore CreateSemaphore();
-        public abstract RHIQuery CreateQuery(in RHIQueryDescription descriptor);
+        public abstract RHIQuery CreateQuery(in RHIQueryDescriptor descriptor);
         public abstract RHIHeap CreateHeap(in RHIHeapDescription descriptor);
         public abstract RHIBuffer CreateBuffer(in RHIBufferDescriptor descriptor);
         public abstract RHITexture CreateTexture(in RHITextureDescriptor descriptor);

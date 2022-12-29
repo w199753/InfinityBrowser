@@ -18,7 +18,37 @@ namespace Infinity.Graphics
         public static void CHECK_HR(int hr, [CallerFilePath] string __FILE__ = "", [CallerLineNumber] int __LINE__ = 0, [CallerArgumentExpression("hr")] string expr = "")
             => Assert.False(FAILED(hr), $"{__FILE__}({__LINE__}): FAILED({(string.IsNullOrEmpty(expr) ? hr.ToString("X8") : expr)})");
 
-        internal static D3D12_COMMAND_LIST_TYPE ConvertToNativeQueueType(in EQueueType queueType)
+        internal static D3D12_QUERY_TYPE ConvertToDx12QueryType(in EQueryType queryType)
+        {
+            switch (queryType)
+            {
+                case EQueryType.Occlusion:
+                    return D3D12_QUERY_TYPE.D3D12_QUERY_TYPE_OCCLUSION;
+
+                case EQueryType.BinaryOcclusion:
+                    return D3D12_QUERY_TYPE.D3D12_QUERY_TYPE_BINARY_OCCLUSION;
+
+                default:
+                    return D3D12_QUERY_TYPE.D3D12_QUERY_TYPE_TIMESTAMP;
+            }
+        }
+
+        internal static D3D12_QUERY_HEAP_TYPE ConvertToDx12QueryHeapType(in EQueryType queryType)
+        {
+            switch (queryType)
+            {
+                case EQueryType.Occlusion:
+                    return D3D12_QUERY_HEAP_TYPE.D3D12_QUERY_HEAP_TYPE_OCCLUSION;
+
+                case EQueryType.BinaryOcclusion:
+                    return D3D12_QUERY_HEAP_TYPE.D3D12_QUERY_HEAP_TYPE_OCCLUSION;
+
+                default:
+                    return D3D12_QUERY_HEAP_TYPE.D3D12_QUERY_HEAP_TYPE_TIMESTAMP;
+            }
+        }
+
+        internal static D3D12_COMMAND_LIST_TYPE ConvertToDx12QueueType(in EQueueType queueType)
         {
             switch (queueType)
             {

@@ -211,6 +211,8 @@ namespace Infinity.Graphics
         public abstract void CopyTextureToTexture(in RHITextureCopyDescriptor src, in RHITextureCopyDescriptor dst, in int3 size);
         public abstract void ResourceBarrier(in RHIBarrier barrier);
         public abstract void ResourceBarrier(in Memory<RHIBarrier> barriers);
+        public abstract void BeginQuery(RHIQuery query, in uint index);
+        public abstract void EndQuery(RHIQuery query, in uint index);
         public abstract void PushDebugGroup(string name);
         public abstract void PopDebugGroup();
         public abstract void EndPass();
@@ -237,6 +239,8 @@ namespace Infinity.Graphics
         public abstract void Dispatch(in uint groupCountX, in uint groupCountY, in uint groupCountZ);
         public abstract void DispatchIndirect(RHIBuffer argsBuffer, in uint argsOffset);
         //public abstract void ExecuteBundles(RHIIndirectCommandBuffer indirectCommandBuffer);
+        public abstract void BeginQuery(RHIQuery query, in uint index);
+        public abstract void EndQuery(RHIQuery query, in uint index);
         public abstract void PushDebugGroup(string name);
         public abstract void PopDebugGroup();
         public abstract void EndPass();
@@ -266,6 +270,8 @@ namespace Infinity.Graphics
         public abstract void Dispatch(in uint groupCountX, in uint groupCountY, in uint groupCountZ);
         public abstract void DispatchIndirect(RHIBuffer argsBuffer, in uint argsOffset);
         //public abstract void ExecuteBundles(RHIIndirectCommandBuffer indirectCommandBuffer);
+        public abstract void BeginQuery(RHIQuery query, in uint index);
+        public abstract void EndQuery(RHIQuery query, in uint index);
         public abstract void PushDebugGroup(string name);
         public abstract void PopDebugGroup();
         public abstract void EndPass();
@@ -299,6 +305,8 @@ namespace Infinity.Graphics
         public abstract void DrawIndirect(RHIBuffer argsBuffer, in uint offset);
         public abstract void DrawIndexedIndirect(RHIBuffer argsBuffer, in uint offset);
         //public abstract void ExecuteBundles(RHIIndirectCommandBuffer indirectCommandBuffer);
+        public abstract void BeginQuery(RHIQuery query, in uint index);
+        public abstract void EndQuery(RHIQuery query, in uint index);
         public abstract void PushDebugGroup(string name);
         public abstract void PopDebugGroup();
         public abstract void EndPass();
@@ -327,6 +335,8 @@ namespace Infinity.Graphics
         public abstract void Dispatch(in uint width, in uint height, in uint depth);
         public abstract void DispatchIndirect(RHIBuffer argsBuffer, in uint argsOffset);
         //public abstract void ExecuteBundles(RHIIndirectCommandBuffer indirectCommandBuffer);
+        public abstract void BeginQuery(RHIQuery query, in uint index);
+        public abstract void EndQuery(RHIQuery query, in uint index);
         public abstract void PushDebugGroup(string name);
         public abstract void PopDebugGroup();
         public abstract void EndPass();

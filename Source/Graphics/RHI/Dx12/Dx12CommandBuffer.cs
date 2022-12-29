@@ -29,7 +29,7 @@ namespace Infinity.Graphics
             Dx12CommandPool dx12CommandPool = m_CommandPool as Dx12CommandPool;
 
             ID3D12GraphicsCommandList5* commandList;
-            bool success = SUCCEEDED(queue.Dx12Device.NativeDevice->CreateCommandList(0, Dx12Utility.ConvertToNativeQueueType(queue.Type), dx12CommandPool.NativeCommandAllocator, null, __uuidof<ID3D12GraphicsCommandList5>(), (void**)&commandList));
+            bool success = SUCCEEDED(queue.Dx12Device.NativeDevice->CreateCommandList(0, Dx12Utility.ConvertToDx12QueueType(queue.Type), dx12CommandPool.NativeCommandAllocator, null, __uuidof<ID3D12GraphicsCommandList5>(), (void**)&commandList));
             Debug.Assert(success);
             m_NativeCommandList = commandList;
 

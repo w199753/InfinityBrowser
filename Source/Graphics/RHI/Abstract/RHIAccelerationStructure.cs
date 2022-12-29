@@ -1,6 +1,6 @@
-﻿using Infinity.Core;
+﻿using System;
+using Infinity.Core;
 using Infinity.Mathmatics;
-using System;
 using System.Runtime.InteropServices;
 
 namespace Infinity.Graphics
