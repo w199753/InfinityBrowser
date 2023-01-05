@@ -147,7 +147,7 @@ namespace Infinity.Rendering
                               "**  ShaderCompile End  **\n" +
                               "*************************\n");
 
-            string glesShaderCode = new string(@"
+            string glesCode = new string(@"
             struct Attribute
             {
                 float3 a_position : POSITION;
@@ -174,6 +174,9 @@ namespace Infinity.Rendering
             float4x4 u_modelInvTrans;
             float4 u_alphaRef4;
 
+            Texture2D _AlbedoTexture : register(t0);
+            SamplerState _AlbedoSampler : register(s0);
+
             Varying VSMain(Attribute input)
             {
                 Varying output;
@@ -184,10 +187,11 @@ namespace Infinity.Rendering
 
             float4 PSMain(Varying input) : SV_TARGET
             {
-                return input.v_color0 + (float4(1, 0, 0, 1) * 0.25);
+                return input.v_color0 + (float4(1, 0, 0, 1) * 0.25) * _AlbedoTexture.Sample(_AlbedoSampler, float2(1.0, 1.0));
             }");
-            string glesVS = ShaderCompiler.HLSLTo(glesShaderCode, "VSMain", ShaderConductorWrapper.EFunctionStage.Vertex, ShaderConductorWrapper.EShadingLanguage.Essl);
-            string glesFS = ShaderCompiler.HLSLTo(glesShaderCode, "PSMain", ShaderConductorWrapper.EFunctionStage.Fragment, ShaderConductorWrapper.EShadingLanguage.Essl);
+            //ShaderCompiler.G_OpenGLVersion = 440;
+            string glesVS = ShaderCompiler.HLSLTo(glesCode, "VSMain", ShaderConductorWrapper.EFunctionStage.Vertex, ShaderConductorWrapper.EShadingLanguage.Essl);
+            string glesFS = ShaderCompiler.HLSLTo(glesCode, "PSMain", ShaderConductorWrapper.EFunctionStage.Fragment, ShaderConductorWrapper.EShadingLanguage.Essl);
         }
 
         public override void Init(RenderContext renderContext)
@@ -558,6 +562,7 @@ namespace Infinity.Rendering
 
         public override void Render(RenderContext renderContext)
         {
+            m_ColorAttachmentDescriptors[0].RenderTarget = renderContext.BackBufferView;
             RHICommandBuffer cmdBuffer = renderContext.GetCommandBuffer(ECommandType.Graphics);
 
             using (cmdBuffer.BeginScoped("FrameRendering"))
@@ -587,12 +592,13 @@ namespace Infinity.Rendering
                     blitEncoder.ResourceBarrier(RHIBarrier.Transition(renderContext.BackBuffer, ETextureState.Present, ETextureState.RenderTarget));
                 }
 
-                m_ColorAttachmentDescriptors[0].RenderTarget = renderContext.BackBufferView;
                 RHIGraphicsPassDescriptor graphicsPassDescriptor;
-                graphicsPassDescriptor.Name = "GraphicsPass";
-                graphicsPassDescriptor.ShadingRateDescriptor = new RHIShadingRateDescriptor(EShadingRate.Rate1x1);
-                graphicsPassDescriptor.ColorAttachmentDescriptors = new Memory<RHIColorAttachmentDescriptor>(m_ColorAttachmentDescriptors);
-                graphicsPassDescriptor.DepthStencilAttachmentDescriptor = null;
+                {
+                    graphicsPassDescriptor.Name = "GraphicsPass";
+                    graphicsPassDescriptor.ShadingRateDescriptor = new RHIShadingRateDescriptor(EShadingRate.Rate1x1);
+                    graphicsPassDescriptor.ColorAttachmentDescriptors = new Memory<RHIColorAttachmentDescriptor>(m_ColorAttachmentDescriptors);
+                    graphicsPassDescriptor.DepthStencilAttachmentDescriptor = null;
+                }
                 using (graphicsEncoder.BeginScopedPass(graphicsPassDescriptor))
                 {
                     graphicsEncoder.SetViewport(new Viewport(0, 0, (uint)renderContext.ScreenSize.x, (uint)renderContext.ScreenSize.y, 0, 1));

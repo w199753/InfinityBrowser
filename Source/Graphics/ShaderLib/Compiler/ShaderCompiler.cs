@@ -133,9 +133,9 @@ namespace Infinity.Shaderlib
 
     public static class ShaderCompiler
     {
-        internal static int GGLSLVersion = 310;
-        internal static bool GEnableHalfPrecision = true;
-        internal static ShaderModel GShaderModelLevel = new ShaderModel(6, 2);
+        public static int G_OpenGLVersion = 310;
+        public static bool G_EnableHalfPrecision = true;
+        internal static ShaderModel G_ShaderModelLevel = new ShaderModel(6, 2);
 
         public static string DisassemblySPIRV(byte[] bytecode)
         {
@@ -164,8 +164,8 @@ namespace Infinity.Shaderlib
                 entryPoint = entryPoint
             };
             OptionsDesc options = OptionsDesc.Default;
-            options.shaderModel = GShaderModelLevel;
-            options.enable16bitTypes = GEnableHalfPrecision;
+            options.shaderModel = G_ShaderModelLevel;
+            options.enable16bitTypes = G_EnableHalfPrecision;
             options.enableDebugInfo = keepDebugInfo;
             options.optimizationLevel = 3;
             options.disableOptimizations = disableOptimization;
@@ -177,7 +177,7 @@ namespace Infinity.Shaderlib
                 options.shiftAllTexturesBindings = 60;
             }
             TargetDesc target = new TargetDesc {
-                version = GGLSLVersion.ToString(),
+                version = G_OpenGLVersion.ToString(),
                 language = language
             };
             Compile(ref source, ref options, ref target, out desc4);
@@ -189,7 +189,7 @@ namespace Infinity.Shaderlib
             if (desc4.isText)
             {
                 str2 = Marshal.PtrToStringAnsi(GetShaderConductorBlobData(desc4.target), GetShaderConductorBlobSize(desc4.target));
-                str2 = TranslationFixes(language, stage, GGLSLVersion, str2);
+                str2 = TranslationFixes(language, stage, G_OpenGLVersion, str2);
             }
             else
             {
@@ -219,15 +219,15 @@ namespace Infinity.Shaderlib
                 entryPoint = entryPoint
             };
             OptionsDesc options = OptionsDesc.Default;
-            options.shaderModel = GShaderModelLevel;
-            options.enable16bitTypes = GEnableHalfPrecision;
+            options.shaderModel = G_ShaderModelLevel;
+            options.enable16bitTypes = G_EnableHalfPrecision;
             options.enableDebugInfo = keepDebugInfo;
             options.optimizationLevel = 3;
             options.disableOptimizations = disableOptimization;
             options.packMatricesInRowMajor = true;
             TargetDesc target = new TargetDesc
             {
-                version = GGLSLVersion.ToString(),
+                version = G_OpenGLVersion.ToString(),
                 language = EShadingLanguage.Dxil
             };
             Compile(ref source, ref options, ref target, out desc4);
@@ -254,15 +254,15 @@ namespace Infinity.Shaderlib
                 entryPoint = entryPoint
             };
             OptionsDesc options = OptionsDesc.Default;
-            options.shaderModel = GShaderModelLevel;
-            options.enable16bitTypes = GEnableHalfPrecision;
+            options.shaderModel = G_ShaderModelLevel;
+            options.enable16bitTypes = G_EnableHalfPrecision;
             options.enableDebugInfo = keepDebugInfo;
             options.optimizationLevel = 3;
             options.disableOptimizations = disableOptimization;
             options.packMatricesInRowMajor = true;
             TargetDesc target = new TargetDesc
             {
-                version = GGLSLVersion.ToString(),
+                version = G_OpenGLVersion.ToString(),
                 language = EShadingLanguage.Dxil
             };
             Compile(ref source, ref options, ref target, out desc4);
@@ -296,8 +296,8 @@ namespace Infinity.Shaderlib
                 entryPoint = entryPoint
             };
             OptionsDesc options = OptionsDesc.Default;
-            options.shaderModel = GShaderModelLevel;
-            options.enable16bitTypes = GEnableHalfPrecision;
+            options.shaderModel = G_ShaderModelLevel;
+            options.enable16bitTypes = G_EnableHalfPrecision;
             options.enableDebugInfo = keepDebugInfo;
             options.optimizationLevel = 3;
             options.disableOptimizations = disableOptimization;
@@ -306,7 +306,7 @@ namespace Infinity.Shaderlib
             options.shiftAllSamplersBindings = 40;
             options.shiftAllTexturesBindings = 60;
             TargetDesc target = new TargetDesc {
-                version = GGLSLVersion.ToString(),
+                version = G_OpenGLVersion.ToString(),
                 language = EShadingLanguage.SpirV
             };
             Compile(ref source, ref options, ref target, out desc4);
@@ -338,8 +338,8 @@ namespace Infinity.Shaderlib
                 entryPoint = entryPoint
             };
             OptionsDesc options = OptionsDesc.Default;
-            options.shaderModel = GShaderModelLevel;
-            options.enable16bitTypes = GEnableHalfPrecision;
+            options.shaderModel = G_ShaderModelLevel;
+            options.enable16bitTypes = G_EnableHalfPrecision;
             options.enableDebugInfo = keepDebugInfo;
             options.optimizationLevel = 3;
             options.disableOptimizations = disableOptimization;
@@ -349,7 +349,7 @@ namespace Infinity.Shaderlib
             options.shiftAllTexturesBindings = 60;
             TargetDesc target = new TargetDesc
             {
-                version = GGLSLVersion.ToString(),
+                version = G_OpenGLVersion.ToString(),
                 language = EShadingLanguage.SpirV
             };
             Compile(ref source, ref options, ref target, out desc4);
