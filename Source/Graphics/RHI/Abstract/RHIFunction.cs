@@ -26,11 +26,11 @@ namespace Infinity.Graphics
 
     public abstract class RHIFunctionTable : Disposal
     {
-        public abstract void SetRayGenerationProgram(string exportName, params RHIBindGroup[] bindGroup);
-        public abstract int AddMissProgram(string exportName, params RHIBindGroup[] bindGroup);
-        public abstract int AddHitGroupProgram(string exportName, params RHIBindGroup[] bindGroup);
-        public abstract void SetMissProgram(in int index, params RHIBindGroup[] bindGroup);
-        public abstract void SetHitGroupProgram(in int index, params RHIBindGroup[] bindGroup);
+        public abstract void SetRayGenerationProgram(string exportName, RHIBindGroup[]? bindGroups = null);
+        public abstract int AddMissProgram(string exportName, RHIBindGroup[]? bindGroups = null);
+        public abstract int AddHitGroupProgram(string exportName, RHIBindGroup[]? bindGroups = null);
+        public abstract void SetMissProgram(in int index, RHIBindGroup[]? bindGroups = null);
+        public abstract void SetHitGroupProgram(in int index, RHIBindGroup[]? bindGroups = null);
         public abstract void ClearMissPrograms();
         public abstract void ClearHitGroupPrograms();
         public abstract void Generate(RHIRaytracingPipeline rayTracingPipeline);

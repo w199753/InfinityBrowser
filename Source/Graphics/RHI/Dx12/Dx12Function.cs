@@ -34,7 +34,7 @@ namespace Infinity.Graphics
     internal struct Dx12FunctionTableEntry
     {
         public string ShaderIdentifier;
-        public RHIBindGroup[] BindGroups;
+        public RHIBindGroup[]? BindGroups;
     };
 
     internal unsafe class Dx12FunctionTable : RHIFunctionTable
@@ -52,34 +52,34 @@ namespace Infinity.Graphics
             m_HitGroupPrograms = new TArray<Dx12FunctionTableEntry>(8);
         }
 
-        public override void SetRayGenerationProgram(string exportName, params RHIBindGroup[] bindGroup)
+        public override void SetRayGenerationProgram(string exportName, RHIBindGroup[]? bindGroups = null)
         {
-            m_RayGenerationProgram.BindGroups = bindGroup;
+            m_RayGenerationProgram.BindGroups = bindGroups;
             m_RayGenerationProgram.ShaderIdentifier = exportName;
         }
 
-        public override int AddMissProgram(string exportName, params RHIBindGroup[] bindGroup)
+        public override int AddMissProgram(string exportName, RHIBindGroup[]? bindGroups = null)
         {
             Dx12FunctionTableEntry missEntry;
-            missEntry.BindGroups = bindGroup;
+            missEntry.BindGroups = bindGroups;
             missEntry.ShaderIdentifier = exportName;
             return m_MissPrograms.Add(missEntry);
         }
 
-        public override int AddHitGroupProgram(string exportName, params RHIBindGroup[] bindGroup)
+        public override int AddHitGroupProgram(string exportName, RHIBindGroup[]? bindGroups = null)
         {
             Dx12FunctionTableEntry hitGroupEntry;
-            hitGroupEntry.BindGroups = bindGroup;
+            hitGroupEntry.BindGroups = bindGroups;
             hitGroupEntry.ShaderIdentifier = exportName;
             return m_HitGroupPrograms.Add(hitGroupEntry);
         }
 
-        public override void SetMissProgram(in int index, params RHIBindGroup[] bindGroup)
+        public override void SetMissProgram(in int index, RHIBindGroup[]? bindGroups = null)
         {
             throw new NotImplementedException();
         }
 
-        public override void SetHitGroupProgram(in int index, params RHIBindGroup[] bindGroup)
+        public override void SetHitGroupProgram(in int index, RHIBindGroup[]? bindGroups = null)
         {
             throw new NotImplementedException();
         }
