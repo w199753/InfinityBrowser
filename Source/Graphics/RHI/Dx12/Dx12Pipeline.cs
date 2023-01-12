@@ -293,7 +293,7 @@ namespace Infinity.Graphics
             #endregion DxilLibrary
 
             #region RayGeneration
-            Dx12PipelineLayout rayGenPipelineLayout = descriptor.RayGenerationDescriptor.LocalPipelineLayout as Dx12PipelineLayout;
+            Dx12PipelineLayout rayGenPipelineLayout = descriptor.RayGenerationDescriptor.PipelineLayout as Dx12PipelineLayout;
             if (rayGenPipelineLayout != null)
             {
                 ++stateSubObjectCount;
@@ -337,7 +337,7 @@ namespace Infinity.Graphics
             for (int i = 0; i < descriptor.RayMissGroupDescriptors.Length; ++i)
             {
                 ref RHIRayGeneralGroupDescriptor rayMissGroupDescriptor = ref rayMissGroupSpan[i];
-                Dx12PipelineLayout rayMissPipelineLayout = rayMissGroupDescriptor.LocalPipelineLayout as Dx12PipelineLayout;
+                Dx12PipelineLayout rayMissPipelineLayout = rayMissGroupDescriptor.PipelineLayout as Dx12PipelineLayout;
 
                 if (rayMissPipelineLayout != null)
                 {
@@ -370,7 +370,7 @@ namespace Infinity.Graphics
             for (int i = 0; i < descriptor.RayHitGroupDescriptors.Length; ++i)
             {
                 ref RHIRayHitGroupDescriptor rayHitGroupDescriptor = ref rayHitGroupSpan[i];
-                Dx12PipelineLayout rayHitPipelineLayout = rayHitGroupDescriptor.LocalPipelineLayout as Dx12PipelineLayout;
+                Dx12PipelineLayout rayHitPipelineLayout = rayHitGroupDescriptor.PipelineLayout as Dx12PipelineLayout;
                 ushort* exportName = (ushort*)Marshal.StringToHGlobalUni(rayHitGroupDescriptor.Name).ToPointer();
 
                 // HitGroup 
@@ -442,7 +442,7 @@ namespace Infinity.Graphics
             ++stateSubObjectCount;
             D3D12_GLOBAL_ROOT_SIGNATURE globalRootSignatureDescriptor;
             {
-                globalRootSignatureDescriptor.pGlobalRootSignature = ((Dx12PipelineLayout)descriptor.GlobalPipelineLayout).NativeRootSignature;
+                globalRootSignatureDescriptor.pGlobalRootSignature = ((Dx12PipelineLayout)descriptor.PipelineLayout).NativeRootSignature;
             }
             ref D3D12_STATE_SUBOBJECT globalRootSignature = ref stateSubObjects[stateSubObjectCount];
             globalRootSignature.Type = D3D12_STATE_SUBOBJECT_TYPE.D3D12_STATE_SUBOBJECT_TYPE_GLOBAL_ROOT_SIGNATURE;

@@ -223,11 +223,6 @@ namespace Infinity.Graphics
             return new Dx12Function(descriptor);
         }
 
-        public override RHIFunctionTable CreateFunctionTable()
-        {
-            return new Dx12FunctionTable(this);
-        }
-
         public override RHISwapChain CreateSwapChain(in RHISwapChainDescriptor descriptor)
         {
             return new Dx12SwapChain(this, descriptor);

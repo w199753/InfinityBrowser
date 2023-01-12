@@ -106,7 +106,7 @@ namespace Infinity.Graphics
     {
         public string Name;
         public EHitGroupType Type;
-        public RHIPipelineLayout LocalPipelineLayout;
+        public RHIPipelineLayout PipelineLayout;
         public RHIFunctionDescriptor? AnyHitDescriptor;
         public RHIFunctionDescriptor? IntersectDescriptor;
         public RHIFunctionDescriptor? ClosestHitDescriptor;
@@ -115,7 +115,7 @@ namespace Infinity.Graphics
     public struct RHIRayGeneralGroupDescriptor
     {
         public string Name;
-        public RHIPipelineLayout LocalPipelineLayout;
+        public RHIPipelineLayout PipelineLayout;
         public RHIFunctionDescriptor GeneralDescriptor;
     }
 
@@ -132,7 +132,7 @@ namespace Infinity.Graphics
         public uint MaxAttributeSize;
         public uint MaxRecursionDepth;
         public RHIFunction FunctionLibrary;
-        public RHIPipelineLayout GlobalPipelineLayout;
+        public RHIPipelineLayout PipelineLayout;
         public RHIRayGeneralGroupDescriptor RayGenerationDescriptor;
         public Memory<RHIRayHitGroupDescriptor> RayHitGroupDescriptors;
         public Memory<RHIRayGeneralGroupDescriptor> RayMissGroupDescriptors;

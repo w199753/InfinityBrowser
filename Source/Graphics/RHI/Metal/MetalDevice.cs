@@ -89,11 +89,6 @@ namespace Infinity.Graphics
             throw new NotImplementedException();
         }
 
-        public override RHIFunctionTable CreateFunctionTable()
-        {
-            throw new NotImplementedException();
-        }
-
         public override RHISwapChain CreateSwapChain(in RHISwapChainDescriptor descriptor)
         {
             throw new NotImplementedException();
