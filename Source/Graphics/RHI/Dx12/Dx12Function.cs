@@ -39,17 +39,17 @@ namespace Infinity.Graphics
 
     internal unsafe class Dx12FunctionTable : RHIFunctionTable
     {
-        public ulong RayGenSize => m_EntrySize;
-        public ulong RayGeStride => m_EntrySize;
+        public ulong RayGenSize => m_EntryStride;
+        public ulong RayGeStride => m_EntryStride;
         public ulong RayGenAddress => m_NativeResource->GetGPUVirtualAddress();
-        public ulong MissSize => (ulong)(m_EntrySize * m_MissPrograms.length);
-        public ulong MissStride => m_EntrySize;
-        public ulong MissAddress => m_NativeResource->GetGPUVirtualAddress() + m_EntrySize;
-        public ulong HitGroupSize => (ulong)(m_EntrySize * m_HitGroupPrograms.length);
-        public ulong HitGroupStride => m_EntrySize;
-        public ulong HitGroupAddress => m_NativeResource->GetGPUVirtualAddress() + (ulong)(m_EntrySize * m_MissPrograms.length + 1);
+        public ulong MissSize => (ulong)(m_EntryStride * m_MissPrograms.length);
+        public ulong MissStride => m_EntryStride;
+        public ulong MissAddress => m_NativeResource->GetGPUVirtualAddress() + m_EntryStride;
+        public ulong HitGroupSize => (ulong)(m_EntryStride * m_HitGroupPrograms.length);
+        public ulong HitGroupStride => m_EntryStride;
+        public ulong HitGroupAddress => m_NativeResource->GetGPUVirtualAddress() + (ulong)(m_EntryStride * m_MissPrograms.length + 1);
 
-        private uint m_EntrySize;
+        private uint m_EntryStride;
         private uint m_ProgramCount;
         private Dx12Device m_Dx12Device;
         private ID3D12Resource* m_NativeResource;
@@ -111,10 +111,10 @@ namespace Infinity.Graphics
         {
             Dx12RaytracingPipeline dx12RaytracingPipeline = rayTracingPipeline as Dx12RaytracingPipeline;
 
-            m_EntrySize = (uint)(D3D12.D3D12_SHADER_IDENTIFIER_SIZE_IN_BYTES + (sizeof(ulong) * (int)dx12RaytracingPipeline.MaxLocalRootParameters));
+            m_EntryStride = (uint)(D3D12.D3D12_SHADER_IDENTIFIER_SIZE_IN_BYTES + (sizeof(ulong) * (int)dx12RaytracingPipeline.MaxLocalRootParameters));
             m_ProgramCount = (uint)(1 + m_MissPrograms.length + m_HitGroupPrograms.length);
 
-            D3D12_RESOURCE_DESC resourceDesc = D3D12_RESOURCE_DESC.Buffer(m_EntrySize * m_ProgramCount, D3D12_RESOURCE_FLAGS.D3D12_RESOURCE_FLAG_NONE);
+            D3D12_RESOURCE_DESC resourceDesc = D3D12_RESOURCE_DESC.Buffer(m_EntryStride * m_ProgramCount, D3D12_RESOURCE_FLAGS.D3D12_RESOURCE_FLAG_NONE);
             D3D12_HEAP_PROPERTIES heapProperties = new D3D12_HEAP_PROPERTIES(D3D12_HEAP_TYPE.D3D12_HEAP_TYPE_UPLOAD, 0, 0);
 
             ID3D12Resource* dx12Resource;
