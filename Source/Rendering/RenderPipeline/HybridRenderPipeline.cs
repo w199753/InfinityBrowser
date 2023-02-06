@@ -82,7 +82,7 @@ namespace Infinity.Rendering
 	            return output;
             }
 
-            float4 PSMain(Varyings input) : SV_Target
+            float4 PSMain(Varyings input) : SV_TARGET
             {
 	            return input.color * _DiffuseTexture[0].Sample(_DiffuseSampler[0], input.uv0);
             }");
@@ -147,19 +147,7 @@ namespace Infinity.Rendering
                               "**  ShaderCompile End  **\n" +
                               "*************************\n");
 
-            string glesCode = new string(@"
-            struct Attribute
-            {
-                float3 a_position : POSITION;
-                float4 a_color0 : COLOR0;
-            };
-
-            struct Varying
-            {
-                float4 v_color0 : COLOR0;
-                float4 v_position : SV_POSITION;
-            };
-
+            string hlslCode = new string(@"
             float4 u_viewRect;
             float4 u_viewTexel;
             float4x4 u_view;
@@ -174,8 +162,17 @@ namespace Infinity.Rendering
             float4x4 u_modelInvTrans;
             float4 u_alphaRef4;
 
-            Texture2D _AlbedoTexture : register(t0);
-            SamplerState _AlbedoSampler : register(s0);
+            struct Attribute
+            {
+                float3 a_position : POSITION;
+                float4 a_color0 : COLOR0;
+            };
+
+            struct Varying
+            {
+                float4 v_color0 : COLOR0;
+                float4 v_position : SV_POSITION;
+            };
 
             Varying VSMain(Attribute input)
             {
@@ -184,14 +181,13 @@ namespace Infinity.Rendering
                 output.v_position = mul(u_modelViewProj, float4(input.a_position, 1.0));
                 return output;
             }
-
             float4 PSMain(Varying input) : SV_TARGET
             {
-                return input.v_color0 + (float4(1, 0, 0, 1) * 0.25) * _AlbedoTexture.Sample(_AlbedoSampler, float2(1.0, 1.0));
+                return input.v_color0 + (float4(1, 0, 0, 1) * 0.25);
             }");
-            //ShaderCompiler.G_OpenGLVersion = 440;
-            string glesVS = ShaderCompiler.HLSLTo(glesCode, "VSMain", ShaderConductorWrapper.EFunctionStage.Vertex, ShaderConductorWrapper.EShadingLanguage.Essl);
-            string glesFS = ShaderCompiler.HLSLTo(glesCode, "PSMain", ShaderConductorWrapper.EFunctionStage.Fragment, ShaderConductorWrapper.EShadingLanguage.Essl);
+            ShaderCompiler.G_OpenGLVersion = 120;
+            string glesVS = ShaderCompiler.HLSLTo(hlslCode, "VSMain", ShaderConductorWrapper.EFunctionStage.Vertex, ShaderConductorWrapper.EShadingLanguage.Glsl);
+            string glesFS = ShaderCompiler.HLSLTo(hlslCode, "PSMain", ShaderConductorWrapper.EFunctionStage.Fragment, ShaderConductorWrapper.EShadingLanguage.Glsl);
         }
 
         public override void Init(RenderContext renderContext)

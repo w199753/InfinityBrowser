@@ -169,7 +169,7 @@ namespace Infinity.Shaderlib
             options.enableDebugInfo = keepDebugInfo;
             options.optimizationLevel = 3;
             options.disableOptimizations = disableOptimization;
-            options.packMatricesInRowMajor = true;
+            options.packMatricesInRowMajor = false;
             if (language == EShadingLanguage.SpirV)
             {
                 options.shiftAllUABuffersBindings = 20;
@@ -224,7 +224,7 @@ namespace Infinity.Shaderlib
             options.enableDebugInfo = keepDebugInfo;
             options.optimizationLevel = 3;
             options.disableOptimizations = disableOptimization;
-            options.packMatricesInRowMajor = true;
+            options.packMatricesInRowMajor = false;
             TargetDesc target = new TargetDesc
             {
                 version = G_OpenGLVersion.ToString(),
@@ -259,7 +259,7 @@ namespace Infinity.Shaderlib
             options.enableDebugInfo = keepDebugInfo;
             options.optimizationLevel = 3;
             options.disableOptimizations = disableOptimization;
-            options.packMatricesInRowMajor = true;
+            options.packMatricesInRowMajor = false;
             TargetDesc target = new TargetDesc
             {
                 version = G_OpenGLVersion.ToString(),
@@ -301,7 +301,7 @@ namespace Infinity.Shaderlib
             options.enableDebugInfo = keepDebugInfo;
             options.optimizationLevel = 3;
             options.disableOptimizations = disableOptimization;
-            options.packMatricesInRowMajor = true;
+            options.packMatricesInRowMajor = false;
             options.shiftAllUABuffersBindings = 20;
             options.shiftAllSamplersBindings = 40;
             options.shiftAllTexturesBindings = 60;
@@ -343,7 +343,7 @@ namespace Infinity.Shaderlib
             options.enableDebugInfo = keepDebugInfo;
             options.optimizationLevel = 3;
             options.disableOptimizations = disableOptimization;
-            options.packMatricesInRowMajor = true;
+            options.packMatricesInRowMajor = false;
             options.shiftAllUABuffersBindings = 20;
             options.shiftAllSamplersBindings = 40;
             options.shiftAllTexturesBindings = 60;
